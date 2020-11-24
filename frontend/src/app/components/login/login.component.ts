@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
@@ -12,6 +12,7 @@ import {AuthRequest} from '../../dtos/auth-request';
 })
 export class LoginComponent implements OnInit {
 
+  @Input() isEmployee: boolean;
   loginForm: FormGroup;
   // After first submission attempt, form validation will start
   submitted: boolean = false;
@@ -48,6 +49,8 @@ export class LoginComponent implements OnInit {
     this.authService.loginUser(authRequest).subscribe(
       () => {
         console.log('Successfully logged in user: ' + authRequest.email);
+        // @ts-ignore
+        $('#loginModal').modal('hide');
         this.router.navigate(['/message']);
       },
       error => {
