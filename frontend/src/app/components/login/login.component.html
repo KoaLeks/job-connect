@@ -16,46 +16,62 @@
         </button>
       </div>
 
-        <div class="modal-body">
-          <form class="form" [formGroup]="loginForm" (ngSubmit)="loginUser()">
-
-            <div class="form-group">
-              <label for="inputUsername">Username</label>
-              <input type="text" name="username" formControlName="username" class="form-control" id="inputUsername"
-                     aria-describedby="usernameHelp" placeholder="Enter username">
-              <div *ngIf="submitted && loginForm.controls.username.errors" class="error">
-                <small class="form-text text-warning" *ngIf="loginForm.controls.username.errors.required">Your username is
-                  required!
-                </small>
-              </div>
+      <div class="modal-body">
+        <form class="form" [formGroup]="loginForm" (ngSubmit)="loginUser()">
+          <div class="form-group input-group">
+            <div class="input-group-prepend">
+               <span class="input-group-text">
+                 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-envelope-fill" fill="currentColor"
+                      xmlns="http://www.w3.org/2000/svg">
+                   <path fill-rule="evenodd"
+                         d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z"/>
+                 </svg>
+               </span>
             </div>
-
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" name="password" formControlName="password" class="form-control" id="password"
-                     placeholder="Password">
-              <div *ngIf="submitted && loginForm.controls.password.errors" class="error">
-                <small class="form-text text-warning" *ngIf="loginForm.controls.password.errors.required">Your password
-                  is
-                  required!
-                </small>
-                <small class="form-text text-warning" *ngIf="loginForm.controls.password.errors.minlength">Your password
-                  must be at least 8 characters long!
-                </small>
-              </div>
+            <input type="text" name="email" formControlName="email" class="form-control" id="inputEmail"
+                   aria-describedby="emailHelp" placeholder="E-Mail">
+            <div *ngIf="submitted && loginForm.controls.email.errors" class="error">
+              <small class="form-text text-warning" *ngIf="loginForm.controls.email.errors.required">Your E-Mail is
+                required!
+              </small>
             </div>
-          </form>
-        </div>
+          </div>
 
-        <div class="modal-footer">
+          <div class="form-group input-group">
+            <div class="input-group-prepend">
+               <span class="input-group-text">
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-lock-fill" fill="currentColor"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2.5 9a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V9z"/>
+                    <path fill-rule="evenodd" d="M4.5 4a3.5 3.5 0 1 1 7 0v3h-1V4a2.5 2.5 0 0 0-5 0v3h-1V4z"/>
+                  </svg>
+               </span>
+            </div>
+            <input type="password" name="password" formControlName="password" class="form-control" id="password"
+                   placeholder="Password">
+            <div *ngIf="submitted && loginForm.controls.password.errors" class="error">
+              <small class="form-text text-warning" *ngIf="loginForm.controls.password.errors.required">Your password
+                is
+                required!
+              </small>
+              <small class="form-text text-warning" *ngIf="loginForm.controls.password.errors.minlength">Your password
+                must be at least 8 characters long!
+              </small>
+            </div>
+          </div>
+        </form>
 
-          <p class="text-left text-light mr-auto" style="transform: rotate(0);">
-            <a routerLink="/register" class="stretched-link" data-dismiss="modal">Not a Member? Sign Up</a>
-          </p>
-          <button type="button" (click)="loginUser()" class="btn btn-outline-primary">Login</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <p class="text-left text-light mr-auto" style="transform: rotate(0);">
+          <a class="stretched-link" data-target="#registerModal" data-toggle="modal" data-dismiss="modal">Not a Member?
+            Sign Up</a>
+        </p>
+        <button type="button" (click)="loginUser()" class="btn btn-outline-primary">Login</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
 
     </div>
   </div>
 </div>
+<app-register [isEmployee]="isEmployee"></app-register>
