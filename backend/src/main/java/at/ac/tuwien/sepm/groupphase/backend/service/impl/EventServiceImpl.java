@@ -22,9 +22,9 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event save(Event event) {
+    public Event saveEvent(Event event) {
         LOGGER.trace("save event({})", event);
         //TODO validator.validateNewEvent(event);
-        return eventRepository.saveEvent(event);
+        return eventRepository.save(event);
     }
 }

@@ -3,6 +3,8 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +19,8 @@ import java.lang.invoke.MethodHandles;
 public class EventEndpoint {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
-    private final EventMapper eventMapper;
     private final EventService eventService;
+    private final EventMapper eventMapper;
 
     @Autowired
     public EventEndpoint(EventMapper eventMapper, EventService eventService) {
@@ -29,12 +30,13 @@ public class EventEndpoint {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    //@ApiOperation(value = "Publish a new event", authorizations = {@Authorization(value = "apiKey")})
+    @ApiOperation(value = "Publish a new event", authorizations = {@Authorization(value = "apiKey")})
     public EventDto create(@Valid @RequestBody EventDto eventDto) {
         LOGGER.info("POST /api/v1/events/{}", eventDto);
 
-        return eventMapper.entityToDto(
-            eventService.save(eventMapper.dtoToEntity(eventDto)));
+        return eventMapper.eventToEventDto(
+          eventService.saveEvent(eventMapper.eventDtoToEvent(eventDto)));
+
     }
 
 

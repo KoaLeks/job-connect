@@ -9,7 +9,7 @@ public interface EventService {
      * @param event that is being saved to database.
      * @return the newly created event.
      */
-    Event save (Event event);
+    Event saveEvent (Event event);
 
 
 }

@@ -2,27 +2,17 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Message;
 
-public class EventMapper {
+import org.mapstruct.Mapper;
+import org.mapstruct.Named;
 
-    public EventDto entityToDto(Event event) {
-        return EventDto.EventDtoBuilder.aEvent().
-            withStart(event.getStart()).
-            withEnd(event.getEnd()).
-            withDescription(event.getDescription()).
-            withEmployer(event.getEmployer()).
-            withAddress(event.getAddress()).
-            withTask(event.getTasks()).build();
-    }
+@Mapper
+public interface EventMapper {
 
-    public Event DtoToEntity(EventDto eventDto) {
-        return Event.EventBuilder.aEvent().
-            withStart(eventDto.getStart()).
-            withEnd(eventDto.getEnd()).
-            withDescription(eventDto.getDescription()).
-            withEmployer(eventDto.getEmployer()).
-            withAddress(eventDto.getAddress()).
-            withTask(eventDto.getTasks()).build();
-    }
+    @Named("Event")
+    EventDto eventToEventDto(Event event);
+
+    Event eventDtoToEvent(EventDto eventDto);
 
 }
