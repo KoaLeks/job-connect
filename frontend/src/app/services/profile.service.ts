@@ -13,8 +13,12 @@ export class ProfileService {
 
   constructor(private httpClient: HttpClient, private globals: Globals) { }
 
-  createProfile(user: any): Observable<any> {
-    console.log('Create user with email ' + user.email);
-    return this.httpClient.post<Message>(this.profileBaseUri, user);
+  /**
+   * Persists profile to the backend
+   * @param profile to persist
+   */
+  createProfile(profile: any): Observable<any> {
+    console.log('Create user with email ' + profile.email);
+    return this.httpClient.post<Message>(this.profileBaseUri, profile);
   }
 }

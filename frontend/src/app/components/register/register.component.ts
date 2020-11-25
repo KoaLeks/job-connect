@@ -37,28 +37,35 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  /**
+   * Form validation will start after the method is called, additionally a createProfile request will be sent
+   */
   registerUser(): void {
     this.submitted = true;
     if (this.registerForm.valid && this.isEmployee) {
       const newEmployee: Employee = new Employee(this.registerForm.controls.firstName.value, this.registerForm.controls.lastName.value,
-        this.registerForm.controls.email.value, this.registerForm.controls.password.value);
+        this.registerForm.controls.email.value, this.registerForm.controls.password.value, '');
       this.createProfile(newEmployee);
     } else if (this.registerForm.valid && !this.isEmployee) {
       // tslint:disable-next-line:max-line-length
       const newEmployer: Employer = new Employer(this.registerForm.controls.companyName.value, this.registerForm.controls.companyDescription.value,
         this.registerForm.controls.firstName.value, this.registerForm.controls.lastName.value,
-        this.registerForm.controls.email.value, this.registerForm.controls.password.value);
+        this.registerForm.controls.email.value, this.registerForm.controls.password.value, '');
       this.createProfile(newEmployer);
     } else {
       console.log('Invalid input');
     }
   }
 
-  createProfile(user: any): void {
-    console.log('Try to register user: ' + user.email);
-    this.profileService.createProfile(user).subscribe(
+  /**
+   * Send profile data to the profileService. If the authentication was successfully, the user will be forwarded to the home page
+   * @param user profile data from the register form
+   */
+  createProfile(profile: any): void {
+    console.log('Try to register profile: ' + profile.email);
+    this.profileService.createProfile(profile).subscribe(
       () => {
-        console.log('Successfully created in user: ' + user.email);
+        console.log('Successfully created profile: ' + profile.email);
         // @ts-ignore
         $('#registerModal').modal('hide');
         this.router.navigate(['']);
