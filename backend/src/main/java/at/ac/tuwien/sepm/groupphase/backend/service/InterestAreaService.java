@@ -1,0 +1,14 @@
+package at.ac.tuwien.sepm.groupphase.backend.service;
+
+import at.ac.tuwien.sepm.groupphase.backend.entity.InterestArea;
+
+public interface InterestAreaService {
+
+    /**
+     * Saves new InterestArea in database.
+     *
+     * @param interestArea that is being saved to database.
+     * @return the newly created interestArea.
+     */
+    InterestArea saveInterestArea(InterestArea interestArea);
+}
