@@ -22,6 +22,10 @@ public class EventDto {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public LocalDateTime getStart() {
         return start;
     }
@@ -44,10 +48,6 @@ public class EventDto {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Employer getEmployer() {
