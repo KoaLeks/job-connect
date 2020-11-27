@@ -6,122 +6,13 @@
     <p>Check out the latest message from the SEPM group phase.</p>
     <p class="lead">
       <a class="btn btn-primary btn-lg" routerLink="/message" role="button">Message</a>
-      <br>
-      <br>
-      <br>
 
       <br>
       <br>
-      <br>
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addingEvent">
-        add new Event
+
+      <button type="button" class="btn btn-primary btn-lg" routerLink="/create-event">
+        Add New Event
       </button>
     </p>
   </div>
 </div>
-
-<!-- Modal -->
-<div class="modal fade" id="addingAddress" tabindex="-1" role="dialog" aria-labelledby="addingNewAddress"
-     aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addingNewAddress">Create new Address</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-
-
-
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Modal -->
-
-<!-- EVENT Modal -->
-<div class="modal fade" id="addingEvent" tabindex="-1" role="dialog" aria-labelledby="addingNewEvent"
-     aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addingNewEvent">Create new Event</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-
-        <!-- EVENT FORM -->
-        <form [formGroup]="eventCreationForm" (ngSubmit)="createEvent(eventCreationForm.value, addressCreationForm.value)"
-              #saveEventForm="ngForm">
-          <div class="form-group">
-            <label for="InputStart">Start</label>
-            <input type="datetime-local" class="form-control" id="InputStart"
-                   formControlName="start">
-          </div>
-          <div class="form-group">
-            <label for="InputEnd">End</label>
-            <input type="datetime-local" class="form-control" id="InputEnd" formControlName="end">
-          </div>
-          <div class="form-group">
-            <label for="InputDescription">Description</label>
-            <input type="text" class="form-control" id="InputDescription" formControlName="description">
-          </div>
-          <!-- ADDRESS FORM -->
-          <form [formGroup]="addressCreationForm"
-                #saveAddressForm="ngForm">
-            <div class="form-group">
-              <label for="InputCity">City<b>*</b></label>
-              <input type="text" class="form-control" id="InputCity" aria-describedby="enterCity"
-                     formControlName="city" required>
-            </div>
-            <div class="form-group">
-              <label for="InputState">State</label>
-              <input type="text" class="form-control" id="InputState" formControlName="state">
-            </div>
-            <div class="form-group">
-              <label for="InputZip">Zip</label>
-              <input type="number" class="form-control" id="InputZip" formControlName="zip">
-            </div>
-            <div class="form-group">
-              <label for="InputAddressLine">Address line</label>
-              <input type="text" class="form-control" id="InputAddressLine" formControlName="addressLine">
-            </div>
-            <div class="form-group">
-              <label for="InputAdditional">additional</label>
-              <input type="text" class="form-control" id="InputAdditional" formControlName="additional">
-            </div>
-
-          </form>
-          <!-- ADDRESS FORM -->
-          <div class="form-group">
-            <label for="InputEmployer">Employer</label>
-            <input type="text" class="form-control" id="InputEmployer" formControlName="employer">
-          </div>
-          <div class="form-group">
-            <label for="InputTasks">Tasks</label>
-            <input type="text" class="form-control" id="InputTasks" formControlName="tasks">
-          </div>
-
-          <div class="form-group form-check">
-          </div>
-          <button type="submit" class="btn btn-primary" [disabled]="!saveEventForm.form.valid">Submit</button>
-
-          <br>
-          <br>
-
-          <div style="color: red;">
-            fields marked with <b>*</b> are obligatory!
-          </div>
-
-        </form>
-        <!-- EVENT FORM -->
-
-      </div>
-    </div>
-  </div>
-</div>
-<!-- EVENT Modal -->
