@@ -3,6 +3,8 @@ import {Message} from '../dtos/message';
 import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {Globals} from '../global/globals';
+import {Employee} from '../dtos/employee';
+import {Employer} from '../dtos/employer';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +21,12 @@ export class ProfileService {
    */
   createProfile(profile: any): Observable<any> {
     console.log('Create user with email ' + profile.email);
-    return this.httpClient.post<Message>(this.profileBaseUri, profile);
+    if (profile instanceof Employee) {
+      return this.httpClient.post<Employee>(this.profileBaseUri + '/employee', profile);
+    } else if (profile instanceof Employer) {
+      return this.httpClient.post<Employer>(this.profileBaseUri + '/employer', profile);
+    } else {
+      console.error('profile object is neither an instance of employee nor employer.');
+    }
   }
 }
