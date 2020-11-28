@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import {AuthService} from '../services/auth.service';
+import {AuthService} from '../../services/auth.service';
 import {FormBuilder} from '@angular/forms';
-import {AddressService} from '../services/address.service';
-import {EventService} from '../services/event.service';
-import {TaskService} from '../services/task.service';
+import {AddressService} from '../../services/address.service';
+import {EventService} from '../../services/event.service';
+import {TaskService} from '../../services/task.service';
+import {Task} from '../../dtos/task';
+import {Event} from '../../dtos/event';
+import {Address} from '../../dtos/address';
 
 @Component({
   selector: 'app-create-event',
@@ -15,6 +18,7 @@ export class CreateEventComponent implements OnInit {
   addressCreationForm;
   eventCreationForm;
   taskCreationForm;
+  tasks: Task[] = [];
 
   constructor(public authService: AuthService, private formBuilder: FormBuilder, private addressService: AddressService,
               private eventService: EventService, private taskService: TaskService) {
@@ -51,7 +55,7 @@ export class CreateEventComponent implements OnInit {
   /**
    * Saves new Event
    */
-  createEvent(event, address, task) {
+  createEvent(event: Event, address: Address, tasks: Task[]) {
     this.addressService.createAddress(address).subscribe(
       (a) => {
         event.address = {
@@ -63,27 +67,31 @@ export class CreateEventComponent implements OnInit {
           additional: null
         };
         // TODO set Employer in event
-        console.log('task: ' + JSON.stringify(task));
         this.eventService.createEvent(event).subscribe(
           (e) => {
-            task.event = {
-              id: e.id,
-              start: null,
-              end: null,
-              description: null,
-              employer: null,
-              address: null,
-              task: null
-            };
-            this.taskService.createTask(task).subscribe(
-              () => {
-                alert('successfully created!');
-              }
-            );
+            for (const t of tasks) {
+              t.event = {
+                id: e.id,
+                start: null,
+                end: null,
+                description: null,
+                employer: null,
+                address: null,
+                tasks: null
+              };
+              this.taskService.createTask(t).subscribe(
+                () => {}
+              );
+            }
           }
         );
       }
     );
+  }
+
+  addTask(task: Task) {
+    this.tasks.push(task);
+    this.taskCreationForm.reset();
   }
 
 }
