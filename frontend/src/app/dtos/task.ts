@@ -6,7 +6,7 @@ export class Task {
     public employeeCount: number,
     public paymentHourly: number,
     public event: Event,
-    public employees: string,
+    public employees: string, // TODO Change to correct dataTypes
     public interestArea: string) {
   }
 }
