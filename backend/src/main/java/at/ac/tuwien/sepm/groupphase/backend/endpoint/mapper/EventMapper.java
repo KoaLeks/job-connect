@@ -1,8 +1,11 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventInquiryDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.MessageInquiryDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 
+import at.ac.tuwien.sepm.groupphase.backend.entity.Message;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
 
@@ -13,5 +16,9 @@ public interface EventMapper {
     EventDto eventToEventDto(Event event);
 
     Event eventDtoToEvent(EventDto eventDto);
+
+    Event eventInquiryDtoToEvent(EventInquiryDto eventInquiryDto);
+
+    EventInquiryDto eventToEventInquiryDto(Event event);
 
 }

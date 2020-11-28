@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.TaskDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.TaskInquiryDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.TaskMapper;
 import at.ac.tuwien.sepm.groupphase.backend.service.TaskService;
 import io.swagger.annotations.ApiOperation;
@@ -31,11 +32,11 @@ public class TaskEndpoint {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Publish a new task", authorizations = {@Authorization(value = "apiKey")})
-    public TaskDto create(@Valid @RequestBody TaskDto taskDto) {
+    public TaskDto create(@Valid @RequestBody TaskInquiryDto taskDto) {
         LOGGER.info("POST /api/v1/tasks/{}", taskDto);
 
         return taskMapper.taskToTaskDto(
-            taskService.saveTask(taskMapper.taskDtoToTask(taskDto)));
+            taskService.saveTask(taskMapper.taskInquiryDtoToTask(taskDto)));
     }
 
 
