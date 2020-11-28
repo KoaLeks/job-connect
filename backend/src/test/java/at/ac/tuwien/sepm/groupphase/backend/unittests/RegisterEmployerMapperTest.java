@@ -56,11 +56,11 @@ public class RegisterEmployerMapperTest implements TestData {
         RegisterEmployerDto registerEmployerDto = registerEmployerMapper.employerToRegisterEmployerDto(employer);
         Employer emp = registerEmployerMapper.employerDtoToEmployer(registerEmployerDto);
         assertAll(
-            () -> assertEquals(EMPLOYEE_EMAIL, emp.getProfile().getEmail()),
-            () -> assertEquals(EMPLOYEE_FIRST_NAME, emp.getProfile().getFirstName()),
-            () -> assertEquals(EMPLOYEE_LAST_NAME, emp.getProfile().getLastName()),
-            () -> assertEquals(EMPLOYEE_PASSWORD, emp.getProfile().getPassword() ),
-            () -> assertEquals(EMPLOYEE_PUBLIC_INFO, emp.getProfile().getPublicInfo()),
+            () -> assertEquals(EMPLOYER_EMAIL, emp.getProfile().getEmail()),
+            () -> assertEquals(EMPLOYER_FIRST_NAME, emp.getProfile().getFirstName()),
+            () -> assertEquals(EMPLOYER_LAST_NAME, emp.getProfile().getLastName()),
+            () -> assertEquals(EMPLOYER_PASSWORD, emp.getProfile().getPassword() ),
+            () -> assertEquals(EMPLOYER_PUBLIC_INFO, emp.getProfile().getPublicInfo()),
             () -> assertEquals(EMPLOYER_COMPANY_DESCRIPTION, emp.getDescription()),
             () -> assertEquals(EMPLOYER_COMPANY_NAME, emp.getCompanyName())
         );
