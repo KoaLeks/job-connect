@@ -7,4 +7,5 @@ import org.mapstruct.Mapper;
 @Mapper
 public interface ProfileMapper {
     Profile profileDtoToProfile(ProfileDto profileDto);
+    ProfileDto profileToProfileDto(Profile profile);
 }

@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Profile;
+import at.ac.tuwien.sepm.groupphase.backend.exception.UniqueConstraintException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,4 +28,6 @@ public interface ProfileService extends UserDetailsService {
      * @return a profile
      */
     Profile findProfileByEmail(String email);
+
+    Long createProfile(Profile profile);
 }

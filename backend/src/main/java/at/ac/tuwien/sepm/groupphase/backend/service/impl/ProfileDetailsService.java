@@ -2,11 +2,13 @@ package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Profile;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
+import at.ac.tuwien.sepm.groupphase.backend.exception.UniqueConstraintException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.ProfileRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.ProfileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
@@ -51,5 +53,15 @@ public class ProfileDetailsService implements ProfileService {
         Profile profile = profileRepository.findProfileByEmail(email);
         if (profile != null) return profile;
         throw new NotFoundException(String.format("Could not find the user with the email address %s", email));
+    }
+
+    @Override
+    public Long createProfile(Profile profile) {
+        LOGGER.info("Create Profile: " + profile.toString());
+        try{
+            return profileRepository.save(profile).getId();
+        }catch(DataIntegrityViolationException e){
+            throw new UniqueConstraintException("Email address already in use");
+        }
     }
 }
