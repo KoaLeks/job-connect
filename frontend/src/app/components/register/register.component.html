@@ -1,77 +1,115 @@
-<div class="modal fade" id="registerModal" role="dialog">
+<div class="modal fade" id="registerModal" data-backdrop="static" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
 
       <div class="modal-header">
-        <h5 class="modal-title">Register as {{isEmployee == true ? "Employee" : "Employer"}}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <h5 class="modal-title">Register as {{isEmployee ? "Employee" : "Employer"}}</h5>
+        <button type="button" (click)="clearForm()" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" >&times;</span>
         </button>
       </div>
 
       <div class="modal-body">
-        <form class="form" [formGroup]="registerForm" (ngSubmit)="registerUser()">
+        <form class="form" [formGroup]="isEmployee ? registerFormEmployee : registerFormEmployer"
+              (ngSubmit)="registerUser()">
           <div *ngIf="!isEmployee">
-            <div class="form-group input-group">
-<!--              Building icon-->
-              <div class="input-group-prepend">
-               <span class="input-group-text">
-                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-building" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022zM6 8.694L1 10.36V15h5V8.694zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15z"/>
-                    <path d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z"/>
-                  </svg>
-               </span>
-              </div>
-<!--              Company Name-->
-              <input type="text" name="company" formControlName="companyName" class="form-control" id="company"
-                     placeholder="Company name">
-              <div *ngIf="submitted && registerForm.controls.companyName.errors" class="error">
-                <small class="form-text text-warning" *ngIf="registerForm.controls.companyName.errors.required">Your company
-                  name is required!
-                </small>
-              </div>
+            <!--          Company Name error -->
+            <div *ngIf="submitted && registerFormEmployer.controls.companyName.errors" class="error">
+              <small class="form-text text-warning" *ngIf="registerFormEmployer.controls.companyName.errors.required">Your
+                company
+                name is required!
+              </small>
             </div>
             <div class="form-group input-group">
-<!--              Textarea icon-->
+              <!--              Building icon-->
               <div class="input-group-prepend">
                <span class="input-group-text">
-                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-card-text" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" d="M14.5 3h-13a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
-                    <path fill-rule="evenodd" d="M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 8zm0 2.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5z"/>
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-building" fill="currentColor"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                          d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022zM6 8.694L1 10.36V15h5V8.694zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15z"/>
+                    <path
+                      d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z"/>
                   </svg>
                </span>
               </div>
-<!--              Company Description-->
-              <textarea name="companyDescription" formControlName="companyDescription" class="form-control" id="companyDescription"
+              <!--              Company Name-->
+              <input type="text" name="company" formControlName="companyName" class="form-control" id="company"
+                     placeholder="Company name">
+            </div>
+            <div class="form-group input-group">
+              <!--              Textarea icon-->
+              <div class="input-group-prepend">
+               <span class="input-group-text">
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-card-text" fill="currentColor"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                          d="M14.5 3h-13a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+                    <path fill-rule="evenodd"
+                          d="M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 8zm0 2.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5z"/>
+                  </svg>
+               </span>
+              </div>
+              <!--              Company Description-->
+              <textarea name="companyDescription" formControlName="companyDescription" class="form-control"
+                        id="companyDescription"
                         placeholder="Company description..." maxlength="1000"></textarea>
             </div>
           </div>
 
+          <!--           Name Employee error -->
+          <div
+            *ngIf="isEmployee && submitted && (registerFormEmployee.controls.firstName.errors || registerFormEmployee.controls.lastName.errors)"
+            class="error">
+            <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.lastName.errors.required">Your
+              first and last
+              name are required!
+            </small>
+          </div>
+          <!--           Name Employer error -->
+          <div
+            *ngIf="!isEmployee && submitted && (registerFormEmployer.controls.firstName.errors || registerFormEmployer.controls.lastName.errors)"
+            class="error">
+            <small class="form-text text-warning" *ngIf="registerFormEmployer.controls.lastName.errors.required">Your
+              first and last
+              name are required!
+            </small>
+          </div>
           <div class="form-group input-group">
-<!--            Person icon -->
-              <div class="input-group-prepend">
+            <!--            Person icon -->
+            <div class="input-group-prepend">
                  <span class="input-group-text">
-                   <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-person-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                     <path fill-rule="evenodd" d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                   <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-person-fill" fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg">
+                     <path fill-rule="evenodd"
+                           d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
                    </svg>
                  </span>
-              </div>
-
-<!--            First Name-->
-              <input class="form-control" type="text" name="firstName" formControlName="firstName" id="firstName"
-                     placeholder="First name">
-<!--            Last Name -->
-              <input class="form-control" type="text" name="lastName" formControlName="lastName" id="lastName"
-                     placeholder="Last name">
-              <div *ngIf="submitted && (registerForm.controls.firstName.errors || registerForm.controls.lastName.errors)" class="error">
-                <small class="form-text text-warning" *ngIf="registerForm.controls.lastName.errors.required">Your first and last
-                  name are required!
-                </small>
-              </div>
             </div>
+            <!--            First Name -->
+            <input class="form-control" type="text" name="firstName" formControlName="firstName" id="firstName"
+                   placeholder="First name">
+            <!--            Last Name -->
+            <input class="form-control" type="text" name="lastName" formControlName="lastName" id="lastName"
+                   placeholder="Last name">
+          </div>
 
+          <!--           Email Employee error -->
+          <div *ngIf="isEmployee && submitted && registerFormEmployee.controls.email.errors" class="error">
+            <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.email.errors.required">Your
+              E-Mail
+              is required!
+            </small>
+          </div>
+          <!--           Email Employer error -->
+          <div *ngIf="!isEmployee && submitted && registerFormEmployer.controls.email.errors" class="error">
+            <small class="form-text text-warning" *ngIf="registerFormEmployer.controls.email.errors.required">Your
+              E-Mail
+              is required!
+            </small>
+          </div>
           <div class="form-group input-group">
-<!--            Mail icon-->
+            <!--            Mail icon -->
             <div class="input-group-prepend">
                <span class="input-group-text">
                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-envelope-fill" fill="currentColor"
@@ -81,19 +119,35 @@
                  </svg>
                </span>
             </div>
-
-<!--            Email-->
+            <!--            Email -->
             <input type="email" name="username" formControlName="email" class="form-control" id="inputEmail"
                    aria-describedby="usernameHelp" placeholder="E-Mail">
-            <div *ngIf="submitted && registerForm.controls.email.errors" class="error">
-              <small class="form-text text-warning" *ngIf="registerForm.controls.email.errors.required">Your E-Mail
-                is required!
-              </small>
-            </div>
           </div>
 
+          <!--           Password Employee error -->
+          <div *ngIf="isEmployee && submitted && registerFormEmployee.controls.password.errors" class="error">
+            <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.password.errors.required">Your
+              password
+              is required!
+            </small>
+            <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.password.errors.minlength">Your
+              password
+              must be at least 8 characters long!
+            </small>
+          </div>
+          <!--           Password Employer error -->
+          <div *ngIf="!isEmployee && submitted && registerFormEmployer.controls.password.errors" class="error">
+            <small class="form-text text-warning" *ngIf="registerFormEmployer.controls.password.errors.required">Your
+              password
+              is required!
+            </small>
+            <small class="form-text text-warning" *ngIf="registerFormEmployer.controls.password.errors.minlength">Your
+              password
+              must be at least 8 characters long!
+            </small>
+          </div>
           <div class="form-group input-group">
-<!--            Lock icon-->
+            <!--            Lock icon-->
             <div class="input-group-prepend">
                <span class="input-group-text">
                   <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-lock-fill" fill="currentColor"
@@ -104,18 +158,9 @@
                </span>
             </div>
 
-<!--            Password -->
+            <!--            Password -->
             <input type="password" name="password" formControlName="password" class="form-control" id="password"
                    placeholder="Password">
-            <div *ngIf="submitted && registerForm.controls.password.errors" class="error">
-              <small class="form-text text-warning" *ngIf="registerForm.controls.password.errors.required">Your password
-                is required!
-              </small>
-              <small class="form-text text-warning" *ngIf="registerForm.controls.password.errors.minlength">Your
-                password
-                must be at least 8 characters long!
-              </small>
-            </div>
           </div>
         </form>
       </div>
@@ -126,7 +171,7 @@
             Login</a>
         </p>
         <button type="button" (click)="registerUser()" class="btn btn-outline-primary">Register</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" (click)="clearForm()" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
