@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {FormBuilder, Validators} from '@angular/forms';
 import {AddressService} from '../../services/address.service';
@@ -84,7 +84,8 @@ export class CreateEventComponent implements OnInit {
                 tasks: null
               };
               this.taskService.createTask(t).subscribe(
-                () => {}
+                () => {
+                }
               );
             }
           }
@@ -104,9 +105,19 @@ export class CreateEventComponent implements OnInit {
   }
 
   addTask(task: Task) {
+    task.interestArea = {
+      id: this.taskCreationForm.value.interestArea,
+      area: null,
+      description: null,
+      interests: null,
+      tasks: null
+    };
     this.tasks.push(task);
+    console.log('task: ' + task.interestArea);
+    console.log('task: ' + JSON.stringify(task));
     this.taskCreationForm.reset();
   }
+
   deleteTask(task: Task) {
     const index = this.tasks.indexOf(task);
     if (index !== -1) {

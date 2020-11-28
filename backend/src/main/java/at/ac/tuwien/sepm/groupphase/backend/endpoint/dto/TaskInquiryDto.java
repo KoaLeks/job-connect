@@ -24,7 +24,6 @@ public class TaskInquiryDto {
     @NotNull(message = "must not be null")
     private Set<Employee> employees;
 
-    @NotNull(message = "must not be null")
     private InterestArea interestArea;
 
     public String getDescription() {

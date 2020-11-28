@@ -1,4 +1,3 @@
-
 <!-- Modal ADD TASK-->
 <div class="modal fade" id="Add-Task" tabindex="-1" role="dialog" aria-labelledby="addTaskLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -13,7 +12,8 @@
       <form [formGroup]="taskCreationForm" (ngSubmit)="addTask(taskCreationForm.value)">
         <div class="form-group">
           <label for="InputTaskDescription">Description<b>*</b></label>
-          <input type="text" maxlength="1000" class="form-control" id="InputTaskDescription" formControlName="description" required>
+          <input type="text" maxlength="1000" class="form-control" id="InputTaskDescription"
+                 formControlName="description" required>
         </div>
         <div class="form-group">
           <label for="InputEmployeeCount">Employee Count<b>*</b></label>
@@ -25,11 +25,14 @@
         </div>
         <div class="form-group" *ngIf="this.interestAreas !== undefined && this.interestAreas.length !== 0">
           <label for="InputInterestArea">Interest Area</label>
-          <div *ngFor="let interestArea of this.interestAreas">
-            <select class="form-control" id="InputInterestArea" formControlName="interestArea">
-              <option>{{interestArea}}</option>
-            </select>
-          </div>
+          <select class="form-control" id="InputInterestArea" formControlName="interestArea">
+            <option [value]=null>no InterestArea chosen</option>
+            <ng-container *ngFor="let interestArea of this.interestAreas">
+              <option [value]="interestArea.id">Area: {{interestArea.area}} -
+                Description: {{interestArea.description}}</option>
+            </ng-container>
+
+          </select>
         </div>
 
         <!-- TASK FORM -->
@@ -123,7 +126,7 @@
 
       <!-- Button trigger modal ADD TASK-->
       <button type="button" class="btn btn-primary" data-toggle="modal"
-              data-target="#Add-Task"> <!-- TODO add (click)="getInterestAreas()"-->
+              data-target="#Add-Task" (click)="getInterestAreas()">
         Add Task
       </button>
 
@@ -138,10 +141,11 @@
         </ng-container>
       </div>
 
-      <div class="form-group form-check" >
+      <div class="form-group form-check">
         <button type="submit" style="float: right" class="btn btn-primary"
                 [disabled]="!eventCreationForm.valid || !addressCreationForm.valid ||
-                 this.tasks.length == 0">Submit</button>
+                 this.tasks.length == 0">Submit
+        </button>
       </div>
     </form>
     <!-- EVENT FORM -->

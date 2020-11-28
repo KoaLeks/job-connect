@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.InterestAreaDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleInterestAreaDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleMessageDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.InterestArea;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Message;
@@ -18,5 +19,5 @@ public interface InterestAreaMapper {
 
     InterestArea interestAreaDtoToInterestArea(InterestAreaDto interestAreaDto);
 
-    List<InterestAreaDto> interestAreaToInterestAreaDto(List<InterestArea> interestArea);
+    List<SimpleInterestAreaDto> interestAreaToSimpleInterestAreaDto(List<InterestArea> interestArea);
 }

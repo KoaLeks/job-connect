@@ -1,7 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.InterestAreaDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleMessageDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleInterestAreaDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.InterestAreaMapper;
 import at.ac.tuwien.sepm.groupphase.backend.service.InterestAreaService;
 import io.swagger.annotations.ApiOperation;
@@ -32,9 +32,9 @@ public class InterestAreaEndpoint {
 
     @GetMapping
     @ApiOperation(value = "Get list of InterestAreas", authorizations = {@Authorization(value = "apiKey")})
-    public List<InterestAreaDto> findAll() {
+    public List<SimpleInterestAreaDto> findAll() {
         LOGGER.info("GET /api/v1/interestareas");
-        return interestAreaMapper.interestAreaToInterestAreaDto(interestAreaService.findAll());
+        return interestAreaMapper.interestAreaToSimpleInterestAreaDto(interestAreaService.findAll());
     }
 
     @PostMapping

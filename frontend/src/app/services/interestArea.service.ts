@@ -9,7 +9,7 @@ import {InterestArea} from '../dtos/interestArea';
 })
 export class InterestAreaService {
 
-  private interestAreaBaseUri: string = this.globals.backendUri + '/interestarea';
+  private interestAreaBaseUri: string = this.globals.backendUri + '/interestareas';
 
   constructor(private httpClient: HttpClient, private globals: Globals) {
   }
