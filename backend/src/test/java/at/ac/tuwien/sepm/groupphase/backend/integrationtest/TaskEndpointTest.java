@@ -89,7 +89,6 @@ public class TaskEndpointTest implements TestData {
         assertEquals(taskRepository.count(), 1);
     }
 
-
     @Test
     public void tryCreateTaskWithoutDescription_EmployeeCount_PaymentHourly_Event_ShouldReturnBadRequest() throws Exception {
         task.setDescription(null);
