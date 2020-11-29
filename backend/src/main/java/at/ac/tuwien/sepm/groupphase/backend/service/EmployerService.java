@@ -7,4 +7,6 @@ import at.ac.tuwien.sepm.groupphase.backend.exception.UniqueConstraintException;
 public interface EmployerService {
 
     Long createEmployer(Employer employer);
+
+    Employer findOneByEmail(String email);
 }
