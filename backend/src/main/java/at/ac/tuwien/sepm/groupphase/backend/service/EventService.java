@@ -2,6 +2,8 @@ package at.ac.tuwien.sepm.groupphase.backend.service;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 
+import java.util.List;
+
 public interface EventService {
 
     /**
@@ -13,4 +15,10 @@ public interface EventService {
     Event saveEvent(Event event);
 
 
+    /**
+     * Find all event entries.
+     *
+     * @return ordered list of al event entries
+     */
+    List<Event> findAll();
 }
