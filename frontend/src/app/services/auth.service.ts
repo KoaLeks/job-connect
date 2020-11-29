@@ -54,11 +54,24 @@ export class AuthService {
       const authInfo: string[] = decoded.rol;
       if (authInfo.includes('ROLE_ADMIN')) {
         return 'ADMIN';
-      } else if (authInfo.includes('ROLE_USER')) {
-        return 'USER';
+      } else if (authInfo.includes('ROLE_EMPLOYER')) {
+        return 'EMPLOYER';
+      } else if (authInfo.includes('ROLE_EMPLOYEE')) {
+        return 'EMPLOYEE';
       }
     }
     return 'UNDEFINED';
+  }
+
+  /**
+   * Returns the users email address based on the current token
+   */
+  getTokenIdentifier(): String {
+    const decoded: any = jwt_decode(this.getToken());
+    if (decoded.sub === undefined) {
+      return null;
+    }
+    return decoded.sub;
   }
 
   private setToken(authResponse: string) {
@@ -76,5 +89,4 @@ export class AuthService {
     date.setUTCSeconds(decoded.exp);
     return date;
   }
-
 }

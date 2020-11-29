@@ -6,5 +6,11 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
+
+    /**
+     * Find a user profile with a certain email address
+     * @param email to look for
+     * @return the profile
+     */
     Profile findProfileByEmail(String email);
 }

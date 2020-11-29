@@ -12,6 +12,9 @@ import {LoginComponent} from './components/login/login.component';
 import {MessageComponent} from './components/message/message.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {httpInterceptorProviders} from './interceptors';
+import { EditEmployerComponent } from './components/edit-employer/edit-employer.component';
+import { EditEmployeeComponent } from './components/edit-employee/edit-employee.component';
+import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +24,9 @@ import {httpInterceptorProviders} from './interceptors';
     HomeComponent,
     LoginComponent,
     MessageComponent,
+    EditEmployerComponent,
+    EditEmployeeComponent,
+    EditProfileComponent,
   ],
   imports: [
     BrowserModule,

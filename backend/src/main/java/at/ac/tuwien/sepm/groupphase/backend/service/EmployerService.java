@@ -6,7 +6,24 @@ import at.ac.tuwien.sepm.groupphase.backend.exception.UniqueConstraintException;
 
 public interface EmployerService {
 
+    /**
+     * Creates an employer with the given details
+     * @param employer to create
+     * @return the ID of the created employer
+     */
     Long createEmployer(Employer employer);
 
+    /**
+     * Find an employer by email
+     * @param email to look for
+     * @return the employer
+     */
     Employer findOneByEmail(String email);
+
+    /**
+     * Update an employer
+     * @param employer to update
+     * @return the ID of the updated employer
+     */
+    Long updateEmployer(Employer employer);
 }

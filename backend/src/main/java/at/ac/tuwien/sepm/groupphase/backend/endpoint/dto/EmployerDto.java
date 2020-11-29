@@ -2,6 +2,8 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 import java.util.Set;
 
@@ -9,14 +11,17 @@ public class EmployerDto {
 
     private Long id;
 
+    @NotNull(message = "Profile details must not be null")
     private ProfileDto profileDto;
 
+    @NotNull(message = "Company name must not be null")
+    @Size(max = 255)
     private String companyName;
 
+    @Size(max = 1000)
     private String description;
 
     private Set<Event> events;
-
 
     public Long getId() {
         return id;

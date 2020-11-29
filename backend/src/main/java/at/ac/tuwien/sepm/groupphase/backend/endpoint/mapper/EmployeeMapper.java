@@ -18,7 +18,7 @@ public class EmployeeMapper {
 
     public Employee employeeDtoToEmployee(EmployeeDto employeeDto){
         var emp_builder = Employee.EmployeeBuilder.aEmployee();
-        Profile profile = profileMapper.profileDtoToProfile(employeeDto);
+        Profile profile = profileMapper.profileDtoToProfile(employeeDto.getProfileDto());
         emp_builder.withProfile(profile);
         return emp_builder.build();
     }

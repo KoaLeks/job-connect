@@ -5,6 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
+    /**
+     * Find an employee with a certain email address
+     * @param email to look for
+     * @return the employee
+     */
     Employee findByProfile_Email(String email);
 
 }

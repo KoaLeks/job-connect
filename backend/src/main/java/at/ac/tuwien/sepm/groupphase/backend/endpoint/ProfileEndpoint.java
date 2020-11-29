@@ -57,6 +57,14 @@ public class ProfileEndpoint {
         return employeeMapper.employeeToEmployeeDto(employeeService.findOneByEmail(email));
     }
 
+    @PutMapping(value = "/employee")
+    @ApiOperation(value = "Update employee details", authorizations = {@Authorization(value = "apiKey")})
+    @CrossOrigin(origins = "http://localhost:4200")
+    public Long updateEmployee(@Valid @RequestBody EmployeeDto employeeDto) {
+        LOGGER.info("PUT /api/v1/profiles/employee body: {}", employeeDto);
+        return employeeService.updateEmployee(employeeMapper.employeeDtoToEmployee(employeeDto));
+    }
+
     @PostMapping(value = "/employer")
     @ApiOperation(value = "Register a new employer", authorizations = {@Authorization(value = "apiKey")})
     @ResponseStatus(HttpStatus.CREATED)
@@ -70,5 +78,13 @@ public class ProfileEndpoint {
     public EmployerDto getEmployer(@PathVariable String email) {
         LOGGER.info("GET /api/v1/profiles/employer/{}", email);
         return employerMapper.employerToEmployerDto(employerService.findOneByEmail(email));
+    }
+
+    @PutMapping(value = "/employer")
+    @ApiOperation(value = "Update employer details", authorizations = {@Authorization(value = "apiKey")})
+    @CrossOrigin(origins = "http://localhost:4200")
+    public Long updateEmployer(@Valid @RequestBody EmployerDto employerDto) {
+        LOGGER.info("PUT /api/v1/profiles/employer body: {}", employerDto);
+        return employerService.updateEmployer(employerMapper.employerDtoToEmployer(employerDto));
     }
 }

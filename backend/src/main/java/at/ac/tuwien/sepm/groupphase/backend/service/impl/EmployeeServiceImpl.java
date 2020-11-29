@@ -25,12 +25,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final PasswordEncoder passwordEncoder;
     private final ProfileService profileService;
+    private final ProfileRepository profileRepository;
 
     @Autowired
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder, ProfileService profileService) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder, ProfileService profileService, ProfileRepository profileRepository) {
         this.employeeRepository = employeeRepository;
         this.passwordEncoder = passwordEncoder;
         this.profileService = profileService;
+        this.profileRepository = profileRepository;
     }
 
     @Override
@@ -46,5 +48,20 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeRepository.findByProfile_Email(email);
         if (employee != null) return employee;
         else throw new NotFoundException(String.format("Could not find employee with email %s", email));
+    }
+
+    @Override
+    public Long updateEmployee(Employee employee) {
+        LOGGER.info("Update employee: {}", employee);
+
+        Profile profile = profileService.findProfileByEmail(employee.getProfile().getEmail());
+        if(!employee.getProfile().getPassword().isBlank())
+            employee.getProfile().setPassword(passwordEncoder.encode(employee.getProfile().getPassword()));
+        else
+            employee.getProfile().setPassword(profile.getPassword());
+
+        employee.setId(profile.getId());
+        employee.getProfile().setId(profile.getId());
+        return profileRepository.save(employee.getProfile()).getId();
     }
 }
