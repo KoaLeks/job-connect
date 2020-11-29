@@ -39,5 +39,15 @@ public class TaskEndpoint {
             taskService.saveTask(taskMapper.taskInquiryDtoToTask(taskDto)));
     }
 
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Update a task", authorizations = {@Authorization(value = "apiKey")})
+    public TaskDto update(@Valid @RequestBody TaskInquiryDto taskDto) {
+        LOGGER.info("PUT /api/v1/tasks/{}", taskDto);
+
+        return taskMapper.taskToTaskDto(
+            taskService.saveTask(taskMapper.taskInquiryDtoToTask(taskDto)));
+    }
+
 
 }

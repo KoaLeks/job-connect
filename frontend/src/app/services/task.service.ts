@@ -22,4 +22,13 @@ export class TaskService {
     console.log('Create task: ' + JSON.stringify(task));
     return this.httpClient.post<Task>(this.taskBaseUri, task);
   }
+
+  /**
+   * Updates a task in the backend
+   * @param task to update
+   */
+  updateTask(task: Task): Observable<Task> {
+    console.log('Update task: ' + JSON.stringify(task));
+    return this.httpClient.put<Task>(this.taskBaseUri, task);
+  }
 }

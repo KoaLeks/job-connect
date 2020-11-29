@@ -3,6 +3,7 @@ import {InterestArea} from './interestArea';
 
 export class Task {
   constructor(
+    public id: number,
     public description: string,
     public employeeCount: number,
     public paymentHourly: number,

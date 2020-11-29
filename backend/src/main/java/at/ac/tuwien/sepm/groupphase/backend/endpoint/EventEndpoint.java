@@ -40,5 +40,16 @@ public class EventEndpoint {
 
     }
 
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Update an event", authorizations = {@Authorization(value = "apiKey")})
+    public EventDto update(@Valid @RequestBody EventInquiryDto eventDto) {
+        LOGGER.info("PUT /api/v1/events/{}", eventDto);
+
+        return eventMapper.eventToEventDto(
+            eventService.saveEvent(eventMapper.eventInquiryDtoToEvent(eventDto)));
+
+    }
+
 
 }

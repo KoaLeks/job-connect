@@ -7,6 +7,8 @@ import java.util.Objects;
 
 public class AddressInquiryDto {
 
+    private Long id;
+
     @NotNull(message = "must not be null")
     @NotBlank(message = "must not be empty")
     private String city;
@@ -26,6 +28,14 @@ public class AddressInquiryDto {
 
     @Nullable
     private String additional;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getCity() {
         return city;
@@ -89,7 +99,8 @@ public class AddressInquiryDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AddressInquiryDto address = (AddressInquiryDto) o;
-        return Objects.equals(city, address.city) &&
+        return Objects.equals(id, address.id) &&
+            Objects.equals(city, address.city) &&
             Objects.equals(state, address.state) &&
             Objects.equals(zip, address.zip) &&
             Objects.equals(addressLine, address.addressLine) &&
@@ -98,21 +109,23 @@ public class AddressInquiryDto {
 
     @Override
     public int hashCode() {
-        return Objects.hash(city, state, zip, addressLine, additional);
+        return Objects.hash(id, city, state, zip, addressLine, additional);
     }
 
     @Override
     public String toString() {
         return "AddressInquiryDto{" +
-            "city='" + city + '\'' +
+            "id=" + id +
+            ", city='" + city + '\'' +
             ", state='" + state + '\'' +
-            ", zip='" + zip + '\'' +
+            ", zip=" + zip +
             ", addressLine='" + addressLine + '\'' +
             ", additional='" + additional + '\'' +
             '}';
     }
 
     public static final class AddressInquiryDtoBuilder {
+        private Long id;
         private String city;
         private String state;
         private Integer zip;
@@ -124,6 +137,11 @@ public class AddressInquiryDto {
 
         public static AddressInquiryDtoBuilder aAddress() {
             return new AddressInquiryDtoBuilder();
+        }
+
+        public AddressInquiryDtoBuilder withId(Long id) {
+            this.id = id;
+            return this;
         }
 
         public AddressInquiryDtoBuilder withCity(String city) {
@@ -153,6 +171,7 @@ public class AddressInquiryDto {
 
         public AddressInquiryDto build() {
             AddressInquiryDto address = new AddressInquiryDto();
+            address.setId(id);
             address.setCity(city);
             address.setZip(zip);
             address.setState(state);

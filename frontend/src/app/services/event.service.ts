@@ -22,4 +22,13 @@ export class EventService {
     console.log('Create event: ' + JSON.stringify(event));
     return this.httpClient.post<Event>(this.eventBaseUri, event);
   }
+
+  /**
+   * Updates event in the backend
+   * @param event to update
+   */
+  updateEvent(event: Event): Observable<Event> {
+    console.log('Update event: ' + JSON.stringify(event));
+    return this.httpClient.put<Event>(this.eventBaseUri, event);
+  }
 }

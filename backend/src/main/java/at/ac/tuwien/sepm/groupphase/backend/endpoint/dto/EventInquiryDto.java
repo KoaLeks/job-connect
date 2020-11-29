@@ -1,12 +1,18 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Address;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Employer;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Task;
 
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Set;
 
 public class EventInquiryDto {
+
+    private Long id;
+
     @NotNull(message = "must not be null")
     @Future
     private LocalDateTime start;
@@ -20,8 +26,20 @@ public class EventInquiryDto {
     @Size(max = 1000)
     private String description;
 
+    private Employer employer;
+
     @NotNull(message = "must not be null")
     private Address address;
+
+    private Set<Task> tasks;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public LocalDateTime getStart() {
         return start;
@@ -55,6 +73,22 @@ public class EventInquiryDto {
         this.address = address;
     }
 
+    public Employer getEmployer() {
+        return employer;
+    }
+
+    public void setEmployer(Employer employer) {
+        this.employer = employer;
+    }
+
+    public Set<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(Set<Task> tasks) {
+        this.tasks = tasks;
+    }
+
     @AssertTrue(message = "Start Date must be earlier than End Date")
     public boolean isValidDate() {
         return end.isAfter(start);
@@ -65,38 +99,46 @@ public class EventInquiryDto {
         if (this == o) return true;
         if (!(o instanceof EventInquiryDto)) return false;
         EventInquiryDto that = (EventInquiryDto) o;
-        return Objects.equals(start, that.start) &&
-            Objects.equals(end, that.end) &&
-            Objects.equals(description, that.description) &&
-            Objects.equals(address, that.address);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(start, end, description, address);
+        return Objects.hash(id);
     }
 
     @Override
     public String toString() {
         return "EventInquiryDto{" +
-            "start=" + start +
+            "id=" + id +
+            ", start=" + start +
             ", end=" + end +
             ", description='" + description + '\'' +
+            ", employer=" + employer +
             ", address=" + address +
+            ", tasks=" + tasks +
             '}';
     }
 
     public static final class EventInquiryDtoBuilder {
+        private Long id;
         private LocalDateTime start;
         private LocalDateTime end;
         private String description;
+        private Employer employer;
         private Address address;
+        private Set<Task> tasks;
 
         private EventInquiryDtoBuilder() {
         }
 
         public static EventInquiryDtoBuilder aEvent() {
             return new EventInquiryDtoBuilder();
+        }
+
+        public EventInquiryDtoBuilder withId(Long id) {
+            this.id = id;
+            return this;
         }
 
         public EventInquiryDtoBuilder withStart(LocalDateTime start) {
@@ -114,17 +156,30 @@ public class EventInquiryDto {
             return this;
         }
 
+        public EventInquiryDtoBuilder withEmployer(Employer employer) {
+            this.employer = employer;
+            return this;
+        }
+
         public EventInquiryDtoBuilder withAddress(Address address) {
             this.address = address;
             return this;
         }
 
+        public EventInquiryDtoBuilder withTask(Set<Task> tasks) {
+            this.tasks = tasks;
+            return this;
+        }
+
         public EventInquiryDto build() {
             EventInquiryDto event = new EventInquiryDto();
+            event.setId(id);
             event.setDescription(description);
             event.setStart(start);
             event.setEnd(end);
+            event.setEmployer(employer);
             event.setAddress(address);
+            event.setTasks(tasks);
             return event;
         }
     }

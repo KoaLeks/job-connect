@@ -40,5 +40,16 @@ public class AddressEndpoint {
 
     }
 
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Update an address", authorizations = {@Authorization(value = "apiKey")})
+    public AddressDto update(@Valid @RequestBody AddressInquiryDto addressDto) {
+        LOGGER.info("PUT /api/v1/addresses/{}", addressDto);
+
+        return addressMapper.addressToAddressDto(
+            addressService.saveAddress(addressMapper.addressInquiryDtoToAddress(addressDto)));
+
+    }
+
 
 }

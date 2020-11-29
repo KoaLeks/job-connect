@@ -22,4 +22,13 @@ export class AddressService {
     console.log('Create address: ' + JSON.stringify(address));
     return this.httpClient.post<Address>(this.addressBaseUri, address);
   }
+
+  /**
+   * Updates an address in the backend
+   * @param address to update
+   */
+  updateAddress(address: Address): Observable<Address> {
+    console.log('Update address: ' + JSON.stringify(address));
+    return this.httpClient.put<Address>(this.addressBaseUri, address);
+  }
 }
