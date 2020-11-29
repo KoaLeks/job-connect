@@ -21,7 +21,6 @@ public class TaskInquiryDto {
     @PositiveOrZero
     private Double paymentHourly;
 
-    @NotNull(message = "must not be null")
     private Set<Employee> employees;
 
     private InterestArea interestArea;
