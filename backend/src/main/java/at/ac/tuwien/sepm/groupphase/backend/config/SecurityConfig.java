@@ -4,7 +4,7 @@ import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties
 import at.ac.tuwien.sepm.groupphase.backend.security.JwtAuthenticationFilter;
 import at.ac.tuwien.sepm.groupphase.backend.security.JwtAuthorizationFilter;
 import at.ac.tuwien.sepm.groupphase.backend.security.JwtTokenizer;
-import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
+import at.ac.tuwien.sepm.groupphase.backend.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -31,17 +31,17 @@ import java.util.stream.Collectors;
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserService userService;
+    private final ProfileService profileService;
     private final PasswordEncoder passwordEncoder;
     private final RequestMatcher whiteListedRequests;
     private final SecurityProperties securityProperties;
     private final JwtTokenizer jwtTokenizer;
 
     @Autowired
-    public SecurityConfig(UserService userService,
+    public SecurityConfig(ProfileService profileService,
                           PasswordEncoder passwordEncoder,
                           SecurityProperties securityProperties, JwtTokenizer jwtTokenizer) {
-        this.userService = userService;
+        this.profileService = profileService;
         this.securityProperties = securityProperties;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenizer = jwtTokenizer;
@@ -71,7 +71,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService).passwordEncoder(passwordEncoder);
+        auth.userDetailsService(profileService).passwordEncoder(passwordEncoder);
     }
 
     @Bean

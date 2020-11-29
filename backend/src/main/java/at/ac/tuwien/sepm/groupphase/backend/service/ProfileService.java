@@ -1,11 +1,12 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
-import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Profile;
+import at.ac.tuwien.sepm.groupphase.backend.exception.UniqueConstraintException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-public interface UserService extends UserDetailsService {
+public interface ProfileService extends UserDetailsService {
 
     /**
      * Find a user in the context of Spring Security based on the email address
@@ -21,10 +22,12 @@ public interface UserService extends UserDetailsService {
     UserDetails loadUserByUsername(String email) throws UsernameNotFoundException;
 
     /**
-     * Find a application user based on the email address
+     * Find a profile based on the email address
      *
      * @param email the email address
-     * @return a application user
+     * @return a profile
      */
-    ApplicationUser findApplicationUserByEmail(String email);
+    Profile findProfileByEmail(String email);
+
+    Long createProfile(Profile profile);
 }
