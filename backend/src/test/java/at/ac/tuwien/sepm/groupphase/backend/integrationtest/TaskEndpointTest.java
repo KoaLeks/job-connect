@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @ExtendWith(SpringExtension.class)
@@ -112,9 +113,72 @@ public class TaskEndpointTest implements TestData {
                 String content = response.getContentAsString();
                 content = content.substring(content.indexOf('[') + 1, content.indexOf(']'));
                 String[] errors = content.split(",");
-                assertEquals(4, errors.length);
+                assertEquals(5, errors.length);
             }
         );
+    }
+
+    @Test
+    public void updateTaskToInvalidPaymentHourly_ShouldReturnBadRequestTest() throws Exception {
+        String body = objectMapper.writeValueAsString(taskMapper.taskToTaskInquiryDto(task));
+
+        MvcResult mvcResult = this.mockMvc.perform(post(TASKS_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(body))
+            .andDo(print())
+            .andReturn();
+        MockHttpServletResponse response = mvcResult.getResponse();
+
+        assertEquals(HttpStatus.CREATED.value(), response.getStatus());
+        assertEquals(taskRepository.count(), 1);
+
+        task.setId(1L);
+        task.setPaymentHourly(-20.5);
+
+        String updatedBody = objectMapper.writeValueAsString(taskMapper.taskToTaskInquiryDto(task));
+
+        MvcResult mvcUpdatedResult = this.mockMvc.perform(put(TASKS_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(updatedBody))
+            .andDo(print())
+            .andReturn();
+        MockHttpServletResponse updatedResponse = mvcUpdatedResult.getResponse();
+
+        assertEquals(HttpStatus.BAD_REQUEST.value(), updatedResponse.getStatus());
+    }
+
+    @Test
+    public void updateTaskEmployeeCountToZeroWhenEmployeesIsNull_ShouldReturnOK() throws Exception {
+        String body = objectMapper.writeValueAsString(taskMapper.taskToTaskInquiryDto(task));
+
+        MvcResult mvcResult = this.mockMvc.perform(post(TASKS_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(body))
+            .andDo(print())
+            .andReturn();
+        MockHttpServletResponse response = mvcResult.getResponse();
+
+        assertEquals(HttpStatus.CREATED.value(), response.getStatus());
+        assertEquals(taskRepository.count(), 1);
+
+        task.setId(1L);
+        task.setEmployeeCount(0);
+        task.setEmployees(null);
+
+        String updatedBody = objectMapper.writeValueAsString(taskMapper.taskToTaskInquiryDto(task));
+
+        MvcResult mvcUpdatedResult = this.mockMvc.perform(put(TASKS_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(updatedBody))
+            .andDo(print())
+            .andReturn();
+        MockHttpServletResponse updatedResponse = mvcUpdatedResult.getResponse();
+
+        assertEquals(HttpStatus.OK.value(), updatedResponse.getStatus());
     }
 
 

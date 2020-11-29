@@ -85,15 +85,15 @@ public class TaskInquiryDto {
         this.interestArea = interestArea;
     }
 
-    @AssertTrue(message = "Number of employees must be at least as high as the number of tasks")
+    @AssertTrue(message = "employeeCount must be at least as high as number of employees")
     public boolean isValidEmployeeCount() {
         if(employees != null && employeeCount != null) {
             return employeeCount >= employees.size();
-        } else if(employees == null && employeeCount != null) {
-            return employeeCount >= 0;
-        } else {
-            return false;
         }
+        if(employees == null && employeeCount != null) {
+            return employeeCount >= 0;
+        }
+        return false;
     }
 
     @Override
