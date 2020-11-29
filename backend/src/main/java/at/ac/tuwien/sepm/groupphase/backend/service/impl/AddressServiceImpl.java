@@ -23,8 +23,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public Address saveAddress(Address address) {
-        LOGGER.trace("save address({})", address);
-        //TODO validator.validateNewAddress(address);
+        LOGGER.debug("save address({})", address);
         return addressRepository.save(address);
     }
 }

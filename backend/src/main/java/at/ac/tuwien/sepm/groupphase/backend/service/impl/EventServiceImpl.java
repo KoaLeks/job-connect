@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.validation.ValidationException;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
@@ -22,9 +24,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event saveEvent(Event event) {
-        LOGGER.trace("save event({})", event);
-        //TODO validator.validateNewEvent(event);
+    public Event saveEvent(Event event) throws ValidationException {
+        LOGGER.debug("save event({})", event);
         return eventRepository.save(event);
     }
 

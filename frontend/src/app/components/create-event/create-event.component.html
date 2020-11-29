@@ -1,0 +1,153 @@
+<!-- Modal ADD TASK-->
+<div class="modal fade" id="Add-Task" tabindex="-1" role="dialog" aria-labelledby="addTaskLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addTaskLabel">Enter Task Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <!-- TASK FORM -->
+      <form [formGroup]="taskCreationForm" (ngSubmit)="addTask(taskCreationForm.value)">
+        <div class="form-group">
+          <label for="InputTaskDescription">Description<b>*</b></label>
+          <input type="text" maxlength="1000" class="form-control" id="InputTaskDescription"
+                 formControlName="description" pattern="[a-zA-Z]+([ ]|[a-zA-Z]|[0-9])*">
+        </div>
+        <div class="form-group">
+          <label for="InputEmployeeCount">Employee Count<b>*</b></label>
+          <input type="number" min="1" pattern="[0-9]*" class="form-control" id="InputEmployeeCount" formControlName="employeeCount">
+        </div>
+        <div class="form-group">
+          <label for="InputPaymentHourly">Payment per Hour<b>*</b></label>
+          <input type="number" min="0" class="form-control" id="InputPaymentHourly" formControlName="paymentHourly">
+        </div>
+        <div class="form-group" *ngIf="this.interestAreas !== undefined && this.interestAreas.length !== 0">
+          <label for="InputInterestArea">Interest Area</label>
+          <select class="form-control" id="InputInterestArea" formControlName="interestArea">
+            <option [value]=null>no InterestArea chosen</option>
+            <ng-container *ngFor="let interestArea of this.interestAreas">
+              <option [value]="interestArea.id">Area: {{interestArea.area}} -
+                Description: {{interestArea.description}}</option>
+            </ng-container>
+
+          </select>
+        </div>
+
+        <!-- TASK FORM -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" data-toggle="modal"
+                  data-target="#Add-Task" [disabled]="!taskCreationForm.valid">Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- Modal ADD TASK-->
+
+<div class="jumbotron mt-5">
+  <h1 class="display-4">Event Creation</h1>
+  <hr class="my-4">
+  <a *ngIf="!authService.isLoggedIn()" class="btn btn-primary btn-lg" routerLink="/login" role="button">Login</a>
+  <div *ngIf="authService.isLoggedIn()">
+
+    <h5>Enter Event Details</h5>
+    <!-- EVENT FORM -->
+    <form [formGroup]="eventCreationForm" (ngSubmit)="createEvent(eventCreationForm.value,
+     addressCreationForm.value, this.tasks)">
+      <div class="form-group">
+        <label for="InputStart">Start<b>*</b></label>
+        <input type="datetime-local" max="9999-12-31T00:00" class="form-control" id="InputStart"
+               formControlName="start">
+      </div>
+      <div class="form-group">
+        <label for="InputEnd">End<b>*</b></label>
+        <input type="datetime-local" max="9999-12-31T00:00" class="form-control" id="InputEnd" formControlName="end">
+      </div>
+      <div class="form-group">
+        <label for="InputDescription">Description<b>*</b></label>
+        <input type="text" maxlength="1000" class="form-control" id="InputDescription" formControlName="description">
+      </div>
+      <br>
+
+      <h5>Enter Address Details</h5>
+      <!-- ADDRESS FORM -->
+      <form [formGroup]="addressCreationForm">
+        <div class="form-group">
+          <label for="InputCity">City<b>*</b></label>
+          <input type="text" class="form-control" id="InputCity" aria-describedby="enterCity"
+                 formControlName="city" required>
+        </div>
+        <div class="form-group">
+          <label for="InputState">State<b>*</b></label>
+          <select class="form-control" id="InputState" formControlName="state">
+            <option>Vienna</option>
+            <option>Lower Austria</option>
+            <option>Upper Austria</option>
+            <option>Styria</option>
+            <option>Tyrol</option>
+            <option>Carinthia</option>
+            <option>Salzburg</option>
+            <option>Vorarlberg</option>
+            <option>Burgenland</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="InputZip">Zip<b>*</b></label>
+          <input type="number" min="1000" max="9999" class="form-control" id="InputZip" formControlName="zip">
+        </div>
+        <div class="form-group">
+          <label for="InputAddressLine">Address line<b>*</b></label>
+          <input type="text" class="form-control" id="InputAddressLine" formControlName="addressLine">
+        </div>
+        <div class="form-group">
+          <label for="InputAdditional">additional</label>
+          <input type="text" class="form-control" id="InputAdditional" formControlName="additional">
+        </div>
+
+      </form>
+      <!-- ADDRESS FORM -->
+
+      <div style="color: red;">
+        fields marked with <b>*</b> are obligatory!
+      </div>
+
+      <br>
+
+
+      <div *ngIf="tasks.length == 0">
+        <br><br>
+        <h5>Add some tasks to your Event</h5>
+      </div>
+      <br>
+
+      <!-- Button trigger modal ADD TASK-->
+      <button type="button" class="btn btn-primary" data-toggle="modal"
+              data-target="#Add-Task" (click)="getInterestAreas()">
+        Add Task
+      </button>
+
+      <div *ngIf="tasks.length != 0">
+        <br><br>
+        <h5>Added Tasks: </h5>
+        <ng-container *ngFor="let task of tasks">
+          <div>
+            Task: {{task.description}} Payment: {{task.paymentHourly}}€/h Jobs: {{task.employeeCount}}
+            <button type="button" class="small" (click)="deleteTask(task)">&times;</button>
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="form-group form-check">
+        <button type="submit" style="float: right" class="btn btn-primary"
+                [disabled]="!eventCreationForm.valid || !addressCreationForm.valid ||
+                 this.tasks.length == 0">Submit
+        </button>
+      </div>
+    </form>
+    <!-- EVENT FORM -->
+  </div>
+</div>

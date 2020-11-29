@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Globals} from '../global/globals';
 import {Event} from '../dtos/event';
@@ -10,7 +10,6 @@ import {Event} from '../dtos/event';
 export class EventService {
 
   private eventBaseUri: string = this.globals.backendUri + '/events';
-
 
   constructor(private httpClient: HttpClient, private globals: Globals) {
   }

@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleEventDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventInquiryDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import io.swagger.annotations.ApiOperation;
@@ -33,11 +34,11 @@ public class EventEndpoint {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Publish a new event", authorizations = {@Authorization(value = "apiKey")})
-    public EventDto create(@Valid @RequestBody EventDto eventDto) {
+    public EventDto create(@Valid @RequestBody EventInquiryDto eventDto) {
         LOGGER.info("POST /api/v1/events/{}", eventDto);
 
         return eventMapper.eventToEventDto(
-          eventService.saveEvent(eventMapper.eventDtoToEvent(eventDto)));
+            eventService.saveEvent(eventMapper.eventInquiryDtoToEvent(eventDto)));
 
     }
 

@@ -2,6 +2,8 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleEventDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventInquiryDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.MessageInquiryDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 
 import org.mapstruct.IterableMapping;
@@ -23,5 +25,9 @@ public interface EventMapper {
 
     @IterableMapping(qualifiedByName = "simpleEvent")
     List<SimpleEventDto> eventsToSimpleEventsDtos(List<Event> events);
+
+    Event eventInquiryDtoToEvent(EventInquiryDto eventInquiryDto);
+
+    EventInquiryDto eventToEventInquiryDto(Event event);
 
 }

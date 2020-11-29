@@ -5,12 +5,14 @@ import {LoginComponent} from './components/login/login.component';
 import {AuthGuard} from './guards/auth.guard';
 import {MessageComponent} from './components/message/message.component';
 import {EventOverviewComponent} from './components/event-overview/event-overview.component';
+import {CreateEventComponent} from './components/create-event/create-event.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'login', component: LoginComponent},
+  {path: 'events', component: EventOverviewComponent},
   {path: 'message', canActivate: [AuthGuard], component: MessageComponent},
-  {path: 'events', component: EventOverviewComponent}
+  {path: 'create-event', component: CreateEventComponent}
 ];
 
 @NgModule({

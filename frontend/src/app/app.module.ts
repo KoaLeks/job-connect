@@ -12,6 +12,7 @@ import {LoginComponent} from './components/login/login.component';
 import {MessageComponent} from './components/message/message.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {httpInterceptorProviders} from './interceptors';
+import { CreateEventComponent } from './components/create-event/create-event.component';
 import { EventOverviewComponent } from './components/event-overview/event-overview.component';
 
 @NgModule({
@@ -23,6 +24,7 @@ import { EventOverviewComponent } from './components/event-overview/event-overvi
     LoginComponent,
     MessageComponent,
     EventOverviewComponent,
+    CreateEventComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.AddressDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.AddressInquiryDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.AddressMapper;
 import at.ac.tuwien.sepm.groupphase.backend.service.AddressService;
 import io.swagger.annotations.ApiOperation;
@@ -31,11 +32,11 @@ public class AddressEndpoint {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Publish a new address", authorizations = {@Authorization(value = "apiKey")})
-    public AddressDto create(@Valid @RequestBody AddressDto addressDto) {
+    public AddressDto create(@Valid @RequestBody AddressInquiryDto addressDto) {
         LOGGER.info("POST /api/v1/addresses/{}", addressDto);
 
         return addressMapper.addressToAddressDto(
-            addressService.saveAddress(addressMapper.addressDtoToAddress(addressDto)));
+            addressService.saveAddress(addressMapper.addressInquiryDtoToAddress(addressDto)));
 
     }
 

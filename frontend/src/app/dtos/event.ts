@@ -1,4 +1,5 @@
 import {Address} from './address';
+import {Task} from './task';
 
 export class Event {
   constructor(
@@ -7,6 +8,7 @@ export class Event {
     public end: string,
     public description: string,
     public employer: string,
-    public address: Address) {
+    public address: Address,
+    public tasks: Task[]) {
   }
 }

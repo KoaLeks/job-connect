@@ -2,26 +2,28 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 
+import javax.validation.constraints.*;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
-public class TaskDto {
+public class TaskInquiryDto {
 
-    private Long id;
+    @NotNull(message = "must not be null")
+    @NotBlank(message = "must not be empty")
+    @Size(max = 1000)
     private String description;
+
+    @NotNull(message = "must not be null")
     private Integer employeeCount;
+
+    @NotNull(message = "must not be null")
+    @PositiveOrZero
     private Double paymentHourly;
-    private Event event;
+
     private Set<Employee> employees;
+
     private InterestArea interestArea;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getDescription() {
         return description;
@@ -47,14 +49,6 @@ public class TaskDto {
         this.paymentHourly = paymentHourly;
     }
 
-    public Event getEvent() {
-        return event;
-    }
-
-    public void setEvent(Event event) {
-        this.event = event;
-    }
-
     public Set<Employee> getEmployees() {
         return employees;
     }
@@ -75,86 +69,74 @@ public class TaskDto {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TaskDto taskDto = (TaskDto) o;
-        return Objects.equals(id, taskDto.id);
+        TaskInquiryDto that = (TaskInquiryDto) o;
+        return Objects.equals(description, that.description) &&
+            Objects.equals(employeeCount, that.employeeCount) &&
+            Objects.equals(paymentHourly, that.paymentHourly) &&
+            Objects.equals(employees, that.employees) &&
+            Objects.equals(interestArea, that.interestArea);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(description, employeeCount, paymentHourly, employees, interestArea);
     }
 
     @Override
     public String toString() {
         return "TaskDto{" +
-            "id=" + id +
-            ", description='" + description + '\'' +
+            "description='" + description + '\'' +
             ", employeeCount=" + employeeCount +
             ", paymentHourly=" + paymentHourly +
-            ", event=" + event +
             ", employees=" + employees +
             ", interestArea=" + interestArea +
             '}';
     }
 
-    public static final class TaskDtoBuilder {
-        private Long id;
+    public static final class TaskInquiryDtoBuilder {
         private String description;
         private Integer employeeCount;
         private Double paymentHourly;
-        private Event event;
         private Set<Employee> employees;
         private InterestArea interestArea;
 
-        private TaskDtoBuilder() {
+        private TaskInquiryDtoBuilder() {
         }
 
-        public static TaskDtoBuilder aTask() {
-            return new TaskDtoBuilder();
+        public static TaskInquiryDtoBuilder aTask() {
+            return new TaskInquiryDtoBuilder();
         }
 
-        public TaskDtoBuilder withId(Long id) {
-            this.id = id;
-            return this;
-        }
-
-        public TaskDtoBuilder withDescription(String description) {
+        public TaskInquiryDtoBuilder withDescription(String description) {
             this.description = description;
             return this;
         }
 
-        public TaskDtoBuilder withEmployeeCount(Integer employeeCount) {
+        public TaskInquiryDtoBuilder withEmployeeCount(Integer employeeCount) {
             this.employeeCount = employeeCount;
             return this;
         }
 
-        public TaskDtoBuilder withPaymentHourly(Double paymentHourly) {
+        public TaskInquiryDtoBuilder withPaymentHourly(Double paymentHourly) {
             this.paymentHourly = paymentHourly;
             return this;
         }
 
-        public TaskDtoBuilder withEvent(Event event) {
-            this.event = event;
-            return this;
-        }
-
-        public TaskDtoBuilder withEmployees(Set<Employee> employees) {
+        public TaskInquiryDtoBuilder withEmployees(Set<Employee> employees) {
             this.employees = employees;
             return this;
         }
 
-        public TaskDtoBuilder withInterestArea(InterestArea interestArea) {
+        public TaskInquiryDtoBuilder withInterestArea(InterestArea interestArea) {
             this.interestArea = interestArea;
             return this;
         }
 
-        public TaskDto build() {
-            TaskDto task = new TaskDto();
+        public TaskInquiryDto build() {
+            TaskInquiryDto task = new TaskInquiryDto();
             task.setDescription(description);
-            task.setId(id);
             task.setEmployeeCount(employeeCount);
             task.setEmployees(employees);
-            task.setEvent(event);
             task.setInterestArea(interestArea);
             task.setPaymentHourly(paymentHourly);
             return task;

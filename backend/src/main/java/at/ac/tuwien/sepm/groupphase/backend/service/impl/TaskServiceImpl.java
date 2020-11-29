@@ -24,8 +24,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task saveTask(Task task) {
-        LOGGER.trace("save task({})", task);
-        //TODO validator.validateNewTask(task);
+        LOGGER.debug("save task({})", task);
         return taskRepository.save(task);
     }
 
