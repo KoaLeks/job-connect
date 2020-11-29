@@ -4,7 +4,6 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import org.slf4j.Logger;

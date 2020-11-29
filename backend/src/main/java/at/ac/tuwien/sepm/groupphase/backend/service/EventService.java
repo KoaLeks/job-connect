@@ -18,7 +18,7 @@ public interface EventService {
     /**
      * Find all event entries.
      *
-     * @return ordered list of al event entries
+     * @return  list of all event entries
      */
     List<Event> findAll();
 }
