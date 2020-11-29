@@ -2,8 +2,11 @@ package at.ac.tuwien.sepm.groupphase.backend.integrationtest;
 
 import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
 import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Address;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+import at.ac.tuwien.sepm.groupphase.backend.repository.AddressRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.security.JwtTokenizer;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,8 +24,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
@@ -39,6 +46,9 @@ public class EventEndpointTest implements TestData {
     private EventRepository eventRepository;
 
     @Autowired
+    private AddressRepository addressRepository;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     @Autowired
@@ -50,30 +60,40 @@ public class EventEndpointTest implements TestData {
     @Autowired
     private SecurityProperties securityProperties;
 
+    private final Address address = Address.AddressBuilder.aAddress()
+        .withCity(CITY)
+        .withState(STATE)
+        .withZip(ZIP)
+        .withAddressLine(ADDRESS_LINE)
+        .withAdditional(ADDITIONAL)
+        .build();
+
     private Event event = Event.EventBuilder.aEvent()
         .withStart(START)
         .withEnd(END)
         .withDescription(DESCRIPTION_EVENT)
         .withEmployer(EMPLOYER)
-        .withAddress(ADDRESS)
+        .withAddress(address)
         .withTask(TASKS_EVENT)
         .build();
 
     @BeforeEach
     public void beforeEach() {
         eventRepository.deleteAll();
+        addressRepository.deleteAll();
         event = Event.EventBuilder.aEvent()
             .withStart(START)
             .withEnd(END)
             .withDescription(DESCRIPTION_EVENT)
             .withEmployer(EMPLOYER)
-            .withAddress(ADDRESS)
+            .withAddress(address)
             .withTask(TASKS_EVENT)
             .build();
     }
 
     @Test
     public void createValidEventTest() throws Exception {
+        addressRepository.save(address);
         String body = objectMapper.writeValueAsString(eventMapper.eventToEventInquiryDto(event));
 
         MvcResult mvcResult = this.mockMvc.perform(post(EVENTS_BASE_URI)
@@ -119,6 +139,51 @@ public class EventEndpointTest implements TestData {
         );
     }
 
+    @Test
+    public void givenNothing_whenFindAll_thenEmptyEventList() throws Exception {
+        MvcResult mvcResult = this.mockMvc.perform(get(EVENTS_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)))
+            .andDo(print())
+            .andReturn();
+        MockHttpServletResponse response = mvcResult.getResponse();
+
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(MediaType.APPLICATION_JSON_VALUE, response.getContentType());
+
+        List<SimpleEventDto> simpleEventDtos = Arrays.asList(objectMapper.readValue(response.getContentAsString(),
+            SimpleEventDto[].class));
+
+        assertEquals(0, simpleEventDtos.size());
+    }
+
+    @Test
+    public void givenOneEvent_whenFindAll_thenListWithSizeOneAndEventWithAllPropertiesExceptTasksAndEmployee()
+        throws Exception {
+        addressRepository.save(address);
+        eventRepository.save(event);
+
+        MvcResult mvcResult = this.mockMvc.perform(get(EVENTS_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)))
+            .andDo(print())
+            .andReturn();
+        MockHttpServletResponse response = mvcResult.getResponse();
+
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(MediaType.APPLICATION_JSON_VALUE, response.getContentType());
+
+        List<SimpleEventDto> simpleEventDtos = Arrays.asList(objectMapper.readValue(response.getContentAsString(),
+            SimpleEventDto[].class));
+
+        assertEquals(1, simpleEventDtos.size());
+        SimpleEventDto simpleEventDto = simpleEventDtos.get(0);
+        assertAll(
+            () -> assertEquals(event.getId(), simpleEventDto.getId()),
+            () -> assertEquals(START, simpleEventDto.getStart()),
+            () -> assertEquals(END, simpleEventDto.getEnd()),
+            () -> assertEquals(DESCRIPTION_EVENT, simpleEventDto.getDescription()),
+            () -> assertEquals(address, simpleEventDto.getAddress())
+        );
+    }
 
 }
 
