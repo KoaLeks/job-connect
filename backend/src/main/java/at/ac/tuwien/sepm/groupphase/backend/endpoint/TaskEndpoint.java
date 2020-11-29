@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.invoke.MethodHandles;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/tasks")
@@ -49,13 +48,5 @@ public class TaskEndpoint {
 
         return taskMapper.taskToTaskDto(
             taskService.saveTask(taskMapper.taskInquiryDtoToTask(taskDto)));
-    }
-
-
-    @GetMapping
-    @ApiOperation(value = "Get list of tasks", authorizations = {@Authorization(value = "apiKey")})
-    public List<TaskDto> findAll() {
-        LOGGER.info("GET /api/v1/tasks");
-        return taskMapper.taskstoTaskDtos(taskService.findAll());
     }
 }
