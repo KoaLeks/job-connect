@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventInquiryDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.invoke.MethodHandles;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/events")
@@ -40,6 +42,13 @@ public class EventEndpoint {
 
     }
 
+    @GetMapping
+    @ApiOperation(value = "Get list of events")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public List<SimpleEventDto> findAll() {
+        LOGGER.info("GET /api/v1/events");
+        return eventMapper.eventsToSimpleEventsDtos(eventService.findAll());
+    }
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Update an event", authorizations = {@Authorization(value = "apiKey")})

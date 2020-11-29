@@ -13,6 +13,7 @@ import {MessageComponent} from './components/message/message.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {httpInterceptorProviders} from './interceptors';
 import { CreateEventComponent } from './components/create-event/create-event.component';
+import { EventOverviewComponent } from './components/event-overview/event-overview.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { CreateEventComponent } from './components/create-event/create-event.com
     HomeComponent,
     LoginComponent,
     MessageComponent,
+    EventOverviewComponent,
     CreateEventComponent,
   ],
   imports: [

@@ -27,8 +27,8 @@ public interface TestData {
     String CITY = "Linz";
     String STATE = "Upper Austria";
     Integer ZIP = 4020;
-    String ADDRESS_LINE = "Baumstraße 5";
-    String ADDITIONAL = "Tür 17";
+    String ADDRESS_LINE = "Baumstrasse 5";
+    String ADDITIONAL = "Tuer 17";
 
     Long INTEREST_AREA_ID = 1L;
     String AREA = "Promo";
@@ -47,7 +47,7 @@ public interface TestData {
     Long EVENT_ID = 1L;
     LocalDateTime START = LocalDateTime.of(2022, 11, 13, 12, 0, 0, 0);
     LocalDateTime END = LocalDateTime.of(2022, 11, 13, 18, 0, 0, 0);
-    String DESCRIPTION_EVENT = "Flyer verteilen für einen Smoothie Konzern am Karlsplatz";
+    String DESCRIPTION_EVENT = "Flyer verteilen fuer einen Smoothie Konzern am Karlsplatz";
     Employer EMPLOYER = null;
     Address ADDRESS = null;
     Set<Task> TASKS_EVENT = null;

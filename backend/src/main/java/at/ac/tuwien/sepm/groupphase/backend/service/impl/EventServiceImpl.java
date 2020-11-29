@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.ValidationException;
 import java.lang.invoke.MethodHandles;
+import java.util.List;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -27,4 +28,12 @@ public class EventServiceImpl implements EventService {
         LOGGER.debug("save event({})", event);
         return eventRepository.save(event);
     }
+
+    @Override
+    public List<Event> findAll() {
+        LOGGER.debug("Find all events");
+        return eventRepository.findAll();
+    }
+
+
 }

@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.integrationtest;
 
 import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
 import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedMessageDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
@@ -27,8 +28,12 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.time.LocalDateTime;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -214,6 +219,51 @@ public class EventEndpointTest implements TestData {
 
     }
 
+    @Test
+    public void givenNothing_whenFindAll_thenEmptyEventList() throws Exception {
+        MvcResult mvcResult = this.mockMvc.perform(get(EVENTS_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)))
+            .andDo(print())
+            .andReturn();
+        MockHttpServletResponse response = mvcResult.getResponse();
+
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(MediaType.APPLICATION_JSON_VALUE, response.getContentType());
+
+        List<SimpleEventDto> simpleEventDtos = Arrays.asList(objectMapper.readValue(response.getContentAsString(),
+            SimpleEventDto[].class));
+
+        assertEquals(0, simpleEventDtos.size());
+    }
+
+    @Test
+    public void givenOneEvent_whenFindAll_thenListWithSizeOneAndEventWithAllPropertiesExceptTasksAndEmployee()
+        throws Exception {
+        addressRepository.save(address);
+        eventRepository.save(event);
+
+        MvcResult mvcResult = this.mockMvc.perform(get(EVENTS_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)))
+            .andDo(print())
+            .andReturn();
+        MockHttpServletResponse response = mvcResult.getResponse();
+
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(MediaType.APPLICATION_JSON_VALUE, response.getContentType());
+
+        List<SimpleEventDto> simpleEventDtos = Arrays.asList(objectMapper.readValue(response.getContentAsString(),
+            SimpleEventDto[].class));
+
+        assertEquals(1, simpleEventDtos.size());
+        SimpleEventDto simpleEventDto = simpleEventDtos.get(0);
+        assertAll(
+            () -> assertEquals(event.getId(), simpleEventDto.getId()),
+            () -> assertEquals(START, simpleEventDto.getStart()),
+            () -> assertEquals(END, simpleEventDto.getEnd()),
+            () -> assertEquals(DESCRIPTION_EVENT, simpleEventDto.getDescription()),
+            () -> assertEquals(address, simpleEventDto.getAddress())
+        );
+    }
 
 }
 

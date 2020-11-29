@@ -31,4 +31,8 @@ export class EventService {
     console.log('Update event: ' + JSON.stringify(event));
     return this.httpClient.put<Event>(this.eventBaseUri, event);
   }
+
+  getEvents(): Observable<Event[]> {
+    return this.httpClient.get<Event[]>(this.eventBaseUri);
+  }
 }

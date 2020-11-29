@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleMessageDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.TaskDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.TaskInquiryDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.TaskMapper;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.invoke.MethodHandles;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/tasks")
@@ -50,4 +52,10 @@ public class TaskEndpoint {
     }
 
 
+    @GetMapping
+    @ApiOperation(value = "Get list of tasks", authorizations = {@Authorization(value = "apiKey")})
+    public List<TaskDto> findAll() {
+        LOGGER.info("GET /api/v1/tasks");
+        return taskMapper.taskstoTaskDtos(taskService.findAll());
+    }
 }
