@@ -57,7 +57,11 @@ public class EventInquiryDto {
 
     @AssertTrue(message = "Start Date must be earlier than End Date")
     public boolean isValidDate() {
-        return end.isAfter(start);
+        if (end != null && start != null) {
+            return end.isAfter(start);
+        } else {
+            return false;
+        }
     }
 
     @Override
