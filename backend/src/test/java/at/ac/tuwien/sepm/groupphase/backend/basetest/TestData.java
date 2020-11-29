@@ -45,8 +45,8 @@ public interface TestData {
     InterestArea INTEREST_AREA = null;
 
     Long EVENT_ID = 1L;
-    LocalDateTime START = LocalDateTime.of(2019, 11, 13, 12, 0, 0, 0);
-    LocalDateTime END = LocalDateTime.of(2019, 11, 13, 18, 0, 0, 0);
+    LocalDateTime START = LocalDateTime.of(2022, 11, 13, 12, 0, 0, 0);
+    LocalDateTime END = LocalDateTime.of(2022, 11, 13, 18, 0, 0, 0);
     String DESCRIPTION_EVENT = "Flyer verteilen für einen Smoothie Konzern am Karlsplatz";
     Employer EMPLOYER = null;
     Address ADDRESS = null;

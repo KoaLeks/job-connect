@@ -88,7 +88,6 @@ public class TaskEndpointTest implements TestData {
         assertEquals(taskRepository.count(), 1);
     }
 
-
     @Test
     public void tryCreateTaskWithoutDescription_EmployeeCount_PaymentHourly_Event_ShouldReturnBadRequest() throws Exception {
         task.setDescription(null);
@@ -112,7 +111,7 @@ public class TaskEndpointTest implements TestData {
                 String content = response.getContentAsString();
                 content = content.substring(content.indexOf('[') + 1, content.indexOf(']'));
                 String[] errors = content.split(",");
-                assertEquals(4, errors.length);
+                assertEquals(5, errors.length);
             }
         );
     }
