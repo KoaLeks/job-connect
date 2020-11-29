@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
+import java.util.List;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -26,5 +27,11 @@ public class TaskServiceImpl implements TaskService {
         LOGGER.trace("save task({})", task);
         //TODO validator.validateNewTask(task);
         return taskRepository.save(task);
+    }
+
+    @Override
+    public List<Task> findAll() {
+        LOGGER.debug("Find all tasks");
+        return taskRepository.findAll();
     }
 }
