@@ -82,38 +82,46 @@ public class Interest {
             '}';
     }
 
-    public static final class InterestBuilder{
+    public static final class InterestBuilder {
         private Long id;
         private String name;
         private String description;
         private InterestArea interestArea;
         private Set<Employee> employees;
 
-        private InterestBuilder(){}
-        public static InterestBuilder aInterest(){
+        private InterestBuilder() {
+        }
+
+        public static InterestBuilder aInterest() {
             return new InterestBuilder();
         }
-        public InterestBuilder withId(Long id){
+
+        public InterestBuilder withId(Long id) {
             this.id = id;
             return this;
         }
-        public InterestBuilder withDescription(String description){
+
+        public InterestBuilder withDescription(String description) {
             this.description = description;
             return this;
         }
-        public InterestBuilder withName(String name){
+
+        public InterestBuilder withName(String name) {
             this.name = name;
             return this;
         }
-        public InterestBuilder withInterestArea(InterestArea interestArea){
+
+        public InterestBuilder withInterestArea(InterestArea interestArea) {
             this.interestArea = interestArea;
             return this;
         }
-        public InterestBuilder withEmployees(Set<Employee> employees){
+
+        public InterestBuilder withEmployees(Set<Employee> employees) {
             this.employees = employees;
             return this;
         }
-        public Interest build(){
+
+        public Interest build() {
             Interest interest = new Interest();
             interest.setId(id);
             interest.setDescription(description);

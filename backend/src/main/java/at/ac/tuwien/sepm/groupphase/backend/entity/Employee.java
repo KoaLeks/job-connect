@@ -71,31 +71,36 @@ public class Employee {
             '}';
     }
 
-    public static final class EmployeeBuilder{
+    public static final class EmployeeBuilder {
         private Long id;
         private Profile profile;
         private Set<Task> tasks;
         private Set<Interest> interests;
 
-        private EmployeeBuilder(){}
+        private EmployeeBuilder() {
+        }
 
-        public static EmployeeBuilder aEmployee(){
+        public static EmployeeBuilder aEmployee() {
             return new EmployeeBuilder();
         }
-        public EmployeeBuilder withProfile(Profile profile){
+
+        public EmployeeBuilder withProfile(Profile profile) {
             this.id = profile.getId();
             this.profile = profile;
             return this;
         }
-        public EmployeeBuilder withTasks(Set<Task> tasks){
+
+        public EmployeeBuilder withTasks(Set<Task> tasks) {
             this.tasks = tasks;
             return this;
         }
-        public EmployeeBuilder withInterests(Set<Interest> interests){
+
+        public EmployeeBuilder withInterests(Set<Interest> interests) {
             this.interests = interests;
             return this;
         }
-        public Employee build(){
+
+        public Employee build() {
             Employee employee = new Employee();
             employee.setId(id);
             employee.setProfile(profile);

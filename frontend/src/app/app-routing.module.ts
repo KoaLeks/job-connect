@@ -8,10 +8,15 @@ import {EditGuard} from './guards/edit.guard';
 import {EditEmployerComponent} from './components/edit-employer/edit-employer.component';
 import {EditEmployeeComponent} from './components/edit-employee/edit-employee.component';
 import {EditProfileComponent} from './components/edit-profile/edit-profile.component';
+import {EventOverviewComponent} from './components/event-overview/event-overview.component';
+import {CreateEventComponent} from './components/create-event/create-event.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'login', component: LoginComponent},
+  {path: 'events', component: EventOverviewComponent},
+  {path: 'message', canActivate: [AuthGuard], component: MessageComponent},
+  {path: 'create-event', component: CreateEventComponent},
   {path: 'message', canActivate: [AuthGuard], component: MessageComponent},
   {path: 'edit-profile', canActivate: [EditGuard], component: EditProfileComponent},
   {path: 'edit-employee', component: EditEmployeeComponent},

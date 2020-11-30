@@ -19,11 +19,11 @@ public class Address {
     @Column
     private String additional;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -97,43 +97,52 @@ public class Address {
             '}';
     }
 
-    public static final class AddressBuilder{
+    public static final class AddressBuilder {
         private Long id;
         private String city;
         private String state;
         private Integer zip;
         private String addressLine;
         private String additional;
-        private AddressBuilder(){
+
+        private AddressBuilder() {
         }
-        public static AddressBuilder aAddress(){
+
+        public static AddressBuilder aAddress() {
             return new AddressBuilder();
         }
-        public AddressBuilder withId(Long id){
+
+        public AddressBuilder withId(Long id) {
             this.id = id;
             return this;
         }
-        public AddressBuilder withCity(String city){
+
+        public AddressBuilder withCity(String city) {
             this.city = city;
             return this;
         }
-        public AddressBuilder withState(String state){
+
+        public AddressBuilder withState(String state) {
             this.state = state;
             return this;
         }
-        public AddressBuilder withZip(Integer zip){
+
+        public AddressBuilder withZip(Integer zip) {
             this.zip = zip;
             return this;
         }
-        public AddressBuilder withAddressLine(String addressLine){
+
+        public AddressBuilder withAddressLine(String addressLine) {
             this.addressLine = addressLine;
             return this;
         }
-        public AddressBuilder withAdditional(String additional){
+
+        public AddressBuilder withAdditional(String additional) {
             this.additional = additional;
             return this;
         }
-        public Address build(){
+
+        public Address build() {
             Address address = new Address();
             address.setId(id);
             address.setCity(city);

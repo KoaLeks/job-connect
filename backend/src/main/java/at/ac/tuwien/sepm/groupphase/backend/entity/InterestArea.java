@@ -89,10 +89,13 @@ public class InterestArea {
         private Set<Interest> interests;
         private Set<Task> tasks;
 
-        private InterestAreaBuilder(){}
+        private InterestAreaBuilder(){
+        }
+
         public static InterestAreaBuilder aInterest(){
             return new InterestAreaBuilder();
         }
+
         public InterestAreaBuilder withId(Long id){
             this.id = id;
             return this;
