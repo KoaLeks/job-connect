@@ -1,3 +1,10 @@
+<div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+  <strong>Error! </strong> {{ errorMessage }}
+  <button type="button" (click)="vanishError()" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
 <h1>Edit profile</h1>
 <form class="form" [formGroup]="editForm" (ngSubmit)="update()">
   <div class="form-group input-group">
@@ -20,7 +27,7 @@
            placeholder="Last name">
     <div *ngIf="submitted && (editForm.controls.firstName.errors || editForm.controls.lastName.errors)"
          class="error">
-      <small class="form-text text-warning" *ngIf="editForm.controls.lastName.errors.required">Your first and last
+      <small class="form-text text-info" *ngIf="editForm.controls.lastName.errors.required">First and last
         name are required!
       </small>
     </div>
@@ -42,7 +49,7 @@
     <input type="email" name="username" formControlName="email" class="form-control" id="inputEmail"
            aria-describedby="usernameHelp" placeholder="E-Mail" readonly>
     <div *ngIf="submitted && editForm.controls.email.errors" class="error">
-      <small class="form-text text-warning" *ngIf="editForm.controls.email.errors.required">Your E-Mail
+      <small class="form-text text-info" *ngIf="editForm.controls.email.errors.required">E-Mail
         is required!
       </small>
     </div>
@@ -64,11 +71,7 @@
     <input type="password" name="password" formControlName="password" class="form-control" id="password"
            placeholder="New password">
     <div *ngIf="submitted && editForm.controls.password.errors" class="error">
-      <small class="form-text text-warning" *ngIf="editForm.controls.password.errors.required">Your password
-        is required!
-      </small>
-      <small class="form-text text-warning" *ngIf="editForm.controls.password.errors.minlength">Your
-        password
+      <small class="form-text text-info" *ngIf="editForm.controls.password.errors.minlength">New password
         must be at least 8 characters long!
       </small>
     </div>

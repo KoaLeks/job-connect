@@ -3,7 +3,6 @@ import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {EmployerService} from '../../services/employer.service';
-import {EditEmployee} from '../../dtos/edit-employee';
 import {ProfileDto} from '../../dtos/profile-dto';
 import {EditEmployer} from '../../dtos/edit-employer';
 
@@ -47,7 +46,6 @@ export class EditEmployerComponent implements OnInit {
       (profile: any) => {
         this.profile = profile;
         this.editForm.controls['email'].setValue(profile.profileDto.email);
-        // this.editForm.controls['password'].setValue(profile.profileDto.email);
         this.editForm.controls['firstName'].setValue(profile.profileDto.firstName);
         this.editForm.controls['lastName'].setValue(profile.profileDto.lastName);
         this.editForm.controls['companyName'].setValue(profile.companyName);
@@ -75,6 +73,7 @@ export class EditEmployerComponent implements OnInit {
       this.employerService.updateEmployer(employer).subscribe(
         () => {
           console.log('User profile updated successfully');
+          this.router.navigate(['/']);
         },
         error => {
           this.error = true;

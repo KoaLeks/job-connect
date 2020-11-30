@@ -45,7 +45,6 @@ export class EditEmployeeComponent implements OnInit {
       (profile: any) => {
         this.profile = profile;
         this.editForm.controls['email'].setValue(profile.profileDto.email);
-        // this.editForm.controls['password'].setValue(profile.profileDto.password);
         this.editForm.controls['firstName'].setValue(profile.profileDto.firstName);
         this.editForm.controls['lastName'].setValue(profile.profileDto.lastName);
         this.editForm.controls['publicInfo'].setValue(profile.profileDto.publicInfo);
@@ -63,13 +62,14 @@ export class EditEmployeeComponent implements OnInit {
    * Check if the form is valid and call the service to update the employee
    */
   update() {
+    this.submitted = true;
     if (this.editForm.valid) {
-      this.submitted = true;
       this.employee = new EditEmployee(new ProfileDto(this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
         this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value));
       this.employeeService.updateEmployee(this.employee).subscribe(
         (id) => {
           console.log('User profile updated successfully id: ' + id);
+          this.router.navigate(['/']);
         },
         error => {
           this.error = true;
