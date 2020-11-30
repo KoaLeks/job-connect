@@ -13,8 +13,18 @@
       <a class="nav-link" routerLink="/events" routerLinkActive="active">Events</a>
     </ul>
     <ul class="navbar-nav mr-5">
-      <a class="nav-link" *ngIf="!authService.isLoggedIn()" routerLink="/login" routerLinkActive="active">Login</a>
+<!--      <a class="nav-link" *ngIf="!authService.isLoggedIn()" routerLink="/login" routerLinkActive="active">Login</a>-->
+      <div class="btn-group" *ngIf="!authService.isLoggedIn()" role="group">
+        <button id="btnGroupDropLogin" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+          Login
+        </button>
+        <div class="dropdown-menu" aria-labelledby="btnGroupDropLogin">
+          <button class="dropdown-item" data-target="#loginModal" data-toggle="modal" (click)="isEmployee=true">as Employee</button>
+          <button class="dropdown-item" data-target="#loginModal" data-toggle="modal" (click)="isEmployee=false">as Employer</button>
+        </div>
+      </div>
       <a class="nav-link" *ngIf="authService.isLoggedIn()" routerLink="/" (click)="authService.logoutUser()">Logout</a>
     </ul>
   </div>
 </nav>
+<app-login [isEmployee]="isEmployee"></app-login>

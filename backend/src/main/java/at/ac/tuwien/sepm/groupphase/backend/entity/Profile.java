@@ -16,7 +16,7 @@ public class Profile {
     @Column(nullable = false, length = 100)
     private String firstName;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 100, unique = true)
     private String email;
 
     @Column(nullable = false)
@@ -27,7 +27,7 @@ public class Profile {
 
     //If user is an Employee or Employer
     @Column(nullable = false)
-    public boolean employer;
+    private boolean employer;
 
     public Long getId() {
         return id;
@@ -118,7 +118,7 @@ public class Profile {
         private String email;
         private String password;
         private String publicInfo;
-        public boolean employer;
+        private boolean employer;
 
         private ProfileBuilder(){}
 
