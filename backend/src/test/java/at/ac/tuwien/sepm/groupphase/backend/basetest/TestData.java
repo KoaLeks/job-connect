@@ -20,6 +20,9 @@ public interface TestData {
     String EMPLOYEE_PASSWORD = "password1234";
     String EMPLOYEE_PUBLIC_INFO = "This is the public information of Max Mustermann";
 
+    String EDIT_EMPLOYEE_LAST_NAME = "Musterfrau";
+    String EDIT_EMPLOYEE_FIRST_NAME = "Erika";
+
     Long EMPLOYER_ID = 2L;
     String EMPLOYER_LAST_NAME = "Musterfrau";
     String EMPLOYER_FIRST_NAME = "Erika";
@@ -29,10 +32,17 @@ public interface TestData {
     String EMPLOYER_COMPANY_NAME = "Muster Corp.";
     String EMPLOYER_COMPANY_DESCRIPTION = "Muster Corp. Description";
 
+    String EDIT_EMPLOYER_COMPANY_NAME = "Musterfrau Corp.";
+    String EDIT_EMPLOYER_COMPANY_DESCRIPTION = "Musterfrau Corp. Description";
+
     String BASE_URI = "/api/v1";
     String MESSAGE_BASE_URI = BASE_URI + "/messages";
     String REGISTER_EMPLOYEE_BASE_URI = BASE_URI + "/profiles/employee";
     String REGISTER_EMPLOYER_BASE_URI = BASE_URI + "/profiles/employer";
+    String GET_EMPLOYEE_BASE_URI = BASE_URI + "/profiles/employee/";
+    String GET_EMPLOYER_BASE_URI = BASE_URI + "/profiles/employer/";
+    String EDIT_EMPLOYEE_BASE_URI = BASE_URI + "/profiles/employee";
+    String EDIT_EMPLOYER_BASE_URI = BASE_URI + "/profiles/employer";
 
     String ADMIN_USER = "admin@email.com";
     List<String> ADMIN_ROLES = new ArrayList<>() {

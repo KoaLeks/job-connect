@@ -2,6 +2,8 @@ package at.ac.tuwien.sepm.groupphase.backend.integrationtest;
 
 import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
 import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EmployeeMapper;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EmployerMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.RegisterEmployeeMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.RegisterEmployerMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Employee;
@@ -26,10 +28,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.concurrent.ExecutionException;
-
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @ExtendWith(SpringExtension.class)
@@ -59,6 +61,12 @@ public class ProfileEndpointTest implements TestData {
     private RegisterEmployerMapper registerEmployerMapper;
 
     @Autowired
+    private EmployeeMapper employeeMapper;
+
+    @Autowired
+    private EmployerMapper employerMapper;
+
+    @Autowired
     private JwtTokenizer jwtTokenizer;
 
     @Autowired
@@ -70,6 +78,16 @@ public class ProfileEndpointTest implements TestData {
             .withEmail(EMPLOYEE_EMAIL)
             .withName(EMPLOYEE_LAST_NAME)
             .withForename(EMPLOYEE_FIRST_NAME)
+            .withPassword(EMPLOYEE_PASSWORD)
+            .build())
+        .build();
+
+    private final Employee editEmployee = Employee.EmployeeBuilder.aEmployee()
+        .withProfile(Profile.ProfileBuilder.aProfile()
+            .isEmployer(false)
+            .withEmail(EMPLOYEE_EMAIL)
+            .withName(EDIT_EMPLOYEE_LAST_NAME)
+            .withForename(EDIT_EMPLOYEE_FIRST_NAME)
             .withPassword(EMPLOYEE_PASSWORD)
             .build())
         .build();
@@ -86,8 +104,20 @@ public class ProfileEndpointTest implements TestData {
         .withDescription(EMPLOYER_COMPANY_DESCRIPTION)
         .build();
 
+    private final Employer editEmployer = Employer.EmployerBuilder.aEmployer()
+        .withProfile(Profile.ProfileBuilder.aProfile()
+            .isEmployer(true)
+            .withEmail(EMPLOYER_EMAIL)
+            .withName(EMPLOYER_LAST_NAME)
+            .withForename(EMPLOYER_FIRST_NAME)
+            .withPassword(EMPLOYER_PASSWORD)
+            .build())
+        .withCompanyName(EDIT_EMPLOYER_COMPANY_NAME)
+        .withDescription(EDIT_EMPLOYER_COMPANY_DESCRIPTION)
+        .build();
+
     @BeforeEach
-    public void beforeEach(){
+    public void beforeEach() {
         employeeRepository.deleteAll();
         employerRepository.deleteAll();
         profileRepository.deleteAll();
@@ -133,7 +163,7 @@ public class ProfileEndpointTest implements TestData {
     }
 
     @Test
-    public void createValidEmployerTest() throws Exception{
+    public void createValidEmployerTest() throws Exception {
         String body = objectMapper.writeValueAsString(registerEmployerMapper.employerToRegisterEmployerDto(employer));
 
         MvcResult mvcResult = this.mockMvc.perform(post(REGISTER_EMPLOYER_BASE_URI)
@@ -205,7 +235,7 @@ public class ProfileEndpointTest implements TestData {
     }
 
     @Test
-    public void createEmployeeWithSameEmailsShouldFail() throws Exception{
+    public void createEmployeeWithSameEmailsShouldFail() throws Exception {
         String body = objectMapper.writeValueAsString(registerEmployeeMapper.employeeToRegisterEmployeeDto(employee));
 
         MvcResult mvcResult = this.mockMvc.perform(post(REGISTER_EMPLOYEE_BASE_URI)
@@ -236,6 +266,105 @@ public class ProfileEndpointTest implements TestData {
         );
 
 
+    }
+
+    @Test
+    public void getEmployeeWithBlankEmailShouldReturnBadRequest() throws Exception {
+        MvcResult mvcResult = this.mockMvc.perform(get(GET_EMPLOYEE_BASE_URI+"   ")
+            .accept(MediaType.APPLICATION_JSON)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+    }
+
+    @Test
+    public void getEmployerWithBlankEmailShouldReturnBadRequest() throws Exception {
+        MvcResult mvcResult = this.mockMvc.perform(get(GET_EMPLOYER_BASE_URI+"  ")
+            .accept(MediaType.APPLICATION_JSON)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+    }
+
+    @Test
+    public void updateValidEmployeeTest() throws Exception {
+        employeeRepository.save(employee);
+
+        String editBody = objectMapper.writeValueAsString(employeeMapper.employeeToEmployeeDto(editEmployee));
+
+        MvcResult mvcResult = this.mockMvc.perform(put(EDIT_EMPLOYEE_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(editBody))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+    }
+
+    @Test
+    public void updateValidEmployerTest() throws Exception {
+        employerRepository.save(employer);
+
+        String editBody = objectMapper.writeValueAsString(employerMapper.employerToEmployerDto(editEmployer));
+
+        MvcResult mvcResult = this.mockMvc.perform(put(EDIT_EMPLOYER_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(editBody))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+    }
+
+    @Test
+    public void updateEmployeeWithoutEmail_LastName_FirstName_Password_ShouldReturnBadRequest() throws Exception {
+        employee.getProfile().setEmail(null);
+        employee.getProfile().setPassword(null);
+        employee.getProfile().setFirstName(null);
+        employee.getProfile().setLastName(null);
+
+        String body = objectMapper.writeValueAsString(employeeMapper.employeeToEmployeeDto(employee));
+
+        MvcResult mvcResult = this.mockMvc.perform(put(EDIT_EMPLOYEE_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(body))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+    }
+
+    @Test
+    public void updateEmployerWithoutEmail_LastName_FirstName_Password_CompanyName_ShouldReturnBadRequest() throws Exception {
+        employer.getProfile().setEmail(null);
+        employer.getProfile().setPassword(null);
+        employer.getProfile().setFirstName(null);
+        employer.getProfile().setLastName(null);
+        employer.setCompanyName(null);
+
+        String body = objectMapper.writeValueAsString(employerMapper.employerToEmployerDto(employer));
+
+        MvcResult mvcResult = this.mockMvc.perform(put(EDIT_EMPLOYER_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(body))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
     }
 
 }

@@ -4,6 +4,7 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Interest;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Task;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
 import java.util.Set;
@@ -12,6 +13,7 @@ public class EmployeeDto {
 
     private Long id;
 
+    @Valid
     @NotNull(message = "Profile details must not be null")
     private ProfileDto profileDto;
 
@@ -86,7 +88,6 @@ public class EmployeeDto {
             return new EmployeeDto.EmployeeDtoBuilder();
         }
         public EmployeeDto.EmployeeDtoBuilder withProfileDto(ProfileDto profileDto){
-            //this.id = profileDto.getId();
             this.profileDto = profileDto;
             return this;
         }
