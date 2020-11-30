@@ -13,7 +13,6 @@ import {CreateEventComponent} from './components/create-event/create-event.compo
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
-  {path: 'login', component: LoginComponent},
   {path: 'events', component: EventOverviewComponent},
   {path: 'message', canActivate: [AuthGuard], component: MessageComponent},
   {path: 'create-event', component: CreateEventComponent},
