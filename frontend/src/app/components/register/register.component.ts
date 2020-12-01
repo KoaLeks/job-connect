@@ -27,22 +27,49 @@ export class RegisterComponent implements OnInit {
     this.registerFormEmployer = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
+      confirmPassword: ['', [Validators.required]],
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
       companyName: ['', [Validators.required]],
       companyDescription: [''],
       publicInfo: ['']
-    });
+    }, {validator: this.mustMatch('password', 'confirmPassword')});
     this.registerFormEmployee = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
+      confirmPassword: ['', [Validators.required]],
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
       publicInfo: ['']
-    });
+    }, {validator: this.mustMatch('password', 'confirmPassword')});
   }
 
   ngOnInit(): void {
+  }
+
+  mustMatch(controlName: string, matchingControlName: string) {
+    return (formGroup: FormGroup) => {
+      const control = formGroup.controls[controlName];
+      const matchingControl = formGroup.controls[matchingControlName];
+
+      if (matchingControl.errors && !matchingControl.errors.notSame) {
+        // return if another validator has already found an error on the matchingControl
+        return;
+      }
+
+      // set error on matchingControl if validation fails
+      if (control.value !== matchingControl.value) {
+        matchingControl.setErrors({notSame: true});
+      } else {
+        matchingControl.setErrors(null);
+      }
+    };
+  }
+
+  checkPasswords(group: FormGroup) {
+    const password = group.get('password').value;
+    const confirmPassword = group.get('confirmPassword').value;
+    return password === confirmPassword ? null : {notSame: true};
   }
 
   /**

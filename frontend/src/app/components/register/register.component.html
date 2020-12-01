@@ -162,6 +162,47 @@
             <input type="password" name="password" formControlName="password" class="form-control" id="password"
                    placeholder="Password">
           </div>
+
+          <!--           Password Confirm Employee error -->
+          <div *ngIf="isEmployee && submitted && registerFormEmployee.controls.confirmPassword.errors" class="error">
+            <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.confirmPassword.errors.required">Your
+              password
+              is required!
+            </small>
+            <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.confirmPassword.errors.notSame">Your
+              passwords
+              don't match!
+            </small>
+          </div>
+          <!--           Password Confirm Employer error -->
+          <div *ngIf="!isEmployee && submitted && registerFormEmployer.controls.confirmPassword.errors" class="error">
+            <small class="form-text text-warning" *ngIf="registerFormEmployer.controls.confirmPassword.errors.required">Your
+              password
+              is required!
+            </small>
+            <small class="form-text text-warning" *ngIf="registerFormEmployer.controls.confirmPassword.errors.notSame">Your
+              passwords
+              don't match!
+            </small>
+          </div>
+
+          <div class="form-group input-group">
+            <!--            Lock icon-->
+            <div class="input-group-prepend">
+               <span class="input-group-text">
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-lock-fill" fill="currentColor"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2.5 9a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V9z"/>
+                    <path fill-rule="evenodd" d="M4.5 4a3.5 3.5 0 1 1 7 0v3h-1V4a2.5 2.5 0 0 0-5 0v3h-1V4z"/>
+                  </svg>
+               </span>
+            </div>
+
+            <!--            Password Confirm -->
+            <input type="password" name="confirmPassword" formControlName="confirmPassword" class="form-control" id="confirmPassword"
+                   placeholder="Confirm Password">
+          </div>
+
         </form>
       </div>
 
