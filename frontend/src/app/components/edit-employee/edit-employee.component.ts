@@ -5,6 +5,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {EmployeeService} from '../../services/employee.service';
 import {EditEmployee} from '../../dtos/edit-employee';
 import {ProfileDto} from '../../dtos/profile-dto';
+import {Gender} from '../../dtos/gender.enum';
 
 @Component({
   selector: 'app-edit-employee',
@@ -18,6 +19,7 @@ export class EditEmployeeComponent implements OnInit {
   submitted: boolean;
   profile: any;
   employee: EditEmployee;
+  genderOptions = Object.values(Gender);
   selectedPicture = null;
   picture;
   hasPicture = false;
@@ -32,6 +34,7 @@ export class EditEmployeeComponent implements OnInit {
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
       publicInfo: [''],
+      gender: ['', [Validators.required]],
       picture: null
     });
   }
@@ -54,6 +57,8 @@ export class EditEmployeeComponent implements OnInit {
         this.editForm.controls['firstName'].setValue(profile.profileDto.firstName);
         this.editForm.controls['lastName'].setValue(profile.profileDto.lastName);
         this.editForm.controls['publicInfo'].setValue(profile.profileDto.publicInfo);
+        this.editForm.controls['gender'].setValue(profile.gender);
+
         // converts bytesArray to Base64
         this.arrayBufferToBase64(profile.profileDto.picture);
         if (profile.profileDto.picture != null) {
@@ -82,13 +87,13 @@ export class EditEmployeeComponent implements OnInit {
 
           this.employee = new EditEmployee(new ProfileDto(this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
             this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
-            this.selectedPicture[1]));
+            this.selectedPicture[1]), this.editForm.controls.gender.value);
           this.hasPicture = true;
           // image has invalid format
         } else {
           this.employee = new EditEmployee(new ProfileDto(this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
             this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
-            null));
+            null), this.editForm.controls.gender.value);
           this.hasPicture = false;
         }
       } else {
@@ -96,11 +101,11 @@ export class EditEmployeeComponent implements OnInit {
           const samePic = this.picture.split(',');
           this.employee = new EditEmployee(new ProfileDto(this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
             this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
-            samePic[1]));
+            samePic[1]), this.editForm.controls.gender.value);
         } else {
           this.employee = new EditEmployee(new ProfileDto(this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
             this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
-            null));
+            null), this.editForm.controls.gender.value);
           this.hasPicture = false;
         }
       }

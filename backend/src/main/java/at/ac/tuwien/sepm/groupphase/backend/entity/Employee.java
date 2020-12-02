@@ -1,5 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.entity;
 
+import at.ac.tuwien.sepm.groupphase.backend.util.Gender;
+
 import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
@@ -15,6 +17,8 @@ public class Employee {
     private Set<Task> tasks;
     @ManyToMany
     private Set<Interest> interests;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     public Long getId() {
         return id;
@@ -48,6 +52,13 @@ public class Employee {
         this.interests = interests;
     }
 
+    public Gender getGender() {
+        return gender;
+    }
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -68,6 +79,7 @@ public class Employee {
             ", profile=" + profile +
             ", tasks=" + tasks +
             ", interests=" + interests +
+            ", gender=" + gender +
             '}';
     }
 
@@ -76,6 +88,8 @@ public class Employee {
         private Profile profile;
         private Set<Task> tasks;
         private Set<Interest> interests;
+        private Gender gender;
+
 
         private EmployeeBuilder() {
         }
@@ -99,6 +113,10 @@ public class Employee {
             this.interests = interests;
             return this;
         }
+        public EmployeeBuilder withGender(Gender gender){
+            this.gender = gender;
+            return this;
+        }
 
         public Employee build() {
             Employee employee = new Employee();
@@ -106,6 +124,7 @@ public class Employee {
             employee.setProfile(profile);
             employee.setInterests(interests);
             employee.setTasks(tasks);
+            employee.setGender(gender);
             return employee;
         }
     }

@@ -40,7 +40,10 @@ public class EmployeeRepositoryTest implements TestData {
             .withPassword(EMPLOYEE_PASSWORD)
             .withPublicInfo(EMPLOYEE_PUBLIC_INFO)
             .build();
-        employee = Employee.EmployeeBuilder.aEmployee().withProfile(profile).build();
+        employee = Employee.EmployeeBuilder.aEmployee()
+            .withProfile(profile)
+            .withGender(EMPLOYEE_GENDER)
+            .build();
     }
 
     @Test
