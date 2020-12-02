@@ -11,9 +11,17 @@ public class SimpleEventDto {
     private Long id;
     private LocalDateTime start;
     private LocalDateTime end;
+    private String title;
     private String description;
     private Address address;
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public Long getId() {
         return id;
@@ -74,6 +82,7 @@ public class SimpleEventDto {
             "id=" + id +
             ", start=" + start +
             ", end=" + end +
+            ", title='" + title + '\'' +
             ", description='" + description + '\'' +
             ", address=" + address +
             '}';
@@ -85,6 +94,7 @@ public class SimpleEventDto {
         private Long id;
         private LocalDateTime start;
         private LocalDateTime end;
+        private String title;
         private String description;
         private Address address;
 
@@ -110,6 +120,11 @@ public class SimpleEventDto {
             return this;
         }
 
+        public SimpleEventDto.SimpleEventDtoBuilder withTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
         public SimpleEventDto.SimpleEventDtoBuilder withDescription(String description) {
             this.description = description;
             return this;
@@ -122,6 +137,7 @@ public class SimpleEventDto {
 
         public SimpleEventDto build() {
             SimpleEventDto simpleEvent = new SimpleEventDto();
+            simpleEvent.setTitle(title);
             simpleEvent.setDescription(description);
             simpleEvent.setStart(start);
             simpleEvent.setId(id);

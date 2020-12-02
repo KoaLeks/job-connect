@@ -27,6 +27,7 @@ public class EventRepositoryTest implements TestData {
         Event event = Event.EventBuilder.aEvent()
             .withStart(START)
             .withEnd(END)
+            .withTitle(TITLE_EVENT)
             .withDescription(DESCRIPTION_EVENT)
             .withEmployer(EMPLOYER)
             .withAddress(ADDRESS)

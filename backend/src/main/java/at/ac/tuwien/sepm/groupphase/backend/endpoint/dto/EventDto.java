@@ -13,10 +13,19 @@ public class EventDto {
     private Long id;
     private LocalDateTime start;
     private LocalDateTime end;
+    private String title;
     private String description;
     private Employer employer;
     private Address address;
     private Set<Task> tasks;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public Long getId() {
         return id;
@@ -93,6 +102,7 @@ public class EventDto {
             "id=" + id +
             ", start=" + start +
             ", end=" + end +
+            ", title='" + title + '\'' +
             ", description='" + description + '\'' +
             ", employer=" + employer +
             ", address=" + address +
@@ -104,6 +114,7 @@ public class EventDto {
         private Long id;
         private LocalDateTime start;
         private LocalDateTime end;
+        private String title;
         private String description;
         private Employer employer;
         private Address address;
@@ -131,6 +142,11 @@ public class EventDto {
             return this;
         }
 
+        public EventDto.EventDtoBuilder withTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
         public EventDto.EventDtoBuilder withDescription(String description) {
             this.description = description;
             return this;
@@ -153,6 +169,7 @@ public class EventDto {
 
         public EventDto build() {
             EventDto event = new EventDto();
+            event.setTitle(title);
             event.setDescription(description);
             event.setStart(start);
             event.setId(id);
