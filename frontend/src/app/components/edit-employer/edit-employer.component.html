@@ -138,4 +138,33 @@
 
   <button type="button" routerLink="/" class="btn btn-outline-secondary float-right">Cancel</button>
   <button type="button" (click)="update()" class="btn btn-outline-primary float-right">Save</button>
+
+<br>
+<br>
+<br>
+
+<ng-container *ngIf="hasPicture">
+  <img id="img" src="{{picture}}" alt="profile_picture" width="20%" height="20%">
+</ng-container>
+
+<ng-container *ngIf="!hasPicture">
+  du hast noch kein Profilbild
+</ng-container>
+
+<ng-container *ngIf="hasPicture">
+  <button (click)="deletePicture()">Bild löschen</button>
+</ng-container>
+
+<br>
+<br>
+<br>
+
 </form>
+
+
+<div class="form-group">
+  <label for="pictureUpload">Profilbild hochladen</label>
+  <input type="file" class="form-control-file" id="pictureUpload" accept="image/png, image/jpeg"
+         (change)="onFileSelected($event)" required>
+</div>
+
