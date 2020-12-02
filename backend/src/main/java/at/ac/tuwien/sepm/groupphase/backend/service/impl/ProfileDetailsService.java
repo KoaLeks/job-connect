@@ -58,9 +58,17 @@ public class ProfileDetailsService implements ProfileService {
     @Override
     public Long createProfile(Profile profile) {
         LOGGER.info("Create Profile: " + profile.toString());
-        try{
+        try {
+            if (profile.getPicture() != null) {
+                Byte[] byteObjects = new Byte[profile.getPicture().length];
+                int i = 0;
+                for (byte b : profile.getPicture()) {
+                    byteObjects[i++] = b;
+                }
+                profile.setPicture(byteObjects);
+            }
             return profileRepository.save(profile).getId();
-        }catch(DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             throw new UniqueConstraintException("Email address already in use");
         }
     }

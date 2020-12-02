@@ -1,9 +1,8 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
-import org.springframework.context.annotation.Profile;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class ProfileDto {
@@ -25,6 +24,8 @@ public class ProfileDto {
 
     @Size(max = 10000)
     private String publicInfo;
+
+    private Byte[] picture;
 
     public String getLastName() {
         return lastName;
@@ -66,6 +67,14 @@ public class ProfileDto {
         this.publicInfo = publicInfo;
     }
 
+    public Byte[] getPicture() {
+        return picture;
+    }
+
+    public void setPicture(Byte[] image) {
+        this.picture = image;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -75,7 +84,8 @@ public class ProfileDto {
             Objects.equals(firstName, that.firstName) &&
             Objects.equals(email, that.email) &&
             Objects.equals(password, that.password) &&
-            Objects.equals(publicInfo, that.publicInfo);
+            Objects.equals(publicInfo, that.publicInfo) &&
+            Objects.equals(picture, that.picture);
     }
 
     @Override
@@ -91,6 +101,7 @@ public class ProfileDto {
             ", email='" + email + '\'' +
             ", password='" + password + '\'' +
             ", publicInfo='" + publicInfo + '\'' +
+            ", picture=" + picture +
             '}';
     }
 
@@ -100,6 +111,8 @@ public class ProfileDto {
         private String email;
         private String password;
         private String publicInfo;
+        private Byte[] picture;
+
         private ProfileDtoBuilder(){
         }
 
@@ -127,6 +140,12 @@ public class ProfileDto {
             this.publicInfo = publicInfo;
             return this;
         }
+
+        public ProfileDtoBuilder isPicture(Byte[] picture) {
+            this.picture = picture;
+            return this;
+        }
+
         public ProfileDto build(){
             ProfileDto profileDto = new ProfileDto();
             profileDto.setEmail(email);
@@ -134,6 +153,7 @@ public class ProfileDto {
             profileDto.setFirstName(firstName);
             profileDto.setLastName(lastName);
             profileDto.setPublicInfo(publicInfo);
+            profileDto.setPicture(picture);
             return profileDto;
         }
     }

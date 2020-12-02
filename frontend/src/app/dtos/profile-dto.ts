@@ -4,6 +4,7 @@ export class ProfileDto {
     public lastName: string,
     public email: string,
     public password: string,
-    public publicInfo: string
+    public publicInfo: string,
+    public picture: Blob
   ) {}
 }

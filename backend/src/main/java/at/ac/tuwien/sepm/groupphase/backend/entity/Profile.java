@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.entity;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.Objects;
 
 @Entity
@@ -28,6 +29,9 @@ public class Profile {
     //If user is an Employee or Employer
     @Column(nullable = false)
     private boolean employer;
+
+    @Lob
+    private Byte[] picture;
 
     public Long getId() {
         return id;
@@ -85,6 +89,14 @@ public class Profile {
         this.employer = employer;
     }
 
+    public Byte[] getPicture() {
+        return picture;
+    }
+
+    public void setPicture(Byte[] picture) {
+        this.picture = picture;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -108,10 +120,11 @@ public class Profile {
             ", password='" + password + '\'' +
             ", publicInfo='" + publicInfo + '\'' +
             ", employer=" + employer +
+            ", picture=" + picture +
             '}';
     }
 
-    public static final class ProfileBuilder{
+    public static final class ProfileBuilder {
         private Long id;
         private String lastName;
         private String firstName;
@@ -119,41 +132,56 @@ public class Profile {
         private String password;
         private String publicInfo;
         private boolean employer;
+        private Byte[] picture;
 
-        private ProfileBuilder(){}
+        private ProfileBuilder() {
+        }
 
-        public static ProfileBuilder aProfile(){
+        public static ProfileBuilder aProfile() {
             return new ProfileBuilder();
         }
-        public ProfileBuilder withId(Long id){
+
+        public ProfileBuilder withId(Long id) {
             this.id = id;
             return this;
         }
-        public ProfileBuilder withName(String lastName){
+
+        public ProfileBuilder withName(String lastName) {
             this.lastName = lastName;
             return this;
         }
-        public ProfileBuilder withForename(String firstName){
+
+        public ProfileBuilder withForename(String firstName) {
             this.firstName = firstName;
             return this;
         }
-        public ProfileBuilder withEmail(String email){
+
+        public ProfileBuilder withEmail(String email) {
             this.email = email;
             return this;
         }
-        public ProfileBuilder withPassword(String password){
+
+        public ProfileBuilder withPassword(String password) {
             this.password = password;
             return this;
         }
-        public ProfileBuilder withPublicInfo(String publicInfo){
+
+        public ProfileBuilder withPublicInfo(String publicInfo) {
             this.publicInfo = publicInfo;
             return this;
         }
-        public ProfileBuilder isEmployer(boolean employer){
+
+        public ProfileBuilder isEmployer(boolean employer) {
             this.employer = employer;
             return this;
         }
-        public Profile build(){
+
+        public ProfileBuilder isPicture(Byte[] picture) {
+            this.picture = picture;
+            return this;
+        }
+
+        public Profile build() {
             Profile profile = new Profile();
             profile.setId(id);
             profile.setLastName(lastName);
@@ -162,6 +190,7 @@ public class Profile {
             profile.setPassword(password);
             profile.setPublicInfo(publicInfo);
             profile.setEmployer(employer);
+            profile.setPicture(picture);
             return profile;
         }
     }

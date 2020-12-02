@@ -21,6 +21,9 @@ export class EditEmployeeComponent implements OnInit {
   employee: EditEmployee;
   genderOptions = Object.values(Gender);
 
+  selectedPicture = null;
+  picture;
+  hasPicture = false;
 
   constructor(private authService: AuthService, private router: Router, private formBuilder: FormBuilder,
               private employeeService: EmployeeService) {
@@ -30,7 +33,8 @@ export class EditEmployeeComponent implements OnInit {
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
       publicInfo: [''],
-      gender: ['', [Validators.required]]
+      gender: ['', [Validators.required]],
+      picture: null
     });
   }
 
@@ -54,7 +58,13 @@ export class EditEmployeeComponent implements OnInit {
         this.editForm.controls['publicInfo'].setValue(profile.profileDto.publicInfo);
         this.editForm.controls['gender'].setValue(profile.gender);
 
-        console.log('Gender is=' + profile.gender);
+        // converts bytesArray to Base64
+        this.arrayBufferToBase64(profile.profileDto.picture);
+        if (profile.profileDto.picture != null) {
+          this.picture = 'data:image/png;base64,' + this.picture;
+          this.hasPicture = true;
+        }
+        console.log(profile);
       },
       error => {
         this.error = true;
@@ -69,11 +79,35 @@ export class EditEmployeeComponent implements OnInit {
   update() {
     this.submitted = true;
     if (this.editForm.valid) {
-      this.employee = new EditEmployee(
-        new ProfileDto(this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
-          this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value),
-          this.editForm.controls.gender.value);
-        this.employeeService.updateEmployee(this.employee).subscribe(
+      if (this.selectedPicture != null) {
+        // image has valid format (png or jpg)
+        if (this.selectedPicture.startsWith('data:image/png;base64') || this.selectedPicture.startsWith('data:image/jpeg;base64')) {
+          this.selectedPicture = this.selectedPicture.split(',');
+
+          this.employee = new EditEmployee(new ProfileDto(this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
+            this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
+            this.selectedPicture[1]), this.editForm.controls.gender.value);
+          this.hasPicture = true;
+          // image has invalid format
+        } else {
+          this.employee = new EditEmployee(new ProfileDto(this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
+            this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
+            null), this.editForm.controls.gender.value);
+        }
+      } else {
+        if (this.picture != null) {
+          const samePic = this.picture.split(',');
+          this.employee = new EditEmployee(new ProfileDto(this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
+            this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
+            samePic[1]), this.editForm.controls.gender.value);
+        } else {
+          this.employee = new EditEmployee(new ProfileDto(this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
+            this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
+            null), this.editForm.controls.gender.value);
+        }
+      }
+
+      this.employeeService.updateEmployee(this.employee).subscribe(
         (id) => {
           console.log('User profile updated successfully id: ' + id);
           this.router.navigate(['/']);
@@ -92,6 +126,31 @@ export class EditEmployeeComponent implements OnInit {
    */
   vanishError() {
     this.error = false;
+  }
+
+  onFileSelected(event) {
+    console.log(event);
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.selectedPicture = reader.result.toString();
+    };
+    reader.readAsDataURL(file);
+  }
+
+  arrayBufferToBase64(buffer) {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    this.picture = window.btoa(binary);
+  }
+
+  deletePicture() {
+    this.hasPicture = false;
+    this.picture = null;
   }
 
 }

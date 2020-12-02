@@ -35,6 +35,7 @@ public class RegisterEmployeeMapper {
         registerEmployeeDto.setPublicInfo(emp.getPublicInfo());
         registerEmployeeDto.setPassword(emp.getPassword());
         registerEmployeeDto.setGender(employee.getGender());
+        registerEmployeeDto.setPicture(emp.getPicture());
         return registerEmployeeDto;
     }
 }
