@@ -100,7 +100,6 @@
   <button type="button" routerLink="/" class="btn btn-outline-secondary float-right">Cancel</button>
   <button type="button" (click)="update()" class="btn btn-outline-primary float-right">Save</button>
 
-
   <br>
   <br>
   <br>
@@ -121,11 +120,9 @@
   <br>
   <br>
 
-</form>
-
-
 <div class="form-group">
   <label for="pictureUpload">Profilbild hochladen</label>
   <input type="file" class="form-control-file" id="pictureUpload" accept="image/png, image/jpeg"
-         (change)="onFileSelected($event)" required>
+         (change)="onFileSelected($event)" required #pictureUpload>
 </div>
+</form>

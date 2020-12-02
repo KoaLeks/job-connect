@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -20,6 +20,8 @@ export class EditEmployerComponent implements OnInit {
   selectedPicture = null;
   picture;
   hasPicture = false;
+  @ViewChild('pictureUpload') // needed for resetting fileUpload button
+  inputImage: ElementRef; // needed for resetting fileUpload button
 
   constructor(private authService: AuthService, private router: Router, private formBuilder: FormBuilder,
               private employerService: EmployerService) {
@@ -77,7 +79,7 @@ export class EditEmployerComponent implements OnInit {
     this.submitted = true;
     if (this.editForm.valid) {
       let employer;
-      if (this.selectedPicture != null) {
+      if (this.selectedPicture != null && typeof this.selectedPicture !== 'object') {
         // image has valid format (png or jpg)
         if (this.selectedPicture.startsWith('data:image/png;base64') || this.selectedPicture.startsWith('data:image/jpeg;base64')) {
           this.selectedPicture = this.selectedPicture.split(',');
@@ -93,6 +95,7 @@ export class EditEmployerComponent implements OnInit {
             this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
             null),
             this.editForm.controls.companyName.value, this.editForm.controls.companyDescription.value);
+          this.hasPicture = false;
         }
       } else {
         if (this.picture != null) {
@@ -106,13 +109,16 @@ export class EditEmployerComponent implements OnInit {
             this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
             null),
             this.editForm.controls.companyName.value, this.editForm.controls.companyDescription.value);
+          this.hasPicture = false;
         }
       }
 
       this.employerService.updateEmployer(employer).subscribe(
         () => {
           console.log('User profile updated successfully');
-          this.router.navigate(['/']);
+          // this.router.navigate(['/']);
+          this.inputImage.nativeElement.value = ''; // resets fileUpload button
+          this.loadEmployerDetails();
         },
         error => {
           this.error = true;

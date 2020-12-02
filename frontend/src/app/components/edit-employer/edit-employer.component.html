@@ -159,12 +159,9 @@
 <br>
 <br>
 
-</form>
-
-
 <div class="form-group">
   <label for="pictureUpload">Profilbild hochladen</label>
   <input type="file" class="form-control-file" id="pictureUpload" accept="image/png, image/jpeg"
-         (change)="onFileSelected($event)" required>
+         (change)="onFileSelected($event)" required #pictureUpload>
 </div>
-
+</form>

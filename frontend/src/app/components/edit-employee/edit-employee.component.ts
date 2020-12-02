@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -21,6 +21,8 @@ export class EditEmployeeComponent implements OnInit {
   selectedPicture = null;
   picture;
   hasPicture = false;
+  @ViewChild('pictureUpload') // needed for resetting fileUpload button
+  inputImage: ElementRef; // needed for resetting fileUpload button
 
   constructor(private authService: AuthService, private router: Router, private formBuilder: FormBuilder,
               private employeeService: EmployeeService) {
@@ -73,8 +75,7 @@ export class EditEmployeeComponent implements OnInit {
   update() {
     this.submitted = true;
     if (this.editForm.valid) {
-
-      if (this.selectedPicture != null) {
+      if (this.selectedPicture != null && typeof this.selectedPicture !== 'object') {
         // image has valid format (png or jpg)
         if (this.selectedPicture.startsWith('data:image/png;base64') || this.selectedPicture.startsWith('data:image/jpeg;base64')) {
           this.selectedPicture = this.selectedPicture.split(',');
@@ -88,6 +89,7 @@ export class EditEmployeeComponent implements OnInit {
           this.employee = new EditEmployee(new ProfileDto(this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
             this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
             null));
+          this.hasPicture = false;
         }
       } else {
         if (this.picture != null) {
@@ -99,13 +101,16 @@ export class EditEmployeeComponent implements OnInit {
           this.employee = new EditEmployee(new ProfileDto(this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
             this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
             null));
+          this.hasPicture = false;
         }
       }
 
       this.employeeService.updateEmployee(this.employee).subscribe(
         (id) => {
           console.log('User profile updated successfully id: ' + id);
-          this.router.navigate(['/']);
+          // this.router.navigate(['/']);
+          this.inputImage.nativeElement.value = ''; // resets fileUpload button
+          this.loadEmployeeDetails();
         },
         error => {
           this.error = true;
@@ -147,5 +152,4 @@ export class EditEmployeeComponent implements OnInit {
     this.hasPicture = false;
     this.picture = null;
   }
-
 }
