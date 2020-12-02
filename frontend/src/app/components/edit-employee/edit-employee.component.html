@@ -34,6 +34,23 @@
   </div>
 
   <div class="form-group input-group">
+    <!--            Gender prepend -->
+    <div class="input-group-prepend">
+       <span class="input-group-text">
+         Gender
+       </span>
+    </div>
+    <!--            Select gender -->
+    <select class="form-control" type="text" name="gender" formControlName="gender" id="gender"
+            placeholder="Gender">
+      <option value="" hidden disabled>Select your gender</option>
+      <option *ngFor="let gender of genderOptions" [ngValue]="gender">{{gender}}</option>
+    </select>
+
+  </div>
+
+
+  <div class="form-group input-group">
     <!--            Mail icon-->
     <div class="input-group-prepend">
                <span class="input-group-text">

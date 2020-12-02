@@ -5,6 +5,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {EmployeeService} from '../../services/employee.service';
 import {EditEmployee} from '../../dtos/edit-employee';
 import {ProfileDto} from '../../dtos/profile-dto';
+import {Gender} from '../../dtos/gender.enum';
 
 @Component({
   selector: 'app-edit-employee',
@@ -18,6 +19,8 @@ export class EditEmployeeComponent implements OnInit {
   submitted: boolean;
   profile: any;
   employee: EditEmployee;
+  genderOptions = Object.values(Gender);
+
 
   constructor(private authService: AuthService, private router: Router, private formBuilder: FormBuilder,
               private employeeService: EmployeeService) {
@@ -26,7 +29,8 @@ export class EditEmployeeComponent implements OnInit {
       password: ['', [Validators.minLength(8)]],
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
-      publicInfo: ['']
+      publicInfo: [''],
+      gender: ['', [Validators.required]]
     });
   }
 
@@ -48,8 +52,9 @@ export class EditEmployeeComponent implements OnInit {
         this.editForm.controls['firstName'].setValue(profile.profileDto.firstName);
         this.editForm.controls['lastName'].setValue(profile.profileDto.lastName);
         this.editForm.controls['publicInfo'].setValue(profile.profileDto.publicInfo);
+        this.editForm.controls['gender'].setValue(profile.gender);
 
-        console.log(profile);
+        console.log('Gender is=' + profile.gender);
       },
       error => {
         this.error = true;
@@ -64,9 +69,11 @@ export class EditEmployeeComponent implements OnInit {
   update() {
     this.submitted = true;
     if (this.editForm.valid) {
-      this.employee = new EditEmployee(new ProfileDto(this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
-        this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value));
-      this.employeeService.updateEmployee(this.employee).subscribe(
+      this.employee = new EditEmployee(
+        new ProfileDto(this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
+          this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value),
+          this.editForm.controls.gender.value);
+        this.employeeService.updateEmployee(this.employee).subscribe(
         (id) => {
           console.log('User profile updated successfully id: ' + id);
           this.router.navigate(['/']);

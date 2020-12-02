@@ -47,6 +47,7 @@ public class ProfileEndpoint {
     @PostMapping(value = "/employee")
     @ApiOperation(value = "Register a new employee", authorizations = {@Authorization(value = "apiKey")})
     @ResponseStatus(HttpStatus.CREATED)
+    @CrossOrigin(origins = "http://localhost:4200")
     public Long registerEmployee(@Valid @RequestBody RegisterEmployeeDto registerEmployeeDto) {
         Employee employee = registerEmployeeMapper.employeeDtoToEmployee(registerEmployeeDto);
         return employeeService.createEmployee(employee);
@@ -70,6 +71,7 @@ public class ProfileEndpoint {
     @PostMapping(value = "/employer")
     @ApiOperation(value = "Register a new employer", authorizations = {@Authorization(value = "apiKey")})
     @ResponseStatus(HttpStatus.CREATED)
+    @CrossOrigin(origins = "http://localhost:4200")
     public Long registerEmployer(@Valid @RequestBody RegisterEmployerDto registerEmployerDto) {
         Employer employer = registerEmployerMapper.employerDtoToEmployer(registerEmployerDto);
         return employerService.createEmployer(employer);
