@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
@@ -14,7 +15,11 @@ public class Event {
     private LocalDateTime start;
     @Column(nullable = false)
     private LocalDateTime end;
-    @Column(length = 1000)
+    @NotBlank
+    @Column(nullable = false)
+    private String title;
+    @NotBlank
+    @Column(nullable = false, length = 1000)
     private String description;
     @ManyToOne
     private Employer employer;
@@ -22,6 +27,14 @@ public class Event {
     private Address address;
     @OneToMany(mappedBy = "event")
     private Set<Task> tasks;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public Long getId() {
         return id;
@@ -98,6 +111,7 @@ public class Event {
             "id=" + id +
             ", start=" + start +
             ", end=" + end +
+            ", title='" + title + '\'' +
             ", description='" + description + '\'' +
             ", employer=" + employer +
             ", address=" + address +
@@ -109,6 +123,7 @@ public class Event {
         private Long id;
         private LocalDateTime start;
         private LocalDateTime end;
+        private String title;
         private String description;
         private Employer employer;
         private Address address;
@@ -130,6 +145,10 @@ public class Event {
             this.end = end;
             return this;
         }
+        public EventBuilder withTitle(String title){
+            this.title = title;
+            return this;
+        }
         public EventBuilder withDescription(String description){
             this.description = description;
             return this;
@@ -149,6 +168,7 @@ public class Event {
 
         public Event build(){
             Event event = new Event();
+            event.setTitle(title);
             event.setDescription(description);
             event.setStart(start);
             event.setId(id);

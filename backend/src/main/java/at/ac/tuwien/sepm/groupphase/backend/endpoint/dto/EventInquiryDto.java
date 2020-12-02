@@ -23,6 +23,11 @@ public class EventInquiryDto {
 
     @NotNull(message = "must not be null")
     @NotBlank(message = "must not be empty")
+    @Size(max = 255)
+    private String title;
+
+    @NotNull(message = "must not be null")
+    @NotBlank(message = "must not be empty")
     @Size(max = 1000)
     private String description;
 
@@ -32,6 +37,14 @@ public class EventInquiryDto {
     private Address address;
 
     private Set<Task> tasks;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public Long getId() {
         return id;
@@ -117,6 +130,7 @@ public class EventInquiryDto {
             "id=" + id +
             ", start=" + start +
             ", end=" + end +
+            ", title='" + title + '\'' +
             ", description='" + description + '\'' +
             ", employer=" + employer +
             ", address=" + address +
@@ -128,6 +142,7 @@ public class EventInquiryDto {
         private Long id;
         private LocalDateTime start;
         private LocalDateTime end;
+        private String title;
         private String description;
         private Employer employer;
         private Address address;
@@ -155,6 +170,11 @@ public class EventInquiryDto {
             return this;
         }
 
+        public EventInquiryDtoBuilder withTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
         public EventInquiryDtoBuilder withDescription(String description) {
             this.description = description;
             return this;
@@ -178,6 +198,7 @@ public class EventInquiryDto {
         public EventInquiryDto build() {
             EventInquiryDto event = new EventInquiryDto();
             event.setId(id);
+            event.setTitle(title);
             event.setDescription(description);
             event.setStart(start);
             event.setEnd(end);

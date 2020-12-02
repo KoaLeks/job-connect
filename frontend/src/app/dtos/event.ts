@@ -6,6 +6,7 @@ export class Event {
     public id: number,
     public start: string,
     public end: string,
+    public title: string,
     public description: string,
     public employer: string,
     public address: Address,
