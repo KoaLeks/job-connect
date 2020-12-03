@@ -1,31 +1,45 @@
-.loginButton {
+.login-button {
   background-color: #FFA545;
   color: #465c69;
   border-color: #465c69;
   font-weight: bold;
 }
-.loginButton:hover {
+.login-button:hover {
   background-color: #465c69;
   color: #FFA545;
 }
-.headerClass {
+.header-class {
   background-color: #FFA545;
+  padding-left: 22rem;
+  padding-right: 22rem;
 }
-.headerContent {
-  font-family: "Century Gothic";
-  font-size: xx-large;
-  margin-left: 20rem;
+.header-content {
+  font-family: "Century Gothic", sans-serif;
+  font-size: large;
+  margin-left: 1rem;
 }
-.logoClass {
+.logo-class {
   filter: invert(1);
 }
-a {
+.nav-class {
+  font-family: "Century Gothic", sans-serif;
   color: #ffe6cc;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-a:hover {
+.nav-class:hover {
   color: #465c69;
   text-underline-color: #465c69;
   text-underline: #465c69;
+}
+.dropdown-edit {
+  color: black;
+}
+.dropdown-logout {
+  color: black;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.dropdown-logout:hover {
+  background-color: #ff4747;
+  color: white;
 }
 
