@@ -76,6 +76,7 @@ public class EventEndpointTest implements TestData {
     private Event event = Event.EventBuilder.aEvent()
         .withStart(START)
         .withEnd(END)
+        .withTitle(TITLE_EVENT)
         .withDescription(DESCRIPTION_EVENT)
         .withEmployer(EMPLOYER)
         .withAddress(address)
@@ -89,6 +90,7 @@ public class EventEndpointTest implements TestData {
         event = Event.EventBuilder.aEvent()
             .withStart(START)
             .withEnd(END)
+            .withTitle(TITLE_EVENT)
             .withDescription(DESCRIPTION_EVENT)
             .withEmployer(EMPLOYER)
             .withAddress(address)
@@ -113,9 +115,10 @@ public class EventEndpointTest implements TestData {
     }
 
     @Test
-    public void tryCreateEventWithoutStart_End_Description_Employer_Address_Tasks_ShouldReturnBadRequest() throws Exception {
+    public void tryCreateEventWithoutStart_End_Title_Description_Employer_Address_Tasks_ShouldReturnBadRequest() throws Exception {
         event.setStart(null);
         event.setEnd(null);
+        event.setTitle(null);
         event.setDescription(null);
         event.setEmployer(null);
         event.setAddress(null);
@@ -138,7 +141,7 @@ public class EventEndpointTest implements TestData {
                 String content = response.getContentAsString();
                 content = content.substring(content.indexOf('[') + 1, content.indexOf(']'));
                 String[] errors = content.split(",");
-                assertEquals(6, errors.length);
+                assertEquals(8, errors.length);
             }
         );
     }
@@ -257,6 +260,7 @@ public class EventEndpointTest implements TestData {
             () -> assertEquals(event.getId(), simpleEventDto.getId()),
             () -> assertEquals(START, simpleEventDto.getStart()),
             () -> assertEquals(END, simpleEventDto.getEnd()),
+            () -> assertEquals(TITLE_EVENT, simpleEventDto.getTitle()),
             () -> assertEquals(DESCRIPTION_EVENT, simpleEventDto.getDescription()),
             () -> assertEquals(address, simpleEventDto.getAddress())
         );

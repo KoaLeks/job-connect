@@ -24,6 +24,7 @@ public class EventMappingTest implements TestData {
     private Event event = Event.EventBuilder.aEvent()
         .withStart(START)
         .withEnd(END)
+        .withTitle(TITLE_EVENT)
         .withDescription(DESCRIPTION_EVENT)
         .withEmployer(EMPLOYER)
         .withAddress(ADDRESS)
@@ -39,6 +40,7 @@ public class EventMappingTest implements TestData {
         assertAll(
             () -> assertEquals(START, eventInquiryDto.getStart()),
             () -> assertEquals(END, eventInquiryDto.getEnd()),
+            () -> assertEquals(TITLE_EVENT, eventInquiryDto.getTitle()),
             () -> assertEquals(DESCRIPTION_EVENT, eventInquiryDto.getDescription()),
             () -> assertEquals(ADDRESS, eventInquiryDto.getAddress()));
 

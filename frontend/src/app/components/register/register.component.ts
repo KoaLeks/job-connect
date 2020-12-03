@@ -5,6 +5,7 @@ import {Router} from '@angular/router';
 import {Employee} from '../../dtos/employee';
 import {Employer} from '../../dtos/employer';
 import {ProfileService} from '../../services/profile.service';
+import {Gender} from '../../dtos/gender.enum';
 
 @Component({
   selector: 'app-register',
@@ -21,6 +22,7 @@ export class RegisterComponent implements OnInit {
   // Error flag
   error: boolean = false;
   errorMessage: string = '';
+  genderOptions = Object.values(Gender);
 
   // tslint:disable-next-line:max-line-length
   constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router, private profileService: ProfileService) {
@@ -40,7 +42,8 @@ export class RegisterComponent implements OnInit {
       confirmPassword: ['', [Validators.required]],
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
-      publicInfo: ['']
+      publicInfo: [''],
+      gender: [null, [Validators.required]]
     }, {validator: this.mustMatch('password', 'confirmPassword')});
   }
 
@@ -66,12 +69,6 @@ export class RegisterComponent implements OnInit {
     };
   }
 
-  checkPasswords(group: FormGroup) {
-    const password = group.get('password').value;
-    const confirmPassword = group.get('confirmPassword').value;
-    return password === confirmPassword ? null : {notSame: true};
-  }
-
   /**
    * Resets Form
    */
@@ -89,11 +86,12 @@ export class RegisterComponent implements OnInit {
     if (this.registerFormEmployee.valid && this.isEmployee) {
       const newEmployee: Employee = new Employee(this.registerFormEmployee.controls.firstName.value,
         this.registerFormEmployee.controls.lastName.value, this.registerFormEmployee.controls.email.value,
-        this.registerFormEmployee.controls.password.value, this.registerFormEmployee.controls.publicInfo.value);
+        this.registerFormEmployee.controls.password.value, this.registerFormEmployee.controls.publicInfo.value,
+        this.registerFormEmployee.controls.gender.value);
       this.createProfile(newEmployee);
     } else if (this.registerFormEmployer.valid && !this.isEmployee) {
       // tslint:disable-next-line:max-line-length
-      const newEmployer: Employer = new Employer(this.registerFormEmployer.controls.companyName.value,
+      const newEmployer: Employer = new Employer(null, this.registerFormEmployer.controls.companyName.value,
         this.registerFormEmployer.controls.companyDescription.value, this.registerFormEmployer.controls.firstName.value,
         this.registerFormEmployer.controls.lastName.value, this.registerFormEmployer.controls.email.value,
         this.registerFormEmployer.controls.password.value, this.registerFormEmployer.controls.publicInfo.value);

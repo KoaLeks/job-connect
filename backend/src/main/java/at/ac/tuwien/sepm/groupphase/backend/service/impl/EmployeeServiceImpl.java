@@ -62,6 +62,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         employee.setId(profile.getId());
         employee.getProfile().setId(profile.getId());
+        employeeRepository.save(employee);
         return profileRepository.save(employee.getProfile()).getId();
     }
 }

@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Interest;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Task;
+import at.ac.tuwien.sepm.groupphase.backend.util.Gender;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -20,6 +21,8 @@ public class EmployeeDto {
     private Set<Task> tasks;
 
     private Set<Interest> interests;
+
+    private Gender gender;
 
     public Long getId() {
         return id;
@@ -53,6 +56,14 @@ public class EmployeeDto {
         this.interests = interests;
     }
 
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -73,6 +84,7 @@ public class EmployeeDto {
             ", profileDto=" + profileDto +
             ", tasks=" + tasks +
             ", interests=" + interests +
+            ", gender=" + gender +
             '}';
     }
 
@@ -81,6 +93,7 @@ public class EmployeeDto {
         private ProfileDto profileDto;
         private Set<Task> tasks;
         private Set<Interest> interests;
+        private Gender gender;
 
         private EmployeeDtoBuilder(){}
 
@@ -99,12 +112,17 @@ public class EmployeeDto {
             this.interests = interests;
             return this;
         }
+        public EmployeeDto.EmployeeDtoBuilder withGender(Gender gender){
+            this.gender = gender;
+            return this;
+        }
         public EmployeeDto build(){
             EmployeeDto employeeDto = new EmployeeDto();
             employeeDto.setId(id);
             employeeDto.setProfileDto(profileDto);
             employeeDto.setInterests(interests);
             employeeDto.setTasks(tasks);
+            employeeDto.setGender(gender);
             return employeeDto;
         }
     }

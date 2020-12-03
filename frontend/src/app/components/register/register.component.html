@@ -94,6 +94,31 @@
                    placeholder="Last name">
           </div>
 
+          <!--           Gender Employee error -->
+          <div
+            *ngIf="isEmployee && submitted && (registerFormEmployee.controls.gender.errors || registerFormEmployee.controls.gender.errors)"
+            class="error">
+            <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.gender.errors.required">Your
+              gender
+              is required!
+            </small>
+          </div>
+          <div *ngIf="isEmployee" class="form-group input-group">
+            <!--            Gender prepend -->
+            <div class="input-group-prepend">
+                 <span class="input-group-text">
+                   Gender
+                 </span>
+            </div>
+            <!--            Select gender -->
+            <select class="form-control" type="text" name="gender" formControlName="gender" id="gender"
+                   placeholder="Gender">
+              <option [ngValue]=null hidden disabled>Select your gender</option>
+              <option *ngFor="let gender of genderOptions" [ngValue]="gender">{{gender}}</option>
+            </select>
+
+          </div>
+
           <!--           Email Employee error -->
           <div *ngIf="isEmployee && submitted && registerFormEmployee.controls.email.errors" class="error">
             <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.email.errors.required">Your

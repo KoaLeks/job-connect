@@ -1,12 +1,12 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
-import org.springframework.context.annotation.Profile;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Objects;
 
 public class ProfileDto {
+    private Long id;
+
     @NotNull(message = "Last name must not be null")
     @Size(max = 100)
     private String lastName;
@@ -25,6 +25,16 @@ public class ProfileDto {
 
     @Size(max = 10000)
     private String publicInfo;
+
+    private Byte[] picture;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getLastName() {
         return lastName;
@@ -66,6 +76,14 @@ public class ProfileDto {
         this.publicInfo = publicInfo;
     }
 
+    public Byte[] getPicture() {
+        return picture;
+    }
+
+    public void setPicture(Byte[] image) {
+        this.picture = image;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -75,36 +93,47 @@ public class ProfileDto {
             Objects.equals(firstName, that.firstName) &&
             Objects.equals(email, that.email) &&
             Objects.equals(password, that.password) &&
-            Objects.equals(publicInfo, that.publicInfo);
+            Objects.equals(publicInfo, that.publicInfo) &&
+            Objects.equals(picture, that.picture);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(lastName, firstName, email, password, publicInfo);
+        return Objects.hash(id, lastName, firstName, email, password, publicInfo);
     }
 
     @Override
     public String toString() {
         return "ProfileDto{" +
+            "id='" + id + '\'' +
             "lastName='" + lastName + '\'' +
             ", firstName='" + firstName + '\'' +
             ", email='" + email + '\'' +
             ", password='" + password + '\'' +
             ", publicInfo='" + publicInfo + '\'' +
+            ", picture=" + picture +
             '}';
     }
 
     public static final class ProfileDtoBuilder{
+        private Long id;
         private String lastName;
         private String firstName;
         private String email;
         private String password;
         private String publicInfo;
+        private Byte[] picture;
+
         private ProfileDtoBuilder(){
         }
 
         public static ProfileDtoBuilder aProfileDto(){
             return new ProfileDtoBuilder();
+        }
+
+        public ProfileDtoBuilder withId(Long id){
+            this.id = id;
+            return this;
         }
 
         public ProfileDtoBuilder withLastName(String lastName){
@@ -127,13 +156,21 @@ public class ProfileDto {
             this.publicInfo = publicInfo;
             return this;
         }
+
+        public ProfileDtoBuilder isPicture(Byte[] picture) {
+            this.picture = picture;
+            return this;
+        }
+
         public ProfileDto build(){
             ProfileDto profileDto = new ProfileDto();
+            profileDto.setId(id);
             profileDto.setEmail(email);
             profileDto.setPassword(password);
             profileDto.setFirstName(firstName);
             profileDto.setLastName(lastName);
             profileDto.setPublicInfo(publicInfo);
+            profileDto.setPicture(picture);
             return profileDto;
         }
     }

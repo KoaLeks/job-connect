@@ -20,6 +20,8 @@ public class EmployeeMapper {
         var emp_builder = Employee.EmployeeBuilder.aEmployee();
         Profile profile = profileMapper.profileDtoToProfile(employeeDto.getProfileDto());
         emp_builder.withProfile(profile);
+        emp_builder.withGender(employeeDto.getGender());
+
         return emp_builder.build();
     }
 
@@ -27,6 +29,7 @@ public class EmployeeMapper {
         var empDto_builder = EmployeeDto.EmployeeDtoBuilder.aEmployeeDto();
         ProfileDto profileDto = profileMapper.profileToProfileDto(employee.getProfile());
         empDto_builder.withProfileDto(profileDto);
+        empDto_builder.withGender(employee.getGender());
         return empDto_builder.build();
     }
 }

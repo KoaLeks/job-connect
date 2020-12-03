@@ -80,6 +80,7 @@ public class ProfileEndpointTest implements TestData {
             .withForename(EMPLOYEE_FIRST_NAME)
             .withPassword(EMPLOYEE_PASSWORD)
             .build())
+        .withGender(EMPLOYEE_GENDER)
         .build();
 
     private final Employee editEmployee = Employee.EmployeeBuilder.aEmployee()
@@ -90,6 +91,7 @@ public class ProfileEndpointTest implements TestData {
             .withForename(EDIT_EMPLOYEE_FIRST_NAME)
             .withPassword(EMPLOYEE_PASSWORD)
             .build())
+        .withGender(EMPLOYEE_GENDER)
         .build();
 
     private Employer employer = Employer.EmployerBuilder.aEmployer()
@@ -130,6 +132,7 @@ public class ProfileEndpointTest implements TestData {
                 .withPassword(EMPLOYEE_PASSWORD)
                 .withPublicInfo(EMPLOYEE_PUBLIC_INFO)
                 .build())
+            .withGender(EMPLOYEE_GENDER)
             .build();
         employer = Employer.EmployerBuilder.aEmployer()
             .withProfile(Profile.ProfileBuilder.aProfile()
@@ -179,11 +182,12 @@ public class ProfileEndpointTest implements TestData {
     }
 
     @Test
-    public void tryCreateEmployeeWithoutEmail_LastName_FirstName_Password_ShouldReturnBadRequest() throws Exception {
+    public void tryCreateEmployeeWithoutEmail_LastName_FirstName_Password_Gender_ShouldReturnBadRequest() throws Exception {
         employee.getProfile().setEmail(null);
         employee.getProfile().setPassword(null);
         employee.getProfile().setFirstName(null);
         employee.getProfile().setLastName(null);
+        employee.setGender(null);
         String body = objectMapper.writeValueAsString(registerEmployeeMapper.employeeToRegisterEmployeeDto(employee));
 
         MvcResult mvcResult = this.mockMvc.perform(post(REGISTER_EMPLOYEE_BASE_URI)
@@ -200,7 +204,7 @@ public class ProfileEndpointTest implements TestData {
                 String content = response.getContentAsString();
                 content = content.substring(content.indexOf('[') + 1, content.indexOf(']'));
                 String[] errors = content.split(",");
-                assertEquals(4, errors.length);
+                assertEquals(5, errors.length);
             }
         );
     }

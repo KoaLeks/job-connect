@@ -9,6 +9,7 @@ import {Event} from '../../dtos/event';
 import {Address} from '../../dtos/address';
 import {InterestArea} from '../../dtos/interestArea';
 import {InterestAreaService} from '../../services/interestArea.service';
+import {EmployerService} from '../../services/employer.service';
 
 @Component({
   selector: 'app-create-event',
@@ -24,10 +25,12 @@ export class CreateEventComponent implements OnInit {
   taskCreationForm;
   tasks: Task[] = [];
   interestAreas: InterestArea[];
+  employerId: number;
 
   constructor(public authService: AuthService, private formBuilder: FormBuilder, private addressService: AddressService,
               private eventService: EventService, private taskService: TaskService,
-              private interestAreaService: InterestAreaService) {
+              private interestAreaService: InterestAreaService,
+              private employerService: EmployerService) {
     this.addressCreationForm = this.formBuilder.group({
       city: [null, Validators.required],
       state: [null, Validators.required],
@@ -39,6 +42,7 @@ export class CreateEventComponent implements OnInit {
       id: [null],
       start: [null, Validators.required],
       end: [null, Validators.required],
+      title: [null, Validators.required],
       description: [null, Validators.required],
       address: [null],
       employer: [null],
@@ -64,6 +68,17 @@ export class CreateEventComponent implements OnInit {
   createEvent(event: Event, address: Address, tasks: Task[]) {
     event.address = address;
     event.tasks = tasks;
+    // set Employer in event
+    event.employer = {
+      id: this.employerId,
+      companyName: null,
+      companyDescription: null,
+      firstName: null,
+      lastName: null,
+      email: null,
+      password: null,
+      publicInfo: null
+    };
     this.eventService.createEvent(event).subscribe(
       () => {},
       error => {
@@ -116,6 +131,18 @@ export class CreateEventComponent implements OnInit {
     } else {
       this.errorMessage = error.error;
     }
+  }
+
+  /**
+   * Get profile id
+   */
+  loadEmployerId() {
+    this.employerService.getEmployerByEmail(this.authService.getTokenIdentifier()).subscribe(
+      (profile) => {
+        this.employerId = profile.profileDto.id;
+        console.log(this.employerId);
+      }
+    );
   }
 
 }
