@@ -2,10 +2,11 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class ProfileDto {
+    private Long id;
+
     @NotNull(message = "Last name must not be null")
     @Size(max = 100)
     private String lastName;
@@ -26,6 +27,14 @@ public class ProfileDto {
     private String publicInfo;
 
     private Byte[] picture;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getLastName() {
         return lastName;
@@ -90,12 +99,13 @@ public class ProfileDto {
 
     @Override
     public int hashCode() {
-        return Objects.hash(lastName, firstName, email, password, publicInfo);
+        return Objects.hash(id, lastName, firstName, email, password, publicInfo);
     }
 
     @Override
     public String toString() {
         return "ProfileDto{" +
+            "id='" + id + '\'' +
             "lastName='" + lastName + '\'' +
             ", firstName='" + firstName + '\'' +
             ", email='" + email + '\'' +
@@ -106,6 +116,7 @@ public class ProfileDto {
     }
 
     public static final class ProfileDtoBuilder{
+        private Long id;
         private String lastName;
         private String firstName;
         private String email;
@@ -118,6 +129,11 @@ public class ProfileDto {
 
         public static ProfileDtoBuilder aProfileDto(){
             return new ProfileDtoBuilder();
+        }
+
+        public ProfileDtoBuilder withId(Long id){
+            this.id = id;
+            return this;
         }
 
         public ProfileDtoBuilder withLastName(String lastName){
@@ -148,6 +164,7 @@ public class ProfileDto {
 
         public ProfileDto build(){
             ProfileDto profileDto = new ProfileDto();
+            profileDto.setId(id);
             profileDto.setEmail(email);
             profileDto.setPassword(password);
             profileDto.setFirstName(firstName);

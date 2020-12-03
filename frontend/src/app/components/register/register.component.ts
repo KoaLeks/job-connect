@@ -91,7 +91,7 @@ export class RegisterComponent implements OnInit {
       this.createProfile(newEmployee);
     } else if (this.registerFormEmployer.valid && !this.isEmployee) {
       // tslint:disable-next-line:max-line-length
-      const newEmployer: Employer = new Employer(this.registerFormEmployer.controls.companyName.value,
+      const newEmployer: Employer = new Employer(null, this.registerFormEmployer.controls.companyName.value,
         this.registerFormEmployer.controls.companyDescription.value, this.registerFormEmployer.controls.firstName.value,
         this.registerFormEmployer.controls.lastName.value, this.registerFormEmployer.controls.email.value,
         this.registerFormEmployer.controls.password.value, this.registerFormEmployer.controls.publicInfo.value);

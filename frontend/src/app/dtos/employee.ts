@@ -1,4 +1,4 @@
-import {Gender} from './gender_old';
+import {Gender} from './gender.enum';
 
 export class Employee {
   constructor(

@@ -9,6 +9,7 @@ import {Event} from '../../dtos/event';
 import {Address} from '../../dtos/address';
 import {InterestArea} from '../../dtos/interestArea';
 import {InterestAreaService} from '../../services/interestArea.service';
+import {EmployerService} from '../../services/employer.service';
 
 @Component({
   selector: 'app-create-event',
@@ -22,10 +23,12 @@ export class CreateEventComponent implements OnInit {
   taskCreationForm;
   tasks: Task[] = [];
   interestAreas: InterestArea[];
+  employerId: number;
 
   constructor(public authService: AuthService, private formBuilder: FormBuilder, private addressService: AddressService,
               private eventService: EventService, private taskService: TaskService,
-              private interestAreaService: InterestAreaService) {
+              private interestAreaService: InterestAreaService,
+              private employerService: EmployerService) {
     this.addressCreationForm = this.formBuilder.group({
       city: [null, Validators.required],
       state: [null, Validators.required],
@@ -71,7 +74,19 @@ export class CreateEventComponent implements OnInit {
           addressLine: null,
           additional: null
         };
-        // TODO set Employer in event
+
+        // set Employer in event
+        event.employer = {
+          id: this.employerId,
+          companyName: null,
+          companyDescription: null,
+          firstName: null,
+          lastName: null,
+          email: null,
+          password: null,
+          publicInfo: null
+        };
+
         this.eventService.createEvent(event).subscribe(
           (e) => {
             for (const t of tasks) {
@@ -125,6 +140,18 @@ export class CreateEventComponent implements OnInit {
     if (index !== -1) {
       this.tasks.splice(index, 1);
     }
+  }
+
+  /**
+   * Get profile id
+   */
+  loadEmployerId() {
+    this.employerService.getEmployerByEmail(this.authService.getTokenIdentifier()).subscribe(
+      (profile) => {
+        this.employerId = profile.profileDto.id;
+        console.log(this.employerId);
+      }
+    );
   }
 
 }

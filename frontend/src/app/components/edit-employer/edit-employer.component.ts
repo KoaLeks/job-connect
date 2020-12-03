@@ -84,14 +84,14 @@ export class EditEmployerComponent implements OnInit {
         if (this.selectedPicture.startsWith('data:image/png;base64') || this.selectedPicture.startsWith('data:image/jpeg;base64')) {
           this.selectedPicture = this.selectedPicture.split(',');
 
-          employer = new EditEmployer(new ProfileDto(this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
+          employer = new EditEmployer(new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
             this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
             this.selectedPicture[1]),
             this.editForm.controls.companyName.value, this.editForm.controls.companyDescription.value);
           this.hasPicture = true;
 // image has invalid format
         } else {
-          employer = new EditEmployer(new ProfileDto(this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
+          employer = new EditEmployer(new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
             this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
             null),
             this.editForm.controls.companyName.value, this.editForm.controls.companyDescription.value);
@@ -100,12 +100,12 @@ export class EditEmployerComponent implements OnInit {
       } else {
         if (this.picture != null) {
           const samePic = this.picture.split(',');
-          employer = new EditEmployer(new ProfileDto(this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
+          employer = new EditEmployer(new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
             this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
             samePic[1]),
             this.editForm.controls.companyName.value, this.editForm.controls.companyDescription.value);
         } else {
-          employer = new EditEmployer(new ProfileDto(this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
+          employer = new EditEmployer(new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
             this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
             null),
             this.editForm.controls.companyName.value, this.editForm.controls.companyDescription.value);
