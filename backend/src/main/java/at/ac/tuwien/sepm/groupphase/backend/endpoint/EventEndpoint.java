@@ -1,6 +1,5 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventInquiryDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
@@ -13,12 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/events")
+@Transactional
 public class EventEndpoint {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -34,11 +35,12 @@ public class EventEndpoint {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Publish a new event", authorizations = {@Authorization(value = "apiKey")})
-    public EventDto create(@Valid @RequestBody EventInquiryDto eventDto) {
-        LOGGER.info("POST /api/v1/events/{}", eventDto);
+    @CrossOrigin(origins = "http://localhost:4200")
+    public EventInquiryDto create(@Valid @RequestBody EventInquiryDto eventInquiryDto) {
+        LOGGER.info("POST /api/v1/events/{}", eventInquiryDto);
 
-        return eventMapper.eventToEventDto(
-            eventService.saveEvent(eventMapper.eventInquiryDtoToEvent(eventDto)));
+        return eventMapper.eventToEventInquiryDto(
+            eventService.saveEvent(eventMapper.eventInquiryDtoToEvent(eventInquiryDto)));
 
     }
 
@@ -52,11 +54,11 @@ public class EventEndpoint {
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Update an event", authorizations = {@Authorization(value = "apiKey")})
-    public EventDto update(@Valid @RequestBody EventInquiryDto eventDto) {
-        LOGGER.info("PUT /api/v1/events/{}", eventDto);
+    public EventInquiryDto update(@Valid @RequestBody EventInquiryDto eventInquiryDto) {
+        LOGGER.info("PUT /api/v1/events/{}", eventInquiryDto);
 
-        return eventMapper.eventToEventDto(
-            eventService.saveEvent(eventMapper.eventInquiryDtoToEvent(eventDto)));
+        return eventMapper.eventToEventInquiryDto(
+            eventService.saveEvent(eventMapper.eventInquiryDtoToEvent(eventInquiryDto)));
 
     }
 

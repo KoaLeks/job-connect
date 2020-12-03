@@ -17,6 +17,8 @@ import {InterestAreaService} from '../../services/interestArea.service';
 })
 export class CreateEventComponent implements OnInit {
 
+  error: boolean = false;
+  errorMessage: string = '';
   addressCreationForm;
   eventCreationForm;
   taskCreationForm;
@@ -60,36 +62,12 @@ export class CreateEventComponent implements OnInit {
    * Saves new Event
    */
   createEvent(event: Event, address: Address, tasks: Task[]) {
-    this.addressService.createAddress(address).subscribe(
-      (a) => {
-        event.address = {
-          id: a.id,
-          city: null,
-          state: null,
-          zip: null,
-          addressLine: null,
-          additional: null
-        };
-        // TODO set Employer in event
-        this.eventService.createEvent(event).subscribe(
-          (e) => {
-            for (const t of tasks) {
-              t.event = {
-                id: e.id,
-                start: null,
-                end: null,
-                description: null,
-                employer: null,
-                address: null,
-                tasks: null
-              };
-              this.taskService.createTask(t).subscribe(
-                () => {
-                }
-              );
-            }
-          }
-        );
+    event.address = address;
+    event.tasks = tasks;
+    this.eventService.createEvent(event).subscribe(
+      () => {},
+      error => {
+        this.defaultServiceErrorHandling(error);
       }
     );
   }
@@ -113,8 +91,6 @@ export class CreateEventComponent implements OnInit {
       tasks: null
     };
     this.tasks.push(task);
-    console.log('task: ' + task.interestArea);
-    console.log('task: ' + JSON.stringify(task));
     this.taskCreationForm.reset();
   }
 
@@ -122,6 +98,23 @@ export class CreateEventComponent implements OnInit {
     const index = this.tasks.indexOf(task);
     if (index !== -1) {
       this.tasks.splice(index, 1);
+    }
+  }
+
+  /**
+   * Error flag will be deactivated, which clears the error message
+   */
+  vanishError() {
+    this.error = false;
+  }
+
+  private defaultServiceErrorHandling(error: any) {
+    console.log(error);
+    this.error = true;
+    if (typeof error.error === 'object') {
+      this.errorMessage = error.error.error;
+    } else {
+      this.errorMessage = error.error;
     }
   }
 

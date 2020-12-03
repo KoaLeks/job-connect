@@ -32,7 +32,6 @@ public class InterestAreaServiceImpl implements InterestAreaService {
     @Override
     public List<InterestArea> findAll() {
         LOGGER.debug("Find all InterestAreas");
-        //TODO lazy loading of interests and tasks
         return interestAreaRepository.findAll();
     }
 }

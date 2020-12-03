@@ -21,4 +21,10 @@ public interface EventService {
      * @return  list of all event entries
      */
     List<Event> findAll();
+
+    /**
+     * Find event by ID
+     * @return event with given id
+     */
+    Event findById(Long id);
 }

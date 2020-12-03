@@ -4,7 +4,7 @@ import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
 import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedMessageDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventInquiryDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Address;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
@@ -98,7 +98,6 @@ public class EventEndpointTest implements TestData {
 
     @Test
     public void createValidEventTest() throws Exception {
-        addressRepository.save(address);
         String body = objectMapper.writeValueAsString(eventMapper.eventToEventInquiryDto(event));
 
         MvcResult mvcResult = this.mockMvc.perform(post(EVENTS_BASE_URI)
@@ -146,7 +145,6 @@ public class EventEndpointTest implements TestData {
 
     @Test
     public void updateEventAddressToNull_ThenBadRequest() throws Exception {
-        addressRepository.save(address);
         String body = objectMapper.writeValueAsString(eventMapper.eventToEventInquiryDto(event));
 
         MvcResult mvcResult = this.mockMvc.perform(post(EVENTS_BASE_URI)
@@ -160,8 +158,8 @@ public class EventEndpointTest implements TestData {
         assertEquals(HttpStatus.CREATED.value(), response.getStatus());
         assertEquals(eventRepository.count(), 1);
 
-        EventDto eventResponse = objectMapper.readValue(response.getContentAsString(),
-            EventDto.class);
+        EventInquiryDto eventResponse = objectMapper.readValue(response.getContentAsString(),
+            EventInquiryDto.class);
 
         event.setId(1L);
         event.setAddress(null);
@@ -180,7 +178,6 @@ public class EventEndpointTest implements TestData {
 
     @Test
     public void updateEventStartAndEndValidTest() throws Exception {
-        addressRepository.save(address);
         String body = objectMapper.writeValueAsString(eventMapper.eventToEventInquiryDto(event));
 
         MvcResult mvcResult = this.mockMvc.perform(post(EVENTS_BASE_URI)
@@ -210,8 +207,8 @@ public class EventEndpointTest implements TestData {
         assertEquals(HttpStatus.OK.value(), updateResponse.getStatus());
         assertEquals(eventRepository.count(), 1);
 
-        EventDto eventResponse = objectMapper.readValue(updateResponse.getContentAsString(),
-            EventDto.class);
+        EventInquiryDto eventResponse = objectMapper.readValue(updateResponse.getContentAsString(),
+            EventInquiryDto.class);
         assertEquals(LocalDateTime.of(2021, 12, 24, 17, 0, 0, 0),
             eventResponse.getStart());
         assertEquals(LocalDateTime.of(2021, 12, 24, 23, 45, 0, 0),
