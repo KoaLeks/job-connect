@@ -85,13 +85,15 @@ export class EditEmployeeComponent implements OnInit {
         if (this.selectedPicture.startsWith('data:image/png;base64') || this.selectedPicture.startsWith('data:image/jpeg;base64')) {
           this.selectedPicture = this.selectedPicture.split(',');
 
-          this.employee = new EditEmployee(new ProfileDto(this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
+          this.employee = new EditEmployee(new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.
+              lastName.value,
             this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
             this.selectedPicture[1]), this.editForm.controls.gender.value);
           this.hasPicture = true;
           // image has invalid format
         } else {
-          this.employee = new EditEmployee(new ProfileDto(this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
+          this.employee = new EditEmployee(new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.
+              lastName.value,
             this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
             null), this.editForm.controls.gender.value);
           this.hasPicture = false;
@@ -99,11 +101,13 @@ export class EditEmployeeComponent implements OnInit {
       } else {
         if (this.picture != null) {
           const samePic = this.picture.split(',');
-          this.employee = new EditEmployee(new ProfileDto(this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
+          this.employee = new EditEmployee(new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.
+              lastName.value,
             this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
             samePic[1]), this.editForm.controls.gender.value);
         } else {
-          this.employee = new EditEmployee(new ProfileDto(this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
+          this.employee = new EditEmployee(new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.
+              lastName.value,
             this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
             null), this.editForm.controls.gender.value);
           this.hasPicture = false;

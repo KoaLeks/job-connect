@@ -1,11 +1,14 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
-  <a class="navbar-brand ml-lg-5" href="">SEPM Group Phase</a>
+<nav class="navbar navbar-expand-lg headerClass">
+  <ng-container class="m-5">
+  <a href="">
+    <img src="assets\logo.png" width="150rem" height="45rem" class="m-2 logoClass">
+  </a>
   <button class="navbar-toggler ml-5" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
           aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+  <div class="collapse navbar-collapse headerContent" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
         <a class="nav-link" *ngIf="authService.isLoggedIn()" routerLink="/message" routerLinkActive="active">Message</a>
@@ -15,7 +18,7 @@
     <ul class="navbar-nav mr-5">
       <a class="nav-link" *ngIf="authService.isLoggedIn()" routerLink="/edit-profile">Edit profile</a>
       <div class="btn-group" *ngIf="!authService.isLoggedIn()" role="group">
-        <button id="btnGroupDropLogin" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+        <button id="btnGroupDropLogin" type="button" class="btn dropdown-toggle loginButton" data-toggle="dropdown">
           Login
         </button>
         <div class="dropdown-menu" aria-labelledby="btnGroupDropLogin">
@@ -26,5 +29,6 @@
       <a class="nav-link" *ngIf="authService.isLoggedIn()" routerLink="/" (click)="authService.logoutUser()">Logout</a>
     </ul>
   </div>
+  </ng-container>
 </nav>
 <app-login [isEmployee]="isEmployee"></app-login>
