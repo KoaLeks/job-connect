@@ -15,7 +15,7 @@ public class Interest {
     private String description;
     @ManyToOne
     private InterestArea interestArea;
-    @ManyToMany(mappedBy = "interests")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "interests")
     private Set<Employee> employees;
 
     public Long getId() {

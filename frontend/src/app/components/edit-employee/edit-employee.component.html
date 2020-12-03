@@ -114,13 +114,6 @@
               placeholder="Public info..." maxlength="10000"></textarea>
   </div>
 
-  <button type="button" routerLink="/" class="btn btn-outline-secondary float-right">Cancel</button>
-  <button type="button" (click)="update()" class="btn btn-outline-primary float-right">Save</button>
-
-  <br>
-  <br>
-  <br>
-
   <ng-container *ngIf="hasPicture">
     <img id="img" src="{{picture}}" alt="profile_picture" width="20%" height="20%">
   </ng-container>
@@ -137,9 +130,20 @@
   <br>
   <br>
 
-<div class="form-group">
-  <label for="pictureUpload">Profilbild hochladen</label>
-  <input type="file" class="form-control-file" id="pictureUpload" accept="image/png, image/jpeg"
-         (change)="onFileSelected($event)" required #pictureUpload>
-</div>
+  <div class="form-group">
+    <label for="pictureUpload">Profilbild hochladen</label>
+    <input type="file" class="form-control-file" id="pictureUpload" accept="image/png, image/jpeg"
+    (change)="onFileSelected($event)" required #pictureUpload>
+  </div>
+
+  <div>
+    Interessen auswählen
+    <div class="form-group" *ngFor="let i of interests">
+      <input type="checkbox" name="{{i.id}}" id="{{i.id}}" (change)="toggleInterest($event, i.id)">
+      <label for="{{i.id}}">{{i.name}}</label>
+    </div>
+  </div>
+
+  <button type="button" routerLink="/" class="btn btn-outline-secondary float-right">Cancel</button>
+  <button type="button" (click)="update()" class="btn btn-outline-primary float-right">Save</button>
 </form>

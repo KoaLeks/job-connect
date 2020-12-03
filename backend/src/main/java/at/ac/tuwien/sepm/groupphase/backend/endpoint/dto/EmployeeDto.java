@@ -1,7 +1,5 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
-
-import at.ac.tuwien.sepm.groupphase.backend.entity.Interest;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Task;
 import at.ac.tuwien.sepm.groupphase.backend.util.Gender;
 
@@ -20,7 +18,7 @@ public class EmployeeDto {
 
     private Set<Task> tasks;
 
-    private Set<Interest> interests;
+    private Set<InterestDto> interestDtos;
 
     private Gender gender;
 
@@ -48,12 +46,12 @@ public class EmployeeDto {
         this.tasks = tasks;
     }
 
-    public Set<Interest> getInterests() {
-        return interests;
+    public Set<InterestDto> getInterestDtos() {
+        return interestDtos;
     }
 
-    public void setInterests(Set<Interest> interests) {
-        this.interests = interests;
+    public void setInterestDtos(Set<InterestDto> interestDtos) {
+        this.interestDtos = interestDtos;
     }
 
     public Gender getGender() {
@@ -83,7 +81,7 @@ public class EmployeeDto {
             "id=" + id +
             ", profileDto=" + profileDto +
             ", tasks=" + tasks +
-            ", interests=" + interests +
+            ", interestDtos=" + interestDtos +
             ", gender=" + gender +
             '}';
     }
@@ -92,7 +90,7 @@ public class EmployeeDto {
         private Long id;
         private ProfileDto profileDto;
         private Set<Task> tasks;
-        private Set<Interest> interests;
+        private Set<InterestDto> interestDtos;
         private Gender gender;
 
         private EmployeeDtoBuilder(){}
@@ -108,8 +106,8 @@ public class EmployeeDto {
             this.tasks = tasks;
             return this;
         }
-        public EmployeeDto.EmployeeDtoBuilder withInterests(Set<Interest> interests){
-            this.interests = interests;
+        public EmployeeDto.EmployeeDtoBuilder withInterestDtos(Set<InterestDto> interestDtos){
+            this.interestDtos = interestDtos;
             return this;
         }
         public EmployeeDto.EmployeeDtoBuilder withGender(Gender gender){
@@ -120,7 +118,7 @@ public class EmployeeDto {
             EmployeeDto employeeDto = new EmployeeDto();
             employeeDto.setId(id);
             employeeDto.setProfileDto(profileDto);
-            employeeDto.setInterests(interests);
+            employeeDto.setInterestDtos(interestDtos);
             employeeDto.setTasks(tasks);
             employeeDto.setGender(gender);
             return employeeDto;
