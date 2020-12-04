@@ -6,6 +6,7 @@ export class EditEmployee {
   constructor(
     public profileDto: ProfileDto,
     public interestDtos: Interest[],
-    public gender: Gender
+    public gender: Gender,
+    public birthDate: Date
   ) {}
 }

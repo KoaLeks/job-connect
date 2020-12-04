@@ -29,6 +29,7 @@ public class EmployeeMapper {
         Set<Interest> interests = interestMapper.interestDtoToInterest(employeeDto.getInterestDtos());
         emp_builder.withInterests(interests);
         emp_builder.withGender(employeeDto.getGender());
+        emp_builder.withBirthDate(employeeDto.getBirthDate());
 
         return emp_builder.build();
     }
@@ -40,6 +41,7 @@ public class EmployeeMapper {
         Set<InterestDto> interestDtos = interestMapper.interestToInterestDto(employee.getInterests());
         empDto_builder.withInterestDtos(interestDtos);
         empDto_builder.withGender(employee.getGender());
+        empDto_builder.withBirthDate(employee.getBirthDate());
         return empDto_builder.build();
     }
 }

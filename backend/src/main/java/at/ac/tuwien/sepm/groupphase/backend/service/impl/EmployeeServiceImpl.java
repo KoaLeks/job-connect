@@ -45,6 +45,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Long createEmployee(Employee employee) throws UniqueConstraintException {
         employee.getProfile().setPassword(passwordEncoder.encode(employee.getProfile().getPassword()));
         employee.setId(profileService.createProfile(employee.getProfile()));
+        LOGGER.info("Service employee" + employee);
         return employeeRepository.save(employee).getId();
     }
 

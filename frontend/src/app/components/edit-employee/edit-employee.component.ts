@@ -38,8 +38,35 @@ export class EditEmployeeComponent implements OnInit {
       lastName: ['', [Validators.required]],
       publicInfo: [''],
       gender: ['', [Validators.required]],
-      picture: null
-    });
+      picture: null,
+      birthDate: [null, [Validators.required]]
+    }, {validators: [this.isAdult('birthDate')]});
+  }
+
+  isAdult(controlName: string) {
+    return (formGroup: FormGroup) => {
+      const control = formGroup.controls[controlName];
+      if (control.errors && !control.errors.notAdult) {
+        // return if another validator has already found an error on the matchingControl
+        return;
+      }
+
+      const birthDate = new Date(control.value);
+      const currentDate = new Date();
+      let age = currentDate.getFullYear() - birthDate.getFullYear();
+
+      if (currentDate.getMonth() < birthDate.getMonth()) {
+        age--;
+      }
+      if (birthDate.getMonth() === currentDate.getMonth() && currentDate.getDate() < birthDate.getDate()) {
+        age--;
+      }
+      if (age < 18) {
+        control.setErrors({notAdult: true});
+      } else {
+        control.setErrors(null);
+      }
+    };
   }
 
   ngOnInit(): void {
@@ -118,27 +145,36 @@ export class EditEmployeeComponent implements OnInit {
         if (this.selectedPicture.startsWith('data:image/png;base64') || this.selectedPicture.startsWith('data:image/jpeg;base64')) {
           this.selectedPicture = this.selectedPicture.split(',');
 
-          this.employee = new EditEmployee(new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
+          this.employee = new EditEmployee(
+            new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
             this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
-            this.selectedPicture[1]), this.employee.interestDtos, this.editForm.controls.gender.value);
+            this.selectedPicture[1]), this.employee.interestDtos, this.editForm.controls.gender.value,
+            new Date(this.editForm.controls.birthDate.value)
+          );
           this.hasPicture = true;
           // image has invalid format
         } else {
-          this.employee = new EditEmployee(new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
+          this.employee = new EditEmployee(
+            new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
             this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
-            null), this.employee.interestDtos, this.editForm.controls.gender.value);
+            null), this.employee.interestDtos, this.editForm.controls.gender.value, new Date(this.editForm.controls.birthDate.value)
+          );
           this.hasPicture = false;
         }
       } else {
         if (this.picture != null) {
           const samePic = this.picture.split(',');
-          this.employee = new EditEmployee(new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
+          this.employee = new EditEmployee(
+            new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
             this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
-            samePic[1]), this.employee.interestDtos, this.editForm.controls.gender.value);
+            samePic[1]), this.employee.interestDtos, this.editForm.controls.gender.value, new Date(this.editForm.controls.birthDate.value)
+          );
         } else {
-          this.employee = new EditEmployee(new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
+          this.employee = new EditEmployee(
+            new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
             this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
-            null), this.employee.interestDtos, this.editForm.controls.gender.value);
+            null), this.employee.interestDtos, this.editForm.controls.gender.value, new Date(this.editForm.controls.birthDate.value)
+          );
           this.hasPicture = false;
         }
       }

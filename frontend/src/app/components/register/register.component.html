@@ -116,7 +116,31 @@
               <option [ngValue]=null hidden disabled>Select your gender</option>
               <option *ngFor="let gender of genderOptions" [ngValue]="gender">{{gender}}</option>
             </select>
+          </div>
 
+
+          <!--           BirthDate Employee error -->
+          <div
+            *ngIf="isEmployee && submitted && (registerFormEmployee.controls.birthDate.errors || registerFormEmployee.controls.birthDate.errors)"
+            class="error">
+            <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.birthDate.errors.required">Your
+              birth date is required!
+            </small>
+            <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.birthDate.errors.notAdult">User
+              must be an adult!
+            </small>
+          </div>
+          <div *ngIf="isEmployee" class="form-group input-group">
+            <!--            BirthDate prepend -->
+            <div class="input-group-prepend">
+                 <span class="input-group-text">
+                   <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-calendar-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V5h16V4H0V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5z"/>
+                  </svg>
+                 </span>
+            </div>
+            <!--            Enter BirthDate -->
+            <input type="date" class="form-control" id="birthDate" formControlName="birthDate">
           </div>
 
           <!--           Email Employee error -->

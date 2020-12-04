@@ -34,8 +34,10 @@ public class RegisterEmployeeMapperTest implements TestData {
         .build();
 
     private final Employee registerEmployee = Employee.EmployeeBuilder.aEmployee()
+        .withProfile(profile)
         .withGender(EMPLOYEE_GENDER)
-        .withProfile(profile).build();
+        .withBirthDate(EMPLOYEE_BIRTH_DATE)
+        .build();
 
     @Test
     public void mapEmployeeToEmployeeDto_SameValueCheck(){
@@ -46,7 +48,8 @@ public class RegisterEmployeeMapperTest implements TestData {
             () -> assertEquals(EMPLOYEE_LAST_NAME, registerEmployeeDto.getLastName()),
             () -> assertEquals(EMPLOYEE_PASSWORD, registerEmployeeDto.getPassword() ),
             () -> assertEquals(EMPLOYEE_PUBLIC_INFO, registerEmployeeDto.getPublicInfo()),
-            () -> assertEquals(EMPLOYEE_GENDER, registerEmployeeDto.getGender())
+            () -> assertEquals(EMPLOYEE_GENDER, registerEmployeeDto.getGender()),
+            () -> assertEquals(EMPLOYEE_BIRTH_DATE, registerEmployeeDto.getBirthDate())
         );
     }
 
@@ -60,7 +63,8 @@ public class RegisterEmployeeMapperTest implements TestData {
             () -> assertEquals(EMPLOYEE_LAST_NAME, emp.getProfile().getLastName()),
             () -> assertEquals(EMPLOYEE_PASSWORD, emp.getProfile().getPassword() ),
             () -> assertEquals(EMPLOYEE_PUBLIC_INFO, emp.getProfile().getPublicInfo()),
-            () -> assertEquals(EMPLOYEE_GENDER, emp.getGender())
+            () -> assertEquals(EMPLOYEE_GENDER, emp.getGender()),
+            () -> assertEquals(EMPLOYEE_BIRTH_DATE, emp.getBirthDate())
         );
     }
 }

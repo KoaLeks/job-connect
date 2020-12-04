@@ -24,6 +24,7 @@ public interface TestData {
     String EMPLOYEE_PASSWORD = "password1234";
     String EMPLOYEE_PUBLIC_INFO = "This is the public information of Max Mustermann";
     Gender EMPLOYEE_GENDER = Gender.MALE;
+    LocalDateTime EMPLOYEE_BIRTH_DATE = LocalDateTime.of(2002, 12, 4, 0, 0, 0, 0);
 
     String EDIT_EMPLOYEE_LAST_NAME = "Musterfrau";
     String EDIT_EMPLOYEE_FIRST_NAME = "Erika";

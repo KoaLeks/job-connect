@@ -1,10 +1,13 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
+import at.ac.tuwien.sepm.groupphase.backend.entity.Employee;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Task;
 import at.ac.tuwien.sepm.groupphase.backend.util.Gender;
+import at.ac.tuwien.sepm.groupphase.backend.util.annotation.IsAdult;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
@@ -20,7 +23,12 @@ public class EmployeeDto {
 
     private Set<InterestDto> interestDtos;
 
+    @NotNull(message = "Gender must not be null")
     private Gender gender;
+
+    @NotNull(message = "Birth date must not be null")
+    @IsAdult(message = "User must be an adult")
+    private LocalDateTime birthDate;
 
     public Long getId() {
         return id;
@@ -62,6 +70,14 @@ public class EmployeeDto {
         this.gender = gender;
     }
 
+    public LocalDateTime getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDateTime birthDate) {
+        this.birthDate = birthDate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -83,6 +99,7 @@ public class EmployeeDto {
             ", tasks=" + tasks +
             ", interestDtos=" + interestDtos +
             ", gender=" + gender +
+            ", birthDate=" + birthDate +
             '}';
     }
 
@@ -92,6 +109,7 @@ public class EmployeeDto {
         private Set<Task> tasks;
         private Set<InterestDto> interestDtos;
         private Gender gender;
+        private LocalDateTime birthDate;
 
         private EmployeeDtoBuilder(){}
 
@@ -114,6 +132,11 @@ public class EmployeeDto {
             this.gender = gender;
             return this;
         }
+        public EmployeeDto.EmployeeDtoBuilder withBirthDate(LocalDateTime birthDate){
+            this.birthDate = birthDate;
+            return this;
+        }
+
         public EmployeeDto build(){
             EmployeeDto employeeDto = new EmployeeDto();
             employeeDto.setId(id);
@@ -121,6 +144,7 @@ public class EmployeeDto {
             employeeDto.setInterestDtos(interestDtos);
             employeeDto.setTasks(tasks);
             employeeDto.setGender(gender);
+            employeeDto.setBirthDate(birthDate);
             return employeeDto;
         }
     }

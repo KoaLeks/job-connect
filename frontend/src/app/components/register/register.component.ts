@@ -43,11 +43,40 @@ export class RegisterComponent implements OnInit {
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
       publicInfo: [''],
-      gender: [null, [Validators.required]]
-    }, {validator: this.mustMatch('password', 'confirmPassword')});
+      gender: [null, [Validators.required]],
+      birthDate: [null, [Validators.required]]
+    }, {validators: [this.mustMatch('password', 'confirmPassword'),
+      this.isAdult('birthDate')]});
   }
 
   ngOnInit(): void {
+  }
+
+
+  isAdult(controlName: string) {
+    return (formGroup: FormGroup) => {
+      const control = formGroup.controls[controlName];
+      if (control.errors && !control.errors.notAdult) {
+        // return if another validator has already found an error on the matchingControl
+        return;
+      }
+
+      const birthDate = new Date(control.value);
+      const currentDate = new Date();
+      let age = currentDate.getFullYear() - birthDate.getFullYear();
+
+      if (currentDate.getMonth() < birthDate.getMonth()) {
+        age--;
+      }
+      if (birthDate.getMonth() === currentDate.getMonth() && currentDate.getDate() < birthDate.getDate()) {
+        age--;
+      }
+      if (age < 18) {
+        control.setErrors({notAdult: true});
+      } else {
+        control.setErrors(null);
+      }
+    };
   }
 
   mustMatch(controlName: string, matchingControlName: string) {
@@ -87,7 +116,7 @@ export class RegisterComponent implements OnInit {
       const newEmployee: Employee = new Employee(this.registerFormEmployee.controls.firstName.value,
         this.registerFormEmployee.controls.lastName.value, this.registerFormEmployee.controls.email.value,
         this.registerFormEmployee.controls.password.value, this.registerFormEmployee.controls.publicInfo.value,
-        this.registerFormEmployee.controls.gender.value);
+        this.registerFormEmployee.controls.gender.value, new Date(this.registerFormEmployee.controls.birthDate.value));
       this.createProfile(newEmployee);
     } else if (this.registerFormEmployer.valid && !this.isEmployee) {
       // tslint:disable-next-line:max-line-length
@@ -107,6 +136,8 @@ export class RegisterComponent implements OnInit {
    */
   createProfile(profile: any): void {
     console.log('Try to register profile: ' + profile.email);
+    // console.log(JSON.stringify(profile));
+
     this.profileService.createProfile(profile).subscribe(
       () => {
         console.log('Successfully created profile: ' + profile.email);
@@ -119,7 +150,7 @@ export class RegisterComponent implements OnInit {
           console.log('Could not create user due to:');
           console.log(error);
           this.error = true;
-          if (typeof error.error === 'object') {
+          if (error.error !== null && typeof error.error === 'object') {
             this.errorMessage = error.error.error;
           } else {
             this.errorMessage = error.error;
