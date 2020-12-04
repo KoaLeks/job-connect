@@ -22,7 +22,7 @@ public class TaskInquiryDto {
     @PositiveOrZero
     private Double paymentHourly;
 
-    private Event event;
+    private Long eventId;
 
     private Set<Employee> employees;
 
@@ -60,12 +60,12 @@ public class TaskInquiryDto {
         this.paymentHourly = paymentHourly;
     }
 
-    public Event getEvent() {
-        return event;
+    public Long getEventId() {
+        return eventId;
     }
 
-    public void setEvent(Event event) {
-        this.event = event;
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
     }
 
     public Set<Employee> getEmployees() {
@@ -115,7 +115,7 @@ public class TaskInquiryDto {
             ", description='" + description + '\'' +
             ", employeeCount=" + employeeCount +
             ", paymentHourly=" + paymentHourly +
-            ", event=" + event +
+            ", eventId=" + eventId +
             ", employees=" + employees +
             ", interestArea=" + interestArea +
             '}';
@@ -126,7 +126,7 @@ public class TaskInquiryDto {
         private String description;
         private Integer employeeCount;
         private Double paymentHourly;
-        private Event event;
+        private Long eventId;
         private Set<Employee> employees;
         private InterestArea interestArea;
 
@@ -157,8 +157,8 @@ public class TaskInquiryDto {
             return this;
         }
 
-        public TaskInquiryDtoBuilder withEvent(Event event) {
-            this.event = event;
+        public TaskInquiryDtoBuilder withEventId(Long eventId) {
+            this.eventId = eventId;
             return this;
         }
 
@@ -178,7 +178,7 @@ public class TaskInquiryDto {
             task.setDescription(description);
             task.setEmployeeCount(employeeCount);
             task.setEmployees(employees);
-            task.setEvent(event);
+            task.setEventId(eventId);
             task.setInterestArea(interestArea);
             task.setPaymentHourly(paymentHourly);
             return task;
