@@ -5,141 +5,100 @@
   </button>
 </div>
 
-<h1>Edit profile</h1>
-<form class="form" [formGroup]="editForm" (ngSubmit)="update()">
-  <div class="form-group input-group">
-    <!--            Person icon -->
-    <div class="input-group-prepend">
-                 <span class="input-group-text">
-                   <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-person-fill" fill="currentColor"
-                        xmlns="http://www.w3.org/2000/svg">
-                     <path fill-rule="evenodd"
-                           d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                   </svg>
-                 </span>
-    </div>
+<div class="jumbotron mt-5">
+  <h1 class="display-4">Profil bearbeiten</h1>
+  <hr class="my-4">
+  <a *ngIf="!authService.isLoggedIn()" class="btn btn-primary btn-lg" routerLink="/login" role="button">Login</a>
+  <div *ngIf="authService.isLoggedIn()">
 
-    <!--            First Name-->
-    <input class="form-control" type="text" name="firstName" formControlName="firstName" id="firstName"
-           placeholder="First name">
-    <!--            Last Name -->
-    <input class="form-control" type="text" name="lastName" formControlName="lastName" id="lastName"
-           placeholder="Last name">
-    <div *ngIf="submitted && (editForm.controls.firstName.errors || editForm.controls.lastName.errors)"
-         class="error">
-      <small class="form-text text-info" *ngIf="editForm.controls.lastName.errors.required">First and last
-        name are required!
-      </small>
-    </div>
+    <form class="form" [formGroup]="editForm" (ngSubmit)="update()">
+      <!-- profile picture -->
+      <div>
+        <div class="mb-2">
+          <div class="container">
+            <img *ngIf="hasPicture" id="img" src="{{picture}}" alt="profile_picture" width="25%" height="25%"
+                 class="image p-4" style="background-color: #465c69" (click)="file.click()">
+            <img *ngIf="!hasPicture" id="img_default" src="assets/user_default.png" alt="default_profile_picture"
+                 width="25%" height="25%" class="image p-4" style="background-color: #465c69" (click)="file.click()">
+            <div class="centered image">Profilbild ändern</div>
+          </div>
+        </div>
+      </div>
+      <input type="file" id="pictureUpload" accept="image/png, image/jpeg" (change)="onFileSelected($event)"
+             required #pictureUpload style="position: fixed; top: -100em" #file>
+
+      <!-- first name -->
+      <div class="form-group">
+        <label for="firstName">Vorname</label>
+        <input class="form-control" type="text" name="firstName" formControlName="firstName" id="firstName"
+               placeholder="First name">
+
+        <div *ngIf="submitted && editForm.controls.firstName.errors"
+             class="error">
+          <small class="form-text text-info" *ngIf="editForm.controls.lastName.errors.required">Vorname muss
+            eingegeben werden
+          </small>
+        </div>
+      </div>
+
+      <!-- last name -->
+      <div class="form-group">
+        <label for="lastName">Nachname</label>
+        <input class="form-control" type="text" name="lastName" formControlName="lastName" id="lastName"
+               placeholder="Last name">
+        <div *ngIf="submitted && editForm.controls.lastName.errors"
+             class="error">
+          <small class="form-text text-info" *ngIf="editForm.controls.lastName.errors.required">Nachname muss
+            eingegeben werden
+          </small>
+        </div>
+      </div>
+
+      <!-- gender -->
+      <div class="form-group">
+        <label for="gender">Geschlecht</label>
+        <select class="form-control" type="text" name="gender" formControlName="gender" id="gender"
+                placeholder="Gender">
+          <option value="" hidden disabled>Select your gender</option>
+          <option *ngFor="let gender of genderOptions" [ngValue]="gender">{{gender}}</option>
+        </select>
+      </div>
+
+      <!-- email -->
+      <div class="form-group ">
+        <label for="inputEmail">E-Mail Adresse</label>
+        <input type="email" name="username" formControlName="email" class="form-control" id="inputEmail"
+               aria-describedby="usernameHelp" placeholder="E-Mail" readonly>
+        <div *ngIf="submitted && editForm.controls.email.errors" class="error">
+          <small class="form-text text-info" *ngIf="editForm.controls.email.errors.required">E-Mail Adresse muss
+            eingegeben werden
+          </small>
+        </div>
+      </div>
+
+      <!-- new password -->
+      <div class="form-group">
+        <label for="password">Neues Passwort</label>
+        <input type="password" name="password" formControlName="password" class="form-control" id="password"
+               placeholder="New password">
+        <div *ngIf="submitted && editForm.controls.password.errors" class="error">
+          <small class="form-text text-info" *ngIf="editForm.controls.password.errors.minlength">New password
+            must be at least 8 characters long!
+          </small>
+        </div>
+      </div>
+
+      <!-- public info -->
+      <div class="form-group">
+        <label for="publicInfo">Öffentliche Profilbeschreibung</label>
+        <textarea name="publicInfo" formControlName="publicInfo" class="form-control" id="publicInfo"
+                  placeholder="Public info..." maxlength="10000"></textarea>
+      </div>
+
+      <div class="form-group form-check">
+        <!--button type="button" routerLink="/" class="btn btn-outline-secondary float-right">Abbrechen</button-->
+        <button type="button" (click)="update()" class="btn btn-outline-primary float-right">Speichern</button>
+      </div>
+    </form>
   </div>
-
-  <div class="form-group input-group">
-    <!--            Gender prepend -->
-    <div class="input-group-prepend">
-       <span class="input-group-text">
-         Gender
-       </span>
-    </div>
-    <!--            Select gender -->
-    <select class="form-control" type="text" name="gender" formControlName="gender" id="gender"
-            placeholder="Gender">
-      <option value="" hidden disabled>Select your gender</option>
-      <option *ngFor="let gender of genderOptions" [ngValue]="gender">{{gender}}</option>
-    </select>
-
-  </div>
-
-
-  <div class="form-group input-group">
-    <!--            Mail icon-->
-    <div class="input-group-prepend">
-               <span class="input-group-text">
-                 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-envelope-fill" fill="currentColor"
-                      xmlns="http://www.w3.org/2000/svg">
-                   <path fill-rule="evenodd"
-                         d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z"/>
-                 </svg>
-               </span>
-    </div>
-
-    <!--            Email-->
-    <input type="email" name="username" formControlName="email" class="form-control" id="inputEmail"
-           aria-describedby="usernameHelp" placeholder="E-Mail" readonly>
-    <div *ngIf="submitted && editForm.controls.email.errors" class="error">
-      <small class="form-text text-info" *ngIf="editForm.controls.email.errors.required">E-Mail
-        is required!
-      </small>
-    </div>
-  </div>
-
-  <div class="form-group input-group">
-    <!--            Lock icon-->
-    <div class="input-group-prepend">
-               <span class="input-group-text">
-                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-lock-fill" fill="currentColor"
-                       xmlns="http://www.w3.org/2000/svg">
-                    <path d="M2.5 9a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V9z"/>
-                    <path fill-rule="evenodd" d="M4.5 4a3.5 3.5 0 1 1 7 0v3h-1V4a2.5 2.5 0 0 0-5 0v3h-1V4z"/>
-                  </svg>
-               </span>
-    </div>
-
-    <!--            Password -->
-    <input type="password" name="password" formControlName="password" class="form-control" id="password"
-           placeholder="New password">
-    <div *ngIf="submitted && editForm.controls.password.errors" class="error">
-      <small class="form-text text-info" *ngIf="editForm.controls.password.errors.minlength">New password
-        must be at least 8 characters long!
-      </small>
-    </div>
-  </div>
-
-  <div class="form-group input-group">
-    <!--            Info icon-->
-    <div class="input-group-prepend">
-               <span class="input-group-text">
-                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-info-circle" fill="currentColor"
-                       xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd"
-                          d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                    <path
-                      d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z"/>
-                    <circle cx="8" cy="4.5" r="1"/>
-                  </svg>
-               </span>
-    </div>
-
-    <!--              Public info-->
-    <textarea name="publicInfo" formControlName="publicInfo" class="form-control" id="publicInfo"
-              placeholder="Public info..." maxlength="10000"></textarea>
-  </div>
-
-  <button type="button" routerLink="/" class="btn btn-outline-secondary float-right">Cancel</button>
-  <button type="button" (click)="update()" class="btn btn-outline-primary float-right">Save</button>
-
-  <br>
-  <br>
-  <br>
-
-  <ng-container *ngIf="hasPicture">
-    <img id="img" src="{{picture}}" alt="profile_picture" width="20%" height="20%">
-  </ng-container>
-
-  <ng-container *ngIf="!hasPicture">
-    du hast noch kein Profilbild
-  </ng-container>
-
-  <ng-container *ngIf="hasPicture">
-    <button (click)="deletePicture()">Bild löschen</button>
-  </ng-container>
-
-  <br>
-  <br>
-  <br>
-
-<div class="form-group">
-  <label for="pictureUpload">Profilbild hochladen</label>
-  <input type="file" class="form-control-file" id="pictureUpload" accept="image/png, image/jpeg"
-         (change)="onFileSelected($event)" required #pictureUpload>
 </div>
-</form>

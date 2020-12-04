@@ -1,0 +1,29 @@
+.container {
+  position: relative;
+  text-align: center;
+  color: black;
+}
+
+.centered {
+  display: none;
+  position: absolute;
+  font-size: x-large;
+  font-weight: bold;
+  top: 90%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.image:hover + .centered {
+  display: block;
+}
+
+.image:hover {
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+img {
+  border-radius: 10px;
+
+}
