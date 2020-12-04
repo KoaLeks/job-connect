@@ -13,21 +13,21 @@ public class EventInquiryDto {
 
     private Long id;
 
-    @NotNull(message = "must not be null")
-    @Future
+    @NotNull(message = "Veranstaltungsbeginn darf nicht NULL sein")
+    @Future(message = "Veranstaltungsbeginn muss in der Zukunft liegen")
     private LocalDateTime start;
 
-    @NotNull(message = "must not be null")
-    @Future
+    @NotNull(message = "Veranstaltungsende darf nicht NULL sein")
+    @Future(message = "Veranstaltungsende muss in der Zukunft liegen")
     private LocalDateTime end;
 
-    @NotNull(message = "must not be null")
-    @NotBlank(message = "must not be empty")
+    @NotNull(message = "Titel darf nicht NULL sein")
+    @NotBlank(message = "Titel darf nicht leer sein")
     @Size(max = 255)
     private String title;
 
-    @NotNull(message = "must not be null")
-    @NotBlank(message = "must not be empty")
+    @NotNull(message = "Beschreibung darf nicht NULL sein")
+    @NotBlank(message = "Beschreibung darf nicht leer sein")
     @Size(max = 1000)
     private String description;
 

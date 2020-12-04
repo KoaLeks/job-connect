@@ -10,15 +10,15 @@ public class TaskInquiryDto {
 
     private Long id;
 
-    @NotNull(message = "must not be null")
-    @NotBlank(message = "must not be empty")
+    @NotNull(message = "Beschreibung darf nicht NULL sein")
+    @NotBlank(message = "Beschreibung darf nicht leer sein")
     @Size(max = 1000)
     private String description;
 
-    @NotNull(message = "must not be null")
+    @NotNull(message = "Arbeitnehmeranzahl darf nicht NULL sein")
     private Integer employeeCount;
 
-    @NotNull(message = "must not be null")
+    @NotNull(message = "Stundenlohn darf nicht NULL sein")
     @PositiveOrZero
     private Double paymentHourly;
 
@@ -84,7 +84,7 @@ public class TaskInquiryDto {
         this.interestArea = interestArea;
     }
 
-    @AssertTrue(message = "employeeCount must be at least as high as number of employees")
+    @AssertTrue(message = "Arbeitnehmeranzahl muss mindestens so groß sein wie die Anzahl der Arbeitnehmer")
     public boolean isValidEmployeeCount() {
         if(employees != null && employeeCount != null) {
             return employeeCount >= employees.size();

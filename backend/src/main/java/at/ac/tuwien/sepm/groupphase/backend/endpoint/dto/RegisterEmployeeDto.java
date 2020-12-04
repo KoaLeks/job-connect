@@ -8,11 +8,11 @@ import java.time.LocalDateTime;
 
 public class RegisterEmployeeDto extends ProfileDto{
 
-    @NotNull(message = "Gender must not be null")
+    @NotNull(message = "Geschlecht darf nicht NULL sein")
     private Gender gender;
 
-    @NotNull(message = "Birth date must not be null")
-    @IsAdult(message = "User must be an adult")
+    @NotNull(message = "Geburtstag darf nicht NULL sein")
+    @IsAdult(message = "Benutzer muss volljährig sein")
     private LocalDateTime birthDate;
 
     public Gender getGender() {
