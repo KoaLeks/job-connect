@@ -2,28 +2,34 @@
   position: relative;
   text-align: center;
   color: black;
+  width: min-content;
+  height: min-content;
 }
 
-.centered {
-  display: none;
-  position: absolute;
-  font-size: x-large;
-  font-weight: bold;
-  top: 90%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.image:hover + .centered {
+.container:hover .centered {
   display: block;
+  cursor: pointer;
 }
 
-.image:hover {
+.container:hover img {
   opacity: 0.5;
   cursor: pointer;
 }
 
+.centered {
+  display: none;
+  font-size: x-large;
+  font-weight: bold;
+  position: absolute;
+  width: 100%;
+  bottom: -5%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 img {
   border-radius: 10px;
-
+  background-color: #465c69;
+  width: 250px;
+  height: 250px
 }

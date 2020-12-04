@@ -15,12 +15,12 @@
       <!-- profile picture -->
       <div>
         <div class="mb-2">
-          <div class="container">
-            <img *ngIf="hasPicture" id="img" src="{{picture}}" alt="profile_picture" width="25%" height="25%"
-                 class="image p-4" style="background-color: #465c69" (click)="file.click()">
+          <div class="container" (click)="file.click()">
+            <img *ngIf="hasPicture" id="img" src="{{picture}}" alt="profile_picture"
+                 class="image p-4" >
             <img *ngIf="!hasPicture" id="img_default" src="assets/user_default.png" alt="default_profile_picture"
-                 width="25%" height="25%" class="image p-4" style="background-color: #465c69" (click)="file.click()">
-            <div class="centered image">Profilbild ändern</div>
+                 class="image p-4">
+            <div class="centered">Profilbild ändern</div>
           </div>
         </div>
       </div>
@@ -29,13 +29,12 @@
 
       <!-- first name -->
       <div class="form-group">
-        <label for="firstName">Vorname</label>
-        <input class="form-control" type="text" name="firstName" formControlName="firstName" id="firstName"
-               placeholder="First name">
+        <label for="firstName">Vorname*</label>
+        <input class="form-control" type="text" name="firstName" formControlName="firstName" id="firstName">
 
         <div *ngIf="submitted && editForm.controls.firstName.errors"
              class="error">
-          <small class="form-text text-info" *ngIf="editForm.controls.lastName.errors.required">Vorname muss
+          <small class="form-text text-info" *ngIf="editForm.controls.firstName.errors.required">Vorname muss
             eingegeben werden
           </small>
         </div>
@@ -43,9 +42,8 @@
 
       <!-- last name -->
       <div class="form-group">
-        <label for="lastName">Nachname</label>
-        <input class="form-control" type="text" name="lastName" formControlName="lastName" id="lastName"
-               placeholder="Last name">
+        <label for="lastName">Nachname*</label>
+        <input class="form-control" type="text" name="lastName" formControlName="lastName" id="lastName">
         <div *ngIf="submitted && editForm.controls.lastName.errors"
              class="error">
           <small class="form-text text-info" *ngIf="editForm.controls.lastName.errors.required">Nachname muss
@@ -56,19 +54,17 @@
 
       <!-- gender -->
       <div class="form-group">
-        <label for="gender">Geschlecht</label>
-        <select class="form-control" type="text" name="gender" formControlName="gender" id="gender"
-                placeholder="Gender">
+        <label for="gender">Geschlecht*</label>
+        <select class="form-control" name="gender" formControlName="gender" id="gender">
           <option value="" hidden disabled>Select your gender</option>
           <option *ngFor="let gender of genderOptions" [ngValue]="gender">{{gender}}</option>
         </select>
       </div>
 
       <!-- email -->
-      <div class="form-group ">
-        <label for="inputEmail">E-Mail Adresse</label>
-        <input type="email" name="username" formControlName="email" class="form-control" id="inputEmail"
-               aria-describedby="usernameHelp" placeholder="E-Mail" readonly>
+      <div class="form-group">
+        <label for="email">E-Mail Adresse*</label>
+        <input type="email" name="email" formControlName="email" class="form-control" id="email">
         <div *ngIf="submitted && editForm.controls.email.errors" class="error">
           <small class="form-text text-info" *ngIf="editForm.controls.email.errors.required">E-Mail Adresse muss
             eingegeben werden
@@ -80,10 +76,10 @@
       <div class="form-group">
         <label for="password">Neues Passwort</label>
         <input type="password" name="password" formControlName="password" class="form-control" id="password"
-               placeholder="New password">
+               placeholder="Neues Passwort">
         <div *ngIf="submitted && editForm.controls.password.errors" class="error">
-          <small class="form-text text-info" *ngIf="editForm.controls.password.errors.minlength">New password
-            must be at least 8 characters long!
+          <small class="form-text text-info" *ngIf="editForm.controls.password.errors.minlength">Passwort muss mindestens
+            8 Zeichen lang sein
           </small>
         </div>
       </div>
@@ -92,7 +88,7 @@
       <div class="form-group">
         <label for="publicInfo">Öffentliche Profilbeschreibung</label>
         <textarea name="publicInfo" formControlName="publicInfo" class="form-control" id="publicInfo"
-                  placeholder="Public info..." maxlength="10000"></textarea>
+                  placeholder="Beschreibung ..." maxlength="10000"></textarea>
       </div>
 
       <div class="form-group form-check">
