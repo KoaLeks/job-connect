@@ -4,8 +4,10 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.*;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.*;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Employee;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Employer;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Profile;
 import at.ac.tuwien.sepm.groupphase.backend.service.EmployeeService;
 import at.ac.tuwien.sepm.groupphase.backend.service.EmployerService;
+import at.ac.tuwien.sepm.groupphase.backend.service.ProfileService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import org.slf4j.Logger;
@@ -26,6 +28,8 @@ import java.lang.invoke.MethodHandles;
 public class ProfileEndpoint {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
+    private final ProfileService profileService;
+
     private final RegisterEmployeeMapper registerEmployeeMapper;
     private final EmployeeService employeeService;
     private final EmployeeMapper employeeMapper;
@@ -35,7 +39,8 @@ public class ProfileEndpoint {
     private final EmployerMapper employerMapper;
 
     @Autowired
-    public ProfileEndpoint(EmployeeService employeeService, RegisterEmployeeMapper registerEmployeeMapper, RegisterEmployerMapper registerEmployerMapper, EmployerService employerService, EmployerMapper employerMapper, EmployeeMapper employeeMapper) {
+    public ProfileEndpoint(ProfileService profileService, EmployeeService employeeService, RegisterEmployeeMapper registerEmployeeMapper, RegisterEmployerMapper registerEmployerMapper, EmployerService employerService, EmployerMapper employerMapper, EmployeeMapper employeeMapper) {
+        this.profileService = profileService;
         this.employeeService = employeeService;
         this.registerEmployeeMapper = registerEmployeeMapper;
         this.employeeMapper = employeeMapper;
@@ -90,5 +95,17 @@ public class ProfileEndpoint {
     public Long updateEmployer(@Valid @RequestBody EmployerDto employerDto) {
         LOGGER.info("PUT /api/v1/profiles/employer body: {}", employerDto);
         return employerService.updateEmployer(employerMapper.employerDtoToEmployer(employerDto));
+    }
+
+    @PutMapping(value = "/updatePassword")
+    @ApiOperation(value = "Update profile password", authorizations = {@Authorization(value = "apiKey")})
+    @CrossOrigin(origins = "http://localhost:4200")
+    public Long updatePassword(@Valid @RequestBody EditPasswordDto editPasswordDto) {
+        LOGGER.info("PUT /api/v1/profiles/updatePassword body: {}", editPasswordDto);
+        this.profileService.checkIfValidCurrentPassword(editPasswordDto.getEmail(), editPasswordDto.getCurrentPassword());
+
+        Profile profileToEdit = this.profileService.findProfileByEmail(editPasswordDto.getEmail());
+        profileToEdit.setPassword(editPasswordDto.getNewPassword());
+        return this.profileService.updateProfile(profileToEdit);
     }
 }

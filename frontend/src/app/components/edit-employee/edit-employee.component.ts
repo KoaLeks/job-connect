@@ -28,6 +28,7 @@ export class EditEmployeeComponent implements OnInit {
   @ViewChild('pictureUpload') // needed for resetting fileUpload button
   inputImage: ElementRef; // needed for resetting fileUpload button
   interests: Interest[];
+  changePassword: boolean = false;
 
   constructor(private authService: AuthService, private router: Router, private formBuilder: FormBuilder,
               private employeeService: EmployeeService, private interestService: InterestService) {

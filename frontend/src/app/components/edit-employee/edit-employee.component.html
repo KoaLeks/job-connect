@@ -50,7 +50,7 @@
 
 
   <!--           BirthDate Employee error -->
-  <div *ngIf="submitted && (editForm.controls.birthDate.errors || editForm.controls.birthDate.errors)" class="error">
+  <div *ngIf="submitted && editForm.controls.birthDate.errors" class="error">
     <small class="form-text text-warning" *ngIf="editForm.controls.birthDate.errors.required">
       Bitte geben Sie Ihr Geburtsdatum ein!
     </small>
@@ -169,4 +169,10 @@
 
   <button type="button" routerLink="/" class="btn btn-outline-secondary float-right">Cancel</button>
   <button type="button" (click)="update()" class="btn btn-outline-primary float-right">Save</button>
+
+  <br>
+  <br>
+  <br>
+  <button class="btn btn-primary float-right" (click)="changePassword=true" data-target="#passwordUpdateModal" data-toggle="modal">Passwort ändern</button>
 </form>
+<app-edit-password [changePassword]="changePassword"></app-edit-password>

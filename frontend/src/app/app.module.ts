@@ -18,6 +18,7 @@ import { EditProfileComponent } from './components/edit-profile/edit-profile.com
 import { CreateEventComponent } from './components/create-event/create-event.component';
 import { EventOverviewComponent } from './components/event-overview/event-overview.component';
 import { RegisterComponent } from './components/register/register.component';
+import { EditPasswordComponent } from './components/edit-password/edit-password.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { RegisterComponent } from './components/register/register.component';
     EventOverviewComponent,
     CreateEventComponent,
     RegisterComponent,
+    EditPasswordComponent,
   ],
   imports: [
     BrowserModule,

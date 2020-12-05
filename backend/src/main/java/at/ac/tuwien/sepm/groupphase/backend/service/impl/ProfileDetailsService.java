@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Profile;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
+import at.ac.tuwien.sepm.groupphase.backend.exception.PasswordsNotMatchingException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.UniqueConstraintException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.ProfileRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.ProfileService;
@@ -14,6 +15,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
@@ -23,9 +25,11 @@ import java.util.List;
 public class ProfileDetailsService implements ProfileService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final ProfileRepository profileRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public ProfileDetailsService(ProfileRepository profileRepository) {
+    public ProfileDetailsService(ProfileRepository profileRepository, PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
         this.profileRepository = profileRepository;
     }
 
@@ -71,5 +75,20 @@ public class ProfileDetailsService implements ProfileService {
         } catch (DataIntegrityViolationException e) {
             throw new UniqueConstraintException("Email address already in use");
         }
+    }
+
+    @Override
+    public void checkIfValidCurrentPassword(String email, String password) throws PasswordsNotMatchingException {
+        LOGGER.info("Checking {}'s password for password update", email);
+        if(!passwordEncoder.matches(password, findProfileByEmail(email).getPassword())){
+            throw new PasswordsNotMatchingException("Das eingegebene alte Passwort stimmt nicht");
+        }
+    }
+
+    @Override
+    public Long updateProfile(Profile profileToEdit) {
+        LOGGER.info("Update profile: {}", profileToEdit);
+        profileToEdit.setPassword(passwordEncoder.encode(profileToEdit.getPassword()));
+        return profileRepository.save(profileToEdit).getId();
     }
 }
