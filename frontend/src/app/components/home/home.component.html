@@ -1,7 +1,15 @@
+<div class="banner">
+  <div class="banner-text">Anmelden - Job suchen - Bewerben</div>
+  <div class="bg-image bg-image-banner bg-center-center">
+  </div>
+</div>
+
+
 <div class="jumbotron mt-5">
   <h1 class="display-4">Welcome to the SEPM group phase!</h1>
   <hr class="my-4">
-  <a *ngIf="!authService.isLoggedIn()" class="btn btn-primary btn-lg" data-target="#loginModal" data-toggle="modal" role="button">Login</a>
+  <a *ngIf="!authService.isLoggedIn()" class="btn btn-primary btn-lg" data-target="#loginModal" data-toggle="modal"
+     role="button">Login</a>
   <div *ngIf="authService.isLoggedIn()">
     <p>Check out the latest message from the SEPM group phase.</p>
     <p class="lead">

@@ -1,3 +1,44 @@
 .jumbotron {
   background: none
 }
+
+.bg-image {
+  height: 500px;
+  width: 100%;
+}
+
+.bg-image-banner {
+  background-image: url(https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1974&q=80);
+  -ms-background-position-x: center;
+  -ms-background-position-y: bottom;
+  background-position: center bottom;
+  background-size: cover;
+  border-radius: 25px;
+  margin-top: 1%;
+}
+
+.bg-center-center {
+  -ms-background-position-x: center;
+  -ms-background-position-y: center;
+  background-position: center center;
+}
+
+.banner {
+  position: relative;
+  text-align: left;
+}
+
+.banner-text {
+  font-size: xx-large;
+  font-weight: bold;
+  position: absolute;
+  bottom: 65%;
+  left: 30%;
+  transform: translate(-50%, -50%);
+  background-color: #465c69;
+  color: white;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-family: "Century Gothic", sans-serif;
+  border-radius: 5px;
+}
