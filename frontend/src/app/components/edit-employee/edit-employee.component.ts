@@ -4,10 +4,10 @@ import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {EmployeeService} from '../../services/employee.service';
 import {EditEmployee} from '../../dtos/edit-employee';
-import {ProfileDto} from '../../dtos/profile-dto';
 import {Gender} from '../../dtos/gender.enum';
 import {InterestService} from '../../services/interest.service';
 import {Interest} from '../../dtos/interest';
+import {ProfileDto} from '../../dtos/profile-dto';
 
 @Component({
   selector: 'app-edit-employee',
@@ -34,7 +34,6 @@ export class EditEmployeeComponent implements OnInit {
               private employeeService: EmployeeService, private interestService: InterestService) {
     this.editForm = this.formBuilder.group({
       email: ['', [Validators.required]],
-      password: ['', [Validators.minLength(8)]],
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
       publicInfo: [''],
@@ -148,7 +147,7 @@ export class EditEmployeeComponent implements OnInit {
 
           this.employee = new EditEmployee(
             new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
-            this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
+            this.editForm.controls.email.value, null, this.editForm.controls.publicInfo.value,
             this.selectedPicture[1]), this.employee.interestDtos, this.editForm.controls.gender.value,
             new Date(this.editForm.controls.birthDate.value)
           );
@@ -157,7 +156,7 @@ export class EditEmployeeComponent implements OnInit {
         } else {
           this.employee = new EditEmployee(
             new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
-            this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
+            this.editForm.controls.email.value, null, this.editForm.controls.publicInfo.value,
             null), this.employee.interestDtos, this.editForm.controls.gender.value, new Date(this.editForm.controls.birthDate.value)
           );
           this.hasPicture = false;
@@ -167,13 +166,13 @@ export class EditEmployeeComponent implements OnInit {
           const samePic = this.picture.split(',');
           this.employee = new EditEmployee(
             new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
-            this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
+            this.editForm.controls.email.value, null, this.editForm.controls.publicInfo.value,
             samePic[1]), this.employee.interestDtos, this.editForm.controls.gender.value, new Date(this.editForm.controls.birthDate.value)
           );
         } else {
           this.employee = new EditEmployee(
             new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
-            this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
+            this.editForm.controls.email.value, null, this.editForm.controls.publicInfo.value,
             null), this.employee.interestDtos, this.editForm.controls.gender.value, new Date(this.editForm.controls.birthDate.value)
           );
           this.hasPicture = false;

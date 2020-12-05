@@ -66,11 +66,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         LOGGER.info("Update employee: {}", employee);
 
         Profile profile = profileService.findProfileByEmail(employee.getProfile().getEmail());
-        if(!employee.getProfile().getPassword().isBlank())
-            employee.getProfile().setPassword(passwordEncoder.encode(employee.getProfile().getPassword()));
-        else
-            employee.getProfile().setPassword(profile.getPassword());
 
+        employee.getProfile().setPassword(profile.getPassword());
         employee.setId(profile.getId());
         employee.getProfile().setId(profile.getId());
         employeeRepository.save(employee);

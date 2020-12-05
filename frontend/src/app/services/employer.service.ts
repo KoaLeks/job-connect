@@ -28,6 +28,6 @@ export class EmployerService {
    */
   updateEmployer(employer: EditEmployer) {
     console.log('Update employer profile');
-    return this.httpClient.put(this.employerBaseUri, employer);
+    return this.httpClient.put(this.employerBaseUri, JSON.parse(JSON.stringify(employer).replace('profileDto', 'editProfileDto')));
   }
 }

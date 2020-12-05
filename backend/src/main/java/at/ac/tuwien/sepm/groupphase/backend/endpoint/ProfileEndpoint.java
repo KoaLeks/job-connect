@@ -68,9 +68,9 @@ public class ProfileEndpoint {
     @PutMapping(value = "/employee")
     @ApiOperation(value = "Update employee details", authorizations = {@Authorization(value = "apiKey")})
     @CrossOrigin(origins = "http://localhost:4200")
-    public Long updateEmployee(@Valid @RequestBody EmployeeDto employeeDto) {
-        LOGGER.info("PUT /api/v1/profiles/employee body: {}", employeeDto);
-        return employeeService.updateEmployee(employeeMapper.employeeDtoToEmployee(employeeDto));
+    public Long updateEmployee(@Valid @RequestBody EditEmployeeDto editEmployeeDto) {
+        LOGGER.info("PUT /api/v1/profiles/employee body: {}", editEmployeeDto);
+        return employeeService.updateEmployee(employeeMapper.editEmployeeDtoToEmployee(editEmployeeDto));
     }
 
     @PostMapping(value = "/employer")
@@ -92,9 +92,9 @@ public class ProfileEndpoint {
     @PutMapping(value = "/employer")
     @ApiOperation(value = "Update employer details", authorizations = {@Authorization(value = "apiKey")})
     @CrossOrigin(origins = "http://localhost:4200")
-    public Long updateEmployer(@Valid @RequestBody EmployerDto employerDto) {
-        LOGGER.info("PUT /api/v1/profiles/employer body: {}", employerDto);
-        return employerService.updateEmployer(employerMapper.employerDtoToEmployer(employerDto));
+    public Long updateEmployer(@Valid @RequestBody EditEmployerDto editEmployerDto) {
+        LOGGER.info("PUT /api/v1/profiles/employer body: {}", editEmployerDto);
+        return employerService.updateEmployer(employerMapper.editEmployerDtoToEmployer(editEmployerDto));
     }
 
     @PutMapping(value = "/updatePassword")

@@ -28,7 +28,7 @@ export class EmployeeService {
    * @param employee to update
    */
   updateEmployee(employee: EditEmployee): Observable<Number> {
-    console.log('Update employee profile');
-    return this.httpClient.put<Number>(this.employeeBaseUri, employee);
+    console.log('Update employee profile {}', employee);
+    return this.httpClient.put<Number>(this.employeeBaseUri, JSON.parse(JSON.stringify(employee).replace('profileDto', 'editProfileDto')));
   }
 }

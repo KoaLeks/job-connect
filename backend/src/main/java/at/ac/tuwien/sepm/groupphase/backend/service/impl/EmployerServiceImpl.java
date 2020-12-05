@@ -53,14 +53,10 @@ public class EmployerServiceImpl implements EmployerService {
         LOGGER.info("Update employer: {}", employer);
 
         Profile profile = profileService.findProfileByEmail(employer.getProfile().getEmail());
-        if(!employer.getProfile().getPassword().isBlank())
-            employer.getProfile().setPassword(passwordEncoder.encode(employer.getProfile().getPassword()));
-        else
-            employer.getProfile().setPassword(profile.getPassword());
 
+        employer.getProfile().setPassword(profile.getPassword());
         employer.getProfile().setId(profile.getId());
         employer.setId(profile.getId());
-
         profileRepository.save(employer.getProfile());
         return employerRepository.save(employer).getId();
     }

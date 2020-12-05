@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EditEmployeeDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EmployeeDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.InterestDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.ProfileDto;
@@ -30,6 +31,18 @@ public class EmployeeMapper {
         emp_builder.withInterests(interests);
         emp_builder.withGender(employeeDto.getGender());
         emp_builder.withBirthDate(employeeDto.getBirthDate());
+
+        return emp_builder.build();
+    }
+
+    public Employee editEmployeeDtoToEmployee(EditEmployeeDto editEmployeeDto){
+        var emp_builder = Employee.EmployeeBuilder.aEmployee();
+        Profile profile = profileMapper.editProfileDtoToProfile(editEmployeeDto.getEditProfileDto());
+        emp_builder.withProfile(profile);
+        Set<Interest> interests = interestMapper.interestDtoToInterest(editEmployeeDto.getInterestDtos());
+        emp_builder.withInterests(interests);
+        emp_builder.withGender(editEmployeeDto.getGender());
+        emp_builder.withBirthDate(editEmployeeDto.getBirthDate());
 
         return emp_builder.build();
     }
