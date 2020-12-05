@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {EditPassword} from '../../dtos/edit-password';
 import {ProfileService} from '../../services/profile.service';
@@ -12,6 +12,7 @@ import {AuthService} from '../../services/auth.service';
 export class EditPasswordComponent implements OnInit {
 
   @Input() changePassword: boolean;
+  @ViewChild('close') close: ElementRef;
   error: boolean = false;
   errorMessage: string = '';
 
@@ -36,8 +37,10 @@ export class EditPasswordComponent implements OnInit {
         this.passwordUpdateForm.controls.currentPassword.value, this.passwordUpdateForm.controls.newPassword.value);
       console.log(editPassword);
       this.profileService.updatePassword(editPassword).subscribe(
-        (id: Number) => {
-          console.log('password updated successfully for ' + id);
+      (id: Number) => {
+        console.log('password updated successfully for ' + id);
+        // close the modal
+          this.close.nativeElement.click();
         }, error => {
           this.error = true;
           if (error.error !== null && typeof error.error === 'object') {
