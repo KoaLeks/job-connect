@@ -3,7 +3,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addTaskLabel">Enter Task Details</h5>
+        <h5 class="modal-title" id="addTaskLabel">Neue Aufgabe</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -11,25 +11,25 @@
       <!-- TASK FORM -->
       <form [formGroup]="taskCreationForm" (ngSubmit)="addTask(taskCreationForm.value)">
         <div class="form-group">
-          <label for="InputTaskDescription">Description<b>*</b></label>
+          <label for="InputTaskDescription">Beschreibung<b>*</b></label>
           <input type="text" maxlength="1000" class="form-control" id="InputTaskDescription"
                  formControlName="description" pattern="[a-zA-Z]+([ ]|[a-zA-Z]|[0-9])*">
         </div>
         <div class="form-group">
-          <label for="InputEmployeeCount">Employee Count<b>*</b></label>
+          <label for="InputEmployeeCount">Benötigte MitarbeiterInnen<b>*</b></label>
           <input type="number" min="1" pattern="[0-9]*" class="form-control" id="InputEmployeeCount" formControlName="employeeCount">
         </div>
         <div class="form-group">
-          <label for="InputPaymentHourly">Payment per Hour<b>*</b></label>
+          <label for="InputPaymentHourly">Bezahlung in Euro/pro Stunde<b>*</b></label>
           <input type="number" min="0" class="form-control" id="InputPaymentHourly" formControlName="paymentHourly">
         </div>
         <div class="form-group" *ngIf="this.interestAreas !== undefined && this.interestAreas.length !== 0">
-          <label for="InputInterestArea">Interest Area</label>
+          <label for="InputInterestArea">Interessengebiet</label>
           <select class="form-control" id="InputInterestArea" formControlName="interestArea">
-            <option [value]=null>no InterestArea chosen</option>
+            <option [value]=null>kein Interessengebiet ausgewählt</option>
             <ng-container *ngFor="let interestArea of this.interestAreas">
-              <option [value]="interestArea.id">Area: {{interestArea.area}} -
-                Description: {{interestArea.description}}</option>
+              <option [value]="interestArea.id">Gebiet: {{interestArea.area}} -
+                Beschreibung: {{interestArea.description}}</option>
             </ng-container>
 
           </select>
@@ -49,44 +49,44 @@
 <!-- Modal ADD TASK-->
 
 <div class="jumbotron mt-5">
-  <h1 class="display-4">Event Creation</h1>
+  <h1 class="display-4">Event erstellen</h1>
   <hr class="my-4">
   <a *ngIf="!authService.isLoggedIn()" class="btn btn-primary btn-lg" routerLink="/login" role="button">Login</a>
   <div *ngIf="authService.isLoggedIn()">
 
-    <h5>Enter Event Details</h5>
+    <h5>Event Details</h5>
     <!-- EVENT FORM -->
     <form [formGroup]="eventCreationForm" (ngSubmit)="createEvent(eventCreationForm.value,
      addressCreationForm.value, this.tasks)">
       <div class="form-group">
-        <label for="InputStart">Start<b>*</b></label>
+        <label for="InputStart">Eventbeginn<b>*</b></label>
         <input type="datetime-local" max="9999-12-31T00:00" class="form-control" id="InputStart"
                formControlName="start">
       </div>
       <div class="form-group">
-        <label for="InputEnd">End<b>*</b></label>
+        <label for="InputEnd">Eventende<b>*</b></label>
         <input type="datetime-local" max="9999-12-31T00:00" class="form-control" id="InputEnd" formControlName="end">
       </div>
       <div class="form-group">
-        <label for="InputTitle">Title<b>*</b></label>
+        <label for="InputTitle">Name<b>*</b></label>
         <input type="text" maxlength="255" class="form-control" id="InputTitle" formControlName="title">
       </div>
       <div class="form-group">
-        <label for="InputDescription">Description<b>*</b></label>
+        <label for="InputDescription">Beschreibung<b>*</b></label>
         <input type="text" maxlength="1000" class="form-control" id="InputDescription" formControlName="description">
       </div>
       <br>
 
-      <h5>Enter Address Details</h5>
+      <h5>Adresse</h5>
       <!-- ADDRESS FORM -->
       <form [formGroup]="addressCreationForm">
         <div class="form-group">
-          <label for="InputCity">City<b>*</b></label>
+          <label for="InputCity">Stadt<b>*</b></label>
           <input type="text" class="form-control" id="InputCity" aria-describedby="enterCity"
                  formControlName="city" required>
         </div>
         <div class="form-group">
-          <label for="InputState">State<b>*</b></label>
+          <label for="InputState">Bundesland<b>*</b></label>
           <select class="form-control" id="InputState" formControlName="state">
             <option>Vienna</option>
             <option>Lower Austria</option>
@@ -100,15 +100,15 @@
           </select>
         </div>
         <div class="form-group">
-          <label for="InputZip">Zip<b>*</b></label>
+          <label for="InputZip">Postleitzahl<b>*</b></label>
           <input type="number" min="1000" max="9999" class="form-control" id="InputZip" formControlName="zip">
         </div>
         <div class="form-group">
-          <label for="InputAddressLine">Address line<b>*</b></label>
+          <label for="InputAddressLine">Straße und Hausnummer<b>*</b></label>
           <input type="text" class="form-control" id="InputAddressLine" formControlName="addressLine">
         </div>
         <div class="form-group">
-          <label for="InputAdditional">additional</label>
+          <label for="InputAdditional">Adresszusatz</label>
           <input type="text" class="form-control" id="InputAdditional" formControlName="additional">
         </div>
 
@@ -116,7 +116,7 @@
       <!-- ADDRESS FORM -->
 
       <div style="color: red;">
-        fields marked with <b>*</b> are obligatory!
+        Mit <b>*</b> markierte Felder sind Pflicht!
       </div>
 
       <br>
@@ -124,22 +124,22 @@
 
       <div *ngIf="tasks.length == 0">
         <br><br>
-        <h5>Add some tasks to your Event</h5>
+        <h5>Aufgaben zum Event hinzufügen</h5>
       </div>
       <br>
 
       <!-- Button trigger modal ADD TASK-->
       <button type="button" class="btn btn-primary" data-toggle="modal"
               data-target="#Add-Task" (click)="getInterestAreas(); loadEmployerId()">
-        Add Task
+        Neue Aufgabe
       </button>
 
       <div *ngIf="tasks.length != 0">
         <br><br>
-        <h5>Added Tasks: </h5>
+        <h5>Jobs: </h5>
         <ng-container *ngFor="let task of tasks">
           <div>
-            Task: {{task.description}} Payment: {{task.paymentHourly}}€/h Jobs: {{task.employeeCount}}
+            Aufgabe: {{task.description}} Bezahlung: {{task.paymentHourly}}€/h Benötigte MitarbeiterInnen: {{task.employeeCount}}
             <button type="button" class="small" (click)="deleteTask(task)">&times;</button>
           </div>
         </ng-container>
@@ -148,7 +148,7 @@
       <div class="form-group form-check">
         <button type="submit" style="float: right" class="btn btn-primary"
                 [disabled]="!eventCreationForm.valid || !addressCreationForm.valid ||
-                 this.tasks.length == 0">Submit
+                 this.tasks.length == 0">Speichern
         </button>
       </div>
     </form>
