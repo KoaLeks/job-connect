@@ -13,13 +13,29 @@
         <form class="form" [formGroup]="isEmployee ? registerFormEmployee : registerFormEmployer"
               (ngSubmit)="registerUser()">
           <div *ngIf="!isEmployee">
+            <div class="form-group input-group">
+              Ich bin eine/ein:
+              <div class="form-check form-check-inline ml-2">
+                <input class="form-check-input" id="radioPerson" type="radio" name="exampleRadios" (click)="setPrivatePerson(true)" checked>
+                <label class="form-check-label" for="radioPerson">
+                  Privatperson
+                </label>
+              </div>
+              <div class="form-check form-check-inline" >
+                <input class="form-check-input" id="radioCompany" type="radio" name="exampleRadios" (click)="setPrivatePerson(false); resetCompanyName()" >
+                <label class="form-check-label" for="radioCompany">
+                  Unternehmen
+                </label>
+              </div>
+            </div>
+
             <!--          Company Name error -->
-            <div *ngIf="submitted && registerFormEmployer.controls.companyName.errors" class="error">
+            <div *ngIf="!isPrivatePerson && submitted && registerFormEmployer.controls.companyName.errors" class="error">
               <small class="form-text text-warning" *ngIf="registerFormEmployer.controls.companyName.errors.required">
                 Bitte geben Sie einen Firmenname an!
               </small>
             </div>
-            <div class="form-group input-group">
+            <div *ngIf="!isPrivatePerson" class="form-group input-group">
               <!--              Building icon-->
               <div class="input-group-prepend">
                <span class="input-group-text">
@@ -36,7 +52,7 @@
               <input type="text" name="company" formControlName="companyName" class="form-control" id="company"
                      placeholder="Firmenname">
             </div>
-            <div class="form-group input-group">
+            <div *ngIf="!isPrivatePerson" class="form-group input-group">
               <!--              Textarea icon-->
               <div class="input-group-prepend">
                <span class="input-group-text">

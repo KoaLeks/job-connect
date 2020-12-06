@@ -23,6 +23,7 @@ export class RegisterComponent implements OnInit {
   error: boolean = false;
   errorMessage: string = '';
   genderOptions = Object.values(Gender);
+  isPrivatePerson: boolean = true;
 
   // tslint:disable-next-line:max-line-length
   constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router, private profileService: ProfileService) {
@@ -52,6 +53,13 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  setPrivatePerson(bool: boolean) {
+    this.isPrivatePerson = bool;
+  }
+
+  resetCompanyName() {
+    this.registerFormEmployer.get('companyName').setValue('');
+  }
 
   isAdult(controlName: string) {
     return (formGroup: FormGroup) => {
@@ -112,6 +120,9 @@ export class RegisterComponent implements OnInit {
    */
   registerUser(): void {
     this.submitted = true;
+    if (this.isPrivatePerson) {
+      this.registerFormEmployer.get('companyName').setValue('Privatperson');
+    }
     if (this.registerFormEmployee.valid && this.isEmployee) {
       const newEmployee: Employee = new Employee(this.registerFormEmployee.controls.firstName.value,
         this.registerFormEmployee.controls.lastName.value, this.registerFormEmployee.controls.email.value,
