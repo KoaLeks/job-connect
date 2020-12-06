@@ -15,11 +15,12 @@
       <!-- profile picture -->
       <div>
         <div class="mb-2">
+          <button class="btn btn-link float-right" (click)=deletePicture()>Bild entfernen</button>
           <div class="container" (click)="file.click()">
             <img *ngIf="hasPicture" id="img" src="{{picture}}" alt="profile_picture"
-                 class="image p-4" >
+                 class="image">
             <img *ngIf="!hasPicture" id="img_default" src="assets/user_default.png" alt="default_profile_picture"
-                 class="image p-4">
+                 class="image">
             <div class="centered">Profilbild ändern</div>
           </div>
         </div>
@@ -78,7 +79,8 @@
         <input type="password" name="password" formControlName="password" class="form-control" id="password"
                placeholder="Neues Passwort">
         <div *ngIf="submitted && editForm.controls.password.errors" class="error">
-          <small class="form-text text-info" *ngIf="editForm.controls.password.errors.minlength">Passwort muss mindestens
+          <small class="form-text text-info" *ngIf="editForm.controls.password.errors.minlength">Passwort muss
+            mindestens
             8 Zeichen lang sein
           </small>
         </div>

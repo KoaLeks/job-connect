@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit {
         console.log('Successfully logged in user: ' + authRequest.email);
         // @ts-ignore
         $('#loginModal').modal('hide');
-        this.router.navigate(['/message']);
+        this.router.navigate(['/']);
       },
       error => {
         console.log('Could not log in due to:');
