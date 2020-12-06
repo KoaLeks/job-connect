@@ -1,6 +1,10 @@
 package at.ac.tuwien.sepm.groupphase.backend.entity;
 
+import net.bytebuddy.implementation.bind.annotation.Empty;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 import java.util.Set;
 
@@ -11,9 +15,11 @@ public class Employer {
 
     @OneToOne
     @MapsId
+    @NotNull
     private Profile profile;
 
     @Column(nullable = false)
+    @NotBlank
     private String companyName;
 
     @Column(length = 1000)
