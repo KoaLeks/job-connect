@@ -127,21 +127,4 @@ public class SecurityTest implements TestData {
 
         assertEquals(HttpStatus.UNAUTHORIZED.value(), response.getStatus());
     }
-
-    @Test
-    public void givenUserLoggedIn_whenPost_then403() throws Exception {
-        message.setPublishedAt(null);
-        MessageInquiryDto messageInquiryDto = messageMapper.messageToMessageInquiryDto(message);
-        String body = objectMapper.writeValueAsString(messageInquiryDto);
-
-        MvcResult mvcResult = this.mockMvc.perform(post(MESSAGE_BASE_URI)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(body)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(DEFAULT_USER, USER_ROLES)))
-            .andDo(print())
-            .andReturn();
-        MockHttpServletResponse response = mvcResult.getResponse();
-
-        assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatus());
-    }
 }

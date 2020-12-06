@@ -210,7 +210,7 @@ public class ProfileEndpointTest implements TestData {
                 String content = response.getContentAsString();
                 content = content.substring(content.indexOf('[') + 1, content.indexOf(']'));
                 String[] errors = content.split(",");
-                assertEquals(5, errors.length);
+                assertEquals(8, errors.length);
             }
         );
     }
@@ -239,7 +239,7 @@ public class ProfileEndpointTest implements TestData {
                 String content = response.getContentAsString();
                 content = content.substring(content.indexOf('[') + 1, content.indexOf(']'));
                 String[] errors = content.split(",");
-                assertEquals(5, errors.length);
+                assertEquals(9, errors.length);
             }
         );
     }

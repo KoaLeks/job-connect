@@ -26,8 +26,7 @@ public class EditProfileDto {
     @Email(message = "E-Mail muss gültig sein")
     private String email;
 
-    @NotNull(message = "Passwort darf nicht NULL sein")
-    @NotBlank(message = "Passwort darf nicht leer sein")
+    // Not used for updating password
     private String password;
 
     @Size(max = 10000)
@@ -114,7 +113,7 @@ public class EditProfileDto {
             '}';
     }
 
-    public static final class EditProfileDtoBuilder{
+    public static final class EditProfileDtoBuilder {
         private Long id;
         private String lastName;
         private String firstName;
@@ -122,34 +121,34 @@ public class EditProfileDto {
         private String publicInfo;
         private Byte[] picture;
 
-        private EditProfileDtoBuilder(){
+        private EditProfileDtoBuilder() {
         }
 
-        public static EditProfileDto.EditProfileDtoBuilder aEditProfileDto(){
+        public static EditProfileDto.EditProfileDtoBuilder aEditProfileDto() {
             return new EditProfileDto.EditProfileDtoBuilder();
         }
 
-        public EditProfileDto.EditProfileDtoBuilder withId(Long id){
+        public EditProfileDto.EditProfileDtoBuilder withId(Long id) {
             this.id = id;
             return this;
         }
 
-        public EditProfileDto.EditProfileDtoBuilder withLastName(String lastName){
+        public EditProfileDto.EditProfileDtoBuilder withLastName(String lastName) {
             this.lastName = lastName;
             return this;
         }
 
-        public EditProfileDto.EditProfileDtoBuilder withFirstName(String firstName){
+        public EditProfileDto.EditProfileDtoBuilder withFirstName(String firstName) {
             this.firstName = firstName;
             return this;
         }
 
-        public EditProfileDto.EditProfileDtoBuilder withEmail(String email){
+        public EditProfileDto.EditProfileDtoBuilder withEmail(String email) {
             this.email = email;
             return this;
         }
 
-        public EditProfileDto.EditProfileDtoBuilder withPublicInfo(String publicInfo){
+        public EditProfileDto.EditProfileDtoBuilder withPublicInfo(String publicInfo) {
             this.publicInfo = publicInfo;
             return this;
         }
@@ -159,7 +158,7 @@ public class EditProfileDto {
             return this;
         }
 
-        public EditProfileDto build(){
+        public EditProfileDto build() {
             EditProfileDto editProfileDto = new EditProfileDto();
             editProfileDto.setId(id);
             editProfileDto.setEmail(email);
