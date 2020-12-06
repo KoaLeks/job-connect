@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EditEmployerDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EmployerDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.ProfileDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Employer;
@@ -23,6 +24,16 @@ public class EmployerMapper {
         emp_builder.withProfile(profile);
         emp_builder.withCompanyName(employerDto.getCompanyName());
         emp_builder.withDescription(employerDto.getDescription());
+        return emp_builder.build();
+    }
+
+    public Employer editEmployerDtoToEmployer(EditEmployerDto editEmployerDto) {
+        var emp_builder = Employer.EmployerBuilder.aEmployer();
+        Profile profile = profileMapper.editProfileDtoToProfile(editEmployerDto.getEditProfileDto());
+        profile.setEmployer(true);
+        emp_builder.withProfile(profile);
+        emp_builder.withCompanyName(editEmployerDto.getCompanyName());
+        emp_builder.withDescription(editEmployerDto.getDescription());
         return emp_builder.build();
     }
 

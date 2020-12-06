@@ -13,10 +13,10 @@ public class EmployerDto {
     private Long id;
 
     @Valid
-    @NotNull(message = "Profile details must not be null")
+    @NotNull(message = "Profil details dürfen nicht NULL sein")
     private ProfileDto profileDto;
 
-    @NotNull(message = "Company name must not be null")
+    @NotNull(message = "Firmenname darf nicht NULL sein")
     @Size(max = 255)
     private String companyName;
 

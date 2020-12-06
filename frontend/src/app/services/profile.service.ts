@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Message} from '../dtos/message';
 import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {Globals} from '../global/globals';
 import {Employee} from '../dtos/employee';
 import {Employer} from '../dtos/employer';
+import {EditPassword} from '../dtos/edit-password';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,8 @@ export class ProfileService {
 
   private profileBaseUri: string = this.globals.backendUri + '/profiles';
 
-  constructor(private httpClient: HttpClient, private globals: Globals) { }
+  constructor(private httpClient: HttpClient, private globals: Globals) {
+  }
 
   /**
    * Persists profile to the backend
@@ -28,5 +30,11 @@ export class ProfileService {
     } else {
       console.error('profile object is neither an instance of employee nor employer.');
     }
+  }
+
+  updatePassword(passwords: EditPassword): Observable<Number> {
+    console.log('Update user password');
+    console.log(passwords);
+    return this.httpClient.put<Number>(this.profileBaseUri + '/updatePassword', passwords);
   }
 }

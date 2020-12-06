@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Profile;
+import at.ac.tuwien.sepm.groupphase.backend.exception.PasswordsNotMatchingException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.UniqueConstraintException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -30,4 +31,19 @@ public interface ProfileService extends UserDetailsService {
     Profile findProfileByEmail(String email);
 
     Long createProfile(Profile profile);
+
+    /**
+     * Check if email password combination is correct. Used to update a users password.
+     * @param email of the profile
+     * @param password of the profile
+     * @return true if the password is correct, false otherwise
+     */
+    void checkIfValidCurrentPassword(String email, String password) throws PasswordsNotMatchingException;
+
+    /**
+     * Update the profile details
+     * @param profileToEdit values to update
+     * @return the ID of the updated user profile
+     */
+    Long updateProfile(Profile profileToEdit);
 }

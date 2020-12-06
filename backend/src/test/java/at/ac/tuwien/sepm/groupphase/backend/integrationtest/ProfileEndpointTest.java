@@ -2,6 +2,9 @@ package at.ac.tuwien.sepm.groupphase.backend.integrationtest;
 
 import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
 import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EditEmployeeDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EditEmployerDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EditProfileDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EmployeeMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EmployerMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.RegisterEmployeeMapper;
@@ -81,6 +84,7 @@ public class ProfileEndpointTest implements TestData {
             .withPassword(EMPLOYEE_PASSWORD)
             .build())
         .withGender(EMPLOYEE_GENDER)
+        .withBirthDate(EMPLOYEE_BIRTH_DATE)
         .build();
 
     private final Employee editEmployee = Employee.EmployeeBuilder.aEmployee()
@@ -92,6 +96,7 @@ public class ProfileEndpointTest implements TestData {
             .withPassword(EMPLOYEE_PASSWORD)
             .build())
         .withGender(EMPLOYEE_GENDER)
+        .withBirthDate(EMPLOYEE_BIRTH_DATE)
         .build();
 
     private Employer employer = Employer.EmployerBuilder.aEmployer()
@@ -133,6 +138,7 @@ public class ProfileEndpointTest implements TestData {
                 .withPublicInfo(EMPLOYEE_PUBLIC_INFO)
                 .build())
             .withGender(EMPLOYEE_GENDER)
+            .withBirthDate(EMPLOYEE_BIRTH_DATE)
             .build();
         employer = Employer.EmployerBuilder.aEmployer()
             .withProfile(Profile.ProfileBuilder.aProfile()
@@ -300,7 +306,17 @@ public class ProfileEndpointTest implements TestData {
     public void updateValidEmployeeTest() throws Exception {
         employeeRepository.save(employee);
 
-        String editBody = objectMapper.writeValueAsString(employeeMapper.employeeToEmployeeDto(editEmployee));
+        EditEmployeeDto editEmployeeDto = EditEmployeeDto.EditEmployeeDtoBuilder.aEmployeeDto()
+            .withEditProfileDto(EditProfileDto.EditProfileDtoBuilder.aEditProfileDto()
+                .withEmail(EMPLOYEE_EMAIL)
+                .withFirstName(EDIT_EMPLOYEE_LAST_NAME)
+                .withLastName(EDIT_EMPLOYEE_FIRST_NAME)
+                .build())
+            .withGender(EMPLOYEE_GENDER)
+            .withBirthDate(EMPLOYEE_BIRTH_DATE)
+            .build();
+
+        String editBody = objectMapper.writeValueAsString(editEmployeeDto);
 
         MvcResult mvcResult = this.mockMvc.perform(put(EDIT_EMPLOYEE_BASE_URI)
             .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
@@ -317,7 +333,17 @@ public class ProfileEndpointTest implements TestData {
     public void updateValidEmployerTest() throws Exception {
         employerRepository.save(employer);
 
-        String editBody = objectMapper.writeValueAsString(employerMapper.employerToEmployerDto(editEmployer));
+        EditEmployerDto editEmployerDto = EditEmployerDto.EditEmployerDtoBuilder.aEmployerDto()
+            .withProfileDto(EditProfileDto.EditProfileDtoBuilder.aEditProfileDto()
+                .withEmail(EMPLOYER_EMAIL)
+                .withLastName(EMPLOYER_LAST_NAME)
+                .withFirstName(EMPLOYER_FIRST_NAME)
+                .build())
+            .withCompanyName(EDIT_EMPLOYER_COMPANY_NAME)
+            .withDescription(EDIT_EMPLOYER_COMPANY_DESCRIPTION)
+            .build();
+
+        String editBody = objectMapper.writeValueAsString(editEmployerDto);
 
         MvcResult mvcResult = this.mockMvc.perform(put(EDIT_EMPLOYER_BASE_URI)
             .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))

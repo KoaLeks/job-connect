@@ -13,30 +13,30 @@ public class EventInquiryDto {
 
     private Long id;
 
-    @NotNull(message = "must not be null")
-    @Future
+    @NotNull(message = "Veranstaltungsbeginn darf nicht NULL sein")
+    @Future(message = "Veranstaltungsbeginn muss in der Zukunft liegen")
     private LocalDateTime start;
 
-    @NotNull(message = "must not be null")
-    @Future
+    @NotNull(message = "Veranstaltungsende darf nicht NULL sein")
+    @Future(message = "Veranstaltungsende muss in der Zukunft liegen")
     private LocalDateTime end;
 
-    @NotNull(message = "must not be null")
-    @NotBlank(message = "must not be empty")
+    @NotNull(message = "Titel darf nicht NULL sein")
+    @NotBlank(message = "Titel darf nicht leer sein")
     @Size(max = 255)
     private String title;
 
-    @NotNull(message = "must not be null")
-    @NotBlank(message = "must not be empty")
+    @NotNull(message = "Beschreibung darf nicht NULL sein")
+    @NotBlank(message = "Beschreibung darf nicht leer sein")
     @Size(max = 1000)
     private String description;
 
-    private Employer employer;
+    private EmployerDto employer;
 
     @NotNull(message = "must not be null")
-    private Address address;
+    private AddressInquiryDto address;
 
-    private Set<Task> tasks;
+    private Set<TaskInquiryDto> tasks;
 
     public String getTitle() {
         return title;
@@ -78,27 +78,27 @@ public class EventInquiryDto {
         this.description = description;
     }
 
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public Employer getEmployer() {
+    public EmployerDto getEmployer() {
         return employer;
     }
 
-    public void setEmployer(Employer employer) {
+    public void setEmployer(EmployerDto employer) {
         this.employer = employer;
     }
 
-    public Set<Task> getTasks() {
+    public AddressInquiryDto getAddress() {
+        return address;
+    }
+
+    public void setAddress(AddressInquiryDto address) {
+        this.address = address;
+    }
+
+    public Set<TaskInquiryDto> getTasks() {
         return tasks;
     }
 
-    public void setTasks(Set<Task> tasks) {
+    public void setTasks(Set<TaskInquiryDto> tasks) {
         this.tasks = tasks;
     }
 
@@ -144,9 +144,9 @@ public class EventInquiryDto {
         private LocalDateTime end;
         private String title;
         private String description;
-        private Employer employer;
-        private Address address;
-        private Set<Task> tasks;
+        private EmployerDto employer;
+        private AddressInquiryDto address;
+        private Set<TaskInquiryDto> tasks;
 
         private EventInquiryDtoBuilder() {
         }
@@ -180,17 +180,17 @@ public class EventInquiryDto {
             return this;
         }
 
-        public EventInquiryDtoBuilder withEmployer(Employer employer) {
+        public EventInquiryDtoBuilder withEmployer(EmployerDto employer) {
             this.employer = employer;
             return this;
         }
 
-        public EventInquiryDtoBuilder withAddress(Address address) {
+        public EventInquiryDtoBuilder withAddress(AddressInquiryDto address) {
             this.address = address;
             return this;
         }
 
-        public EventInquiryDtoBuilder withTask(Set<Task> tasks) {
+        public EventInquiryDtoBuilder withTask(Set<TaskInquiryDto> tasks) {
             this.tasks = tasks;
             return this;
         }

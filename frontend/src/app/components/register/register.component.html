@@ -1,9 +1,9 @@
 <div class="modal fade" id="registerModal" data-backdrop="static" role="dialog">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" style="width:33%"  role="document">
     <div class="modal-content">
 
       <div class="modal-header">
-        <h5 class="modal-title">Register as {{isEmployee ? "Employee" : "Employer"}}</h5>
+        <h5 class="modal-title">Registrieren als {{isEmployee ? "Arbeitnehmer" : "Arbeitgeber"}}</h5>
         <button type="button" (click)="clearForm()" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true" >&times;</span>
         </button>
@@ -13,14 +13,29 @@
         <form class="form" [formGroup]="isEmployee ? registerFormEmployee : registerFormEmployer"
               (ngSubmit)="registerUser()">
           <div *ngIf="!isEmployee">
+            <div class="form-group input-group">
+              Ich bin eine/ein:
+              <div class="form-check form-check-inline ml-2">
+                <input class="form-check-input" id="radioPerson" type="radio" name="exampleRadios" (click)="setPrivatePerson(true)" checked>
+                <label class="form-check-label" for="radioPerson">
+                  Privatperson
+                </label>
+              </div>
+              <div class="form-check form-check-inline" >
+                <input class="form-check-input" id="radioCompany" type="radio" name="exampleRadios" (click)="setPrivatePerson(false); resetCompanyName()" >
+                <label class="form-check-label" for="radioCompany">
+                  Unternehmen
+                </label>
+              </div>
+            </div>
+
             <!--          Company Name error -->
-            <div *ngIf="submitted && registerFormEmployer.controls.companyName.errors" class="error">
-              <small class="form-text text-warning" *ngIf="registerFormEmployer.controls.companyName.errors.required">Your
-                company
-                name is required!
+            <div *ngIf="!isPrivatePerson && submitted && registerFormEmployer.controls.companyName.errors" class="error">
+              <small class="form-text text-warning" *ngIf="registerFormEmployer.controls.companyName.errors.required">
+                Bitte geben Sie einen Firmenname an!
               </small>
             </div>
-            <div class="form-group input-group">
+            <div *ngIf="!isPrivatePerson" class="form-group input-group">
               <!--              Building icon-->
               <div class="input-group-prepend">
                <span class="input-group-text">
@@ -35,9 +50,9 @@
               </div>
               <!--              Company Name-->
               <input type="text" name="company" formControlName="companyName" class="form-control" id="company"
-                     placeholder="Company name">
+                     placeholder="Firmenname">
             </div>
-            <div class="form-group input-group">
+            <div *ngIf="!isPrivatePerson" class="form-group input-group">
               <!--              Textarea icon-->
               <div class="input-group-prepend">
                <span class="input-group-text">
@@ -53,7 +68,7 @@
               <!--              Company Description-->
               <textarea name="companyDescription" formControlName="companyDescription" class="form-control"
                         id="companyDescription"
-                        placeholder="Company description..." maxlength="1000"></textarea>
+                        placeholder="Firmenbeschreibung..." maxlength="1000"></textarea>
             </div>
           </div>
 
@@ -62,17 +77,15 @@
             *ngIf="isEmployee && submitted && (registerFormEmployee.controls.firstName.errors || registerFormEmployee.controls.lastName.errors)"
             class="error">
             <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.lastName.errors.required">Your
-              first and last
-              name are required!
+              Bitte geben Sie Ihren Vor- und Nachname ein!
             </small>
           </div>
           <!--           Name Employer error -->
           <div
             *ngIf="!isEmployee && submitted && (registerFormEmployer.controls.firstName.errors || registerFormEmployer.controls.lastName.errors)"
             class="error">
-            <small class="form-text text-warning" *ngIf="registerFormEmployer.controls.lastName.errors.required">Your
-              first and last
-              name are required!
+            <small class="form-text text-warning" *ngIf="registerFormEmployer.controls.lastName.errors.required">
+              Bitte geben Sie Ihren Vor- und Nachname ein!
             </small>
           </div>
           <div class="form-group input-group">
@@ -88,49 +101,69 @@
             </div>
             <!--            First Name -->
             <input class="form-control" type="text" name="firstName" formControlName="firstName" id="firstName"
-                   placeholder="First name">
+                   placeholder="Vorname">
             <!--            Last Name -->
             <input class="form-control" type="text" name="lastName" formControlName="lastName" id="lastName"
-                   placeholder="Last name">
+                   placeholder="Nachname">
           </div>
 
           <!--           Gender Employee error -->
           <div
             *ngIf="isEmployee && submitted && (registerFormEmployee.controls.gender.errors || registerFormEmployee.controls.gender.errors)"
             class="error">
-            <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.gender.errors.required">Your
-              gender
-              is required!
+            <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.gender.errors.required">
+              Bitte geben Sie Ihr Geschlecht an!
             </small>
           </div>
           <div *ngIf="isEmployee" class="form-group input-group">
             <!--            Gender prepend -->
             <div class="input-group-prepend">
                  <span class="input-group-text">
-                   Gender
+                   Geschlecht
                  </span>
             </div>
             <!--            Select gender -->
             <select class="form-control" type="text" name="gender" formControlName="gender" id="gender"
                    placeholder="Gender">
-              <option [ngValue]=null hidden disabled>Select your gender</option>
+              <option [ngValue]=null hidden disabled>Wählen Sie Ihr Geschlecht</option>
               <option *ngFor="let gender of genderOptions" [ngValue]="gender">{{gender}}</option>
             </select>
+          </div>
 
+          <!--           BirthDate Employee error -->
+          <div
+            *ngIf="isEmployee && submitted && (registerFormEmployee.controls.birthDate.errors || registerFormEmployee.controls.birthDate.errors)"
+            class="error">
+            <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.birthDate.errors.required">
+              Bitte geben Sie Ihr Geburtsdatum ein!
+            </small>
+            <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.birthDate.errors.notAdult">User
+              must be an adult!
+            </small>
+          </div>
+          <div *ngIf="isEmployee" class="form-group input-group">
+            <!--            BirthDate prepend -->
+            <div class="input-group-prepend">
+                 <span class="input-group-text">
+                   <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-calendar-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V5h16V4H0V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5z"/>
+                  </svg>
+                 </span>
+            </div>
+            <!--            Enter BirthDate -->
+            <input type="date" class="form-control" id="birthDate" formControlName="birthDate">
           </div>
 
           <!--           Email Employee error -->
           <div *ngIf="isEmployee && submitted && registerFormEmployee.controls.email.errors" class="error">
-            <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.email.errors.required">Your
-              E-Mail
-              is required!
+            <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.email.errors.required">
+              Bitte geben Sie Ihre E-Mail ein.
             </small>
           </div>
           <!--           Email Employer error -->
           <div *ngIf="!isEmployee && submitted && registerFormEmployer.controls.email.errors" class="error">
-            <small class="form-text text-warning" *ngIf="registerFormEmployer.controls.email.errors.required">Your
-              E-Mail
-              is required!
+            <small class="form-text text-warning" *ngIf="registerFormEmployer.controls.email.errors.required">
+              Bitte geben Sie Ihre E-Mail ein.
             </small>
           </div>
           <div class="form-group input-group">
@@ -151,24 +184,20 @@
 
           <!--           Password Employee error -->
           <div *ngIf="isEmployee && submitted && registerFormEmployee.controls.password.errors" class="error">
-            <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.password.errors.required">Your
-              password
-              is required!
+            <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.password.errors.required">
+              Bitte geben Sie Ihr Passwort ein.
             </small>
-            <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.password.errors.minlength">Your
-              password
-              must be at least 8 characters long!
+            <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.password.errors.minlength">
+              Ihr Passwort muss mindestens 8 Zeichen lang sein.
             </small>
           </div>
           <!--           Password Employer error -->
           <div *ngIf="!isEmployee && submitted && registerFormEmployer.controls.password.errors" class="error">
-            <small class="form-text text-warning" *ngIf="registerFormEmployer.controls.password.errors.required">Your
-              password
-              is required!
+            <small class="form-text text-warning" *ngIf="registerFormEmployer.controls.password.errors.required">
+              Bitte geben Sie Ihr Passwort ein.
             </small>
-            <small class="form-text text-warning" *ngIf="registerFormEmployer.controls.password.errors.minlength">Your
-              password
-              must be at least 8 characters long!
+            <small class="form-text text-warning" *ngIf="registerFormEmployer.controls.password.errors.minlength">
+              Ihr Passwort muss mindestens 8 Zeichen lang sein.
             </small>
           </div>
           <div class="form-group input-group">
@@ -185,29 +214,25 @@
 
             <!--            Password -->
             <input type="password" name="password" formControlName="password" class="form-control" id="password"
-                   placeholder="Password">
+                   placeholder="Passwort">
           </div>
 
           <!--           Password Confirm Employee error -->
           <div *ngIf="isEmployee && submitted && registerFormEmployee.controls.confirmPassword.errors" class="error">
-            <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.confirmPassword.errors.required">Your
-              password
-              is required!
+            <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.confirmPassword.errors.required">
+              Bitte geben Sie Ihr Passwort ein.
             </small>
-            <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.confirmPassword.errors.notSame">Your
-              passwords
-              don't match!
+            <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.confirmPassword.errors.notSame">
+              Die Passwörter stimmen nicht überein!
             </small>
           </div>
           <!--           Password Confirm Employer error -->
           <div *ngIf="!isEmployee && submitted && registerFormEmployer.controls.confirmPassword.errors" class="error">
-            <small class="form-text text-warning" *ngIf="registerFormEmployer.controls.confirmPassword.errors.required">Your
-              password
-              is required!
+            <small class="form-text text-warning" *ngIf="registerFormEmployer.controls.confirmPassword.errors.required">
+              Bitte geben Sie Ihr Passwort ein.
             </small>
-            <small class="form-text text-warning" *ngIf="registerFormEmployer.controls.confirmPassword.errors.notSame">Your
-              passwords
-              don't match!
+            <small class="form-text text-warning" *ngIf="registerFormEmployer.controls.confirmPassword.errors.notSame">
+              Die Passwörter stimmen nicht überein!
             </small>
           </div>
 
@@ -225,7 +250,7 @@
 
             <!--            Password Confirm -->
             <input type="password" name="confirmPassword" formControlName="confirmPassword" class="form-control" id="confirmPassword"
-                   placeholder="Confirm Password">
+                   placeholder="Passwort bestätigen">
           </div>
 
         </form>
@@ -233,11 +258,12 @@
 
       <div class="modal-footer">
         <p class="text-left text-light mr-auto" style="transform: rotate(0);">
-          <a class="stretched-link" data-target="#loginModal" data-toggle="modal" data-dismiss="modal">Already a Member?
-            Login</a>
+          <a class="stretched-link" data-target="#loginModal" data-toggle="modal" data-dismiss="modal">
+            Bereits Mitglied? Zur Anmeldung
+          </a>
         </p>
-        <button type="button" (click)="registerUser()" class="btn btn-outline-primary">Register</button>
-        <button type="button" (click)="clearForm()" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" (click)="registerUser()" class="btn btn-outline-primary">Registrieren</button>
+        <button type="button" (click)="clearForm()" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
       </div>
     </div>
   </div>

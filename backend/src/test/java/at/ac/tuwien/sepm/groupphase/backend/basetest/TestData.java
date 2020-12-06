@@ -24,6 +24,7 @@ public interface TestData {
     String EMPLOYEE_PASSWORD = "password1234";
     String EMPLOYEE_PUBLIC_INFO = "This is the public information of Max Mustermann";
     Gender EMPLOYEE_GENDER = Gender.MALE;
+    LocalDateTime EMPLOYEE_BIRTH_DATE = LocalDateTime.of(2002, 12, 4, 0, 0, 0, 0);
 
     String EDIT_EMPLOYEE_LAST_NAME = "Musterfrau";
     String EDIT_EMPLOYEE_FIRST_NAME = "Erika";
@@ -60,6 +61,11 @@ public interface TestData {
     Set<Interest> INTERESTS = null;
     Set<Task> TASKS = null;
 
+    Long INTEREST_ID = 1L;
+    String INTEREST_NAME = "Fotografie";
+    String INTEREST_DESCRIPTION = "fotografieren";
+    Set<Employee> INTEREST_EMPLOYEES = null;
+
     Long TASK_ID = 1L;
     String DESCRIPTION_TASK = "Flyer verteilen";
     Integer EMPLOYEE_COUNT = 3;
@@ -82,6 +88,7 @@ public interface TestData {
     String GET_EMPLOYER_BASE_URI = BASE_URI + "/profiles/employer/";
     String EDIT_EMPLOYEE_BASE_URI = BASE_URI + "/profiles/employee";
     String EDIT_EMPLOYER_BASE_URI = BASE_URI + "/profiles/employer";
+    String GET_INTERESTS_BASE_URI = BASE_URI + "/interests";
 
     String ADMIN_USER = "admin@email.com";
     List<String> ADMIN_ROLES = new ArrayList<>() {

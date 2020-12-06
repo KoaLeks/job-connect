@@ -1,12 +1,13 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
-
-import at.ac.tuwien.sepm.groupphase.backend.entity.Interest;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Employee;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Task;
 import at.ac.tuwien.sepm.groupphase.backend.util.Gender;
+import at.ac.tuwien.sepm.groupphase.backend.util.annotation.IsAdult;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
@@ -15,14 +16,19 @@ public class EmployeeDto {
     private Long id;
 
     @Valid
-    @NotNull(message = "Profile details must not be null")
+    @NotNull(message = "Profil details dürfen nicht NULL sein")
     private ProfileDto profileDto;
 
     private Set<Task> tasks;
 
-    private Set<Interest> interests;
+    private Set<InterestDto> interestDtos;
 
+    @NotNull(message = "Geschlecht darf nicht NULL sein")
     private Gender gender;
+
+    @NotNull(message = "Geburtstag darf nicht NULL sein")
+    @IsAdult(message = "Benutzer müssen volljährig sein")
+    private LocalDateTime birthDate;
 
     public Long getId() {
         return id;
@@ -48,12 +54,12 @@ public class EmployeeDto {
         this.tasks = tasks;
     }
 
-    public Set<Interest> getInterests() {
-        return interests;
+    public Set<InterestDto> getInterestDtos() {
+        return interestDtos;
     }
 
-    public void setInterests(Set<Interest> interests) {
-        this.interests = interests;
+    public void setInterestDtos(Set<InterestDto> interestDtos) {
+        this.interestDtos = interestDtos;
     }
 
     public Gender getGender() {
@@ -62,6 +68,14 @@ public class EmployeeDto {
 
     public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    public LocalDateTime getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDateTime birthDate) {
+        this.birthDate = birthDate;
     }
 
     @Override
@@ -83,8 +97,9 @@ public class EmployeeDto {
             "id=" + id +
             ", profileDto=" + profileDto +
             ", tasks=" + tasks +
-            ", interests=" + interests +
+            ", interestDtos=" + interestDtos +
             ", gender=" + gender +
+            ", birthDate=" + birthDate +
             '}';
     }
 
@@ -92,8 +107,9 @@ public class EmployeeDto {
         private Long id;
         private ProfileDto profileDto;
         private Set<Task> tasks;
-        private Set<Interest> interests;
+        private Set<InterestDto> interestDtos;
         private Gender gender;
+        private LocalDateTime birthDate;
 
         private EmployeeDtoBuilder(){}
 
@@ -108,21 +124,27 @@ public class EmployeeDto {
             this.tasks = tasks;
             return this;
         }
-        public EmployeeDto.EmployeeDtoBuilder withInterests(Set<Interest> interests){
-            this.interests = interests;
+        public EmployeeDto.EmployeeDtoBuilder withInterestDtos(Set<InterestDto> interestDtos){
+            this.interestDtos = interestDtos;
             return this;
         }
         public EmployeeDto.EmployeeDtoBuilder withGender(Gender gender){
             this.gender = gender;
             return this;
         }
+        public EmployeeDto.EmployeeDtoBuilder withBirthDate(LocalDateTime birthDate){
+            this.birthDate = birthDate;
+            return this;
+        }
+
         public EmployeeDto build(){
             EmployeeDto employeeDto = new EmployeeDto();
             employeeDto.setId(id);
             employeeDto.setProfileDto(profileDto);
-            employeeDto.setInterests(interests);
+            employeeDto.setInterestDtos(interestDtos);
             employeeDto.setTasks(tasks);
             employeeDto.setGender(gender);
+            employeeDto.setBirthDate(birthDate);
             return employeeDto;
         }
     }

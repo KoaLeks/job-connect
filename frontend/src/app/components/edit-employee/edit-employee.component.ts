@@ -4,8 +4,10 @@ import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {EmployeeService} from '../../services/employee.service';
 import {EditEmployee} from '../../dtos/edit-employee';
-import {ProfileDto} from '../../dtos/profile-dto';
 import {Gender} from '../../dtos/gender.enum';
+import {InterestService} from '../../services/interest.service';
+import {Interest} from '../../dtos/interest';
+import {ProfileDto} from '../../dtos/profile-dto';
 
 @Component({
   selector: 'app-edit-employee',
@@ -25,25 +27,70 @@ export class EditEmployeeComponent implements OnInit {
   hasPicture = false;
   @ViewChild('pictureUpload') // needed for resetting fileUpload button
   inputImage: ElementRef; // needed for resetting fileUpload button
+  interests: Interest[];
+  changePassword: boolean = false;
 
   constructor(private authService: AuthService, private router: Router, private formBuilder: FormBuilder,
-              private employeeService: EmployeeService) {
+              private employeeService: EmployeeService, private interestService: InterestService) {
     this.editForm = this.formBuilder.group({
       email: ['', [Validators.required]],
-      password: ['', [Validators.minLength(8)]],
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
       publicInfo: [''],
       gender: ['', [Validators.required]],
-      picture: null
-    });
+      picture: null,
+      birthDate: [null, [Validators.required]]
+    }, {validators: [this.isAdult('birthDate')]});
+  }
+
+  isAdult(controlName: string) {
+    return (formGroup: FormGroup) => {
+      const control = formGroup.controls[controlName];
+      if (control.errors && !control.errors.notAdult) {
+        // return if another validator has already found an error on the matchingControl
+        return;
+      }
+
+      const birthDate = new Date(control.value);
+      const currentDate = new Date();
+      let age = currentDate.getFullYear() - birthDate.getFullYear();
+
+      if (currentDate.getMonth() < birthDate.getMonth()) {
+        age--;
+      }
+      if (birthDate.getMonth() === currentDate.getMonth() && currentDate.getDate() < birthDate.getDate()) {
+        age--;
+      }
+      if (age < 18) {
+        control.setErrors({notAdult: true});
+      } else {
+        control.setErrors(null);
+      }
+    };
   }
 
   ngOnInit(): void {
     if (this.authService.getUserRole() !== 'EMPLOYEE') {
       this.router.navigate(['edit-profile']);
     }
-    this.loadEmployeeDetails();
+    this.load(); // loads the employee after getting the list of interests
+  }
+
+  /**
+   * Loads interests and then calls function to load the employee
+   */
+  load() {
+    this.interestService.getInterests().subscribe(
+      (interests: Interest[]) => {
+        console.log(interests);
+        this.interests = interests;
+        this.loadEmployeeDetails();
+      },
+      error => {
+        this.error = true;
+        this.errorMessage = error.error;
+      }
+    );
   }
 
   /**
@@ -51,21 +98,34 @@ export class EditEmployeeComponent implements OnInit {
    */
   loadEmployeeDetails() {
     this.employeeService.getEmployeeByEmail(this.authService.getTokenIdentifier()).subscribe(
-      (profile: any) => {
-        this.profile = profile;
-        this.editForm.controls['email'].setValue(profile.profileDto.email);
-        this.editForm.controls['firstName'].setValue(profile.profileDto.firstName);
-        this.editForm.controls['lastName'].setValue(profile.profileDto.lastName);
-        this.editForm.controls['publicInfo'].setValue(profile.profileDto.publicInfo);
-        this.editForm.controls['gender'].setValue(profile.gender);
+      (employee: EditEmployee) => {
+        this.employee = employee;
+        this.editForm.controls['email'].setValue(employee.profileDto.email);
+        this.editForm.controls['firstName'].setValue(employee.profileDto.firstName);
+        this.editForm.controls['lastName'].setValue(employee.profileDto.lastName);
+        this.editForm.controls['publicInfo'].setValue(employee.profileDto.publicInfo);
+        this.editForm.controls['gender'].setValue(employee.gender);
 
         // converts bytesArray to Base64
-        this.arrayBufferToBase64(profile.profileDto.picture);
-        if (profile.profileDto.picture != null) {
+        this.arrayBufferToBase64(employee.profileDto.picture);
+        if (employee.profileDto.picture != null) {
           this.picture = 'data:image/png;base64,' + this.picture;
           this.hasPicture = true;
         }
-        console.log(profile);
+
+        console.log(this.employee);
+
+        if (this.employee.interestDtos !== undefined && this.employee.interestDtos.length > 0) {
+          for (let i = 0; i < this.employee.interestDtos.length; i++) {
+            for (let j = 0; j < this.interests.length; j++) {
+              if (this.employee.interestDtos[i].id === this.interests[j].id) {
+                const checkbox = document.getElementById(this.interests[j].id.toString()) as HTMLInputElement;
+                checkbox.checked = true;
+                break;
+              }
+            }
+          }
+        }
       },
       error => {
         this.error = true;
@@ -85,31 +145,36 @@ export class EditEmployeeComponent implements OnInit {
         if (this.selectedPicture.startsWith('data:image/png;base64') || this.selectedPicture.startsWith('data:image/jpeg;base64')) {
           this.selectedPicture = this.selectedPicture.split(',');
 
-          this.employee = new EditEmployee(new ProfileDto(null, this.editForm.controls.firstName.value,
-            this.editForm.controls.lastName.value,
-            this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
-            this.selectedPicture[1]), this.editForm.controls.gender.value);
+          this.employee = new EditEmployee(
+            new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
+            this.editForm.controls.email.value, null, this.editForm.controls.publicInfo.value,
+            this.selectedPicture[1]), this.employee.interestDtos, this.editForm.controls.gender.value,
+            new Date(this.editForm.controls.birthDate.value)
+          );
           this.hasPicture = true;
           // image has invalid format
         } else {
-          this.employee = new EditEmployee(new ProfileDto(null, this.editForm.controls.firstName.value,
-            this.editForm.controls.lastName.value,
-            this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
-            null), this.editForm.controls.gender.value);
+          this.employee = new EditEmployee(
+            new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
+            this.editForm.controls.email.value, null, this.editForm.controls.publicInfo.value,
+            null), this.employee.interestDtos, this.editForm.controls.gender.value, new Date(this.editForm.controls.birthDate.value)
+          );
           this.hasPicture = false;
         }
       } else {
         if (this.picture != null) {
           const samePic = this.picture.split(',');
-          this.employee = new EditEmployee(new ProfileDto(null, this.editForm.controls.firstName.value,
-            this.editForm.controls.lastName.value,
-            this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
-            samePic[1]), this.editForm.controls.gender.value);
+          this.employee = new EditEmployee(
+            new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
+            this.editForm.controls.email.value, null, this.editForm.controls.publicInfo.value,
+            samePic[1]), this.employee.interestDtos, this.editForm.controls.gender.value, new Date(this.editForm.controls.birthDate.value)
+          );
         } else {
-          this.employee = new EditEmployee(new ProfileDto(null, this.editForm.controls.firstName.value,
-            this.editForm.controls.lastName.value,
-            this.editForm.controls.email.value, this.editForm.controls.password.value, this.editForm.controls.publicInfo.value,
-            null), this.editForm.controls.gender.value);
+          this.employee = new EditEmployee(
+            new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
+            this.editForm.controls.email.value, null, this.editForm.controls.publicInfo.value,
+            null), this.employee.interestDtos, this.editForm.controls.gender.value, new Date(this.editForm.controls.birthDate.value)
+          );
           this.hasPicture = false;
         }
       }
@@ -119,7 +184,7 @@ export class EditEmployeeComponent implements OnInit {
           console.log('User profile updated successfully id: ' + id);
           // this.router.navigate(['/']);
           this.inputImage.nativeElement.value = ''; // resets fileUpload button
-          this.loadEmployeeDetails();
+          this.load();
         },
         error => {
           this.error = true;
@@ -160,5 +225,25 @@ export class EditEmployeeComponent implements OnInit {
   deletePicture() {
     this.hasPicture = false;
     this.picture = null;
+  }
+
+  toggleInterest(event, id: number) {
+    if (event.target.checked) {
+      // if the interest checkbox has been checked => add it to users interests
+      for (const i of this.interests) {
+        if (i.id === id) {
+          this.employee.interestDtos.push(i);
+          break;
+        }
+      }
+    } else {
+      // if the interest checkbox has been unchecked => remove it from users interests
+      for (let i = 0; i < this.employee.interestDtos.length; i++) {
+        if (this.employee.interestDtos[i].id === id) {
+          this.employee.interestDtos.splice(i, 1);
+          break;
+        }
+      }
+    }
   }
 }

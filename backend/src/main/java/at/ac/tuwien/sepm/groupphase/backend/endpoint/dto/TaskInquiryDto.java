@@ -10,19 +10,19 @@ public class TaskInquiryDto {
 
     private Long id;
 
-    @NotNull(message = "must not be null")
-    @NotBlank(message = "must not be empty")
+    @NotNull(message = "Beschreibung darf nicht NULL sein")
+    @NotBlank(message = "Beschreibung darf nicht leer sein")
     @Size(max = 1000)
     private String description;
 
-    @NotNull(message = "must not be null")
+    @NotNull(message = "Arbeitnehmeranzahl darf nicht NULL sein")
     private Integer employeeCount;
 
-    @NotNull(message = "must not be null")
+    @NotNull(message = "Stundenlohn darf nicht NULL sein")
     @PositiveOrZero
     private Double paymentHourly;
 
-    private Event event;
+    private Long eventId;
 
     private Set<Employee> employees;
 
@@ -60,12 +60,12 @@ public class TaskInquiryDto {
         this.paymentHourly = paymentHourly;
     }
 
-    public Event getEvent() {
-        return event;
+    public Long getEventId() {
+        return eventId;
     }
 
-    public void setEvent(Event event) {
-        this.event = event;
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
     }
 
     public Set<Employee> getEmployees() {
@@ -84,7 +84,7 @@ public class TaskInquiryDto {
         this.interestArea = interestArea;
     }
 
-    @AssertTrue(message = "employeeCount must be at least as high as number of employees")
+    @AssertTrue(message = "Arbeitnehmeranzahl muss mindestens so groß sein wie die Anzahl der Arbeitnehmer")
     public boolean isValidEmployeeCount() {
         if(employees != null && employeeCount != null) {
             return employeeCount >= employees.size();
@@ -115,7 +115,7 @@ public class TaskInquiryDto {
             ", description='" + description + '\'' +
             ", employeeCount=" + employeeCount +
             ", paymentHourly=" + paymentHourly +
-            ", event=" + event +
+            ", eventId=" + eventId +
             ", employees=" + employees +
             ", interestArea=" + interestArea +
             '}';
@@ -126,7 +126,7 @@ public class TaskInquiryDto {
         private String description;
         private Integer employeeCount;
         private Double paymentHourly;
-        private Event event;
+        private Long eventId;
         private Set<Employee> employees;
         private InterestArea interestArea;
 
@@ -157,8 +157,8 @@ public class TaskInquiryDto {
             return this;
         }
 
-        public TaskInquiryDtoBuilder withEvent(Event event) {
-            this.event = event;
+        public TaskInquiryDtoBuilder withEventId(Long eventId) {
+            this.eventId = eventId;
             return this;
         }
 
@@ -178,7 +178,7 @@ public class TaskInquiryDto {
             task.setDescription(description);
             task.setEmployeeCount(employeeCount);
             task.setEmployees(employees);
-            task.setEvent(event);
+            task.setEventId(eventId);
             task.setInterestArea(interestArea);
             task.setPaymentHourly(paymentHourly);
             return task;

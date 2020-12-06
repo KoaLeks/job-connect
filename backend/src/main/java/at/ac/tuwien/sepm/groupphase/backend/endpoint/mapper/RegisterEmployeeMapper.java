@@ -23,6 +23,7 @@ public class RegisterEmployeeMapper {
         Profile profile = profileMapper.profileDtoToProfile(registerEmployeeDto);
         emp_builder.withProfile(profile);
         emp_builder.withGender(registerEmployeeDto.getGender());
+        emp_builder.withBirthDate(registerEmployeeDto.getBirthDate());
         return emp_builder.build();
     }
 
@@ -36,6 +37,7 @@ public class RegisterEmployeeMapper {
         registerEmployeeDto.setPassword(emp.getPassword());
         registerEmployeeDto.setGender(employee.getGender());
         registerEmployeeDto.setPicture(emp.getPicture());
+        registerEmployeeDto.setBirthDate(employee.getBirthDate());
         return registerEmployeeDto;
     }
 }

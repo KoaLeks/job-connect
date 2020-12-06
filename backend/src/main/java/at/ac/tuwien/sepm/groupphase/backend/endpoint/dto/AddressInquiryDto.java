@@ -9,21 +9,21 @@ public class AddressInquiryDto {
 
     private Long id;
 
-    @NotNull(message = "must not be null")
-    @NotBlank(message = "must not be empty")
+    @NotNull(message = "Darf nicht NULL sein")
+    @NotBlank(message = "Darf nicht leer sein")
     private String city;
 
-    @NotNull(message = "must not be null")
-    @NotBlank(message = "must not be empty")
+    @NotNull(message = "Darf nicht NULL sein")
+    @NotBlank(message = "Darf nicht leer sein")
     private String state;
 
-    @NotNull(message = "must not be null")
-    @Min(value = 1000, message = "ZIP must be between 1000-9999")
-    @Max(value = 9999, message = "ZIP must be between 1000-9999")
+    @NotNull(message = "Darf nicht NULL sein")
+    @Min(value = 1000, message = "Postleitzahl musst zwischen 1000 und 9999 liegen")
+    @Max(value = 9999, message = "Postleitzahl musst zwischen 1000 und 9999 liegen")
     private Integer zip;
 
-    @NotNull(message = "must not be null")
-    @NotBlank(message = "must not be empty")
+    @NotNull(message = "Darf nicht NULL sein")
+    @NotBlank(message = "Darf nicht leer sein")
     private String addressLine;
 
     @Nullable
@@ -77,15 +77,15 @@ public class AddressInquiryDto {
         this.additional = additional;
     }
 
-    @AssertTrue(message = "only austrian states are valid")
+    @AssertTrue(message = "Nur össterreichische Bundesländer sind gültig")
     public boolean isValidState() {
         if (getState() != null) {
-            return getState().equals("Vienna") ||
-                getState().equals("Lower Austria") ||
-                getState().equals("Upper Austria") ||
-                getState().equals("Styria") ||
-                getState().equals("Tyrol") ||
-                getState().equals("Carinthia") ||
+            return getState().equals("Wien") ||
+                getState().equals("Niederösterreich") ||
+                getState().equals("Oberösterreich") ||
+                getState().equals("Steiermark") ||
+                getState().equals("Tirol") ||
+                getState().equals("Kärnten") ||
                 getState().equals("Salzburg") ||
                 getState().equals("Vorarlberg") ||
                 getState().equals("Burgenland");

@@ -1,8 +1,10 @@
 package at.ac.tuwien.sepm.groupphase.backend.entity;
 
 import at.ac.tuwien.sepm.groupphase.backend.util.Gender;
+import at.ac.tuwien.sepm.groupphase.backend.util.annotation.IsAdult;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
@@ -19,6 +21,9 @@ public class Employee {
     private Set<Interest> interests;
     @Enumerated(EnumType.STRING)
     private Gender gender;
+    @Column(nullable = false)
+    @IsAdult
+    private LocalDateTime birthDate;
 
     public Long getId() {
         return id;
@@ -55,8 +60,17 @@ public class Employee {
     public Gender getGender() {
         return gender;
     }
+
     public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    public LocalDateTime getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDateTime birthDate) {
+        this.birthDate = birthDate;
     }
 
     @Override
@@ -80,6 +94,7 @@ public class Employee {
             ", tasks=" + tasks +
             ", interests=" + interests +
             ", gender=" + gender +
+            ", birthdate=" + birthDate +
             '}';
     }
 
@@ -89,6 +104,7 @@ public class Employee {
         private Set<Task> tasks;
         private Set<Interest> interests;
         private Gender gender;
+        private LocalDateTime birthDate;
 
 
         private EmployeeBuilder() {
@@ -113,8 +129,14 @@ public class Employee {
             this.interests = interests;
             return this;
         }
+
         public EmployeeBuilder withGender(Gender gender){
             this.gender = gender;
+            return this;
+        }
+
+        public EmployeeBuilder withBirthDate(LocalDateTime birthDate){
+            this.birthDate = birthDate;
             return this;
         }
 
@@ -125,6 +147,7 @@ public class Employee {
             employee.setInterests(interests);
             employee.setTasks(tasks);
             employee.setGender(gender);
+            employee.setBirthDate(birthDate);
             return employee;
         }
     }

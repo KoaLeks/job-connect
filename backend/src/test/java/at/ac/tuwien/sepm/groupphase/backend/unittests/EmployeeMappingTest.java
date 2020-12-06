@@ -36,6 +36,7 @@ public class EmployeeMappingTest implements TestData {
     private final Employee employee = Employee.EmployeeBuilder.aEmployee()
         .withProfile(profile)
         .withGender(EMPLOYEE_GENDER)
+        .withBirthDate(EMPLOYEE_BIRTH_DATE)
         .build();
 
     private final ProfileDto profileDto = ProfileDto.ProfileDtoBuilder.aProfileDto()
@@ -49,6 +50,7 @@ public class EmployeeMappingTest implements TestData {
     private final EmployeeDto employeeDto = EmployeeDto.EmployeeDtoBuilder.aEmployeeDto()
         .withProfileDto(profileDto)
         .withGender(EMPLOYEE_GENDER)
+        .withBirthDate(EMPLOYEE_BIRTH_DATE)
         .build();
 
     @Test
@@ -60,7 +62,8 @@ public class EmployeeMappingTest implements TestData {
             () -> assertEquals(EMPLOYEE_LAST_NAME, employeeDto.getProfileDto().getLastName()),
             () -> assertEquals(EMPLOYEE_FIRST_NAME, employeeDto.getProfileDto().getFirstName()),
             () -> assertEquals(EMPLOYEE_EMAIL, employeeDto.getProfileDto().getEmail()),
-            () -> assertEquals(EMPLOYEE_GENDER, employeeDto.getGender())
+            () -> assertEquals(EMPLOYEE_GENDER, employeeDto.getGender()),
+            () -> assertEquals(EMPLOYEE_BIRTH_DATE, employeeDto.getBirthDate())
         );
     }
 
@@ -73,7 +76,8 @@ public class EmployeeMappingTest implements TestData {
             () -> assertEquals(EMPLOYEE_LAST_NAME, employee.getProfile().getLastName()),
             () -> assertEquals(EMPLOYEE_FIRST_NAME, employee.getProfile().getFirstName()),
             () -> assertEquals(EMPLOYEE_EMAIL, employee.getProfile().getEmail()),
-            () -> assertEquals(EMPLOYEE_GENDER, employeeDto.getGender())
+            () -> assertEquals(EMPLOYEE_GENDER, employeeDto.getGender()),
+            () -> assertEquals(EMPLOYEE_BIRTH_DATE, employeeDto.getBirthDate())
         );
     }
 }

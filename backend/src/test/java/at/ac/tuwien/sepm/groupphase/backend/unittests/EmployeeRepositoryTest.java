@@ -28,7 +28,11 @@ public class EmployeeRepositoryTest implements TestData {
         .withPassword(EMPLOYEE_PASSWORD)
         .withPublicInfo(EMPLOYEE_PUBLIC_INFO)
         .build();
-    private Employee employee = Employee.EmployeeBuilder.aEmployee().withProfile(profile).build();
+    private Employee employee = Employee.EmployeeBuilder.aEmployee()
+        .withProfile(profile)
+        .withGender(EMPLOYEE_GENDER)
+        .withBirthDate(EMPLOYEE_BIRTH_DATE)
+        .build();
 
     @BeforeEach
     public void beforeEach(){
@@ -43,6 +47,7 @@ public class EmployeeRepositoryTest implements TestData {
         employee = Employee.EmployeeBuilder.aEmployee()
             .withProfile(profile)
             .withGender(EMPLOYEE_GENDER)
+            .withBirthDate(EMPLOYEE_BIRTH_DATE)
             .build();
     }
 
