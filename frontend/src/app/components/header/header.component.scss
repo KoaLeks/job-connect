@@ -42,4 +42,20 @@
   background-color: #ff4747;
   color: white;
 }
+.profile-img {
+  border-radius: 50%;
+  border: 2px solid #ffe6cc;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.profile-img:hover {
+  border: 2px solid #465c69;
 
+}
+.profile-img-default {
+  color: #ffe6cc;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+}
+.profile-img-default:hover {
+  color: #465c69;
+}
