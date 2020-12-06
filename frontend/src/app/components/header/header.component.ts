@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {EmployerService} from '../../services/employer.service';
+import {EmployeeService} from '../../services/employee.service';
 
 @Component({
   selector: 'app-header',
@@ -12,36 +13,57 @@ export class HeaderComponent implements OnInit {
   isEmployee: boolean;
   picture: any;
   profile: any;
-  hasPicture =  false;
+  hasPicture = false;
   error = false;
   errorMessage;
 
-  constructor(public authService: AuthService, public employerService: EmployerService) { }
+  constructor(public authService: AuthService, public employerService: EmployerService, public employeeService: EmployeeService) {
+  }
 
   ngOnInit() {
     if (this.authService.isLoggedIn()) {
-      this.loadEmployerPicture();
+      this.loadPicture();
     }
   }
 
-  private loadEmployerPicture() {
-    this.employerService.getEmployerByEmail(this.authService.getTokenIdentifier()).subscribe(
-      (profile: any) => {
-        this.profile = profile;
-        // converts bytesArray to Base64
-        this.arrayBufferToBase64(profile.profileDto.picture);
-        if (profile.profileDto.picture != null) {
-          this.picture = 'data:image/png;base64,' + this.picture;
-          this.hasPicture = true;
+  private loadPicture() {
+    if (this.authService.getUserRole() === 'EMPLOYER') {
+      this.employerService.getEmployerByEmail(this.authService.getTokenIdentifier()).subscribe(
+        (profile: any) => {
+          this.profile = profile;
+          // converts bytesArray to Base64
+          this.arrayBufferToBase64(profile.profileDto.picture);
+          if (profile.profileDto.picture != null) {
+            this.picture = 'data:image/png;base64,' + this.picture;
+            this.hasPicture = true;
+          }
+          console.log(profile);
+        },
+        error => {
+          this.error = true;
+          this.errorMessage = error.error;
         }
-        console.log(profile);
-      },
-      error => {
-        this.error = true;
-        this.errorMessage = error.error;
-      }
-    );
+      );
+    } else if (this.authService.getUserRole() === 'EMPLOYEE') {
+      this.employeeService.getEmployeeByEmail(this.authService.getTokenIdentifier()).subscribe(
+        (profile: any) => {
+          this.profile = profile;
+          // converts bytesArray to Base64
+          this.arrayBufferToBase64(profile.profileDto.picture);
+          if (profile.profileDto.picture != null) {
+            this.picture = 'data:image/png;base64,' + this.picture;
+            this.hasPicture = true;
+          }
+          console.log(profile);
+        },
+        error => {
+          this.error = true;
+          this.errorMessage = error.error;
+        }
+      );
+    }
   }
+
   private arrayBufferToBase64(buffer) {
     let binary = '';
     const bytes = new Uint8Array(buffer);

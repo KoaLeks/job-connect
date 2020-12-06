@@ -67,18 +67,6 @@
         </div>
       </div>
 
-      <!-- new password -->
-      <div class="form-group">
-        <label for="password">Neues Passwort</label>
-        <input type="password" name="password" formControlName="password" class="form-control" id="password"
-               placeholder="Neues Passwort">
-        <div *ngIf="submitted && editForm.controls.password.errors" class="error">
-          <small class="form-text text-info" *ngIf="editForm.controls.password.errors.minlength">Passwort muss mindestens
-            8 Zeichen lang sein
-          </small>
-        </div>
-      </div>
-
       <!-- public info -->
       <div class="form-group">
         <label for="publicInfo">Öffentliche Profilbeschreibung</label>
@@ -114,3 +102,6 @@
     </form>
   </div>
 </div>
+
+<button class="btn btn-primary float-right" (click)="changePassword=true" data-target="#passwordUpdateModal" data-toggle="modal">Passwort ändern</button>
+<app-edit-password [changePassword]="changePassword"></app-edit-password>
