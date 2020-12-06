@@ -1,6 +1,9 @@
 package at.ac.tuwien.sepm.groupphase.backend.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -12,15 +15,19 @@ public class Profile {
     private Long id;
 
     @Column(nullable = false, length = 100)
+    @NotBlank
     private String lastName;
 
     @Column(nullable = false, length = 100)
+    @NotBlank
     private String firstName;
 
     @Column(nullable = false, length = 100, unique = true)
+    @Email
     private String email;
 
     @Column(nullable = false)
+    @NotBlank
     private String password;
 
     @Column(length = 10000)

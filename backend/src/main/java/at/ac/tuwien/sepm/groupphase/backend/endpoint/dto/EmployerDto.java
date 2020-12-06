@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Objects;
@@ -17,6 +18,7 @@ public class EmployerDto {
     private ProfileDto profileDto;
 
     @NotNull(message = "Firmenname darf nicht NULL sein")
+    @NotBlank(message = "Firmenname darf nicht leer sein")
     @Size(max = 255)
     private String companyName;
 

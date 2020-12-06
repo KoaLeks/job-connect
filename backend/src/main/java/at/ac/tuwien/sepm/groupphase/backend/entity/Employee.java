@@ -4,6 +4,9 @@ import at.ac.tuwien.sepm.groupphase.backend.util.Gender;
 import at.ac.tuwien.sepm.groupphase.backend.util.annotation.IsAdult;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
@@ -12,16 +15,22 @@ import java.util.Set;
 public class Employee {
     @Id
     private Long id;
+
     @OneToOne
     @MapsId
     private Profile profile;
+
     @ManyToMany
     private Set<Task> tasks;
+
     @ManyToMany
     private Set<Interest> interests;
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
     @Column(nullable = false)
+    @NotNull
     @IsAdult
     private LocalDateTime birthDate;
 

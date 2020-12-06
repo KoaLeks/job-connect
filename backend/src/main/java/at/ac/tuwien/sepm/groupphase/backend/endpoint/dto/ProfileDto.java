@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Objects;
@@ -9,19 +10,22 @@ public class ProfileDto {
     private Long id;
 
     @NotNull(message = "Nachname darf nicht NULL sein")
+    @NotBlank(message = "Nachname darf nicht leer sein")
     @Size(max = 100)
     private String lastName;
 
     @NotNull(message = "Vorname darf nicht NULL sein")
+    @NotBlank(message = "Vorname darf nicht leer sein")
     @Size(max = 100)
     private String firstName;
 
     @NotNull(message = "E-Mail darf nicht NULL sein")
-    @Size(max = 100)
     @Email(message = "E-Mail muss gültig sein")
+    @Size(max = 100)
     private String email;
 
     @NotNull(message = "Passwort darf nicht NULL sein")
+    @NotBlank(message = "Passwort darf nicht leer sein")
     @Size(max = 255)
     private String password;
 

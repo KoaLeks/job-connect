@@ -1,12 +1,16 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class RegisterEmployerDto extends ProfileDto{
-    @NotNull
+
+    @NotNull(message = "Firmenname darf nicht NULL sein")
+    @NotBlank(message = "Firmenname darf nicht leer sein")
     @Size(max = 255)
     private String companyName;
+
     @Size(max = 1000)
     private String companyDescription;
 
