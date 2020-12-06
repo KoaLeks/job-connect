@@ -19,6 +19,7 @@ import { CreateEventComponent } from './components/create-event/create-event.com
 import { EventOverviewComponent } from './components/event-overview/event-overview.component';
 import { RegisterComponent } from './components/register/register.component';
 import { EditPasswordComponent } from './components/edit-password/edit-password.component';
+import {UpdateHeaderService} from './services/update-header.service';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,7 @@ import { EditPasswordComponent } from './components/edit-password/edit-password.
     NgbModule,
     FormsModule
   ],
-  providers: [httpInterceptorProviders],
+  providers: [httpInterceptorProviders, UpdateHeaderService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

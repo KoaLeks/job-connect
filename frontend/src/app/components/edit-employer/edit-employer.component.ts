@@ -5,6 +5,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {EmployerService} from '../../services/employer.service';
 import {ProfileDto} from '../../dtos/profile-dto';
 import {EditEmployer} from '../../dtos/edit-employer';
+import {UpdateHeaderService} from '../../services/update-header.service';
 
 @Component({
   selector: 'app-edit-employer',
@@ -25,7 +26,7 @@ export class EditEmployerComponent implements OnInit {
   changePassword: boolean = false;
 
   constructor(private authService: AuthService, private router: Router, private formBuilder: FormBuilder,
-              private employerService: EmployerService) {
+              private employerService: EmployerService, private updateHeaderService: UpdateHeaderService) {
     this.editForm = this.formBuilder.group({
       email: ['', [Validators.required]],
       firstName: ['', [Validators.required]],
@@ -119,6 +120,7 @@ export class EditEmployerComponent implements OnInit {
           // this.router.navigate(['/']);
           this.inputImage.nativeElement.value = ''; // resets fileUpload button
           this.loadEmployerDetails();
+          this.updateHeaderService.updateProfile.next(true);
         },
         error => {
           this.error = true;

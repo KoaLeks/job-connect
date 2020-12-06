@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {EmployerService} from '../../services/employer.service';
 import {EmployeeService} from '../../services/employee.service';
+import {Router} from '@angular/router';
+import {UpdateHeaderService} from '../../services/update-header.service';
 
 @Component({
   selector: 'app-header',
@@ -17,7 +19,13 @@ export class HeaderComponent implements OnInit {
   error = false;
   errorMessage;
 
-  constructor(public authService: AuthService, public employerService: EmployerService, public employeeService: EmployeeService) {
+  constructor(public authService: AuthService, public employerService: EmployerService, public employeeService: EmployeeService,
+              private updateHeaderService: UpdateHeaderService) {
+    this.updateHeaderService.updateProfile.subscribe(value => {
+      if (this.authService.isLoggedIn()) {
+        this.loadPicture();
+      }
+    });
   }
 
   ngOnInit() {
