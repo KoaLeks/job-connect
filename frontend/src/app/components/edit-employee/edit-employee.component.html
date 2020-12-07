@@ -11,7 +11,7 @@
   <a *ngIf="!authService.isLoggedIn()" class="btn btn-primary btn-lg" routerLink="/login" role="button">Login</a>
   <div *ngIf="authService.isLoggedIn()">
 
-    <form class="form" [formGroup]="editForm" (ngSubmit)="update()">
+    <form class="form" [formGroup]="editForm">
       <!-- profile picture -->
       <div>
         <div class="mb-2">
