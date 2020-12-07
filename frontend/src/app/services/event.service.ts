@@ -32,6 +32,18 @@ export class EventService {
     return this.httpClient.put<Event>(this.eventBaseUri, event);
   }
 
+  /**
+   * Get event details by ID
+   * @param id of the event to find
+   */
+  getEventDetails(id: number): Observable<Event> {
+    console.log('Get event details for: ' + id);
+    return this.httpClient.get<Event>(this.eventBaseUri + '/' + id + '/details');
+  }
+
+  /**
+   * Gets all events from the backend
+   */
   getEvents(): Observable<Event[]> {
     return this.httpClient.get<Event[]>(this.eventBaseUri);
   }

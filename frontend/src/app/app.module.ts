@@ -20,6 +20,7 @@ import { EventOverviewComponent } from './components/event-overview/event-overvi
 import { RegisterComponent } from './components/register/register.component';
 import { EditPasswordComponent } from './components/edit-password/edit-password.component';
 import {UpdateHeaderService} from './services/update-header.service';
+import { EventDetailsComponent } from './components/event-details/event-details.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import {UpdateHeaderService} from './services/update-header.service';
     CreateEventComponent,
     RegisterComponent,
     EditPasswordComponent,
+    EventDetailsComponent,
   ],
   imports: [
     BrowserModule,

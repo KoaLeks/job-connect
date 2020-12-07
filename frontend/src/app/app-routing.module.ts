@@ -9,6 +9,7 @@ import {EditEmployeeComponent} from './components/edit-employee/edit-employee.co
 import {EditProfileComponent} from './components/edit-profile/edit-profile.component';
 import {EventOverviewComponent} from './components/event-overview/event-overview.component';
 import {CreateEventComponent} from './components/create-event/create-event.component';
+import {EventDetailsComponent} from './components/event-details/event-details.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -19,6 +20,7 @@ const routes: Routes = [
   {path: 'edit-profile', canActivate: [EditGuard], component: EditProfileComponent},
   {path: 'edit-employee', component: EditEmployeeComponent},
   {path: 'edit-employer', component: EditEmployerComponent},
+  {path: 'events/:id/details', component: EventDetailsComponent}
 ];
 
 @NgModule({

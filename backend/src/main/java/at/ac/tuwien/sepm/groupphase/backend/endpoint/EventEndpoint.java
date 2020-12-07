@@ -44,6 +44,16 @@ public class EventEndpoint {
 
     }
 
+    @GetMapping(value = "/{id}/details")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get event details")
+    public EventInquiryDto getEventDetails(@PathVariable Long id) {
+        LOGGER.info("GET /api/v1/events/{}/details", id);
+        EventInquiryDto test = eventMapper.eventToEventInquiryDto(eventService.findById(id));
+        LOGGER.info("" + test);
+        return test;
+    }
+
     @GetMapping
     @ApiOperation(value = "Get list of events")
     @CrossOrigin(origins = "http://localhost:4200")
@@ -51,6 +61,7 @@ public class EventEndpoint {
         LOGGER.info("GET /api/v1/events");
         return eventMapper.eventsToSimpleEventsDtos(eventService.findAll());
     }
+
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Update an event", authorizations = {@Authorization(value = "apiKey")})
