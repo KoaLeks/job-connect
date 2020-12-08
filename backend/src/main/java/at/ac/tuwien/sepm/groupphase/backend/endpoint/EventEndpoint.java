@@ -35,7 +35,7 @@ public class EventEndpoint {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @ApiOperation(value = "Publish a new event", authorizations = {@Authorization(value = "apiKey")})
+    @ApiOperation(value = "Publish a new event")
     @CrossOrigin(origins = "http://localhost:4200")
     public EventInquiryDto create(@Valid @RequestBody EventInquiryDto eventInquiryDto) {
         LOGGER.info("POST /api/v1/events/{}", eventInquiryDto);

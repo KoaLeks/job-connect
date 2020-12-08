@@ -44,6 +44,9 @@ security:
       #Registration
       - /api/v1/profiles/employee
       - /api/v1/profiles/employer
+      #Event details
+      - /api/v1/events/*/details
+
   jwt:
     # Use http://www.allkeysgenerator.com/ to generate secrets
     secret: ?E(H+MbQeThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u8x/A?D(G+KbPdSgVkYp3s6v9
