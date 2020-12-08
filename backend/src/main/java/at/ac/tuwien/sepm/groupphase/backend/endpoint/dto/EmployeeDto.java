@@ -1,8 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
-import at.ac.tuwien.sepm.groupphase.backend.entity.Employee;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Task;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Time;
 import at.ac.tuwien.sepm.groupphase.backend.util.Gender;
 import at.ac.tuwien.sepm.groupphase.backend.util.annotation.IsAdult;
 
@@ -31,7 +29,7 @@ public class EmployeeDto {
     @IsAdult(message = "Benutzer müssen volljährig sein")
     private LocalDateTime birthDate;
 
-    private Set<Time> times;
+    private Set<TimeDto> times;
 
     public Long getId() {
         return id;
@@ -81,11 +79,11 @@ public class EmployeeDto {
         this.birthDate = birthDate;
     }
 
-    public Set<Time> getTimes() {
+    public Set<TimeDto> getTimes() {
         return times;
     }
 
-    public void setTimes(Set<Time> times) {
+    public void setTimes(Set<TimeDto> times) {
         this.times = times;
     }
 
@@ -122,7 +120,7 @@ public class EmployeeDto {
         private Set<InterestDto> interestDtos;
         private Gender gender;
         private LocalDateTime birthDate;
-        private Set<Time> times;
+        private Set<TimeDto> times;
 
         private EmployeeDtoBuilder(){}
 
@@ -149,7 +147,7 @@ public class EmployeeDto {
             this.birthDate = birthDate;
             return this;
         }
-        public EmployeeDto.EmployeeDtoBuilder withTimes(Set<Time> times){
+        public EmployeeDto.EmployeeDtoBuilder withTimes(Set<TimeDto> times){
             this.times = times;
             return this;
         }

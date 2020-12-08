@@ -103,7 +103,7 @@ public class EditEmployeeDto {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, editProfileDto, tasks, interestDtos, gender, birthDate);
+        return Objects.hash(id, editProfileDto, tasks, interestDtos, gender, birthDate, times);
     }
 
     @Override
