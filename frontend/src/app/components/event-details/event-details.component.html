@@ -1,0 +1,74 @@
+<ng-container *ngIf="eventDetails">
+  <div class="container m-5">
+    <div class="card">
+      <div class="card-header">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-md-9 h1">
+              {{eventDetails.title}}
+            </div>
+            <div class="col-md-3 mt-3 text-right h5">
+              Beginn: {{eventDetails.start.slice(0, 10)}}
+            </div>
+          </div>
+          <div class="row justify-content-between">
+            <div class="col-md-9 h3">
+              {{eventDetails.address.addressLine}}, {{eventDetails.address.zip}} {{eventDetails.address.city}}
+            </div>
+            <div class="col-md-3 text-right h5">
+              Ende: {{eventDetails.end.slice(0, 10)}}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="row justify-content-between">
+          <div class="col-md-8 text-justify" style="border-right: 2px solid #ccc;">
+            <p style="border-bottom: 1px solid #ccc;">
+              {{eventDetails.description}}
+            </p>
+  <!--          <h3 style="border-bottom: 1px solid #ccc;">-->
+  <!--            Aufgaben-->
+  <!--          </h3>-->
+            <table class="table table-sm">
+              <thead class="thead-dark">
+              <tr class="d-flex">
+                <th class="col-7">Beschreibung</th>
+                <th class="col-3 text-center">Teilnehmer</th>
+                <th class="col-2 text-center">€/h</th>
+              </tr>
+              </thead>
+              <ng-container *ngFor="let task of eventDetails.tasks">
+                <tr class="d-flex">
+                  <td class="col-7 text-justify">{{task.interestArea.description}}</td>
+                  <td class="col-3 text-center">{{task.employees.length}}/{{task.employeeCount}}</td>
+                  <td class="col-2 text-center">{{task.paymentHourly}}</td>
+                </tr>
+              </ng-container>
+            </table>
+          </div>
+        <div class="col-md-4 justify-content-end text-md-center">
+          <img class="rounded-circle" src="{{picture}}" width="100em" height="100em"  >
+          <h3  style="border-bottom: 1px solid #ccc;">
+            {{eventDetails.employer.companyName}}
+          </h3>
+          <p class="text-justify">
+            {{eventDetails.employer.simpleProfileDto.publicInfo}}
+          </p>
+        </div>
+      </div>
+        <div class="row justify-content-center mt-3" style="border-top: 1px solid #ccc">
+          <ng-container *ngFor="let task of eventDetails.tasks">
+            <h5> <span class="badge badge-pill badge-info mt-3 ml-1 mr-1" style="border-radius: 30px">{{task.interestArea.area}}</span></h5>
+          </ng-container>
+        </div>
+      </div>
+      <div class="card-footer text-muted">
+        <a class="btn btn-block btn-outline-primary">
+          Bewirb dich jetzt!
+        </a>
+      </div>
+    </div>
+  </div>
+</ng-container>

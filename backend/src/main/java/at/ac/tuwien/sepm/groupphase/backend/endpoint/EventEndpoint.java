@@ -46,8 +46,8 @@ public class EventEndpoint {
     }
 
     @GetMapping(value = "/{id}/details")
-    @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get event details")
+    @CrossOrigin(origins = "http://localhost:4200")
     public DetailedEventDto getEventDetails(@PathVariable Long id) {
         LOGGER.info("GET /api/v1/events/{}/details", id);
         return eventMapper.eventToDetailedEventDto(eventService.findById(id));

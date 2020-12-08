@@ -1,4 +1,3 @@
-import {Event} from './event';
 import {InterestArea} from './interestArea';
 
 export class Task {

@@ -77,5 +77,4 @@ public class MessageDataGenerator {
             interestAreaRepository.save(interestArea3);
         }
     }
-
 }

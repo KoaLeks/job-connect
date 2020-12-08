@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Globals} from '../global/globals';
 import {Event} from '../dtos/event';
+import {DetailedEvent} from '../dtos/detailed-event';
 
 @Injectable({
   providedIn: 'root'
@@ -36,9 +37,9 @@ export class EventService {
    * Get event details by ID
    * @param id of the event to find
    */
-  getEventDetails(id: number): Observable<Event> {
+  getEventDetails(id: number): Observable<DetailedEvent> {
     console.log('Get event details for: ' + id);
-    return this.httpClient.get<Event>(this.eventBaseUri + '/' + id + '/details');
+    return this.httpClient.get<DetailedEvent>(this.eventBaseUri + '/' + id + '/details');
   }
 
   /**

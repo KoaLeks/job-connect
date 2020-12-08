@@ -10,7 +10,7 @@ public class SimpleInterestAreaDto {
     private Long id;
     private String area;
     private String description;
-    private Set<Interest> interests;
+//    private Set<Interest> interests;
 
     public Long getId() {
         return id;
@@ -36,13 +36,13 @@ public class SimpleInterestAreaDto {
         this.description = description;
     }
 
-    public Set<Interest> getInterests() {
-        return interests;
-    }
-
-    public void setInterests(Set<Interest> interests) {
-        this.interests = interests;
-    }
+//    public Set<Interest> getInterests() {
+//        return interests;
+//    }
+//
+//    public void setInterests(Set<Interest> interests) {
+//        this.interests = interests;
+//    }
 
     @Override
     public boolean equals(Object o) {
@@ -63,7 +63,7 @@ public class SimpleInterestAreaDto {
             "id='" + id + '\'' +
             ", area='" + area + '\'' +
             ", description='" + description + '\'' +
-            ", interests='" + interests + '\'' +
+//            ", interests='" + interests + '\'' +
             '}';
     }
 
@@ -107,7 +107,7 @@ public class SimpleInterestAreaDto {
             simpleInterestAreaDto.setId(id);
             simpleInterestAreaDto.setArea(area);
             simpleInterestAreaDto.setDescription(description);
-            simpleInterestAreaDto.setInterests(interests);
+//            simpleInterestAreaDto.setInterests(interests);
             return simpleInterestAreaDto;
         }
     }
