@@ -31,6 +31,7 @@ public class EmployeeMapper {
         emp_builder.withInterests(interests);
         emp_builder.withGender(employeeDto.getGender());
         emp_builder.withBirthDate(employeeDto.getBirthDate());
+        emp_builder.withTimes(employeeDto.getTimes());
 
         return emp_builder.build();
     }
@@ -43,6 +44,7 @@ public class EmployeeMapper {
         emp_builder.withInterests(interests);
         emp_builder.withGender(editEmployeeDto.getGender());
         emp_builder.withBirthDate(editEmployeeDto.getBirthDate());
+        emp_builder.withTimes(editEmployeeDto.getTimes());
 
         return emp_builder.build();
     }
@@ -55,6 +57,7 @@ public class EmployeeMapper {
         empDto_builder.withInterestDtos(interestDtos);
         empDto_builder.withGender(employee.getGender());
         empDto_builder.withBirthDate(employee.getBirthDate());
+        empDto_builder.withTimes(employee.getTimes());
         return empDto_builder.build();
     }
 }

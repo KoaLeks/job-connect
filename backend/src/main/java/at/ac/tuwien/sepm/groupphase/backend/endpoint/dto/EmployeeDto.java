@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Employee;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Task;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Time;
 import at.ac.tuwien.sepm.groupphase.backend.util.Gender;
 import at.ac.tuwien.sepm.groupphase.backend.util.annotation.IsAdult;
 
@@ -29,6 +30,8 @@ public class EmployeeDto {
     @NotNull(message = "Geburtstag darf nicht NULL sein")
     @IsAdult(message = "Benutzer müssen volljährig sein")
     private LocalDateTime birthDate;
+
+    private Set<Time> times;
 
     public Long getId() {
         return id;
@@ -78,6 +81,14 @@ public class EmployeeDto {
         this.birthDate = birthDate;
     }
 
+    public Set<Time> getTimes() {
+        return times;
+    }
+
+    public void setTimes(Set<Time> times) {
+        this.times = times;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -100,6 +111,7 @@ public class EmployeeDto {
             ", interestDtos=" + interestDtos +
             ", gender=" + gender +
             ", birthDate=" + birthDate +
+            ", times=" + times +
             '}';
     }
 
@@ -110,6 +122,7 @@ public class EmployeeDto {
         private Set<InterestDto> interestDtos;
         private Gender gender;
         private LocalDateTime birthDate;
+        private Set<Time> times;
 
         private EmployeeDtoBuilder(){}
 
@@ -136,6 +149,10 @@ public class EmployeeDto {
             this.birthDate = birthDate;
             return this;
         }
+        public EmployeeDto.EmployeeDtoBuilder withTimes(Set<Time> times){
+            this.times = times;
+            return this;
+        }
 
         public EmployeeDto build(){
             EmployeeDto employeeDto = new EmployeeDto();
@@ -145,6 +162,7 @@ public class EmployeeDto {
             employeeDto.setTasks(tasks);
             employeeDto.setGender(gender);
             employeeDto.setBirthDate(birthDate);
+            employeeDto.setTimes(times);
             return employeeDto;
         }
     }

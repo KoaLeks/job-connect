@@ -34,6 +34,17 @@ public class Employee {
     @IsAdult
     private LocalDateTime birthDate;
 
+    @OneToMany(mappedBy = "employee")
+    private Set<Time> times;
+
+    public Set<Time> getTimes() {
+        return times;
+    }
+
+    public void setTimes(Set<Time> times) {
+        this.times = times;
+    }
+
     public Long getId() {
         return id;
     }
@@ -104,6 +115,7 @@ public class Employee {
             ", interests=" + interests +
             ", gender=" + gender +
             ", birthdate=" + birthDate +
+            ", times=" + times +
             '}';
     }
 
@@ -114,6 +126,7 @@ public class Employee {
         private Set<Interest> interests;
         private Gender gender;
         private LocalDateTime birthDate;
+        private Set<Time> times;
 
 
         private EmployeeBuilder() {
@@ -139,13 +152,18 @@ public class Employee {
             return this;
         }
 
-        public EmployeeBuilder withGender(Gender gender){
+        public EmployeeBuilder withGender(Gender gender) {
             this.gender = gender;
             return this;
         }
 
-        public EmployeeBuilder withBirthDate(LocalDateTime birthDate){
+        public EmployeeBuilder withBirthDate(LocalDateTime birthDate) {
             this.birthDate = birthDate;
+            return this;
+        }
+
+        public EmployeeBuilder withTimes(Set<Time> times) {
+            this.times = times;
             return this;
         }
 
@@ -157,6 +175,7 @@ public class Employee {
             employee.setTasks(tasks);
             employee.setGender(gender);
             employee.setBirthDate(birthDate);
+            employee.setTimes(times);
             return employee;
         }
     }
