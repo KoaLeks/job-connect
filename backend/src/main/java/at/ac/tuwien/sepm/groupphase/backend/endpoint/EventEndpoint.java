@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventInquiryDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
@@ -47,11 +48,9 @@ public class EventEndpoint {
     @GetMapping(value = "/{id}/details")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get event details")
-    public EventInquiryDto getEventDetails(@PathVariable Long id) {
+    public DetailedEventDto getEventDetails(@PathVariable Long id) {
         LOGGER.info("GET /api/v1/events/{}/details", id);
-        EventInquiryDto test = eventMapper.eventToEventInquiryDto(eventService.findById(id));
-        LOGGER.info("" + test);
-        return test;
+        return eventMapper.eventToDetailedEventDto(eventService.findById(id));
     }
 
     @GetMapping

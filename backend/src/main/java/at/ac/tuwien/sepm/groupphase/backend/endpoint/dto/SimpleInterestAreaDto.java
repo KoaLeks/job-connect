@@ -1,12 +1,16 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
+import at.ac.tuwien.sepm.groupphase.backend.entity.Interest;
+
 import java.util.Objects;
+import java.util.Set;
 
 public class SimpleInterestAreaDto {
 
     private Long id;
     private String area;
     private String description;
+    private Set<Interest> interests;
 
     public Long getId() {
         return id;
@@ -32,6 +36,14 @@ public class SimpleInterestAreaDto {
         this.description = description;
     }
 
+    public Set<Interest> getInterests() {
+        return interests;
+    }
+
+    public void setInterests(Set<Interest> interests) {
+        this.interests = interests;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -51,6 +63,7 @@ public class SimpleInterestAreaDto {
             "id='" + id + '\'' +
             ", area='" + area + '\'' +
             ", description='" + description + '\'' +
+            ", interests='" + interests + '\'' +
             '}';
     }
 
@@ -58,6 +71,7 @@ public class SimpleInterestAreaDto {
         private Long id;
         private String area;
         private String description;
+        private Set<Interest> interests;
 
 
         private SimpleInterestAreaDtoBuilder() {
@@ -83,11 +97,17 @@ public class SimpleInterestAreaDto {
             return this;
         }
 
+        public SimpleInterestAreaDtoBuilder withInterests(Set<Interest> interests) {
+            this.interests = interests;
+            return this;
+        }
+
         public SimpleInterestAreaDto build() {
             SimpleInterestAreaDto simpleInterestAreaDto = new SimpleInterestAreaDto();
             simpleInterestAreaDto.setId(id);
             simpleInterestAreaDto.setArea(area);
             simpleInterestAreaDto.setDescription(description);
+            simpleInterestAreaDto.setInterests(interests);
             return simpleInterestAreaDto;
         }
     }
