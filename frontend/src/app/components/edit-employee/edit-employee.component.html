@@ -103,7 +103,7 @@
         </div>
       </div>
 
-      <!-- TIME Management -->
+<!-- TIME Management begin-->
 
       <br>
       <br>
@@ -124,89 +124,111 @@
 
       <br>
 
-      <table class="table borderless">
-        <thead>
-        <tr>
-          <th scope="col">Wochentag</th>
-          <th scope="col">Montag</th>
-          <th scope="col">Dienstag</th>
-          <th scope="col">Mittwoch</th>
-          <th scope="col">Donnerstag</th>
-          <th scope="col">Freitag</th>
-          <th scope="col">Samstag</th>
-          <th scope="col">Sonntag</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <th scope="row">von</th>
-          <td>
-            <input type="time">
-          </td>
-          <td>
-            <input type="time">
-          </td>
-          <td>
-            <input type="time">
-          </td>
-          <td>
-            <input type="time">
-          </td>
-          <td>
-            <input type="time">
-          </td>
-          <td>
-            <input type="time">
-          </td>
-          <td>
-            <input type="time">
-          </td>
-        </tr>
-        <tr>
-          <th scope="row">bis</th>
-          <td>
-            <input type="time">
-          </td>
-          <td>
-            <input type="time">
-          </td>
-          <td>
-            <input type="time">
-          </td>
-          <td>
-            <input type="time">
-          </td>
-          <td>
-            <input type="time">
-          </td>
-          <td>
-            <input type="time">
-          </td>
-          <td>
-            <input type="time">
-          </td>
-        </tr>
-        <tr>
-          <!-- <th scope="row" colspan="8"> <hr/> </th> -->
-        </tr>
+      <!--
+            <table class="table table-borderless">
+              <thead>
+              <tr>
+                <th scope="col">jeden</th>
+                <th scope="col">Montag</th>
+                <th scope="col">Dienstag</th>
+                <th scope="col">Mittwoch</th>
+                <th scope="col">Donnerstag</th>
+                <th scope="col">Freitag</th>
+                <th scope="col">Samstag</th>
+                <th scope="col">Sonntag</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <th scope="row">von</th>
+                <td>
+                  <input type="time">
+                </td>
+                <td>
+                  <input type="time">
+                </td>
+                <td>
+                  <input type="time">
+                </td>
+                <td>
+                  <input type="time">
+                </td>
+                <td>
+                  <input type="time">
+                </td>
+                <td>
+                  <input type="time">
+                </td>
+                <td>
+                  <input type="time">
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">bis</th>
+                <td>
+                  <input type="time">
+                </td>
+                <td>
+                  <input type="time">
+                </td>
+                <td>
+                  <input type="time">
+                </td>
+                <td>
+                  <input type="time">
+                </td>
+                <td>
+                  <input type="time">
+                </td>
+                <td>
+                  <input type="time">
+                </td>
+                <td>
+                  <input type="time">
+                </td>
+              </tr>
+              <tr>
+                <th scope="row" colspan="8"> <hr/> </th>
+              </tr>
 
 
-        <!-- TODO add button for adding additional times
 
-        <tr>
-          <th scope="row">
-            <svg (click)="addNewTimeRow()" width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-plus-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-              <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-            </svg>
-          </th>
-        </tr>
--->
 
-        </tbody>
-      </table>
+              TODO add button for adding additional times
 
-      <!-- TIME Management -->
+              <tr>
+                <th scope="row">
+                  <svg (click)="addNewTimeRow()" width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-plus-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                    <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                  </svg>
+                </th>
+              </tr>
+
+              </tbody>
+            </table>
+
+            -->
+
+      <!-- Button trigger time adding Modal -->
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addTimeModal">
+        neue Zeitspanne hinzufügen
+      </button>
+
+      <div *ngIf="times.length != 0">
+        <br><br>
+        <h5>verfügbare Zeiten: </h5>
+        <ng-container *ngFor="let time of times">
+          <div>
+            <button type="button" class="small" (click)="deleteTime(time)">&times;</button>
+            <a style="margin: 1em"> <b>Datum:</b> {{time.start.substr(0, 10)}}</a>
+            <a style="margin-right: 1em"> <b>Von:</b> {{time.start.substr(11, 5)}} Uhr</a>
+            <b>Bis:</b> {{time.end.substr(11, 5)}} Uhr
+          </div>
+        </ng-container>
+      </div>
+
+<!-- TIME Management end-->
 
       <div class="form-group form-check">
         <!--button type="button" routerLink="/" class="btn btn-outline-secondary float-right">Abbrechen</button-->
@@ -221,6 +243,48 @@
 </button>
 <app-edit-password [changePassword]="changePassword"></app-edit-password>
 
+<!-- time adding Modal -->
+<div class="modal fade" id="addTimeModal" tabindex="-1" role="dialog" aria-labelledby="addTimeModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addTimeModalLabel">neue Zeitspanne hinzufügen</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form [formGroup]="timeCreationForm" (ngSubmit)="addTime(timeCreationForm.value)">
+          <div class="form-group">
+          <label for="availableDate">Datum</label>
+          <input type="date" id="availableDate" formControlName="date" class="form-control" style="margin-bottom: 1em">
+          </div>
+          <div class="form-group">
+          <label for="availableTimeStart">Von</label>
+          <input type="time" id="availableTimeStart" class="form-control" formControlName="timeStart"
+                 style="margin-bottom: 1em">
+          </div>
+          <div class="form-group">
+          <label for="availableTimeEnd">Bis</label>
+          <input type="time" id="availableTimeEnd" class="form-control" formControlName="timeEnd">
+          </div>
+          <br>
+
+          <input type="checkbox" id="weekly" style="margin-right: 1em" class="switch">
+          <label for="weekly">soll sich wöchentlich wiederholen?</label>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Schließen</button>
+            <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#addTimeModal">Speichern</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- time adding Modal -->
 
 <br>
 <br>

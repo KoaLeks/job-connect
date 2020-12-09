@@ -16,6 +16,7 @@
         </button>
       </div>
       <!-- TASK FORM -->
+      <div class="modal-body">
       <form [formGroup]="taskCreationForm" (ngSubmit)="addTask(taskCreationForm.value)">
         <div class="form-group">
           <label for="InputTaskDescription">Beschreibung<b>*</b></label>
@@ -51,6 +52,7 @@
         </div>
       </form>
     </div>
+  </div>
   </div>
 </div>
 <!-- Modal ADD TASK-->
