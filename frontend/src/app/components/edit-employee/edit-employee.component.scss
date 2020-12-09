@@ -33,3 +33,12 @@ img {
   width: 250px;
   height: 250px
 }
+
+hr {
+  border: 0;
+  border-top: 1px solid rgba(0, 0, 0, 1);
+}
+
+.borderless td, .borderless th {
+  border: none;
+}

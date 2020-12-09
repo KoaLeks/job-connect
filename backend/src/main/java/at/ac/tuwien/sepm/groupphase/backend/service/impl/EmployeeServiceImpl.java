@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Service
@@ -78,12 +79,17 @@ public class EmployeeServiceImpl implements EmployeeService {
         //save times for this employee
         if (employee.getTimes() != null) {
             Set<Time> times = employee.getTimes();
-            System.out.println("times set: " + times);
             for (Time time :
                 times) {
-                System.out.println("time: " + time);
-                time.setEmployee(employee);
-                timeRepository.save(time);
+
+                //TODO: after delete, it throws ID not found Exception ??
+
+                // if (time.getStart().isEqual(LocalDateTime.parse("9999-12-31T23:59:59"))) {    //if user deletes certain time in frontend, its Start is set to Max, so the backend knows to delete it
+                //    timeRepository.deleteById(time.getId());
+                // } else {                                                                    //else it creates a new database entry or updates an existing one
+                    time.setEmployee(employee);
+                    timeRepository.save(time);
+                // }
             }
         }
 
