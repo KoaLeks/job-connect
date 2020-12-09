@@ -50,6 +50,7 @@ export class EditEmployeeComponent implements OnInit {
       date: [null, Validators.required],
       timeStart: [null, Validators.required],
       timeEnd: [null, Validators.required],
+      booleanDate: false
     });
   }
 
@@ -270,24 +271,48 @@ export class EditEmployeeComponent implements OnInit {
     const date: string = time.date;
     const start: string = time.timeStart;
     const end: string = time.timeEnd;
+
     console.log('times: ' + date + ', ' + start + ', ' + end);
+
     // format: 2021-09-10T00:00:00
     const timeStartBuild: string = date + 'T' + start;
     const timeEndBuild: string = date + 'T' + end;
 
-    const newTimeDto: TimeDto = new TimeDto(null, timeStartBuild, timeEndBuild);
-    console.log('newTimeDto: ' + JSON.stringify(newTimeDto));
+    const timeDtoToSave: TimeDto = new TimeDto(null, timeStartBuild, timeEndBuild, time.booleanDate, true);
+    console.log('newTimeDto: ' + JSON.stringify(timeDtoToSave));
+    this.times.push(timeDtoToSave);
 
-    this.times.push(newTimeDto);
+    if (time.booleanDate) {
+      const newDate = new Date(date);
+      for (let i = 0; i < 52; i++) {
+        newDate.setDate(newDate.getDate() + 7);
+        console.log('newDate: ' + newDate);
+        let newDateString: string;
+
+        newDateString = newDate.getUTCFullYear() + '-' +
+          ('0' + (newDate.getUTCMonth() + 1)).slice(-2) + '-'
+          + ('0' + newDate.getUTCDate()).slice(-2);
+        console.log('newDateString: ' + newDateString);
+
+        const newTimeStartBuild: string = newDateString + 'T' + start;
+        const newTimeEndBuild: string = newDateString + 'T' + end;
+        const repeatedTimeDto: TimeDto = new TimeDto(null, newTimeStartBuild, newTimeEndBuild, time.booleanDate, false);
+        this.times.push(repeatedTimeDto);
+      }
+    }
+
     this.timeCreationForm.reset();
   }
 
   deleteTime(time: TimeDto) {
     const index = this.times.indexOf(time);
     if (index !== -1) {
-      this.times.splice(index, 1);
+      if (time.booleanDate) {
+        this.times.splice(index, 52);
+      } else {
+        this.times.splice(index, 1);
+      }
     }
   }
-
 
 }

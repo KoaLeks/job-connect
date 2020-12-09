@@ -219,11 +219,18 @@
         <br><br>
         <h5>verfügbare Zeiten: </h5>
         <ng-container *ngFor="let time of times">
-          <div>
+          <div *ngIf="time.visible">
             <button type="button" class="small" (click)="deleteTime(time)">&times;</button>
-            <a style="margin: 1em"> <b>Datum:</b> {{time.start.substr(0, 10)}}</a>
+            <a style="margin: 1em"> <b>Datum:</b> {{time.start.substr(0, 10) |  date:'MM/dd/yyyy'}}</a>
             <a style="margin-right: 1em"> <b>Von:</b> {{time.start.substr(11, 5)}} Uhr</a>
-            <b>Bis:</b> {{time.end.substr(11, 5)}} Uhr
+            <a> <b>Bis:</b> {{time.end.substr(11, 5)}} Uhr | </a>
+            <ng-container *ngIf="time.booleanDate">
+              wiederholt sich wöchentlich? <a style="color: green"><b>ja</b></a>
+            </ng-container>
+            <ng-container *ngIf="!time.booleanDate">
+              wiederholt sich wöchentlich? <a style="color: red"><b>nein</b></a>
+            </ng-container>
+
           </div>
         </ng-container>
       </div>
@@ -271,12 +278,14 @@
           </div>
           <br>
 
-          <input type="checkbox" id="weekly" style="margin-right: 1em" class="switch">
-          <label for="weekly">soll sich wöchentlich wiederholen?</label>
+          <div class="form-group">
+          <input type="checkbox" id="weekly" style="margin-right: 1em" class="form-control; switch" formControlName="booleanDate">
+            <label for="weekly">soll sich wöchentlich wiederholen? <i>(ein Jahr lang)</i></label>
+          </div>
 
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Schließen</button>
-            <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#addTimeModal">Speichern</button>
+            <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#addTimeModal" [disabled]="!timeCreationForm.valid">Speichern</button>
           </div>
         </form>
       </div>
