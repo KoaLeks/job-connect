@@ -13,4 +13,9 @@ public interface InterestService {
      */
     List<Interest> findAll();
 
+    /**
+     * deletes an Interest with given id.
+     */
+    void deleteById(Long id);
+
 }

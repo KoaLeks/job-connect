@@ -64,7 +64,7 @@ public interface TestData {
     Long INTEREST_ID = 1L;
     String INTEREST_NAME = "Fotografie";
     String INTEREST_DESCRIPTION = "fotografieren";
-    Set<Employee> INTEREST_EMPLOYEES = null;
+    Employee INTEREST_EMPLOYEE = null;
 
     Long TASK_ID = 1L;
     String DESCRIPTION_TASK = "Flyer verteilen";
