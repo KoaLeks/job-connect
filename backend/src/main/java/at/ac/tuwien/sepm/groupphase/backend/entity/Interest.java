@@ -62,12 +62,14 @@ public class Interest {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Interest interest = (Interest) o;
-        return Objects.equals(id, interest.id);
+        return Objects.equals(id, interest.id) &&
+            Objects.equals(name, interest.name) &&
+            Objects.equals(description, interest.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, name, description);
     }
 
     @Override

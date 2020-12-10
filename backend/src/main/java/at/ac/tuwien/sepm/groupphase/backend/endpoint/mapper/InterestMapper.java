@@ -12,13 +12,13 @@ import java.util.Set;
 @Mapper(uses = {InterestAreaService.class})
 public interface InterestMapper {
 
-    Set<InterestDto> interestToInterestDto(List<Interest> interests);
+    Set<InterestDto> interestListToInterestDtoSet(List<Interest> interests);
 
-    Set<InterestDto> interestToInterestDto(Set<Interest> interests);
+    Set<InterestDto> interestSetToInterestDtoSet(Set<Interest> interests);
 
-    Set<Interest> interestDtoToInterest(Set<InterestDto> interestDtos);
+    Set<Interest> interestDtoSetToInterestSet(Set<InterestDto> interestDtos);
 
-    Set<Interest> interestDtoToInterest(List<InterestDto> interestDtos);
+    Set<Interest> interestDtoListToInterestSet(List<InterestDto> interestDtos);
 
     //needed for Set mappers
     @Mapping(source = "interestArea", target = "simpleInterestAreaDto")
