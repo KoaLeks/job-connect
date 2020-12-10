@@ -103,7 +103,7 @@
         </div>
       </div>
 
-<!-- TIME Management begin-->
+      <!-- TIME Management begin-->
 
       <br>
       <br>
@@ -111,7 +111,7 @@
       <h5>
         <div data-toggle="tooltip" data-placement="top" title="Somit kannst du Jobs ganz leicht nach deiner verfügbaren Zeit filtern und
       bekommst auch nur Mails für neue Jobs, bei denen du auch Zeit hast!">
-          Hier kannst du eintragen, wann du Zeit zum Arbeiten hast.
+          Hier siehst du, wann du Zeit zum Arbeiten hast
           <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-info-circle" fill="currentColor"
                xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
@@ -122,93 +122,85 @@
         </div>
       </h5>
 
+      <table class="table table-borderless">
+        <thead>
+        <tr>
+          <th scope="col">Montag</th>
+          <th scope="col">Dienstag</th>
+          <th scope="col">Mittwoch</th>
+          <th scope="col">Donnerstag</th>
+          <th scope="col">Freitag</th>
+          <th scope="col">Samstag</th>
+          <th scope="col">Sonntag</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>
+            <ng-container
+              *ngFor="let day of timeMap.get('monday')">einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+              <br>{{day.start.substr(11, 5)}}
+              bis {{day.end.substr(11, 5)}}
+              <hr/>
+            </ng-container>
+          </td>
+          <td>
+            <ng-container
+              *ngFor="let day of timeMap.get('tuesday')">einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+              <br>{{day.start.substr(11, 5)}}
+              bis {{day.end.substr(11, 5)}}
+              <hr/>
+            </ng-container>
+          </td>
+          <td>
+            <ng-container
+              *ngFor="let day of timeMap.get('wednesday')">einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+              <br>{{day.start.substr(11, 5)}}
+              bis {{day.end.substr(11, 5)}}
+              <hr/>
+            </ng-container>
+          </td>
+          <td>
+            <ng-container
+              *ngFor="let day of timeMap.get('thursday')">einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+              <br>{{day.start.substr(11, 5)}}
+              bis {{day.end.substr(11, 5)}}
+              <hr/>
+            </ng-container>
+          </td>
+          <td>
+            <ng-container
+              *ngFor="let day of timeMap.get('friday')">einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+              <br>{{day.start.substr(11, 5)}}
+              bis {{day.end.substr(11, 5)}}
+              <hr/>
+            </ng-container>
+          </td>
+          <td>
+            <ng-container
+              *ngFor="let day of timeMap.get('saturday')">einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+              <br>{{day.start.substr(11, 5)}}
+              bis {{day.end.substr(11, 5)}}
+              <hr/>
+            </ng-container>
+          </td>
+          <td>
+            <ng-container
+              *ngFor="let day of timeMap.get('sunday')">einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+              <br>{{day.start.substr(11, 5)}}
+              bis {{day.end.substr(11, 5)}}
+              <hr/>
+            </ng-container>
+          </td>
+        </tr>
+
+
+        </tbody>
+      </table>
+
+
       <br>
-
-      <!--
-            <table class="table table-borderless">
-              <thead>
-              <tr>
-                <th scope="col">jeden</th>
-                <th scope="col">Montag</th>
-                <th scope="col">Dienstag</th>
-                <th scope="col">Mittwoch</th>
-                <th scope="col">Donnerstag</th>
-                <th scope="col">Freitag</th>
-                <th scope="col">Samstag</th>
-                <th scope="col">Sonntag</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr>
-                <th scope="row">von</th>
-                <td>
-                  <input type="time">
-                </td>
-                <td>
-                  <input type="time">
-                </td>
-                <td>
-                  <input type="time">
-                </td>
-                <td>
-                  <input type="time">
-                </td>
-                <td>
-                  <input type="time">
-                </td>
-                <td>
-                  <input type="time">
-                </td>
-                <td>
-                  <input type="time">
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">bis</th>
-                <td>
-                  <input type="time">
-                </td>
-                <td>
-                  <input type="time">
-                </td>
-                <td>
-                  <input type="time">
-                </td>
-                <td>
-                  <input type="time">
-                </td>
-                <td>
-                  <input type="time">
-                </td>
-                <td>
-                  <input type="time">
-                </td>
-                <td>
-                  <input type="time">
-                </td>
-              </tr>
-              <tr>
-                <th scope="row" colspan="8"> <hr/> </th>
-              </tr>
-
-
-
-
-              TODO add button for adding additional times
-
-              <tr>
-                <th scope="row">
-                  <svg (click)="addNewTimeRow()" width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-plus-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-                    <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                  </svg>
-                </th>
-              </tr>
-
-              </tbody>
-            </table>
-
-            -->
 
       <!-- Button trigger time adding Modal -->
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addTimeModal">
@@ -221,7 +213,7 @@
         <ng-container *ngFor="let time of times">
           <div *ngIf="time.visible">
             <button type="button" class="small" (click)="deleteTime(time)">&times;</button>
-            <a style="margin: 1em"> <b>Datum:</b> {{time.start.substr(0, 10) |  date:'MM/dd/yyyy'}}</a>
+            <a style="margin: 1em"> <b>Datum:</b> {{time.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</a>
             <a style="margin-right: 1em"> <b>Von:</b> {{time.start.substr(11, 5)}} Uhr</a>
             <a> <b>Bis:</b> {{time.end.substr(11, 5)}} Uhr | </a>
             <ng-container *ngIf="time.booleanDate">
@@ -235,7 +227,7 @@
         </ng-container>
       </div>
 
-<!-- TIME Management end-->
+      <!-- TIME Management end-->
 
       <div class="form-group form-check">
         <!--button type="button" routerLink="/" class="btn btn-outline-secondary float-right">Abbrechen</button-->
@@ -264,28 +256,51 @@
 
         <form [formGroup]="timeCreationForm" (ngSubmit)="addTime(timeCreationForm.value)">
           <div class="form-group">
-          <label for="availableDate">Datum</label>
-          <input type="date" id="availableDate" formControlName="date" class="form-control" style="margin-bottom: 1em">
+            <label for="availableDate">Datum</label>
+            <input type="date" id="availableDate" formControlName="date" class="form-control" style="margin-bottom: 1em"
+                   max='9999-12-31'
+                   pattern="2[0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]"> <!-- only year 2000 or later is allowed -->
           </div>
-          <div class="form-group">
-          <label for="availableTimeStart">Von</label>
-          <input type="time" id="availableTimeStart" class="form-control" formControlName="timeStart"
-                 style="margin-bottom: 1em">
+
+          <div>
+            <input type="checkbox" id="fullDayCheck" style="margin-right: 1em" class="switch"
+                   (click)="toggleStartEndMethod()">
+            <label for="fullDayCheck">ganzer Tag?</label>
           </div>
-          <div class="form-group">
-          <label for="availableTimeEnd">Bis</label>
-          <input type="time" id="availableTimeEnd" class="form-control" formControlName="timeEnd">
+
+            <div *ngIf="toggleStartEnd">
+              <input type="checkbox" id="nightShiftFullDay" style="margin-right: 1em" class="switch" (click)="toggleNightShift(); addNightShift()">
+              <label for="nightShiftFullDay">bis zum Folgetag um 3:00 Uhr in der Früh?</label>
+            </div>
+
+          <div class="form-group" *ngIf="!toggleStartEnd">
+            <label for="availableTimeStart">Von</label>
+            <input type="time" id="availableTimeStart" class="form-control" formControlName="timeStart"
+                   style="margin-bottom: 1em">
+          </div>
+          <div class="form-group" *ngIf="!toggleStartEnd && !nightShift">
+            <label for="availableTimeEnd">Bis</label>
+            <input type="time" id="availableTimeEnd" class="form-control" formControlName="timeEnd">
           </div>
           <br>
 
+            <div *ngIf="!toggleStartEnd">
+              <input type="checkbox" id="nightShift" style="margin-right: 1em" class="switch" (click)="toggleNightShift(); addNightShift()">
+              <label for="nightShift">bis zum Folgetag um 3:00 Uhr in der Früh?</label>
+            </div>
+
           <div class="form-group">
-          <input type="checkbox" id="weekly" style="margin-right: 1em" class="form-control; switch" formControlName="booleanDate">
+            <input type="checkbox" id="weekly" style="margin-right: 1em" class="form-control; switch"
+                   formControlName="booleanDate">
             <label for="weekly">soll sich wöchentlich wiederholen? <i>(ein Jahr lang)</i></label>
           </div>
 
+
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Schließen</button>
-            <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#addTimeModal" [disabled]="!timeCreationForm.valid">Speichern</button>
+            <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#addTimeModal"
+                    [disabled]="!timeCreationForm.valid">Speichern
+            </button>
           </div>
         </form>
       </div>

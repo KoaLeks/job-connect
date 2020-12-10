@@ -33,6 +33,9 @@ export class EditEmployeeComponent implements OnInit {
   changePassword: boolean = false;
   timeCreationForm;
   times: TimeDto[] = [];
+  toggleStartEnd: boolean = false;
+  timeMap = new Map<string, TimeDto[]>();
+  nightShift: boolean = false;
 
   constructor(private authService: AuthService, private router: Router, private formBuilder: FormBuilder,
               private employeeService: EmployeeService, private interestService: InterestService,
@@ -52,6 +55,7 @@ export class EditEmployeeComponent implements OnInit {
       timeEnd: [null, Validators.required],
       booleanDate: false
     });
+
   }
 
   isAdult(controlName: string) {
@@ -117,6 +121,7 @@ export class EditEmployeeComponent implements OnInit {
         this.editForm.controls['publicInfo'].setValue(employee.profileDto.publicInfo);
         this.editForm.controls['gender'].setValue(employee.gender);
         this.editForm.controls['birthDate'].setValue(employee.birthDate.toString().substr(0, 10));
+        this.filterShowTime(employee.times);
         // converts bytesArray to Base64
         this.arrayBufferToBase64(employee.profileDto.picture);
         if (employee.profileDto.picture != null) {
@@ -198,6 +203,7 @@ export class EditEmployeeComponent implements OnInit {
           this.inputImage.nativeElement.value = ''; // resets fileUpload button
           this.load();
           this.updateHeaderService.updateProfile.next(true);
+          this.times = [];
         },
         error => {
           this.error = true;
@@ -271,37 +277,58 @@ export class EditEmployeeComponent implements OnInit {
     const date: string = time.date;
     const start: string = time.timeStart;
     const end: string = time.timeEnd;
-
-    console.log('times: ' + date + ', ' + start + ', ' + end);
-
+    let timeStartBuild: string;
+    let timeEndBuild: string;
+    let newEndDate;
+    if (this.nightShift) {
+      newEndDate = new Date(date);
+      newEndDate.setDate(newEndDate.getDate() + 1);
+      let newEndDateString: string;
+      newEndDateString = newEndDate.getUTCFullYear() + '-' +
+        ('0' + (newEndDate.getUTCMonth() + 1)).slice(-2) + '-'
+        + ('0' + newEndDate.getUTCDate()).slice(-2);
+      timeEndBuild = newEndDateString + 'T' + end;
+    } else {
+      timeEndBuild = date + 'T' + end;
+    }
     // format: 2021-09-10T00:00:00
-    const timeStartBuild: string = date + 'T' + start;
-    const timeEndBuild: string = date + 'T' + end;
-
+    timeStartBuild = date + 'T' + start;
     const timeDtoToSave: TimeDto = new TimeDto(null, timeStartBuild, timeEndBuild, time.booleanDate, true);
-    console.log('newTimeDto: ' + JSON.stringify(timeDtoToSave));
     this.times.push(timeDtoToSave);
-
     if (time.booleanDate) {
-      const newDate = new Date(date);
-      for (let i = 0; i < 52; i++) {
-        newDate.setDate(newDate.getDate() + 7);
-        console.log('newDate: ' + newDate);
-        let newDateString: string;
-
-        newDateString = newDate.getUTCFullYear() + '-' +
-          ('0' + (newDate.getUTCMonth() + 1)).slice(-2) + '-'
-          + ('0' + newDate.getUTCDate()).slice(-2);
-        console.log('newDateString: ' + newDateString);
-
-        const newTimeStartBuild: string = newDateString + 'T' + start;
-        const newTimeEndBuild: string = newDateString + 'T' + end;
-        const repeatedTimeDto: TimeDto = new TimeDto(null, newTimeStartBuild, newTimeEndBuild, time.booleanDate, false);
-        this.times.push(repeatedTimeDto);
+      if (!this.nightShift) {
+        const newDate = new Date(date);
+        for (let i = 0; i < 51; i++) { // saves this day each week for one year in database
+          newDate.setDate(newDate.getDate() + 7);
+          let newDateString: string;
+          newDateString = newDate.getUTCFullYear() + '-' +
+            ('0' + (newDate.getUTCMonth() + 1)).slice(-2) + '-'
+            + ('0' + newDate.getUTCDate()).slice(-2);
+          const newTimeStartBuild: string = newDateString + 'T' + start;
+          const newTimeEndBuild: string = newDateString + 'T' + end;
+          const repeatedTimeDto: TimeDto = new TimeDto(null, newTimeStartBuild, newTimeEndBuild, time.booleanDate, false);
+          this.times.push(repeatedTimeDto);
+        }
+      } else {
+        const newDate = new Date(newEndDate);
+        for (let i = 0; i < 51; i++) { // saves this day each week for one year in database
+          newDate.setDate(newDate.getDate() + 7);
+          let newDateString: string;
+          newDateString = newDate.getUTCFullYear() + '-' +
+            ('0' + (newDate.getUTCMonth() + 1)).slice(-2) + '-'
+            + ('0' + newDate.getUTCDate()).slice(-2);
+          const newTimeStartBuild: string = newDateString + 'T' + start;
+          const newTimeEndBuild: string = newDateString + 'T' + end;
+          const repeatedTimeDto: TimeDto = new TimeDto(null, newTimeStartBuild, newTimeEndBuild, time.booleanDate, false);
+          this.times.push(repeatedTimeDto);
+        }
       }
     }
-
     this.timeCreationForm.reset();
+    const checkbox = document.getElementById('fullDayCheck') as HTMLInputElement;
+    checkbox.checked = false;
+    this.toggleStartEnd = false;
+    this.nightShift = false;
   }
 
   deleteTime(time: TimeDto) {
@@ -315,4 +342,79 @@ export class EditEmployeeComponent implements OnInit {
     }
   }
 
+  toggleStartEndMethod() {
+    this.toggleStartEnd = !this.toggleStartEnd;
+    if (this.toggleStartEnd) {
+      this.timeCreationForm.controls['timeStart'].setValue('00:00');
+      this.timeCreationForm.controls['timeEnd'].setValue('23:59');
+    } else {
+      this.timeCreationForm.controls['timeStart'].setValue('');
+      this.timeCreationForm.controls['timeEnd'].setValue('');
+    }
+  }
+
+  toggleNightShift() {
+    this.nightShift = !this.nightShift;
+  }
+
+  addNightShift() {
+    if (this.nightShift) {
+      this.timeCreationForm.controls['timeEnd'].setValue('03:00');
+    } else {
+      this.timeCreationForm.controls['timeEnd'].setValue('');
+    }
+  }
+
+  filterShowTime(showTime) {
+
+    const mondayArray: TimeDto[] = [];
+    const tuesdayArray: TimeDto[] = [];
+    const wednesdayArray: TimeDto[] = [];
+    const thursdayArray: TimeDto[] = [];
+    const fridayArray: TimeDto[] = [];
+    const saturdayArray: TimeDto[] = [];
+    const sundayArray: TimeDto[] = [];
+
+    this.timeMap.set('monday', mondayArray);
+    this.timeMap.set('tuesday', tuesdayArray);
+    this.timeMap.set('wednesday', wednesdayArray);
+    this.timeMap.set('thursday', thursdayArray);
+    this.timeMap.set('friday', fridayArray);
+    this.timeMap.set('saturday', saturdayArray);
+    this.timeMap.set('sunday', sundayArray);
+
+    for (const time of showTime) {
+      // time is type of TimeDto
+      const endDate = new Date(time.end);
+      const startDate = new Date(time.start);
+      const now = new Date();
+      if (endDate > now) {
+        switch (startDate.getDay()) {
+          case 0:
+            sundayArray.push(time);
+            break;
+          case 1:
+            mondayArray.push(time);
+            break;
+          case 2:
+            tuesdayArray.push(time);
+            break;
+          case 3:
+            wednesdayArray.push(time);
+            break;
+          case 4:
+            thursdayArray.push(time);
+            break;
+          case 5:
+            fridayArray.push(time);
+            break;
+          case 6:
+            saturdayArray.push(time);
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  }
 }
