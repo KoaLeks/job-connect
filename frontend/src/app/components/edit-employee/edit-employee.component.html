@@ -122,7 +122,7 @@
         </div>
       </h5>
 
-      <table class="table table-borderless">
+      <table class="table table-bordered">
         <thead>
         <tr>
           <th scope="col">Montag</th>
@@ -138,58 +138,157 @@
         <tbody>
         <tr>
           <td>
-            <ng-container
-              *ngFor="let day of timeMap.get('monday')">einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-              <br>{{day.start.substr(11, 5)}}
-              bis {{day.end.substr(11, 5)}}
+            <ng-container *ngFor="let day of mondayArray">
+              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) === day.end.substr(0, 10)">
+                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                <br>{{day.start.substr(11, 5)}}
+                bis {{day.end.substr(11, 5)}}
+              </ng-container>
+              <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
+                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                <br>ganztägig
+              </ng-container>
+              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) !== day.end.substr(0, 10)">
+                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                <br>{{day.start.substr(11, 5)}}
+                bis Folgetag
+              </ng-container>
+              <div style="float: right; color: red" (click)="deleteTimeFromOverview(day, mondayArray)">entfernen</div>
               <hr/>
             </ng-container>
           </td>
           <td>
-            <ng-container
-              *ngFor="let day of timeMap.get('tuesday')">einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-              <br>{{day.start.substr(11, 5)}}
-              bis {{day.end.substr(11, 5)}}
+            <ng-container *ngFor="let day of tuesdayArray">
+              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) === day.end.substr(0, 10)">
+                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                <br>{{day.start.substr(11, 5)}}
+                bis {{day.end.substr(11, 5)}}
+              </ng-container>
+              <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
+                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                <br>ganztägig
+              </ng-container>
+              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) !== day.end.substr(0, 10)">
+                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                <br>{{day.start.substr(11, 5)}}
+                bis Folgetag
+              </ng-container>
+              <div style="float: right; color: red" (click)="deleteTimeFromOverview(day, tuesdayArray)">entfernen</div>
               <hr/>
             </ng-container>
           </td>
           <td>
-            <ng-container
-              *ngFor="let day of timeMap.get('wednesday')">einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-              <br>{{day.start.substr(11, 5)}}
-              bis {{day.end.substr(11, 5)}}
+            <ng-container *ngFor="let day of wednesdayArray">
+              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) === day.end.substr(0, 10)">
+                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                <br>{{day.start.substr(11, 5)}}
+                bis {{day.end.substr(11, 5)}}
+              </ng-container>
+              <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
+                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                <br>ganztägig
+              </ng-container>
+              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) !== day.end.substr(0, 10)">
+                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                <br>{{day.start.substr(11, 5)}}
+                bis Folgetag
+              </ng-container>
+              <div style="float: right; color: red" (click)="deleteTimeFromOverview(day, wednesdayArray)">entfernen
+              </div>
               <hr/>
             </ng-container>
           </td>
           <td>
-            <ng-container
-              *ngFor="let day of timeMap.get('thursday')">einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-              <br>{{day.start.substr(11, 5)}}
-              bis {{day.end.substr(11, 5)}}
+            <ng-container *ngFor="let day of thursdayArray">
+              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) === day.end.substr(0, 10)">
+                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                <br>{{day.start.substr(11, 5)}}
+                bis {{day.end.substr(11, 5)}}
+              </ng-container>
+              <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
+                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                <br>ganztägig
+              </ng-container>
+              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) !== day.end.substr(0, 10)">
+                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                <br>{{day.start.substr(11, 5)}}
+                bis Folgetag
+              </ng-container>
+              <div style="float: right; color: red" (click)="deleteTimeFromOverview(day, thursdayArray)">entfernen</div>
               <hr/>
             </ng-container>
           </td>
           <td>
-            <ng-container
-              *ngFor="let day of timeMap.get('friday')">einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-              <br>{{day.start.substr(11, 5)}}
-              bis {{day.end.substr(11, 5)}}
+            <ng-container *ngFor="let day of fridayArray">
+              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) === day.end.substr(0, 10)">
+                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                <br>{{day.start.substr(11, 5)}}
+                bis {{day.end.substr(11, 5)}}
+              </ng-container>
+              <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
+                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                <br>ganztägig
+              </ng-container>
+              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) !== day.end.substr(0, 10)">
+                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                <br>{{day.start.substr(11, 5)}}
+                bis Folgetag
+              </ng-container>
+              <div style="float: right; color: red" (click)="deleteTimeFromOverview(day, fridayArray)">entfernen</div>
               <hr/>
             </ng-container>
           </td>
           <td>
-            <ng-container
-              *ngFor="let day of timeMap.get('saturday')">einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-              <br>{{day.start.substr(11, 5)}}
-              bis {{day.end.substr(11, 5)}}
+            <ng-container *ngFor="let day of saturdayArray">
+              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) === day.end.substr(0, 10)">
+                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                <br>{{day.start.substr(11, 5)}}
+                bis {{day.end.substr(11, 5)}}
+              </ng-container>
+              <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
+                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                <br>ganztägig
+              </ng-container>
+              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) !== day.end.substr(0, 10)">
+                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                <br>{{day.start.substr(11, 5)}}
+                bis Folgetag
+              </ng-container>
+              <div style="float: right; color: red" (click)="deleteTimeFromOverview(day, saturdayArray)">entfernen</div>
               <hr/>
             </ng-container>
           </td>
           <td>
-            <ng-container
-              *ngFor="let day of timeMap.get('sunday')">einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-              <br>{{day.start.substr(11, 5)}}
-              bis {{day.end.substr(11, 5)}}
+            <ng-container *ngFor="let day of sundayArray">
+              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) === day.end.substr(0, 10)">
+                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                <br>{{day.start.substr(11, 5)}}
+                bis {{day.end.substr(11, 5)}}
+              </ng-container>
+              <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
+                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                <br>ganztägig
+              </ng-container>
+              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) !== day.end.substr(0, 10)">
+                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                <br>{{day.start.substr(11, 5)}}
+                bis Folgetag
+              </ng-container>
+              <div style="float: right; color: red" (click)="deleteTimeFromOverview(day, sundayArray)">entfernen</div>
               <hr/>
             </ng-container>
           </td>
@@ -207,10 +306,10 @@
         neue Zeitspanne hinzufügen
       </button>
 
-      <div *ngIf="times.length != 0">
+      <div *ngIf="newTimes.length != 0">
         <br><br>
-        <h5>verfügbare Zeiten: </h5>
-        <ng-container *ngFor="let time of times">
+        <h5>neu erstellt: </h5>
+        <ng-container *ngFor="let time of newTimes">
           <div *ngIf="time.visible">
             <button type="button" class="small" (click)="deleteTime(time)">&times;</button>
             <a style="margin: 1em"> <b>Datum:</b> {{time.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</a>
@@ -268,33 +367,27 @@
             <label for="fullDayCheck">ganzer Tag?</label>
           </div>
 
-            <div *ngIf="toggleStartEnd">
-              <input type="checkbox" id="nightShiftFullDay" style="margin-right: 1em" class="switch" (click)="toggleNightShift(); addNightShift()">
-              <label for="nightShiftFullDay">bis zum Folgetag um 3:00 Uhr in der Früh?</label>
-            </div>
-
           <div class="form-group" *ngIf="!toggleStartEnd">
             <label for="availableTimeStart">Von</label>
             <input type="time" id="availableTimeStart" class="form-control" formControlName="timeStart"
                    style="margin-bottom: 1em">
           </div>
-          <div class="form-group" *ngIf="!toggleStartEnd && !nightShift">
+          <div class="form-group" *ngIf="!toggleStartEnd && !toggleStartEndNightShift">
             <label for="availableTimeEnd">Bis</label>
             <input type="time" id="availableTimeEnd" class="form-control" formControlName="timeEnd">
           </div>
-          <br>
 
-            <div *ngIf="!toggleStartEnd">
-              <input type="checkbox" id="nightShift" style="margin-right: 1em" class="switch" (click)="toggleNightShift(); addNightShift()">
-              <label for="nightShift">bis zum Folgetag um 3:00 Uhr in der Früh?</label>
-            </div>
+          <div>
+            <input type="checkbox" id="nightShift" style="margin-right: 1em" class="switch"
+                   (click)="toggleNightShift(); addNightShift()">
+            <label for="nightShift">bis zum Folgetag um 3:00 Uhr in der Früh?</label>
+          </div>
 
           <div class="form-group">
             <input type="checkbox" id="weekly" style="margin-right: 1em" class="form-control; switch"
                    formControlName="booleanDate">
-            <label for="weekly">soll sich wöchentlich wiederholen? <i>(ein Jahr lang)</i></label>
+            <label for="weekly">soll sich wöchentlich wiederholen? <i>(ein Semester lang)</i></label>
           </div>
-
 
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Schließen</button>

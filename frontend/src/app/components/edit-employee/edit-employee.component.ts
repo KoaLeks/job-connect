@@ -32,10 +32,18 @@ export class EditEmployeeComponent implements OnInit {
   interests: Interest[];
   changePassword: boolean = false;
   timeCreationForm;
-  times: TimeDto[] = [];
+  times: TimeDto[] = []; // for database entries
+  newTimes: TimeDto[] = []; // for newly added entries
   toggleStartEnd: boolean = false;
-  timeMap = new Map<string, TimeDto[]>();
   nightShift: boolean = false;
+  toggleStartEndNightShift: boolean = false;
+  mondayArray: TimeDto[] = [];
+  tuesdayArray: TimeDto[] = [];
+  wednesdayArray: TimeDto[] = [];
+  thursdayArray: TimeDto[] = [];
+  fridayArray: TimeDto[] = [];
+  saturdayArray: TimeDto[] = [];
+  sundayArray: TimeDto[] = [];
 
   constructor(private authService: AuthService, private router: Router, private formBuilder: FormBuilder,
               private employeeService: EmployeeService, private interestService: InterestService,
@@ -121,7 +129,8 @@ export class EditEmployeeComponent implements OnInit {
         this.editForm.controls['publicInfo'].setValue(employee.profileDto.publicInfo);
         this.editForm.controls['gender'].setValue(employee.gender);
         this.editForm.controls['birthDate'].setValue(employee.birthDate.toString().substr(0, 10));
-        this.filterShowTime(employee.times);
+        this.times = employee.times;
+        this.filterShowTime();
         // converts bytesArray to Base64
         this.arrayBufferToBase64(employee.profileDto.picture);
         if (employee.profileDto.picture != null) {
@@ -155,6 +164,9 @@ export class EditEmployeeComponent implements OnInit {
   update() {
     this.submitted = true;
     if (this.editForm.valid) {
+      for (const time of this.times) {
+        this.newTimes.push(time);
+      }
       if (this.selectedPicture != null && typeof this.selectedPicture !== 'object') {
         // image has valid format (png or jpg)
         if (this.selectedPicture.startsWith('data:image/png;base64') || this.selectedPicture.startsWith('data:image/jpeg;base64')) {
@@ -164,7 +176,7 @@ export class EditEmployeeComponent implements OnInit {
             new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
               this.editForm.controls.email.value, null, this.editForm.controls.publicInfo.value,
               this.selectedPicture[1]), this.employee.interestDtos, this.editForm.controls.gender.value,
-            new Date(this.editForm.controls.birthDate.value), this.times);
+            new Date(this.editForm.controls.birthDate.value), this.newTimes);
           this.hasPicture = true;
           // image has invalid format
         } else {
@@ -172,7 +184,7 @@ export class EditEmployeeComponent implements OnInit {
             new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
               this.editForm.controls.email.value, null, this.editForm.controls.publicInfo.value,
               null), this.employee.interestDtos, this.editForm.controls.gender.value,
-            new Date(this.editForm.controls.birthDate.value), this.times);
+            new Date(this.editForm.controls.birthDate.value), this.newTimes);
           this.hasPicture = false;
         }
       } else {
@@ -182,13 +194,13 @@ export class EditEmployeeComponent implements OnInit {
             new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
               this.editForm.controls.email.value, null, this.editForm.controls.publicInfo.value,
               samePic[1]), this.employee.interestDtos, this.editForm.controls.gender.value,
-            new Date(this.editForm.controls.birthDate.value), this.times);
+            new Date(this.editForm.controls.birthDate.value), this.newTimes);
         } else {
           this.employee = new EditEmployee(
             new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
               this.editForm.controls.email.value, null, this.editForm.controls.publicInfo.value,
               null), this.employee.interestDtos, this.editForm.controls.gender.value,
-            new Date(this.editForm.controls.birthDate.value), this.times);
+            new Date(this.editForm.controls.birthDate.value), this.newTimes);
           this.hasPicture = false;
         }
       }
@@ -200,10 +212,10 @@ export class EditEmployeeComponent implements OnInit {
         (id) => {
           console.log('User profile updated successfully id: ' + id);
           // this.router.navigate(['/']);
+          this.newTimes = [];
           this.inputImage.nativeElement.value = ''; // resets fileUpload button
           this.load();
           this.updateHeaderService.updateProfile.next(true);
-          this.times = [];
         },
         error => {
           this.error = true;
@@ -284,9 +296,9 @@ export class EditEmployeeComponent implements OnInit {
       newEndDate = new Date(date);
       newEndDate.setDate(newEndDate.getDate() + 1);
       let newEndDateString: string;
-      newEndDateString = newEndDate.getUTCFullYear() + '-' +
-        ('0' + (newEndDate.getUTCMonth() + 1)).slice(-2) + '-'
-        + ('0' + newEndDate.getUTCDate()).slice(-2);
+      newEndDateString = newEndDate.getFullYear() + '-' +
+        ('0' + (newEndDate.getMonth() + 1)).slice(-2) + '-'
+        + ('0' + newEndDate.getDate()).slice(-2);
       timeEndBuild = newEndDateString + 'T' + end;
     } else {
       timeEndBuild = date + 'T' + end;
@@ -294,50 +306,68 @@ export class EditEmployeeComponent implements OnInit {
     // format: 2021-09-10T00:00:00
     timeStartBuild = date + 'T' + start;
     const timeDtoToSave: TimeDto = new TimeDto(null, timeStartBuild, timeEndBuild, time.booleanDate, true);
-    this.times.push(timeDtoToSave);
+    this.newTimes.push(timeDtoToSave);
     if (time.booleanDate) {
       if (!this.nightShift) {
         const newDate = new Date(date);
-        for (let i = 0; i < 51; i++) { // saves this day each week for one year in database
+        for (let i = 0; i < 17; i++) { // saves this day each week for one semester in database
           newDate.setDate(newDate.getDate() + 7);
           let newDateString: string;
-          newDateString = newDate.getUTCFullYear() + '-' +
-            ('0' + (newDate.getUTCMonth() + 1)).slice(-2) + '-'
-            + ('0' + newDate.getUTCDate()).slice(-2);
+          newDateString = newDate.getFullYear() + '-' +
+            ('0' + (newDate.getMonth() + 1)).slice(-2) + '-'
+            + ('0' + newDate.getDate()).slice(-2);
           const newTimeStartBuild: string = newDateString + 'T' + start;
           const newTimeEndBuild: string = newDateString + 'T' + end;
           const repeatedTimeDto: TimeDto = new TimeDto(null, newTimeStartBuild, newTimeEndBuild, time.booleanDate, false);
-          this.times.push(repeatedTimeDto);
+          this.newTimes.push(repeatedTimeDto);
         }
       } else {
-        const newDate = new Date(newEndDate);
-        for (let i = 0; i < 51; i++) { // saves this day each week for one year in database
-          newDate.setDate(newDate.getDate() + 7);
-          let newDateString: string;
-          newDateString = newDate.getUTCFullYear() + '-' +
-            ('0' + (newDate.getUTCMonth() + 1)).slice(-2) + '-'
-            + ('0' + newDate.getUTCDate()).slice(-2);
-          const newTimeStartBuild: string = newDateString + 'T' + start;
-          const newTimeEndBuild: string = newDateString + 'T' + end;
+        const newStartDate = new Date(date);
+        for (let i = 0; i < 17; i++) { // saves this day each week for one semester in database
+          newStartDate.setDate(newStartDate.getDate() + 7);
+          let newStartDateString: string;
+          newStartDateString = newStartDate.getFullYear() + '-' +
+            ('0' + (newStartDate.getMonth() + 1)).slice(-2) + '-'
+            + ('0' + newStartDate.getDate()).slice(-2);
+          newEndDate.setDate(newEndDate.getDate() + 7);
+          let newEndDateString: string;
+          newEndDateString = newEndDate.getFullYear() + '-' +
+            ('0' + (newEndDate.getMonth() + 1)).slice(-2) + '-'
+            + ('0' + newEndDate.getDate()).slice(-2);
+          const newTimeStartBuild: string = newStartDateString + 'T' + start;
+          const newTimeEndBuild: string = newEndDateString + 'T' + end;
           const repeatedTimeDto: TimeDto = new TimeDto(null, newTimeStartBuild, newTimeEndBuild, time.booleanDate, false);
-          this.times.push(repeatedTimeDto);
+          this.newTimes.push(repeatedTimeDto);
         }
       }
     }
     this.timeCreationForm.reset();
     const checkbox = document.getElementById('fullDayCheck') as HTMLInputElement;
     checkbox.checked = false;
+    const checkbox1 = document.getElementById('nightShift') as HTMLInputElement;
+    checkbox1.checked = false;
     this.toggleStartEnd = false;
     this.nightShift = false;
   }
 
+  deleteTimeFromOverview(time, timeArray) {
+    const index = timeArray.indexOf(time);
+    if (index !== -1) {
+      timeArray.splice(index, 1);
+      const index1 = this.times.indexOf(time);
+      if (index !== -1) {
+        this.times.splice(index1, 1);
+      }
+    }
+  }
+
   deleteTime(time: TimeDto) {
-    const index = this.times.indexOf(time);
+    const index = this.newTimes.indexOf(time);
     if (index !== -1) {
       if (time.booleanDate) {
-        this.times.splice(index, 52);
+        this.newTimes.splice(index, 18);
       } else {
-        this.times.splice(index, 1);
+        this.newTimes.splice(index, 1);
       }
     }
   }
@@ -349,41 +379,42 @@ export class EditEmployeeComponent implements OnInit {
       this.timeCreationForm.controls['timeEnd'].setValue('23:59');
     } else {
       this.timeCreationForm.controls['timeStart'].setValue('');
-      this.timeCreationForm.controls['timeEnd'].setValue('');
+      if (this.nightShift) {
+        this.timeCreationForm.controls['timeEnd'].setValue('03:00');
+      } else {
+        this.timeCreationForm.controls['timeEnd'].setValue('');
+      }
     }
   }
 
   toggleNightShift() {
     this.nightShift = !this.nightShift;
+    this.toggleStartEndNightShift = !this.toggleStartEndNightShift;
   }
 
   addNightShift() {
     if (this.nightShift) {
       this.timeCreationForm.controls['timeEnd'].setValue('03:00');
     } else {
-      this.timeCreationForm.controls['timeEnd'].setValue('');
+      if (this.toggleStartEnd) {
+        this.timeCreationForm.controls['timeEnd'].setValue('23:59');
+      } else {
+        this.timeCreationForm.controls['timeEnd'].setValue('');
+      }
     }
   }
 
-  filterShowTime(showTime) {
+  filterShowTime() {
 
-    const mondayArray: TimeDto[] = [];
-    const tuesdayArray: TimeDto[] = [];
-    const wednesdayArray: TimeDto[] = [];
-    const thursdayArray: TimeDto[] = [];
-    const fridayArray: TimeDto[] = [];
-    const saturdayArray: TimeDto[] = [];
-    const sundayArray: TimeDto[] = [];
+    this.mondayArray = [];
+    this.tuesdayArray = [];
+    this.wednesdayArray = [];
+    this.thursdayArray = [];
+    this.fridayArray = [];
+    this.saturdayArray = [];
+    this.sundayArray = [];
 
-    this.timeMap.set('monday', mondayArray);
-    this.timeMap.set('tuesday', tuesdayArray);
-    this.timeMap.set('wednesday', wednesdayArray);
-    this.timeMap.set('thursday', thursdayArray);
-    this.timeMap.set('friday', fridayArray);
-    this.timeMap.set('saturday', saturdayArray);
-    this.timeMap.set('sunday', sundayArray);
-
-    for (const time of showTime) {
+    for (const time of this.times) {
       // time is type of TimeDto
       const endDate = new Date(time.end);
       const startDate = new Date(time.start);
@@ -391,25 +422,25 @@ export class EditEmployeeComponent implements OnInit {
       if (endDate > now) {
         switch (startDate.getDay()) {
           case 0:
-            sundayArray.push(time);
+            this.sundayArray.push(time);
             break;
           case 1:
-            mondayArray.push(time);
+            this.mondayArray.push(time);
             break;
           case 2:
-            tuesdayArray.push(time);
+            this.tuesdayArray.push(time);
             break;
           case 3:
-            wednesdayArray.push(time);
+            this.wednesdayArray.push(time);
             break;
           case 4:
-            thursdayArray.push(time);
+            this.thursdayArray.push(time);
             break;
           case 5:
-            fridayArray.push(time);
+            this.fridayArray.push(time);
             break;
           case 6:
-            saturdayArray.push(time);
+            this.saturdayArray.push(time);
             break;
           default:
             break;
