@@ -21,6 +21,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.lang.invoke.MethodHandles;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/profiles")
@@ -107,5 +108,13 @@ public class ProfileEndpoint {
         Profile profileToEdit = this.profileService.findProfileByEmail(editPasswordDto.getEmail());
         profileToEdit.setPassword(editPasswordDto.getNewPassword());
         return this.profileService.updateProfile(profileToEdit);
+    }
+
+    @GetMapping(value = "/employee")
+    @ApiOperation(value = "Get list of all employees", authorizations = {@Authorization(value = "apiKey")})
+    @CrossOrigin(origins = "http://localhost:4200")
+    public List<EmployeeDto> getAllEmployees() {
+        LOGGER.info("GET api/v1/profiles/employees");
+        return this.employeeMapper.employeesToEmployeeDtos(employeeService.findAll());
     }
 }

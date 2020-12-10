@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
 import {AuthRequest} from '../../dtos/auth-request';
+import {UpdateHeaderService} from '../../services/update-header.service';
 
 
 @Component({
@@ -20,7 +21,7 @@ export class LoginComponent implements OnInit {
   error: boolean = false;
   errorMessage: string = '';
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router, private updateHeaderService: UpdateHeaderService) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]]
@@ -59,6 +60,7 @@ export class LoginComponent implements OnInit {
         console.log('Successfully logged in user: ' + authRequest.email);
         // @ts-ignore
         $('#loginModal').modal('hide');
+        this.updateHeaderService.updateProfile.next(true);
         this.router.navigate(['/']);
       },
       error => {

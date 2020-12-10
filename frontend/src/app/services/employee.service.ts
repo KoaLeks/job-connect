@@ -20,7 +20,7 @@ export class EmployeeService {
    */
   getEmployeeByEmail(email: String) {
     console.log('Get employee by email ' + email);
-    return this.httpClient.get<EditEmployee>(this.employeeBaseUri + '/' + email);;
+    return this.httpClient.get<EditEmployee>(this.employeeBaseUri + '/' + email);
   }
 
   /**
@@ -30,5 +30,13 @@ export class EmployeeService {
   updateEmployee(employee: EditEmployee): Observable<Number> {
     console.log('Update employee profile {}', employee);
     return this.httpClient.put<Number>(this.employeeBaseUri, JSON.parse(JSON.stringify(employee).replace('profileDto', 'editProfileDto')));
+  }
+
+  /**
+   * Get all employees from the backend
+   */
+  findAll(): Observable<EditEmployee[]> {
+    console.log('Get all employees');
+    return this.httpClient.get<EditEmployee[]>(this.employeeBaseUri);
   }
 }

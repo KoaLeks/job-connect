@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -72,5 +73,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.getProfile().setId(profile.getId());
         employeeRepository.save(employee);
         return profileRepository.save(employee.getProfile()).getId();
+    }
+
+    @Override
+    public List<Employee> findAll() {
+        LOGGER.info("Find all employees");
+        return employeeRepository.getAllEmployeesAndFetchInterests();
     }
 }

@@ -1,15 +1,14 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper;
 
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EditEmployeeDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EmployeeDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.InterestDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.ProfileDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.*;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Employee;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Interest;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Profile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -23,7 +22,7 @@ public class EmployeeMapper {
         this.interestMapper = interestMapper;
     }
 
-    public Employee employeeDtoToEmployee(EmployeeDto employeeDto){
+    public Employee employeeDtoToEmployee(EmployeeDto employeeDto) {
         var emp_builder = Employee.EmployeeBuilder.aEmployee();
         Profile profile = profileMapper.profileDtoToProfile(employeeDto.getProfileDto());
         emp_builder.withProfile(profile);
@@ -35,7 +34,7 @@ public class EmployeeMapper {
         return emp_builder.build();
     }
 
-    public Employee editEmployeeDtoToEmployee(EditEmployeeDto editEmployeeDto){
+    public Employee editEmployeeDtoToEmployee(EditEmployeeDto editEmployeeDto) {
         var emp_builder = Employee.EmployeeBuilder.aEmployee();
         Profile profile = profileMapper.editProfileDtoToProfile(editEmployeeDto.getEditProfileDto());
         emp_builder.withProfile(profile);
@@ -47,7 +46,7 @@ public class EmployeeMapper {
         return emp_builder.build();
     }
 
-    public EmployeeDto employeeToEmployeeDto(Employee employee){
+    public EmployeeDto employeeToEmployeeDto(Employee employee) {
         var empDto_builder = EmployeeDto.EmployeeDtoBuilder.aEmployeeDto();
         ProfileDto profileDto = profileMapper.profileToProfileDto(employee.getProfile());
         empDto_builder.withProfileDto(profileDto);
@@ -56,5 +55,20 @@ public class EmployeeMapper {
         empDto_builder.withGender(employee.getGender());
         empDto_builder.withBirthDate(employee.getBirthDate());
         return empDto_builder.build();
+    }
+
+    public List<EmployeeDto> employeesToEmployeeDtos(List<Employee> employees) {
+        if (employees == null) {
+            return null;
+        }
+
+        List<EmployeeDto> list = new ArrayList<>(employees.size());
+        for (Employee employee : employees) {
+            // TODO currently set to NULL because fetching interests with employees gives empty result
+            employee.setInterests(null);
+            list.add(employeeToEmployeeDto(employee));
+        }
+
+        return list;
     }
 }
