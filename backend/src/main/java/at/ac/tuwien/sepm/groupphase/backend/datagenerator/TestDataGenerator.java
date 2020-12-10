@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.datagenerator;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.repository.*;
+import at.ac.tuwien.sepm.groupphase.backend.util.Gender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
@@ -63,14 +64,49 @@ public class TestDataGenerator {
         "Maxaprofit"
     };
 
+    String[] names = {
+        "Lucy Bauer",
+        "Lukas Müller",
+        "Ella Schwartz",
+        "Konstantin Hofer",
+        "Amy Gruber",
+        "Ben Huber",
+        "Emely Egger",
+        "Jonas Wagner",
+        "Finja Schmidt",
+        "Elias Weiss",
+        "Amelie Wolf",
+        "Niklas Haas",
+        "Luise Fuchs",
+        "David Edner",
+        "Frieda Schmid",
+        "Oskar Maier",
+        "Katharina Weber",
+        "Philipp Reiter",
+        "Romy Wimmer",
+        "Leon Baumgartner",
+        "Juna Lackner",
+        "Noah Stadler",
+        "Theresa Berger",
+        "Luis Pichler",
+        "Eva Moser",
+        "Paul Aigner",
+        "Julia Koller",
+        "Finn Graf",
+        "Anna Lechner",
+        "Felix Maier"
+    };
+
     // Interest area
     private static final int NUMBER_OF_InterestAreas_TO_GENERATE = 10;
 
     // Employer
     private static final String TEST_EMPLOYER_FIRST_NAME = "FIRST NAME";
     private static final String TEST_EMPLOYER_LAST_NAME = "LAST NAME";
-    private static final String TEST_EMPLOYER_PUBLIC_INFO = "PUBLIC INFO";
-    private static final String TEST_EMPLOYER_PASSWORD = "123456789";
+    private static final String TEST_PUBLIC_INFO = "PUBLIC INFO";
+    private static final String TEST_PASSWORD = "123456789";
+    private static final LocalDateTime TEST_BIRTHDATE
+        = LocalDateTime.of(2000, 1, 1, 0, 0, 0, 0);
 
     // Event
     private static final String TEST_EVENT_TITLE = "EVENT TITLE";
@@ -98,25 +134,25 @@ public class TestDataGenerator {
 
     // Addresses
     private static final Address TEST_ADDRESS1 = Address.AddressBuilder.aAddress()
-        .withAddressLine("Baumstrasse 5")
+        .withAddressLine("Mariahilfer Straße 5")
         .withCity("Wien")
         .withState("Wien")
         .withZip(1070)
         .build();
     private static final Address TEST_ADDRESS2 = Address.AddressBuilder.aAddress()
-        .withAddressLine("Gipfelgasse 22")
+        .withAddressLine("Morzingasse 22")
         .withCity("Mariazell")
         .withState("Steiermark")
         .withZip(8100)
         .build();
     private static final Address TEST_ADDRESS3 = Address.AddressBuilder.aAddress()
-        .withAddressLine("Servusweg 12")
+        .withAddressLine("Kapfweg 12")
         .withCity("Feldkirch")
         .withState("Vorarlberg")
         .withZip(6800)
         .build();
     private static final Address TEST_ADDRESS4 = Address.AddressBuilder.aAddress()
-        .withAddressLine("EVENT ADDRESS 4")
+        .withAddressLine("Heimstraße 4")
         .withCity("Villach")
         .withState("Kärnten")
         .withZip(9500)
@@ -154,7 +190,7 @@ public class TestDataGenerator {
         .withPaymentHourly(10.0)
         .build();
 
-
+    private final EmployeeRepository employeeRepository;
     private final EmployerRepository employerRepository;
     private final ProfileRepository profileRepository;
     private final EventRepository eventRepository;
@@ -164,10 +200,11 @@ public class TestDataGenerator {
     private final InterestAreaRepository interestAreaRepository;
 
 
-    public TestDataGenerator(EmployerRepository employerRepository, ProfileRepository profileRepository,
-                             PasswordEncoder passwordEncoder, EventRepository eventRepository,
-                             AddressRepository addressRepository, TaskRepository taskRepository,
-                             InterestAreaRepository interestAreaRepository) {
+    public TestDataGenerator(EmployeeRepository employeeRepository, EmployerRepository employerRepository,
+                             ProfileRepository profileRepository, PasswordEncoder passwordEncoder,
+                             EventRepository eventRepository, AddressRepository addressRepository,
+                             TaskRepository taskRepository, InterestAreaRepository interestAreaRepository) {
+        this.employeeRepository = employeeRepository;
         this.employerRepository = employerRepository;
         this.profileRepository = profileRepository;
         this.eventRepository = eventRepository;
@@ -189,14 +226,14 @@ public class TestDataGenerator {
                         .withEmail("test@" + name.replace(" ", "").toLowerCase() + ".at")
                         .withForename(TEST_EMPLOYER_FIRST_NAME)
                         .withName(TEST_EMPLOYER_LAST_NAME)
-                        .withPassword(passwordEncoder.encode(TEST_EMPLOYER_PASSWORD))
-                        .withPublicInfo(TEST_EMPLOYER_PUBLIC_INFO)
+                        .withPassword(passwordEncoder.encode(TEST_PASSWORD))
+                        .withPublicInfo(TEST_PUBLIC_INFO)
                         .isEmployer(true)
                         .build();
 
                 Employer employer = Employer.EmployerBuilder.aEmployer()
                     .withCompanyName(name)
-                    .withDescription("generatead employer")
+                    .withDescription("generated employer")
                     .withProfile(employerProfile)
                     .build();
                 LOGGER.debug("saving employer {}", employer);
@@ -208,6 +245,37 @@ public class TestDataGenerator {
     }
 
     @PostConstruct
+    private void generateEmployees() {
+        if (employeeRepository.findAll().size() > 0) {
+            LOGGER.debug("employees already generated");
+        } else {
+            LOGGER.debug("generating {} employee entries", names.length);
+            int count = 0;
+            for (String name : names) {
+                at.ac.tuwien.sepm.groupphase.backend.entity.Profile employeeProfile =
+                    at.ac.tuwien.sepm.groupphase.backend.entity.Profile.ProfileBuilder.aProfile()
+                        .withEmail(name.replace(" ", ".").toLowerCase() + "@gmail.com")
+                        .withForename(name.split(" ")[0])
+                        .withName(name.split(" ")[1])
+                        .withPassword(passwordEncoder.encode(TEST_PASSWORD))
+                        .withPublicInfo(TEST_PUBLIC_INFO)
+                        .isEmployer(false)
+                        .build();
+
+                Employee employee = Employee.EmployeeBuilder.aEmployee()
+                    .withGender(count % 2 == 0 ? Gender.FEMALE : Gender.MALE)
+                    .withBirthDate(TEST_BIRTHDATE)
+                    .withProfile(employeeProfile)
+                    .build();
+                LOGGER.debug("saving employee {}", employee);
+                Long id = profileRepository.save(employeeProfile).getId();
+                employee.setId(id);
+                employeeRepository.save(employee);
+                count++;
+            }
+        }
+    }
+
     private void generateInterestAreas() {
         if (interestAreaRepository.findAll().size() > 0) {
             LOGGER.debug("interestAreas already generated");
@@ -217,18 +285,19 @@ public class TestDataGenerator {
                 .withArea("Promo")
                 .withDescription("Flyer verteilen")
                 .build();
-            LOGGER.debug("saving interestArea {}", interestArea1);
-            interestAreaRepository.save(interestArea1);
             InterestArea interestArea2 = InterestArea.InterestAreaBuilder.aInterest()
                 .withArea("Gastro")
                 .withDescription("Gäste bedienen und Tische abräumen")
                 .build();
-            LOGGER.debug("saving interestArea {}", interestArea2);
-            interestAreaRepository.save(interestArea2);
             InterestArea interestArea3 = InterestArea.InterestAreaBuilder.aInterest()
                 .withArea("Körperliches")
                 .withDescription("schwere Lasten tragen")
                 .build();
+
+            LOGGER.debug("saving interestArea {}", interestArea1);
+            interestAreaRepository.save(interestArea1);
+            LOGGER.debug("saving interestArea {}", interestArea2);
+            interestAreaRepository.save(interestArea2);
             LOGGER.debug("saving interestArea {}", interestArea3);
             interestAreaRepository.save(interestArea3);
 
@@ -241,6 +310,7 @@ public class TestDataGenerator {
             LOGGER.debug("events already generated");
         } else {
 
+            generateInterestAreas();
             TEST_TASK1.setInterestArea(interestAreaRepository.getOne(1L));
             TEST_TASK2.setInterestArea(interestAreaRepository.getOne(1L));
             TEST_TASK3.setInterestArea(interestAreaRepository.getOne(2L));
@@ -299,6 +369,13 @@ public class TestDataGenerator {
                 .withEmployer(employerRepository.findByProfile_Email("test@maxaprofit.at"))
                 .build();
 
+            TEST_TASK1.setEvent(event1);
+            TEST_TASK2.setEvent(event2);
+            TEST_TASK3.setEvent(event2);
+            TEST_TASK4.setEvent(event3);
+            TEST_TASK5.setEvent(event4);
+            TEST_TASK6.setEvent(event4);
+
             LOGGER.debug("saving event {}", event1);
             eventRepository.save(event1);
             LOGGER.debug("saving event {}", event2);
@@ -307,13 +384,6 @@ public class TestDataGenerator {
             eventRepository.save(event3);
             LOGGER.debug("saving event {}", event4);
             eventRepository.save(event4);
-
-            TEST_TASK1.setEvent(event1);
-            TEST_TASK2.setEvent(event2);
-            TEST_TASK3.setEvent(event2);
-            TEST_TASK4.setEvent(event3);
-            TEST_TASK5.setEvent(event4);
-            TEST_TASK6.setEvent(event4);
 
             LOGGER.debug("saving task {}", TEST_TASK1);
             taskRepository.save(TEST_TASK1);
