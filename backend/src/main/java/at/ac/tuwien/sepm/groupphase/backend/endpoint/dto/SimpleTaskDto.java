@@ -11,7 +11,7 @@ public class SimpleTaskDto {
     private String description;
     private Integer employeeCount;
     private Double paymentHourly;
-    private Set<Employee> employees;
+    private Set<SimpleEmployeeDto> employees;
     private SimpleInterestAreaDto interestArea;
 
     @Override
@@ -67,11 +67,11 @@ public class SimpleTaskDto {
         this.paymentHourly = paymentHourly;
     }
 
-    public Set<Employee> getEmployees() {
+    public Set<SimpleEmployeeDto> getEmployees() {
         return employees;
     }
 
-    public void setEmployees(Set<Employee> employees) {
+    public void setEmployees(Set<SimpleEmployeeDto> employees) {
         this.employees = employees;
     }
 
@@ -90,7 +90,7 @@ public class SimpleTaskDto {
         private String description;
         private Integer employeeCount;
         private Double paymentHourly;
-        private Set<Employee> employees;
+        private Set<SimpleEmployeeDto> employees;
         private SimpleInterestAreaDto interestArea;
 
         private SimpleTaskDtoBuilder() {
@@ -125,7 +125,7 @@ public class SimpleTaskDto {
             return this;
         }
 
-        public SimpleTaskDtoBuilder withEmployees(Set<Employee> employees) {
+        public SimpleTaskDtoBuilder withEmployees(Set<SimpleEmployeeDto> employees) {
             this.employees = employees;
             return this;
         }

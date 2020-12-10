@@ -1,11 +1,8 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.*;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Employer;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 
-import at.ac.tuwien.sepm.groupphase.backend.entity.Profile;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Task;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
@@ -14,7 +11,7 @@ import org.mapstruct.Named;
 
 import java.util.List;
 
-@Mapper(uses = { EventService.class, EmployerMapper.class })
+@Mapper(uses = { EventService.class, EmployerMapper.class, EmployeeMapper.class })
 public interface EventMapper {
 
     @Named("simpleEvent")

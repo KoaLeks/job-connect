@@ -78,7 +78,7 @@ public class Interest {
             ", name='" + name + '\'' +
             ", description='" + description + '\'' +
             ", interestArea=" + interestArea +
-            ", employees=" + employees +
+            ", employees=" + employees.size() +
             '}';
     }
 

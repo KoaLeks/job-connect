@@ -1,9 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper;
 
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EditEmployeeDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EmployeeDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.InterestDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.ProfileDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.*;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Employee;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Interest;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Profile;
@@ -49,12 +46,21 @@ public class EmployeeMapper {
 
     public EmployeeDto employeeToEmployeeDto(Employee employee){
         var empDto_builder = EmployeeDto.EmployeeDtoBuilder.aEmployeeDto();
-        ProfileDto profileDto = profileMapper.profileToProfileDto(employee.getProfile());
-        empDto_builder.withProfileDto(profileDto);
+        empDto_builder.withProfileDto(profileMapper.profileToProfileDto(employee.getProfile()));
         Set<InterestDto> interestDtos = interestMapper.interestToInterestDto(employee.getInterests());
         empDto_builder.withInterestDtos(interestDtos);
         empDto_builder.withGender(employee.getGender());
         empDto_builder.withBirthDate(employee.getBirthDate());
+        return empDto_builder.build();
+    }
+
+    SimpleEmployeeDto employeeToSimpleEmployeeDto(Employee employee){
+        var empDto_builder = SimpleEmployeeDto.SimpleEmployeeDtoBuilder.aSimpleEmployeeDto();
+        empDto_builder.withId(employee.getId());
+        empDto_builder.withSimpleProfileDto(profileMapper.profileToSimpleProfileDto(employee.getProfile()));
+        empDto_builder.withInterests(employee.getInterests());
+        empDto_builder.withBirthDate(employee.getBirthDate());
+        empDto_builder.withGender(employee.getGender());
         return empDto_builder.build();
     }
 }
