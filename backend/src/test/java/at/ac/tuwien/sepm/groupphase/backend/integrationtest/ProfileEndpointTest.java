@@ -153,6 +153,8 @@ public class ProfileEndpointTest implements TestData {
         employeeRepository.deleteAll();
         employerRepository.deleteAll();
         profileRepository.deleteAll();
+        interestRepository.deleteAll();
+        interestAreaRepository.deleteAll();
         employee = Employee.EmployeeBuilder.aEmployee()
             .withProfile(Profile.ProfileBuilder.aProfile()
                 .isEmployer(false)
@@ -425,10 +427,12 @@ public class ProfileEndpointTest implements TestData {
 
     @Test
     public void updateInterestsOfValidEmployeeTest() throws Exception {
-        interestAreaRepository.save(interestArea);
+        Long id = interestAreaRepository.save(interestArea).getId();
         employeeRepository.save(employee);
 
         Set<InterestDto> interestDtoSet = new HashSet<>();
+        simpleInterestAreaDto.setId(id);
+        interestDto.setSimpleInterestAreaDto(simpleInterestAreaDto);
         interestDtoSet.add(interestDto);
 
         EditEmployeeDto editEmployeeDto = EditEmployeeDto.EditEmployeeDtoBuilder.aEmployeeDto()
@@ -458,10 +462,12 @@ public class ProfileEndpointTest implements TestData {
 
     @Test
     public void deleteInterestOfValidEmployeeTest() throws Exception {
-        interestAreaRepository.save(interestArea);
+        Long id = interestAreaRepository.save(interestArea).getId();
         employeeRepository.save(employee);
 
         Set<InterestDto> interestDtoSet = new HashSet<>();
+        simpleInterestAreaDto.setId(id);
+        interestDto.setSimpleInterestAreaDto(simpleInterestAreaDto);
         interestDtoSet.add(interestDto);
 
         EditEmployeeDto editEmployeeDto = EditEmployeeDto.EditEmployeeDtoBuilder.aEmployeeDto()
