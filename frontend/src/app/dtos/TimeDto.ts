@@ -4,7 +4,8 @@ export class TimeDto {
     public start: string,
     public end: string,
     public booleanDate: boolean,
-    public visible: boolean
+    public visible: boolean,
+    public finalEndDate: string
   ) {
   }
 }

@@ -305,8 +305,21 @@ export class EditEmployeeComponent implements OnInit {
     }
     // format: 2021-09-10T00:00:00
     timeStartBuild = date + 'T' + start;
-    const timeDtoToSave: TimeDto = new TimeDto(null, timeStartBuild, timeEndBuild, time.booleanDate, true);
-    this.newTimes.push(timeDtoToSave);
+    if (time.booleanDate) {
+      // build a new timeEndBuild with plus 119 days
+      const newFinalEndDate = new Date(timeEndBuild);
+      // + 119 days calculates the final End Date for this weekly repeated time for one semester.
+      newFinalEndDate.setDate(newFinalEndDate.getDate() + 119);
+      const newFinalEndDateString = newFinalEndDate.getFullYear() + '-' +
+        ('0' + (newFinalEndDate.getMonth() + 1)).slice(-2) + '-'
+        + ('0' + newFinalEndDate.getDate()).slice(-2);
+      const finalTimeEndBuild = newFinalEndDateString + 'T' + end;
+      const timeDtoToSave: TimeDto = new TimeDto(null, timeStartBuild, timeEndBuild, time.booleanDate, true, finalTimeEndBuild);
+      this.newTimes.push(timeDtoToSave);
+    } else {
+      const timeDtoToSave: TimeDto = new TimeDto(null, timeStartBuild, timeEndBuild, time.booleanDate, true, timeEndBuild);
+      this.newTimes.push(timeDtoToSave);
+    }
     if (time.booleanDate) {
       if (!this.nightShift) {
         const newDate = new Date(date);
@@ -318,7 +331,7 @@ export class EditEmployeeComponent implements OnInit {
             + ('0' + newDate.getDate()).slice(-2);
           const newTimeStartBuild: string = newDateString + 'T' + start;
           const newTimeEndBuild: string = newDateString + 'T' + end;
-          const repeatedTimeDto: TimeDto = new TimeDto(null, newTimeStartBuild, newTimeEndBuild, time.booleanDate, false);
+          const repeatedTimeDto: TimeDto = new TimeDto(null, newTimeStartBuild, newTimeEndBuild, false, false, newTimeEndBuild);
           this.newTimes.push(repeatedTimeDto);
         }
       } else {
@@ -336,7 +349,7 @@ export class EditEmployeeComponent implements OnInit {
             + ('0' + newEndDate.getDate()).slice(-2);
           const newTimeStartBuild: string = newStartDateString + 'T' + start;
           const newTimeEndBuild: string = newEndDateString + 'T' + end;
-          const repeatedTimeDto: TimeDto = new TimeDto(null, newTimeStartBuild, newTimeEndBuild, time.booleanDate, false);
+          const repeatedTimeDto: TimeDto = new TimeDto(null, newTimeStartBuild, newTimeEndBuild, false, false, newTimeEndBuild);
           this.newTimes.push(repeatedTimeDto);
         }
       }
@@ -416,7 +429,7 @@ export class EditEmployeeComponent implements OnInit {
 
     for (const time of this.times) {
       // time is type of TimeDto
-      const endDate = new Date(time.end);
+      const endDate = new Date(time.finalEndDate);
       const startDate = new Date(time.start);
       const now = new Date();
       if (endDate > now) {

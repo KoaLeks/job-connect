@@ -103,11 +103,9 @@
         </div>
       </div>
 
-      <!-- TIME Management begin-->
-
+<!-- TIME Management begin-->
       <br>
       <br>
-
       <h5>
         <div data-toggle="tooltip" data-placement="top" title="Somit kannst du Jobs ganz leicht nach deiner verfügbaren Zeit filtern und
       bekommst auch nur Mails für neue Jobs, bei denen du auch Zeit hast!">
@@ -121,7 +119,6 @@
           </svg>
         </div>
       </h5>
-
       <table class="table table-bordered">
         <thead>
         <tr>
@@ -132,175 +129,226 @@
           <th scope="col">Freitag</th>
           <th scope="col">Samstag</th>
           <th scope="col">Sonntag</th>
-
         </tr>
         </thead>
         <tbody>
         <tr>
           <td>
             <ng-container *ngFor="let day of mondayArray">
-              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+              <ng-container *ngIf="day.visible">
+                <ng-container *ngIf="(day.end.substr(0, 10) !== day.finalEndDate.substr(0, 10)); else onlyOnce">
+                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-container>
+                <ng-template #onlyOnce>
+                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-template>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
                 && day.start.substr(0, 10) === day.end.substr(0, 10)">
-                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-                <br>{{day.start.substr(11, 5)}}
-                bis {{day.end.substr(11, 5)}}
-              </ng-container>
-              <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
-                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-                <br>ganztägig
-              </ng-container>
-              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                  <br>{{day.start.substr(11, 5)}}
+                  bis {{day.end.substr(11, 5)}}
+                </ng-container>
+                <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
+                  <br>ganztägig
+                </ng-container>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
                 && day.start.substr(0, 10) !== day.end.substr(0, 10)">
-                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-                <br>{{day.start.substr(11, 5)}}
-                bis Folgetag
+                  <br>{{day.start.substr(11, 5)}}
+                  bis Folgetag
+                </ng-container>
+                <div style="float: right; color: red" (click)="deleteTimeFromOverview(day, mondayArray)"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                  <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                </svg></div>
+                <hr/>
               </ng-container>
-              <div style="float: right; color: red" (click)="deleteTimeFromOverview(day, mondayArray)">entfernen</div>
-              <hr/>
             </ng-container>
           </td>
           <td>
             <ng-container *ngFor="let day of tuesdayArray">
-              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+              <ng-container *ngIf="day.visible">
+                <ng-container *ngIf="(day.end.substr(0, 10) !== day.finalEndDate.substr(0, 10)); else onlyOnce">
+                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-container>
+                <ng-template #onlyOnce>
+                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-template>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
                 && day.start.substr(0, 10) === day.end.substr(0, 10)">
-                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-                <br>{{day.start.substr(11, 5)}}
-                bis {{day.end.substr(11, 5)}}
-              </ng-container>
-              <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
-                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-                <br>ganztägig
-              </ng-container>
-              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                  <br>{{day.start.substr(11, 5)}}
+                  bis {{day.end.substr(11, 5)}}
+                </ng-container>
+                <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
+                  <br>ganztägig
+                </ng-container>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
                 && day.start.substr(0, 10) !== day.end.substr(0, 10)">
-                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-                <br>{{day.start.substr(11, 5)}}
-                bis Folgetag
-              </ng-container>
-              <div style="float: right; color: red" (click)="deleteTimeFromOverview(day, tuesdayArray)">entfernen</div>
+                  <br>{{day.start.substr(11, 5)}}
+                  bis Folgetag
+                </ng-container>
+              <div style="float: right; color: red" (click)="deleteTimeFromOverview(day, tuesdayArray)"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+              </svg></div>
               <hr/>
+              </ng-container>
             </ng-container>
           </td>
           <td>
             <ng-container *ngFor="let day of wednesdayArray">
-              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+              <ng-container *ngIf="day.visible">
+                <ng-container *ngIf="(day.end.substr(0, 10) !== day.finalEndDate.substr(0, 10)); else onlyOnce">
+                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-container>
+                <ng-template #onlyOnce>
+                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-template>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
                 && day.start.substr(0, 10) === day.end.substr(0, 10)">
-                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-                <br>{{day.start.substr(11, 5)}}
-                bis {{day.end.substr(11, 5)}}
-              </ng-container>
-              <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
-                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-                <br>ganztägig
-              </ng-container>
-              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                  <br>{{day.start.substr(11, 5)}}
+                  bis {{day.end.substr(11, 5)}}
+                </ng-container>
+                <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
+                  <br>ganztägig
+                </ng-container>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
                 && day.start.substr(0, 10) !== day.end.substr(0, 10)">
-                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-                <br>{{day.start.substr(11, 5)}}
-                bis Folgetag
-              </ng-container>
-              <div style="float: right; color: red" (click)="deleteTimeFromOverview(day, wednesdayArray)">entfernen
+                  <br>{{day.start.substr(11, 5)}}
+                  bis Folgetag
+                </ng-container>
+              <div style="float: right; color: red" (click)="deleteTimeFromOverview(day, wednesdayArray)"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+              </svg>
               </div>
               <hr/>
+              </ng-container>
             </ng-container>
           </td>
           <td>
             <ng-container *ngFor="let day of thursdayArray">
-              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+              <ng-container *ngIf="day.visible">
+                <ng-container *ngIf="(day.end.substr(0, 10) !== day.finalEndDate.substr(0, 10)); else onlyOnce">
+                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-container>
+                <ng-template #onlyOnce>
+                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-template>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
                 && day.start.substr(0, 10) === day.end.substr(0, 10)">
-                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-                <br>{{day.start.substr(11, 5)}}
-                bis {{day.end.substr(11, 5)}}
-              </ng-container>
-              <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
-                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-                <br>ganztägig
-              </ng-container>
-              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                  <br>{{day.start.substr(11, 5)}}
+                  bis {{day.end.substr(11, 5)}}
+                </ng-container>
+                <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
+                  <br>ganztägig
+                </ng-container>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
                 && day.start.substr(0, 10) !== day.end.substr(0, 10)">
-                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-                <br>{{day.start.substr(11, 5)}}
-                bis Folgetag
-              </ng-container>
-              <div style="float: right; color: red" (click)="deleteTimeFromOverview(day, thursdayArray)">entfernen</div>
+                  <br>{{day.start.substr(11, 5)}}
+                  bis Folgetag
+                </ng-container>
+              <div style="float: right; color: red" (click)="deleteTimeFromOverview(day, thursdayArray)"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+              </svg></div>
               <hr/>
+              </ng-container>
             </ng-container>
           </td>
           <td>
             <ng-container *ngFor="let day of fridayArray">
-              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+              <ng-container *ngIf="day.visible">
+                <ng-container *ngIf="(day.end.substr(0, 10) !== day.finalEndDate.substr(0, 10)); else onlyOnce">
+                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-container>
+                <ng-template #onlyOnce>
+                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-template>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
                 && day.start.substr(0, 10) === day.end.substr(0, 10)">
-                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-                <br>{{day.start.substr(11, 5)}}
-                bis {{day.end.substr(11, 5)}}
-              </ng-container>
-              <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
-                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-                <br>ganztägig
-              </ng-container>
-              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                  <br>{{day.start.substr(11, 5)}}
+                  bis {{day.end.substr(11, 5)}}
+                </ng-container>
+                <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
+                  <br>ganztägig
+                </ng-container>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
                 && day.start.substr(0, 10) !== day.end.substr(0, 10)">
-                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-                <br>{{day.start.substr(11, 5)}}
-                bis Folgetag
+                  <br>{{day.start.substr(11, 5)}}
+                  bis Folgetag
+                </ng-container>
+                <div style="float: right; color: red" (click)="deleteTimeFromOverview(day, fridayArray)"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                  <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                </svg></div>
+                <hr/>
               </ng-container>
-              <div style="float: right; color: red" (click)="deleteTimeFromOverview(day, fridayArray)">entfernen</div>
-              <hr/>
             </ng-container>
           </td>
           <td>
             <ng-container *ngFor="let day of saturdayArray">
-              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+              <ng-container *ngIf="day.visible">
+                <ng-container *ngIf="(day.end.substr(0, 10) !== day.finalEndDate.substr(0, 10)); else onlyOnce">
+                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-container>
+                <ng-template #onlyOnce>
+                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-template>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
                 && day.start.substr(0, 10) === day.end.substr(0, 10)">
-                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-                <br>{{day.start.substr(11, 5)}}
-                bis {{day.end.substr(11, 5)}}
-              </ng-container>
-              <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
-                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-                <br>ganztägig
-              </ng-container>
-              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                  <br>{{day.start.substr(11, 5)}}
+                  bis {{day.end.substr(11, 5)}}
+                </ng-container>
+                <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
+                  <br>ganztägig
+                </ng-container>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
                 && day.start.substr(0, 10) !== day.end.substr(0, 10)">
-                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-                <br>{{day.start.substr(11, 5)}}
-                bis Folgetag
+                  <br>{{day.start.substr(11, 5)}}
+                  bis Folgetag
+                </ng-container>
+                <div style="float: right; color: red" (click)="deleteTimeFromOverview(day, saturdayArray)"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                  <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                </svg>
+                </div>
+                <hr/>
               </ng-container>
-              <div style="float: right; color: red" (click)="deleteTimeFromOverview(day, saturdayArray)">entfernen</div>
-              <hr/>
             </ng-container>
           </td>
           <td>
             <ng-container *ngFor="let day of sundayArray">
-              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+              <ng-container *ngIf="day.visible">
+                <ng-container *ngIf="(day.end.substr(0, 10) !== day.finalEndDate.substr(0, 10)); else onlyOnce">
+                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-container>
+                <ng-template #onlyOnce>
+                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-template>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
                 && day.start.substr(0, 10) === day.end.substr(0, 10)">
-                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-                <br>{{day.start.substr(11, 5)}}
-                bis {{day.end.substr(11, 5)}}
-              </ng-container>
-              <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
-                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-                <br>ganztägig
-              </ng-container>
-              <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                  <br>{{day.start.substr(11, 5)}}
+                  bis {{day.end.substr(11, 5)}}
+                </ng-container>
+                <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
+                  <br>ganztägig
+                </ng-container>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
                 && day.start.substr(0, 10) !== day.end.substr(0, 10)">
-                einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
-                <br>{{day.start.substr(11, 5)}}
-                bis Folgetag
+                  <br>{{day.start.substr(11, 5)}}
+                  bis Folgetag
+                </ng-container>
+                <div style="float: right; color: red" (click)="deleteTimeFromOverview(day, sundayArray)"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                  <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                </svg></div>
+                <hr/>
               </ng-container>
-              <div style="float: right; color: red" (click)="deleteTimeFromOverview(day, sundayArray)">entfernen</div>
-              <hr/>
             </ng-container>
           </td>
         </tr>
-
-
         </tbody>
       </table>
-
-
       <br>
-
       <!-- Button trigger time adding Modal -->
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addTimeModal">
         neue Zeitspanne hinzufügen
@@ -326,7 +374,7 @@
         </ng-container>
       </div>
 
-      <!-- TIME Management end-->
+<!-- TIME Management end-->
 
       <div class="form-group form-check">
         <!--button type="button" routerLink="/" class="btn btn-outline-secondary float-right">Abbrechen</button-->

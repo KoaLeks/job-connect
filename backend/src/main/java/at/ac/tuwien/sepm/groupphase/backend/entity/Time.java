@@ -19,6 +19,28 @@ public class Time {
     @Column(nullable = false)
     private LocalDateTime end;
 
+    @Column
+    private Boolean visible;
+
+    @Column
+    private LocalDateTime finalEndDate;
+
+    public Boolean getVisible() {
+        return visible;
+    }
+
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
+    }
+
+    public LocalDateTime getFinalEndDate() {
+        return finalEndDate;
+    }
+
+    public void setFinalEndDate(LocalDateTime finalEndDate) {
+        this.finalEndDate = finalEndDate;
+    }
+
     public Long getId() {
         return id;
     }
@@ -59,12 +81,14 @@ public class Time {
         return id.equals(time.id) &&
             employee.equals(time.employee) &&
             start.equals(time.start) &&
+            finalEndDate.equals(time.finalEndDate) &&
+            visible.equals(time.visible) &&
             end.equals(time.end);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, employee, start, end);
+        return Objects.hash(id, employee, start, end, visible, finalEndDate);
     }
 
     @Override
@@ -74,6 +98,8 @@ public class Time {
             ", employee=" + employee +
             ", start=" + start +
             ", end=" + end +
+            ", visible=" + visible +
+            ", finalEndDate=" + finalEndDate +
             '}';
     }
 
@@ -82,6 +108,8 @@ public class Time {
         private Employee employee;
         private LocalDateTime start;
         private LocalDateTime end;
+        private LocalDateTime finalEndDate;
+        private Boolean visible;
 
         private TimeBuilder() {
         }
@@ -110,6 +138,15 @@ public class Time {
             return this;
         }
 
+        public TimeBuilder withFinalEndDate(LocalDateTime finalEndDate) {
+            this.finalEndDate = finalEndDate;
+            return this;
+        }
+
+        public TimeBuilder withVisible(Boolean visible) {
+            this.visible = visible;
+            return this;
+        }
 
         public Time build() {
             Time time = new Time();
@@ -117,6 +154,8 @@ public class Time {
             time.setEmployee(employee);
             time.setStart(start);
             time.setEnd(end);
+            time.setVisible(visible);
+            time.setFinalEndDate(finalEndDate);
             return time;
         }
     }

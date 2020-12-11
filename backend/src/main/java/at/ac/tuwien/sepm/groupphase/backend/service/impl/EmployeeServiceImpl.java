@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -76,20 +77,32 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setId(profile.getId());
         employee.getProfile().setId(profile.getId());
 
-        //save times for this employee
-        if (employee.getTimes() != null) {
-            Set<Time> times = employee.getTimes();
-            for (Time time :
-                times) {
+        if (employee.getTimes() != null && employee.getTimes().size() != 0) {
+            Set<Time> timesFromFrontend = employee.getTimes();
+            Set<Time> existingTimes = timeRepository.findByEmployee_Profile_Id(employee.getProfile().getId());
+            HashSet<Long> keptIds = new HashSet<>(timesFromFrontend.size());
 
-                //TODO: after delete, it throws ID not found Exception ??
-
-                // if (time.getStart().isEqual(LocalDateTime.parse("9999-12-31T23:59:59"))) {    //if user deletes certain time in frontend, its Start is set to Max, so the backend knows to delete it
-                //    timeRepository.deleteById(time.getId());
-                // } else {                                                                    //else it creates a new database entry or updates an existing one
+            for (Time time : timesFromFrontend) {
+                if (time.getId() == null) {
                     time.setEmployee(employee);
                     timeRepository.save(time);
-                // }
+                } else {
+                    keptIds.add(time.getId());
+                }
+            }
+
+            for (Time time : existingTimes) {
+                if (!keptIds.contains(time.getId())) {
+                    interestRepository.deleteById(time.getId());
+                }
+            }
+
+        } else {
+            Set<Time> deletableTimes = timeRepository.findByEmployee_Profile_Id(employee.getProfile().getId());
+            if (deletableTimes != null && deletableTimes.size() != 0) {
+                for (Time time : deletableTimes) {
+                    timeRepository.deleteById(time.getId());
+                }
             }
         }
 

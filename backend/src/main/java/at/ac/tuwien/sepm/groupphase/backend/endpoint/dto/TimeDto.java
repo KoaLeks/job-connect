@@ -1,5 +1,8 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
+import at.ac.tuwien.sepm.groupphase.backend.entity.Time;
+
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Future;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -8,10 +11,10 @@ public class TimeDto {
 
     private Long id;
     private Long employee_id;
-    @Future
     private LocalDateTime start;
-    @Future
     private LocalDateTime end;
+    private LocalDateTime finalEndDate;
+    private Boolean visible;
 
     public Long getId() {
         return id;
@@ -45,8 +48,23 @@ public class TimeDto {
         this.end = end;
     }
 
-    /*
-    @AssertTrue(message = "Start Datum muss vor dem End Datum liegen")
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
+    }
+
+    public LocalDateTime getFinalEndDate() {
+        return finalEndDate;
+    }
+
+    public void setFinalEndDate(LocalDateTime finalEndDate) {
+        this.finalEndDate = finalEndDate;
+    }
+
+    public Boolean getVisible() {
+        return visible;
+    }
+
+    @AssertTrue(message = "Start Zeitpunkt muss vor dem End Zeitpunkt liegen")
     public boolean isValidDate() {
         if (end != null && start != null) {
             return end.isAfter(start);
@@ -54,7 +72,6 @@ public class TimeDto {
             return false;
         }
     }
-     */
 
     @Override
     public boolean equals(Object o) {
@@ -64,12 +81,14 @@ public class TimeDto {
         return id.equals(time.id) &&
             employee_id.equals(time.employee_id) &&
             start.equals(time.start) &&
+            finalEndDate.equals(time.finalEndDate) &&
+            visible.equals(time.visible) &&
             end.equals(time.end);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, employee_id, start, end);
+        return Objects.hash(id, employee_id, start, end, visible, finalEndDate);
     }
 
     @Override
@@ -79,6 +98,8 @@ public class TimeDto {
             ", employee=" + employee_id +
             ", start=" + start +
             ", end=" + end +
+            ", visible=" + visible +
+            ", finalEndDate=" + finalEndDate +
             '}';
     }
 
@@ -87,6 +108,8 @@ public class TimeDto {
         private Long employee_id;
         private LocalDateTime start;
         private LocalDateTime end;
+        private LocalDateTime finalEndDate;
+        private Boolean visible;
 
         private TimeDtoBuilder() {
         }
@@ -115,6 +138,16 @@ public class TimeDto {
             return this;
         }
 
+        public TimeDtoBuilder withFinalEndDate(LocalDateTime finalEndDate) {
+            this.finalEndDate = finalEndDate;
+            return this;
+        }
+
+        public TimeDtoBuilder withVisible(Boolean visible) {
+            this.visible = visible;
+            return this;
+        }
+
 
         public TimeDto build() {
             TimeDto time = new TimeDto();
@@ -122,6 +155,8 @@ public class TimeDto {
             time.setEmployee_ID(employee_id);
             time.setStart(start);
             time.setEnd(end);
+            time.setVisible(visible);
+            time.setFinalEndDate(finalEndDate);
             return time;
         }
     }
