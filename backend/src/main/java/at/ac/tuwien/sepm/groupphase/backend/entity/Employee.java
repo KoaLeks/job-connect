@@ -100,10 +100,10 @@ public class Employee {
         return "Employee{" +
             "id=" + id +
             ", profile=" + profile +
-            ", tasks=" + tasks.size() +
+            ", tasks=" + tasks +
             ", interests=" + interests +
             ", gender=" + gender +
-            ", birthdate=" + birthDate +
+            ", birthDate=" + birthDate +
             '}';
     }
 
