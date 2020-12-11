@@ -2,19 +2,16 @@ package at.ac.tuwien.sepm.groupphase.backend.integrationtest;
 
 import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
 import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EditEmployeeDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EditEmployerDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EditProfileDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.*;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EmployeeMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EmployerMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.RegisterEmployeeMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.RegisterEmployerMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Employee;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Employer;
+import at.ac.tuwien.sepm.groupphase.backend.entity.InterestArea;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Profile;
-import at.ac.tuwien.sepm.groupphase.backend.repository.EmployeeRepository;
-import at.ac.tuwien.sepm.groupphase.backend.repository.EmployerRepository;
-import at.ac.tuwien.sepm.groupphase.backend.repository.ProfileRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.*;
 import at.ac.tuwien.sepm.groupphase.backend.security.JwtTokenizer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +27,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -50,6 +50,12 @@ public class ProfileEndpointTest implements TestData {
 
     @Autowired
     private EmployerRepository employerRepository;
+
+    @Autowired
+    private InterestRepository interestRepository;
+
+    @Autowired
+    private InterestAreaRepository interestAreaRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -123,6 +129,25 @@ public class ProfileEndpointTest implements TestData {
         .withDescription(EDIT_EMPLOYER_COMPANY_DESCRIPTION)
         .build();
 
+    private final InterestDto interestDto = InterestDto.InterestDtoBuilder.aInterestDto()
+        .withId(null)
+        .withName(INTEREST_NAME)
+        .withDescription(INTEREST_DESCRIPTION)
+        .withSimpleInterestAreaDto(null)
+        .build();
+
+    private final SimpleInterestAreaDto simpleInterestAreaDto = SimpleInterestAreaDto.SimpleInterestAreaDtoBuilder.aInterestArea()
+        .withId(INTEREST_AREA_ID)
+        .withArea(AREA)
+        .withDescription(DESCRIPTION)
+        .build();
+
+    private final InterestArea interestArea = InterestArea.InterestAreaBuilder.aInterest()
+        .withId(INTEREST_AREA_ID)
+        .withArea(AREA)
+        .withDescription(DESCRIPTION)
+        .build();
+
     @BeforeEach
     public void beforeEach() {
         employeeRepository.deleteAll();
@@ -152,6 +177,7 @@ public class ProfileEndpointTest implements TestData {
             .withCompanyName(EMPLOYER_COMPANY_NAME)
             .withDescription(EMPLOYER_COMPANY_DESCRIPTION)
             .build();
+        interestDto.setSimpleInterestAreaDto(simpleInterestAreaDto);
     }
 
     @Test
@@ -397,4 +423,94 @@ public class ProfileEndpointTest implements TestData {
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
     }
 
+    @Test
+    public void updateInterestsOfValidEmployeeTest() throws Exception {
+        interestAreaRepository.save(interestArea);
+        employeeRepository.save(employee);
+
+        Set<InterestDto> interestDtoSet = new HashSet<>();
+        interestDtoSet.add(interestDto);
+
+        EditEmployeeDto editEmployeeDto = EditEmployeeDto.EditEmployeeDtoBuilder.aEmployeeDto()
+            .withEditProfileDto(EditProfileDto.EditProfileDtoBuilder.aEditProfileDto()
+                .withEmail(EMPLOYEE_EMAIL)
+                .withFirstName(EDIT_EMPLOYEE_LAST_NAME)
+                .withLastName(EDIT_EMPLOYEE_FIRST_NAME)
+                .build())
+            .withInterestDtos(interestDtoSet)
+            .withGender(EMPLOYEE_GENDER)
+            .withBirthDate(EMPLOYEE_BIRTH_DATE)
+            .build();
+
+        String editBody = objectMapper.writeValueAsString(editEmployeeDto);
+
+        MvcResult mvcResult = this.mockMvc.perform(put(EDIT_EMPLOYEE_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(editBody))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(interestRepository.count(), 1);
+    }
+
+    @Test
+    public void deleteInterestOfValidEmployeeTest() throws Exception {
+        interestAreaRepository.save(interestArea);
+        employeeRepository.save(employee);
+
+        Set<InterestDto> interestDtoSet = new HashSet<>();
+        interestDtoSet.add(interestDto);
+
+        EditEmployeeDto editEmployeeDto = EditEmployeeDto.EditEmployeeDtoBuilder.aEmployeeDto()
+            .withEditProfileDto(EditProfileDto.EditProfileDtoBuilder.aEditProfileDto()
+                .withEmail(EMPLOYEE_EMAIL)
+                .withFirstName(EDIT_EMPLOYEE_LAST_NAME)
+                .withLastName(EDIT_EMPLOYEE_FIRST_NAME)
+                .build())
+            .withInterestDtos(interestDtoSet)
+            .withGender(EMPLOYEE_GENDER)
+            .withBirthDate(EMPLOYEE_BIRTH_DATE)
+            .build();
+
+        String editBody = objectMapper.writeValueAsString(editEmployeeDto);
+
+        MvcResult mvcResult = this.mockMvc.perform(put(EDIT_EMPLOYEE_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(editBody))
+            .andDo(print())
+            .andReturn();
+
+        // assert that added interest is in db
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(interestRepository.count(), 1);
+
+        EditEmployeeDto newEditEmployeeDto = EditEmployeeDto.EditEmployeeDtoBuilder.aEmployeeDto()
+            .withEditProfileDto(EditProfileDto.EditProfileDtoBuilder.aEditProfileDto()
+                .withEmail(EMPLOYEE_EMAIL)
+                .withFirstName(EDIT_EMPLOYEE_LAST_NAME)
+                .withLastName(EDIT_EMPLOYEE_FIRST_NAME)
+                .build())
+            .withInterestDtos(null)
+            .withGender(EMPLOYEE_GENDER)
+            .withBirthDate(EMPLOYEE_BIRTH_DATE)
+            .build();
+
+        String newEditBody = objectMapper.writeValueAsString(newEditEmployeeDto);
+
+        MvcResult newMvcResult = this.mockMvc.perform(put(EDIT_EMPLOYEE_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(newEditBody))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse newResponse = newMvcResult.getResponse();
+        assertEquals(HttpStatus.OK.value(), newResponse.getStatus());
+        assertEquals(interestRepository.count(), 0);
+    }
 }
