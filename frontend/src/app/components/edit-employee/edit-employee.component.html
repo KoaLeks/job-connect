@@ -58,7 +58,7 @@
         <label for="gender">Geschlecht*</label>
         <select class="form-control" name="gender" formControlName="gender" id="gender">
           <option value="" hidden disabled>Geschlecht auswählen</option>
-          <option *ngFor="let gender of genderOptions" [ngValue]="gender">{{gender}}</option>
+          <option *ngFor="let gender of genderOptions" [ngValue]="gender">{{gender==='MALE'?'Männlich':gender=='FEMALE'?'Weiblich':'Divers'}}</option>
         </select>
       </div>
 
