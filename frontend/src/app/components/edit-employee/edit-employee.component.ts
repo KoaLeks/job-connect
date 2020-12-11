@@ -366,6 +366,7 @@ export class EditEmployeeComponent implements OnInit {
     checkbox1.checked = false;
     this.toggleStartEnd = false;
     this.nightShift = false;
+    this.toggleStartEndNightShift = false;
   }
 
   deleteTimeFromOverview(time, timeArray) {
@@ -396,8 +397,13 @@ export class EditEmployeeComponent implements OnInit {
   toggleStartEndMethod() {
     this.toggleStartEnd = !this.toggleStartEnd;
     if (this.toggleStartEnd) {
-      this.timeCreationForm.controls['timeStart'].setValue('00:00');
-      this.timeCreationForm.controls['timeEnd'].setValue('23:59');
+      if (this.nightShift) {
+        this.timeCreationForm.controls['timeStart'].setValue('00:00');
+        this.timeCreationForm.controls['timeEnd'].setValue('03:00');
+      } else {
+        this.timeCreationForm.controls['timeStart'].setValue('00:00');
+        this.timeCreationForm.controls['timeEnd'].setValue('23:59');
+      }
     } else {
       this.timeCreationForm.controls['timeStart'].setValue('');
       if (this.nightShift) {

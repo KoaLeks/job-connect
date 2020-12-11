@@ -65,10 +65,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Set<Time> times = timeRepository.findByEmployee_Profile_Id(employee.getProfile().getId());
         employee.setTimes(times);
 
-
-
         timeRepository.deleteByFinalEndDateBefore(LocalDateTime.now());
-
 
         return employee;
     }
