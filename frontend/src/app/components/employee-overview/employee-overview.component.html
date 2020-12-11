@@ -10,10 +10,10 @@
     </thead>
     <tbody>
     <tr *ngFor="let employee of employees">
-      <td>{{ employee.profileDto.firstName}}</td>
-      <td>{{employee.profileDto.lastName}}</td>
-      <td>{{ employee.profileDto.email}}</td>
-      <td>{{ employee.profileDto.publicInfo}}</td>
+      <td>{{ employee.simpleProfileDto.firstName}}</td>
+      <td>{{ employee.simpleProfileDto.lastName}}</td>
+      <td>{{ employee.simpleProfileDto.email}}</td>
+      <td>{{ employee.simpleProfileDto.publicInfo}}</td>
     </tr>
     </tbody>
   </table>

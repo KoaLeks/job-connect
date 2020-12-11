@@ -19,8 +19,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
      * Find all employees with their interests
      *
      * @return List of employees
-     * TODO add "JOIN FETCH e.interests" to the query to get interests as well
      */
-    @Query(value = "SELECT e FROM Employee e")
+    @Query(value = "FROM Employee e ORDER BY e.profile.firstName")
     List<Employee> getAllEmployeesAndFetchInterests();
 }

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
 import {EmployeeService} from '../../services/employee.service';
-import {EditEmployee} from '../../dtos/edit-employee';
+import {SimpleEmployee} from '../../dtos/simple-employee';
 
 @Component({
   selector: 'app-employee-overview',
@@ -10,7 +10,7 @@ import {EditEmployee} from '../../dtos/edit-employee';
   styleUrls: ['./employee-overview.component.scss']
 })
 export class EmployeeOverviewComponent implements OnInit {
-  employees: EditEmployee[] = [];
+  employees: SimpleEmployee[] = [];
   error: boolean = false;
   errorMessage: string = '';
 
@@ -27,7 +27,7 @@ export class EmployeeOverviewComponent implements OnInit {
 
   private loadEmployees() {
     this.employeeService.findAll().subscribe(
-      (employees: EditEmployee[]) => {
+      (employees: SimpleEmployee[]) => {
         this.employees = employees;
         console.log(this.employees);
       }, error => {

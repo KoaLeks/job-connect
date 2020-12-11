@@ -68,16 +68,23 @@ public class EmployeeMapper {
         return empDto_builder.build();
     }
 
-    public List<EmployeeDto> employeesToEmployeeDtos(List<Employee> employees) {
+    public SimpleEmployeeDto employeeToSimpleEmployeeDto_WithoutInterests(Employee employee){
+        var empDto_builder = SimpleEmployeeDto.SimpleEmployeeDtoBuilder.aSimpleEmployeeDto();
+        empDto_builder.withId(employee.getId());
+        empDto_builder.withSimpleProfileDto(profileMapper.profileToSimpleProfileDto(employee.getProfile()));
+        empDto_builder.withBirthDate(employee.getBirthDate());
+        empDto_builder.withGender(employee.getGender());
+        return empDto_builder.build();
+    }
+
+    public List<SimpleEmployeeDto> employeesToSimpleEmployeeDtos(List<Employee> employees) {
         if (employees == null) {
             return null;
         }
 
-        List<EmployeeDto> list = new ArrayList<>(employees.size());
+        List<SimpleEmployeeDto> list = new ArrayList<>(employees.size());
         for (Employee employee : employees) {
-            // TODO currently set to NULL because fetching interests with employees gives empty result
-            employee.setInterests(null);
-            list.add(employeeToEmployeeDto(employee));
+            list.add(employeeToSimpleEmployeeDto_WithoutInterests(employee));
         }
 
         return list;

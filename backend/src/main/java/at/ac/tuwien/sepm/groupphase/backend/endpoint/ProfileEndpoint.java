@@ -113,8 +113,8 @@ public class ProfileEndpoint {
     @GetMapping(value = "/employee")
     @ApiOperation(value = "Get list of all employees", authorizations = {@Authorization(value = "apiKey")})
     @CrossOrigin(origins = "http://localhost:4200")
-    public List<EmployeeDto> getAllEmployees() {
+    public List<SimpleEmployeeDto> getAllEmployees() {
         LOGGER.info("GET api/v1/profiles/employees");
-        return this.employeeMapper.employeesToEmployeeDtos(employeeService.findAll());
+        return this.employeeMapper.employeesToSimpleEmployeeDtos(employeeService.findAll());
     }
 }

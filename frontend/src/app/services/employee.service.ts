@@ -3,6 +3,7 @@ import {Globals} from '../global/globals';
 import {HttpClient} from '@angular/common/http';
 import {EditEmployee} from '../dtos/edit-employee';
 import {Observable} from 'rxjs';
+import {SimpleEmployee} from '../dtos/simple-employee';
 
 @Injectable({
   providedIn: 'root'
@@ -35,8 +36,8 @@ export class EmployeeService {
   /**
    * Get all employees from the backend
    */
-  findAll(): Observable<EditEmployee[]> {
+  findAll(): Observable<SimpleEmployee[]> {
     console.log('Get all employees');
-    return this.httpClient.get<EditEmployee[]>(this.employeeBaseUri);
+    return this.httpClient.get<SimpleEmployee[]>(this.employeeBaseUri);
   }
 }
