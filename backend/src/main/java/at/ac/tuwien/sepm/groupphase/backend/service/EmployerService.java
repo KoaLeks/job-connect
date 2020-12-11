@@ -13,6 +13,8 @@ public interface EmployerService {
      */
     Long createEmployer(Employer employer);
 
+    Employer findOneById(Long id);
+
     /**
      * Find an employer by email
      * @param email to look for

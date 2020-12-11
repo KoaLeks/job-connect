@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Profile;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Task;
+import at.ac.tuwien.sepm.groupphase.backend.service.EmployerService;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
@@ -14,7 +15,7 @@ import org.mapstruct.Named;
 
 import java.util.List;
 
-@Mapper(uses = { EventService.class, EmployerMapper.class })
+@Mapper(uses = { EventService.class, EmployerMapper.class, EmployerService.class})
 public interface EventMapper {
 
     @Named("simpleEvent")
@@ -23,6 +24,7 @@ public interface EventMapper {
     @IterableMapping(qualifiedByName = "simpleEvent")
     List<SimpleEventDto> eventsToSimpleEventsDtos(List<Event> events);
 
+    @Mapping(source = "employer.id", target = "employer")
     Event eventInquiryDtoToEvent(EventInquiryDto eventInquiryDto);
 
     @Mapping(source = "eventId", target = "event")
@@ -34,5 +36,6 @@ public interface EventMapper {
 
     @Mapping(source = "event.id", target = "eventId")
     TaskInquiryDto toTaskInquiryDto(Task task);
+
 
 }
