@@ -1,9 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
-import at.ac.tuwien.sepm.groupphase.backend.entity.Time;
-
 import javax.validation.constraints.AssertTrue;
-import javax.validation.constraints.Future;
 import java.time.LocalDateTime;
 import java.util.Objects;
 

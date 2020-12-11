@@ -354,10 +354,10 @@
         neue Zeitspanne hinzufügen
       </button>
 
-      <div *ngIf="newTimes.length != 0">
+      <div *ngIf="newTimes1.length != 0">
         <br><br>
         <h5>neu erstellt: </h5>
-        <ng-container *ngFor="let time of newTimes">
+        <ng-container *ngFor="let time of newTimes1">
           <div *ngIf="time.visible">
             <button type="button" class="small" (click)="deleteTime(time)">&times;</button>
             <a style="margin: 1em"> <b>Datum:</b> {{time.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</a>

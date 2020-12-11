@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
 import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -64,6 +65,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         Set<Time> times = timeRepository.findByEmployee_Profile_Id(employee.getProfile().getId());
         employee.setTimes(times);
 
+
+
+        timeRepository.deleteByFinalEndDateBefore(LocalDateTime.now());
+
+
         return employee;
     }
 
@@ -93,7 +99,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
             for (Time time : existingTimes) {
                 if (!keptIds.contains(time.getId())) {
-                    interestRepository.deleteById(time.getId());
+                    timeRepository.deleteById(time.getId());
                 }
             }
 
@@ -109,4 +115,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeRepository.save(employee);
         return profileRepository.save(employee.getProfile()).getId();
     }
+
+
+
+
+
+
 }

@@ -44,6 +44,7 @@ export class EditEmployeeComponent implements OnInit {
   fridayArray: TimeDto[] = [];
   saturdayArray: TimeDto[] = [];
   sundayArray: TimeDto[] = [];
+  newTimes1: TimeDto[] = [];
 
   constructor(private authService: AuthService, private router: Router, private formBuilder: FormBuilder,
               private employeeService: EmployeeService, private interestService: InterestService,
@@ -207,12 +208,12 @@ export class EditEmployeeComponent implements OnInit {
 
       console.log('employee before sending:');
       console.log(this.employee);
-
+      this.newTimes1 = [];
       this.employeeService.updateEmployee(this.employee).subscribe(
         (id) => {
+          this.newTimes = [];
           console.log('User profile updated successfully id: ' + id);
           // this.router.navigate(['/']);
-          this.newTimes = [];
           this.inputImage.nativeElement.value = ''; // resets fileUpload button
           this.load();
           this.updateHeaderService.updateProfile.next(true);
@@ -316,9 +317,11 @@ export class EditEmployeeComponent implements OnInit {
       const finalTimeEndBuild = newFinalEndDateString + 'T' + end;
       const timeDtoToSave: TimeDto = new TimeDto(null, timeStartBuild, timeEndBuild, time.booleanDate, true, finalTimeEndBuild);
       this.newTimes.push(timeDtoToSave);
+      this.newTimes1.push(timeDtoToSave);
     } else {
       const timeDtoToSave: TimeDto = new TimeDto(null, timeStartBuild, timeEndBuild, time.booleanDate, true, timeEndBuild);
       this.newTimes.push(timeDtoToSave);
+      this.newTimes1.push(timeDtoToSave);
     }
     if (time.booleanDate) {
       if (!this.nightShift) {
@@ -333,6 +336,7 @@ export class EditEmployeeComponent implements OnInit {
           const newTimeEndBuild: string = newDateString + 'T' + end;
           const repeatedTimeDto: TimeDto = new TimeDto(null, newTimeStartBuild, newTimeEndBuild, false, false, newTimeEndBuild);
           this.newTimes.push(repeatedTimeDto);
+          this.newTimes1.push(repeatedTimeDto);
         }
       } else {
         const newStartDate = new Date(date);
@@ -351,6 +355,7 @@ export class EditEmployeeComponent implements OnInit {
           const newTimeEndBuild: string = newEndDateString + 'T' + end;
           const repeatedTimeDto: TimeDto = new TimeDto(null, newTimeStartBuild, newTimeEndBuild, false, false, newTimeEndBuild);
           this.newTimes.push(repeatedTimeDto);
+          this.newTimes1.push(repeatedTimeDto);
         }
       }
     }
@@ -376,11 +381,14 @@ export class EditEmployeeComponent implements OnInit {
 
   deleteTime(time: TimeDto) {
     const index = this.newTimes.indexOf(time);
+    const index1 = this.newTimes1.indexOf(time);
     if (index !== -1) {
       if (time.booleanDate) {
         this.newTimes.splice(index, 18);
+        this.newTimes1.splice(index1, 18);
       } else {
         this.newTimes.splice(index, 1);
+        this.newTimes1.splice(index1, 1);
       }
     }
   }
