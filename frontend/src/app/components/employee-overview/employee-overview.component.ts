@@ -14,6 +14,12 @@ export class EmployeeOverviewComponent implements OnInit {
   error: boolean = false;
   errorMessage: string = '';
 
+  // Pagination
+  page = 1;
+  pageSize = 10;
+  collectionSize;
+  pageEmployees: SimpleEmployee[];
+
   constructor(private authService: AuthService, private router: Router, private employeeService: EmployeeService) {
   }
 
@@ -29,10 +35,18 @@ export class EmployeeOverviewComponent implements OnInit {
     this.employeeService.findAll().subscribe(
       (employees: SimpleEmployee[]) => {
         this.employees = employees;
-        console.log(this.employees);
+        this.collectionSize = this.employees.length;
+        this.refreshEmployees();
       }, error => {
         this.defaultServiceErrorHandling(error);
       });
+  }
+
+  public refreshEmployees() {
+    this.pageEmployees = this.employees
+      .map((employee, i) => ({id: i + 1, ...employee}))
+      .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
+    console.log('refresh');
   }
 
   private defaultServiceErrorHandling(error: any) {
