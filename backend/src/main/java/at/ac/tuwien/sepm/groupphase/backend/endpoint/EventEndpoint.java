@@ -66,7 +66,6 @@ public class EventEndpoint {
     @ApiOperation(value = "Update an event", authorizations = {@Authorization(value = "apiKey")})
     public EventInquiryDto update(@Valid @RequestBody EventInquiryDto eventInquiryDto) {
         LOGGER.info("PUT /api/v1/events/{}", eventInquiryDto);
-
         return eventMapper.eventToEventInquiryDto(
             eventService.saveEvent(eventMapper.eventInquiryDtoToEvent(eventInquiryDto)));
 
