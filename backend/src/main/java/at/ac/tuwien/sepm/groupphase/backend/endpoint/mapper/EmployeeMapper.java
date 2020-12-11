@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -48,12 +50,21 @@ public class EmployeeMapper {
 
     public EmployeeDto employeeToEmployeeDto(Employee employee) {
         var empDto_builder = EmployeeDto.EmployeeDtoBuilder.aEmployeeDto();
-        ProfileDto profileDto = profileMapper.profileToProfileDto(employee.getProfile());
-        empDto_builder.withProfileDto(profileDto);
+        empDto_builder.withProfileDto(profileMapper.profileToProfileDto(employee.getProfile()));
         Set<InterestDto> interestDtos = interestMapper.interestToInterestDto(employee.getInterests());
         empDto_builder.withInterestDtos(interestDtos);
         empDto_builder.withGender(employee.getGender());
         empDto_builder.withBirthDate(employee.getBirthDate());
+        return empDto_builder.build();
+    }
+
+    public SimpleEmployeeDto employeeToSimpleEmployeeDto(Employee employee){
+        var empDto_builder = SimpleEmployeeDto.SimpleEmployeeDtoBuilder.aSimpleEmployeeDto();
+        empDto_builder.withId(employee.getId());
+        empDto_builder.withSimpleProfileDto(profileMapper.profileToSimpleProfileDto(employee.getProfile()));
+        empDto_builder.withInterests(employee.getInterests());
+        empDto_builder.withBirthDate(employee.getBirthDate());
+        empDto_builder.withGender(employee.getGender());
         return empDto_builder.build();
     }
 

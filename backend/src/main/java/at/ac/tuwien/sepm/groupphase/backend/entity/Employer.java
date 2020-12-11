@@ -88,7 +88,7 @@ public class Employer {
             ", profile=" + profile +
             ", companyName='" + companyName + '\'' +
             ", description='" + description + '\'' +
-            ", events=" + events +
+            ", events=" + events.size() +
             '}';
     }
 
