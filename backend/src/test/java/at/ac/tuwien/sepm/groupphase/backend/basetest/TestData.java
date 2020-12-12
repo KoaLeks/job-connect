@@ -44,8 +44,6 @@ public interface TestData {
     String BASE_URI = "/api/v1";
     String MESSAGE_BASE_URI = BASE_URI + "/messages";
     String EVENTS_BASE_URI = BASE_URI + "/events";
-    String ADDRESSES_BASE_URI = BASE_URI + "/addresses";
-    String TASKS_BASE_URI = BASE_URI + "/tasks";
     String INTERESTAREAS_BASE_URI = BASE_URI + "/interestareas";
 
     Long ADDRESS_ID = 1L;
@@ -64,7 +62,7 @@ public interface TestData {
     Long INTEREST_ID = 1L;
     String INTEREST_NAME = "Fotografie";
     String INTEREST_DESCRIPTION = "fotografieren";
-    Set<Employee> INTEREST_EMPLOYEES = null;
+    Employee INTEREST_EMPLOYEE = null;
 
     Long TASK_ID = 1L;
     String DESCRIPTION_TASK = "Flyer verteilen";

@@ -23,7 +23,7 @@ public class Employee {
     @ManyToMany
     private Set<Task> tasks;
 
-    @ManyToMany
+    @OneToMany(mappedBy = "employee")
     private Set<Interest> interests;
 
     @Enumerated(EnumType.STRING)
@@ -100,10 +100,10 @@ public class Employee {
         return "Employee{" +
             "id=" + id +
             ", profile=" + profile +
-            ", tasks=" + tasks.size() +
+            ", tasks=" + tasks +
             ", interests=" + interests +
             ", gender=" + gender +
-            ", birthdate=" + birthDate +
+            ", birthDate=" + birthDate +
             '}';
     }
 

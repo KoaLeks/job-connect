@@ -28,7 +28,7 @@ public class EmployeeMapper {
         var emp_builder = Employee.EmployeeBuilder.aEmployee();
         Profile profile = profileMapper.profileDtoToProfile(employeeDto.getProfileDto());
         emp_builder.withProfile(profile);
-        Set<Interest> interests = interestMapper.interestDtoToInterest(employeeDto.getInterestDtos());
+        Set<Interest> interests = interestMapper.interestDtoSetToInterestSet(employeeDto.getInterestDtos());
         emp_builder.withInterests(interests);
         emp_builder.withGender(employeeDto.getGender());
         emp_builder.withBirthDate(employeeDto.getBirthDate());
@@ -40,7 +40,7 @@ public class EmployeeMapper {
         var emp_builder = Employee.EmployeeBuilder.aEmployee();
         Profile profile = profileMapper.editProfileDtoToProfile(editEmployeeDto.getEditProfileDto());
         emp_builder.withProfile(profile);
-        Set<Interest> interests = interestMapper.interestDtoToInterest(editEmployeeDto.getInterestDtos());
+        Set<Interest> interests = interestMapper.interestDtoSetToInterestSet(editEmployeeDto.getInterestDtos());
         emp_builder.withInterests(interests);
         emp_builder.withGender(editEmployeeDto.getGender());
         emp_builder.withBirthDate(editEmployeeDto.getBirthDate());
@@ -51,7 +51,7 @@ public class EmployeeMapper {
     public EmployeeDto employeeToEmployeeDto(Employee employee) {
         var empDto_builder = EmployeeDto.EmployeeDtoBuilder.aEmployeeDto();
         empDto_builder.withProfileDto(profileMapper.profileToProfileDto(employee.getProfile()));
-        Set<InterestDto> interestDtos = interestMapper.interestToInterestDto(employee.getInterests());
+        Set<InterestDto> interestDtos = interestMapper.interestSetToInterestDtoSet(employee.getInterests());
         empDto_builder.withInterestDtos(interestDtos);
         empDto_builder.withGender(employee.getGender());
         empDto_builder.withBirthDate(employee.getBirthDate());

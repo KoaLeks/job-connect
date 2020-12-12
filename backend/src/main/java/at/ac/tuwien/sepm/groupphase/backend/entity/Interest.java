@@ -2,7 +2,6 @@ package at.ac.tuwien.sepm.groupphase.backend.entity;
 
 import javax.persistence.*;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 public class Interest {
@@ -15,8 +14,8 @@ public class Interest {
     private String description;
     @ManyToOne
     private InterestArea interestArea;
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "interests")
-    private Set<Employee> employees;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Employee employee;
 
     public Long getId() {
         return id;
@@ -50,12 +49,12 @@ public class Interest {
         this.interestArea = interestArea;
     }
 
-    public Set<Employee> getEmployees() {
-        return employees;
+    public Employee getEmployee() {
+        return employee;
     }
 
-    public void setEmployees(Set<Employee> employees) {
-        this.employees = employees;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     @Override
@@ -63,12 +62,14 @@ public class Interest {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Interest interest = (Interest) o;
-        return Objects.equals(id, interest.id);
+        return Objects.equals(id, interest.id) &&
+            Objects.equals(name, interest.name) &&
+            Objects.equals(description, interest.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, name, description);
     }
 
     @Override
@@ -78,7 +79,7 @@ public class Interest {
             ", name='" + name + '\'' +
             ", description='" + description + '\'' +
             ", interestArea=" + interestArea +
-            ", employees=" + employees.size() +
+            ", employee=" + employee +
             '}';
     }
 
@@ -87,7 +88,7 @@ public class Interest {
         private String name;
         private String description;
         private InterestArea interestArea;
-        private Set<Employee> employees;
+        private Employee employee;
 
         private InterestBuilder() {
         }
@@ -116,8 +117,8 @@ public class Interest {
             return this;
         }
 
-        public InterestBuilder withEmployees(Set<Employee> employees) {
-            this.employees = employees;
+        public InterestBuilder withEmployee(Employee employee) {
+            this.employee = employee;
             return this;
         }
 
@@ -127,7 +128,7 @@ public class Interest {
             interest.setDescription(description);
             interest.setInterestArea(interestArea);
             interest.setName(name);
-            interest.setEmployees(employees);
+            interest.setEmployee(employee);
             return interest;
         }
     }

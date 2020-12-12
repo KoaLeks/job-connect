@@ -33,7 +33,7 @@ public class InterestEndpoint {
     @ApiOperation(value = "Get list of Interests", authorizations = {@Authorization(value = "apiKey")})
     public Set<InterestDto> findAll() {
         LOGGER.info("GET /api/v1/interests");
-        return interestMapper.interestToInterestDto(interestService.findAll());
+        return interestMapper.interestListToInterestDtoSet(interestService.findAll());
     }
 
 }

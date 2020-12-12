@@ -102,8 +102,6 @@ export class CreateEventComponent implements OnInit {
       id: this.taskCreationForm.value.interestArea,
       area: null,
       description: null,
-      interests: null,
-      tasks: null
     };
     this.tasks.push(task);
     this.taskCreationForm.reset();

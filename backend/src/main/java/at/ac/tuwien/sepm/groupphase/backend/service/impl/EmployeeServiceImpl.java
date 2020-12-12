@@ -17,6 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -55,7 +57,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeRepository.findByProfile_Email(email);
         if (employee == null) throw new NotFoundException(String.format("Could not find employee with email %s", email));
 
-        Set<Interest> interests = interestRepository.findByEmployees_Id(employee.getProfile().getId());
+        Set<Interest> interests = interestRepository.findByEmployee_Id(employee.getProfile().getId());
         employee.setInterests(interests);
 
         return employee;
@@ -71,6 +73,33 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setId(profile.getId());
         employee.getProfile().setId(profile.getId());
         employeeRepository.save(employee);
+
+        if(employee.getInterests() != null && employee.getInterests().size() != 0) {
+            Set<Interest> interests = employee.getInterests();
+            Set<Interest> savedInterests = interestRepository.findByEmployee_Id(employee.getProfile().getId());
+            HashSet<Long> keptIds = new HashSet<>(interests.size());
+            for (Interest i : interests) {
+                if(i.getId() == null) {
+                    i.setEmployee(employee);
+                    interestRepository.save(i);
+                } else {
+                 keptIds.add(i.getId());
+                }
+            }
+            for (Interest i : savedInterests) {
+                if(!keptIds.contains(i.getId())) {
+                    interestRepository.deleteById(i.getId());
+                }
+            }
+        } else {
+            Set<Interest> deletableInterests = interestRepository.findByEmployee_Id(employee.getProfile().getId());
+            if(deletableInterests != null && deletableInterests.size() != 0) {
+                for (Interest i : deletableInterests) {
+                    interestRepository.deleteById(i.getId());
+                }
+            }
+        }
+
         return profileRepository.save(employee.getProfile()).getId();
     }
 
