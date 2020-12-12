@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.security.access.annotation.Secured;
@@ -36,6 +37,7 @@ public class ApplicationEndpoint {
 
     private final TokenService tokenService;
 
+    @Autowired
     public ApplicationEndpoint(ApplicationStatusMapper applicationStatusMapper, EventService eventService, Employee_TasksService employee_tasksService, TaskService taskService, NotificationService notificationService, EmployerService employerService, EmployeeService employeeService, TokenService tokenService) {
         this.applicationStatusMapper = applicationStatusMapper;
         this.eventService = eventService;
@@ -49,7 +51,7 @@ public class ApplicationEndpoint {
 
 
     @PutMapping(value = "/apply")
-    @ApiOperation(value = "Register a new employee", authorizations = {@Authorization(value = "apiKey")})
+    @ApiOperation(value = "Handle application from employee and send Notification", authorizations = {@Authorization(value = "apiKey")})
     @Secured("ROLE_EMPLOYEE")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CrossOrigin(origins = "http://localhost:4200")
@@ -72,11 +74,11 @@ public class ApplicationEndpoint {
     }
 
     @PostMapping(value = "/changeStatus")
-    @ApiOperation(value = "Register a new employee", authorizations = {@Authorization(value = "apiKey")})
+    @ApiOperation(value = "Change status of application and send Notification", authorizations = {@Authorization(value = "apiKey")})
     @Secured("ROLE_EMPLOYER")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CrossOrigin(origins = "http://localhost:4200")
-    public void acceptApplication(@Valid @RequestBody ApplicationStatusDto applicationStatusDto, @RequestHeader String authorization){
+    public void changeApplicationStatus(@Valid @RequestBody ApplicationStatusDto applicationStatusDto, @RequestHeader String authorization){
         LOGGER.info("POST /api/v1/profiles/applicationStatus/ body: {}", applicationStatusDto);
 
         Employee_Tasks employee_tasks = applicationStatusMapper.applicationStatusDtoToEmployee_tasks(applicationStatusDto);

@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
@@ -37,6 +38,7 @@ public class EventEndpoint {
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Publish a new event")
     @CrossOrigin(origins = "http://localhost:4200")
+    @Secured("ROLE_EMPLOYER")
     public EventInquiryDto create(@Valid @RequestBody EventInquiryDto eventInquiryDto) {
         LOGGER.info("POST /api/v1/events/{}", eventInquiryDto);
 
@@ -64,6 +66,7 @@ public class EventEndpoint {
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Update an event", authorizations = {@Authorization(value = "apiKey")})
+    @Secured("ROLE_EMPLOYER")
     public EventInquiryDto update(@Valid @RequestBody EventInquiryDto eventInquiryDto) {
         LOGGER.info("PUT /api/v1/events/{}", eventInquiryDto);
 
