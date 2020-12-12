@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.basetest;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.TimeDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.util.Gender;
 
@@ -25,6 +26,7 @@ public interface TestData {
     String EMPLOYEE_PUBLIC_INFO = "This is the public information of Max Mustermann";
     Gender EMPLOYEE_GENDER = Gender.MALE;
     LocalDateTime EMPLOYEE_BIRTH_DATE = LocalDateTime.of(2002, 12, 4, 0, 0, 0, 0);
+    Set<TimeDto> EMPLOYEE_TIMESET = null;
 
     String EDIT_EMPLOYEE_LAST_NAME = "Musterfrau";
     String EDIT_EMPLOYEE_FIRST_NAME = "Erika";
@@ -87,6 +89,14 @@ public interface TestData {
     String EDIT_EMPLOYEE_BASE_URI = BASE_URI + "/profiles/employee";
     String EDIT_EMPLOYER_BASE_URI = BASE_URI + "/profiles/employer";
     String GET_INTERESTS_BASE_URI = BASE_URI + "/interests";
+
+    Long TIME_ID = 1L;
+    LocalDateTime START_TIME = LocalDateTime.of(2022, 11, 13, 12, 0, 0, 0);
+    LocalDateTime END_TIME = LocalDateTime.of(2022, 11, 13, 18, 0, 0, 0);
+    LocalDateTime FINAL_END_TIME = LocalDateTime.of(2022, 11, 13, 18, 0, 0, 0);
+    Employee EMPLOYEE_TIME = null;
+    Boolean VISIBLE = false;
+    Long REF_ID = 1L;
 
     String ADMIN_USER = "admin@email.com";
     List<String> ADMIN_ROLES = new ArrayList<>() {

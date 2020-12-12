@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.*;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Employee;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Interest;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Profile;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Time;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,11 +16,13 @@ import java.util.Set;
 public class EmployeeMapper {
     private final ProfileMapper profileMapper;
     private final InterestMapper interestMapper;
+    private final TimeMapper timeMapper;
 
     @Autowired
-    public EmployeeMapper(ProfileMapper profileMapper, InterestMapper interestMapper) {
+    public EmployeeMapper(ProfileMapper profileMapper, InterestMapper interestMapper, TimeMapper timeMapper) {
         this.profileMapper = profileMapper;
         this.interestMapper = interestMapper;
+        this.timeMapper = timeMapper;
     }
 
     public Employee employeeDtoToEmployee(EmployeeDto employeeDto) {
@@ -30,6 +33,8 @@ public class EmployeeMapper {
         emp_builder.withInterests(interests);
         emp_builder.withGender(employeeDto.getGender());
         emp_builder.withBirthDate(employeeDto.getBirthDate());
+        Set<Time> times = timeMapper.toTimeSet(employeeDto.getTimes());
+        emp_builder.withTimes(times);
 
         return emp_builder.build();
     }
@@ -42,6 +47,8 @@ public class EmployeeMapper {
         emp_builder.withInterests(interests);
         emp_builder.withGender(editEmployeeDto.getGender());
         emp_builder.withBirthDate(editEmployeeDto.getBirthDate());
+        Set<Time> times = timeMapper.toTimeSet(editEmployeeDto.getTimes());
+        emp_builder.withTimes(times);
 
         return emp_builder.build();
     }
@@ -53,6 +60,8 @@ public class EmployeeMapper {
         empDto_builder.withInterestDtos(interestDtos);
         empDto_builder.withGender(employee.getGender());
         empDto_builder.withBirthDate(employee.getBirthDate());
+        Set<TimeDto> timeDtos = timeMapper.ToTimeDtoSet(employee.getTimes());
+        empDto_builder.withTimes(timeDtos);
         return empDto_builder.build();
     }
 

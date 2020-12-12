@@ -102,7 +102,7 @@ public class EventInquiryDto {
         this.tasks = tasks;
     }
 
-    @AssertTrue(message = "Start Date must be earlier than End Date")
+    @AssertTrue(message = "Start Datum muss vor dem End Datum liegen")
     public boolean isValidDate() {
         if (end != null && start != null) {
             return end.isAfter(start);

@@ -9,6 +9,7 @@ import {InterestService} from '../../services/interest.service';
 import {Interest} from '../../dtos/interest';
 import {ProfileDto} from '../../dtos/profile-dto';
 import {UpdateHeaderService} from '../../services/update-header.service';
+import {TimeDto} from '../../dtos/TimeDto';
 import {InterestArea} from '../../dtos/interestArea';
 import {InterestAreaService} from '../../services/interestArea.service';
 
@@ -32,6 +33,21 @@ export class EditEmployeeComponent implements OnInit {
   inputImage: ElementRef; // needed for resetting fileUpload button
   interests: Interest[];
   changePassword: boolean = false;
+  timeCreationForm;
+  times: TimeDto[] = []; // for database entries
+  newTimes: TimeDto[] = []; // for newly added entries
+  toggleStartEnd: boolean = false;
+  nightShift: boolean = false;
+  toggleStartEndNightShift: boolean = false;
+  mondayArray: TimeDto[] = [];
+  tuesdayArray: TimeDto[] = [];
+  wednesdayArray: TimeDto[] = [];
+  thursdayArray: TimeDto[] = [];
+  fridayArray: TimeDto[] = [];
+  saturdayArray: TimeDto[] = [];
+  sundayArray: TimeDto[] = [];
+  newTimes1: TimeDto[] = [];
+  ref_id: number = 0;
   interestForm;
   interestAreas: InterestArea[];
   employeeInterests: Interest[] = [];
@@ -53,6 +69,13 @@ export class EditEmployeeComponent implements OnInit {
       description: ['', [Validators.required]],
       interestArea: ['']
     });
+    this.timeCreationForm = this.formBuilder.group({
+      date: [null, Validators.required],
+      timeStart: [null, Validators.required],
+      timeEnd: [null, Validators.required],
+      booleanDate: false
+    });
+
   }
 
   isAdult(controlName: string) {
@@ -101,14 +124,14 @@ export class EditEmployeeComponent implements OnInit {
         this.editForm.controls['publicInfo'].setValue(employee.profileDto.publicInfo);
         this.editForm.controls['gender'].setValue(employee.gender);
         this.editForm.controls['birthDate'].setValue(employee.birthDate.toString().substr(0, 10));
-
+        this.times = employee.times;
+        this.filterShowTime();
         // converts bytesArray to Base64
         this.arrayBufferToBase64(employee.profileDto.picture);
         if (employee.profileDto.picture != null) {
           this.picture = 'data:image/png;base64,' + this.picture;
           this.hasPicture = true;
         }
-
         console.log(this.employee);
 
         if (this.employee.interestDtos !== undefined && this.employee.interestDtos.length > 0) {
@@ -128,6 +151,9 @@ export class EditEmployeeComponent implements OnInit {
   update() {
     this.submitted = true;
     if (this.editForm.valid) {
+      for (const time of this.times) {
+        this.newTimes.push(time);
+      }
       if (this.selectedPicture != null && typeof this.selectedPicture !== 'object') {
         // image has valid format (png or jpg)
         if (this.selectedPicture.startsWith('data:image/png;base64') || this.selectedPicture.startsWith('data:image/jpeg;base64')) {
@@ -137,16 +163,15 @@ export class EditEmployeeComponent implements OnInit {
             new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
               this.editForm.controls.email.value, null, this.editForm.controls.publicInfo.value,
               this.selectedPicture[1]), this.employee.interestDtos, this.editForm.controls.gender.value,
-            new Date(this.editForm.controls.birthDate.value)
-          );
+            new Date(this.editForm.controls.birthDate.value), this.newTimes);
           this.hasPicture = true;
           // image has invalid format
         } else {
           this.employee = new EditEmployee(
             new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
               this.editForm.controls.email.value, null, this.editForm.controls.publicInfo.value,
-              null), this.employee.interestDtos, this.editForm.controls.gender.value, new Date(this.editForm.controls.birthDate.value)
-          );
+              null), this.employee.interestDtos, this.editForm.controls.gender.value,
+            new Date(this.editForm.controls.birthDate.value), this.newTimes);
           this.hasPicture = false;
         }
       } else {
@@ -155,20 +180,25 @@ export class EditEmployeeComponent implements OnInit {
           this.employee = new EditEmployee(
             new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
               this.editForm.controls.email.value, null, this.editForm.controls.publicInfo.value,
-              samePic[1]), this.employee.interestDtos, this.editForm.controls.gender.value, new Date(this.editForm.controls.birthDate.value)
-          );
+              samePic[1]), this.employee.interestDtos, this.editForm.controls.gender.value,
+            new Date(this.editForm.controls.birthDate.value), this.newTimes);
         } else {
           this.employee = new EditEmployee(
             new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
               this.editForm.controls.email.value, null, this.editForm.controls.publicInfo.value,
-              null), this.employee.interestDtos, this.editForm.controls.gender.value, new Date(this.editForm.controls.birthDate.value)
-          );
+              null), this.employee.interestDtos, this.editForm.controls.gender.value,
+            new Date(this.editForm.controls.birthDate.value), this.newTimes);
           this.hasPicture = false;
         }
       }
+
+      console.log('employee before sending:');
+      console.log(this.employee);
+      this.newTimes1 = [];
       this.employee.interestDtos = this.employeeInterests;
       this.employeeService.updateEmployee(this.employee).subscribe(
         (id) => {
+          this.newTimes = [];
           console.log('User profile updated successfully id: ' + id);
           // this.router.navigate(['/']);
           this.inputImage.nativeElement.value = ''; // resets fileUpload button
@@ -178,6 +208,8 @@ export class EditEmployeeComponent implements OnInit {
         error => {
           this.error = true;
           this.errorMessage = error.error;
+          this.newTimes = [];
+          this.newTimes1 = [];
         });
     } else {
       console.log('Invalid input');
@@ -193,12 +225,18 @@ export class EditEmployeeComponent implements OnInit {
 
   onFileSelected(event) {
     console.log(event);
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.selectedPicture = reader.result.toString();
-    };
-    reader.readAsDataURL(file);
+    // checks if files size is smaller than 5MB
+    if (event.target.files[0].size <= 5242880) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.selectedPicture = reader.result.toString();
+      };
+      reader.readAsDataURL(file);
+    } else {
+      this.error = true;
+      this.errorMessage = 'Das Bild darf maximal 5 MB groß sein.';
+    }
   }
 
   arrayBufferToBase64(buffer) {
@@ -245,6 +283,201 @@ export class EditEmployeeComponent implements OnInit {
     const index = this.employeeInterests.indexOf(interest);
     if (index !== -1) {
       this.employeeInterests.splice(index, 1);
+    }
+  }
+
+  addTime(time) {
+    // build Time with date, start, end
+    const date: string = time.date;
+    const start: string = time.timeStart;
+    const end: string = time.timeEnd;
+    let timeStartBuild: string;
+    let timeEndBuild: string;
+    let newEndDate;
+    if (this.nightShift) {
+      newEndDate = new Date(date);
+      newEndDate.setDate(newEndDate.getDate() + 1);
+      let newEndDateString: string;
+      newEndDateString = newEndDate.getFullYear() + '-' +
+        ('0' + (newEndDate.getMonth() + 1)).slice(-2) + '-'
+        + ('0' + newEndDate.getDate()).slice(-2);
+      timeEndBuild = newEndDateString + 'T' + end;
+    } else {
+      timeEndBuild = date + 'T' + end;
+    }
+    // format: 2021-09-10T00:00:00
+    timeStartBuild = date + 'T' + start;
+    if (time.booleanDate) {
+      // build a new timeEndBuild with plus 119 days
+      const newFinalEndDate = new Date(timeEndBuild);
+      // + 119 days calculates the final End Date for this weekly repeated time for one semester.
+      newFinalEndDate.setDate(newFinalEndDate.getDate() + 119);
+      const newFinalEndDateString = newFinalEndDate.getFullYear() + '-' +
+        ('0' + (newFinalEndDate.getMonth() + 1)).slice(-2) + '-'
+        + ('0' + newFinalEndDate.getDate()).slice(-2);
+      const finalTimeEndBuild = newFinalEndDateString + 'T' + end;
+      const timeDtoToSave: TimeDto =
+        new TimeDto(null, timeStartBuild, timeEndBuild, time.booleanDate, true, finalTimeEndBuild, this.ref_id);
+      this.newTimes.push(timeDtoToSave);
+      this.newTimes1.push(timeDtoToSave);
+    } else {
+      const timeDtoToSave: TimeDto = new TimeDto(null, timeStartBuild, timeEndBuild, time.booleanDate, true, timeEndBuild, -1);
+      this.newTimes.push(timeDtoToSave);
+      this.newTimes1.push(timeDtoToSave);
+    }
+    if (time.booleanDate) {
+      if (!this.nightShift) {
+        const newDate = new Date(date);
+        for (let i = 0; i < 17; i++) { // saves this day each week for one semester in database
+          newDate.setDate(newDate.getDate() + 7);
+          let newDateString: string;
+          newDateString = newDate.getFullYear() + '-' +
+            ('0' + (newDate.getMonth() + 1)).slice(-2) + '-'
+            + ('0' + newDate.getDate()).slice(-2);
+          const newTimeStartBuild: string = newDateString + 'T' + start;
+          const newTimeEndBuild: string = newDateString + 'T' + end;
+          const repeatedTimeDto: TimeDto =
+            new TimeDto(null, newTimeStartBuild, newTimeEndBuild, false, false, newTimeEndBuild, this.ref_id);
+          this.newTimes.push(repeatedTimeDto);
+          this.newTimes1.push(repeatedTimeDto);
+        }
+      } else {
+        const newStartDate = new Date(date);
+        for (let i = 0; i < 17; i++) { // saves this day each week for one semester in database
+          newStartDate.setDate(newStartDate.getDate() + 7);
+          let newStartDateString: string;
+          newStartDateString = newStartDate.getFullYear() + '-' +
+            ('0' + (newStartDate.getMonth() + 1)).slice(-2) + '-'
+            + ('0' + newStartDate.getDate()).slice(-2);
+          newEndDate.setDate(newEndDate.getDate() + 7);
+          let newEndDateString: string;
+          newEndDateString = newEndDate.getFullYear() + '-' +
+            ('0' + (newEndDate.getMonth() + 1)).slice(-2) + '-'
+            + ('0' + newEndDate.getDate()).slice(-2);
+          const newTimeStartBuild: string = newStartDateString + 'T' + start;
+          const newTimeEndBuild: string = newEndDateString + 'T' + end;
+          const repeatedTimeDto: TimeDto =
+            new TimeDto(null, newTimeStartBuild, newTimeEndBuild, false, false, newTimeEndBuild, this.ref_id);
+          this.newTimes.push(repeatedTimeDto);
+          this.newTimes1.push(repeatedTimeDto);
+        }
+      }
+      this.ref_id++;
+    }
+    this.timeCreationForm.reset();
+    const checkbox = document.getElementById('fullDayCheck') as HTMLInputElement;
+    checkbox.checked = false;
+    const checkbox1 = document.getElementById('nightShift') as HTMLInputElement;
+    checkbox1.checked = false;
+    this.toggleStartEnd = false;
+    this.nightShift = false;
+    this.toggleStartEndNightShift = false;
+  }
+
+  deleteTimeFromOverview(time, timeArray) {
+    const index = timeArray.indexOf(time);
+    if (index !== -1) {
+      timeArray.splice(index, 1);
+      const index1 = this.times.indexOf(time);
+      if (index !== -1) {
+        this.times.splice(index1, 1);
+      }
+    }
+  }
+
+  deleteTime(time: TimeDto) {
+    const index = this.newTimes.indexOf(time);
+    const index1 = this.newTimes1.indexOf(time);
+    if (index !== -1) {
+      if (time.booleanDate) {
+        this.newTimes.splice(index, 18);
+        this.newTimes1.splice(index1, 18);
+      } else {
+        this.newTimes.splice(index, 1);
+        this.newTimes1.splice(index1, 1);
+      }
+    }
+  }
+
+  toggleStartEndMethod() {
+    this.toggleStartEnd = !this.toggleStartEnd;
+    if (this.toggleStartEnd) {
+      if (this.nightShift) {
+        this.timeCreationForm.controls['timeStart'].setValue('00:00');
+        this.timeCreationForm.controls['timeEnd'].setValue('03:00');
+      } else {
+        this.timeCreationForm.controls['timeStart'].setValue('00:00');
+        this.timeCreationForm.controls['timeEnd'].setValue('23:59');
+      }
+    } else {
+      this.timeCreationForm.controls['timeStart'].setValue('');
+      if (this.nightShift) {
+        this.timeCreationForm.controls['timeEnd'].setValue('03:00');
+      } else {
+        this.timeCreationForm.controls['timeEnd'].setValue('');
+      }
+    }
+  }
+
+  toggleNightShift() {
+    this.nightShift = !this.nightShift;
+    this.toggleStartEndNightShift = !this.toggleStartEndNightShift;
+  }
+
+  addNightShift() {
+    if (this.nightShift) {
+      this.timeCreationForm.controls['timeEnd'].setValue('03:00');
+    } else {
+      if (this.toggleStartEnd) {
+        this.timeCreationForm.controls['timeEnd'].setValue('23:59');
+      } else {
+        this.timeCreationForm.controls['timeEnd'].setValue('');
+      }
+    }
+  }
+
+  filterShowTime() {
+
+    this.mondayArray = [];
+    this.tuesdayArray = [];
+    this.wednesdayArray = [];
+    this.thursdayArray = [];
+    this.fridayArray = [];
+    this.saturdayArray = [];
+    this.sundayArray = [];
+
+    for (const time of this.times) {
+      // time is type of TimeDto
+      const endDate = new Date(time.finalEndDate);
+      const startDate = new Date(time.start);
+      const now = new Date();
+      if (endDate > now) {
+        switch (startDate.getDay()) {
+          case 0:
+            this.sundayArray.push(time);
+            break;
+          case 1:
+            this.mondayArray.push(time);
+            break;
+          case 2:
+            this.tuesdayArray.push(time);
+            break;
+          case 3:
+            this.wednesdayArray.push(time);
+            break;
+          case 4:
+            this.thursdayArray.push(time);
+            break;
+          case 5:
+            this.fridayArray.push(time);
+            break;
+          case 6:
+            this.saturdayArray.push(time);
+            break;
+          default:
+            break;
+        }
+      }
     }
   }
 }

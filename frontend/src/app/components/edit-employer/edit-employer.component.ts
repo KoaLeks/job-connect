@@ -138,12 +138,18 @@ export class EditEmployerComponent implements OnInit {
 
   onFileSelected(event) {
     console.log(event);
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.selectedPicture = reader.result.toString();
-    };
-    reader.readAsDataURL(file);
+    // checks if files size is smaller than 5MB
+    if (event.target.files[0].size <= 5242880) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.selectedPicture = reader.result.toString();
+      };
+      reader.readAsDataURL(file);
+    } else {
+      this.error = true;
+      this.errorMessage = 'Das Bild darf maximal 5 MB groß sein.';
+    }
   }
 
   arrayBufferToBase64(buffer) {
