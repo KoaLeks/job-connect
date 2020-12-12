@@ -9,14 +9,17 @@ import at.ac.tuwien.sepm.groupphase.backend.repository.ProfileRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.TimeRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.EmployeeService;
 import at.ac.tuwien.sepm.groupphase.backend.service.ProfileService;
+import org.apache.tomcat.jni.Local;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.invoke.MethodHandles;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
@@ -71,6 +74,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional
     public Long updateEmployee(Employee employee) {
         LOGGER.info("Update employee: {}", employee);
 
@@ -81,9 +85,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.getProfile().setId(profile.getId());
 
         if (employee.getTimes() != null && employee.getTimes().size() != 0) {
-            Set<Time> timesFromFrontend = employee.getTimes();
-            Set<Time> existingTimes = timeRepository.findByEmployee_Profile_Id(employee.getProfile().getId());
-            HashSet<Long> keptIds = new HashSet<>(timesFromFrontend.size());
+            Set<Time> timesFromFrontend = employee.getTimes(); //times that are sent from Frontend -> does not include deleted times by user
+            Set<Time> existingTimes = timeRepository.findByEmployee_Profile_Id(employee.getProfile().getId()); // all currently saved times from database for this user
+            HashSet<Long> keptIds = new HashSet<>(timesFromFrontend.size()); // these times should be saved again
+            ArrayList<Long> IdsToDelete = new ArrayList<>();
 
             for (Time time : timesFromFrontend) {
                 if (time.getId() == null) {
@@ -96,7 +101,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 
             for (Time time : existingTimes) {
                 if (!keptIds.contains(time.getId())) {
+                    IdsToDelete.add(time.getRef_id());
                     timeRepository.deleteById(time.getId());
+                }
+            }
+
+            Set<Time> newExistingTimes = timeRepository.findByEmployee_Profile_Id(employee.getProfile().getId());
+            for (Time time : newExistingTimes) {
+                for (Long id : IdsToDelete) {
+                    if (id != -1 && time.getRef_id().equals(id)) {
+                        timeRepository.deleteById(time.getId());
+                    }
                 }
             }
 
@@ -112,10 +127,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeRepository.save(employee);
         return profileRepository.save(employee.getProfile()).getId();
     }
-
-
-
-
 
 
 }

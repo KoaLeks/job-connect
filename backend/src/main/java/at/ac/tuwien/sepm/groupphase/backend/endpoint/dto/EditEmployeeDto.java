@@ -117,7 +117,7 @@ public class EditEmployeeDto {
             ", interestDtos=" + interestDtos +
             ", gender=" + gender +
             ", birthDate=" + birthDate +
-            ", times=" + times +
+            ", times=" + times.size() +
             '}';
     }
 

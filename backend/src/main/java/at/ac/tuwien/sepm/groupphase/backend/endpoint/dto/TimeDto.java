@@ -12,6 +12,15 @@ public class TimeDto {
     private LocalDateTime end;
     private LocalDateTime finalEndDate;
     private Boolean visible;
+    private Long ref_id;
+
+    public Long getRef_id() {
+        return ref_id;
+    }
+
+    public void setRef_id(Long ref_id) {
+        this.ref_id = ref_id;
+    }
 
     public Long getId() {
         return id;
@@ -71,12 +80,13 @@ public class TimeDto {
             start.equals(time.start) &&
             finalEndDate.equals(time.finalEndDate) &&
             visible.equals(time.visible) &&
+            ref_id.equals(time.ref_id) &&
             end.equals(time.end);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, start, end, visible, finalEndDate);
+        return Objects.hash(id, start, end, visible, finalEndDate, ref_id);
     }
 
     @Override
@@ -87,6 +97,7 @@ public class TimeDto {
             ", end=" + end +
             ", visible=" + visible +
             ", finalEndDate=" + finalEndDate +
+            ", ref_id=" + ref_id +
             '}';
     }
 
@@ -96,6 +107,7 @@ public class TimeDto {
         private LocalDateTime end;
         private LocalDateTime finalEndDate;
         private Boolean visible;
+        private Long ref_id;
 
         private TimeDtoBuilder() {
         }
@@ -129,6 +141,10 @@ public class TimeDto {
             return this;
         }
 
+        public TimeDtoBuilder withRef_Id(Long ref_id) {
+            this.ref_id = ref_id;
+            return this;
+        }
 
         public TimeDto build() {
             TimeDto time = new TimeDto();
@@ -137,6 +153,7 @@ public class TimeDto {
             time.setEnd(end);
             time.setVisible(visible);
             time.setFinalEndDate(finalEndDate);
+            time.setRef_id(ref_id);
             return time;
         }
     }

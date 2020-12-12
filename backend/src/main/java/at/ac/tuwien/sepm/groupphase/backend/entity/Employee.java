@@ -115,7 +115,7 @@ public class Employee {
             ", interests=" + interests +
             ", gender=" + gender +
             ", birthdate=" + birthDate +
-            ", times=" + times +
+            ", times=" + times.size() +
             '}';
     }
 

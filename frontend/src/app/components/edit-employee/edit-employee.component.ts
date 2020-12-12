@@ -45,6 +45,7 @@ export class EditEmployeeComponent implements OnInit {
   saturdayArray: TimeDto[] = [];
   sundayArray: TimeDto[] = [];
   newTimes1: TimeDto[] = [];
+  ref_id: number = 0;
 
   constructor(private authService: AuthService, private router: Router, private formBuilder: FormBuilder,
               private employeeService: EmployeeService, private interestService: InterestService,
@@ -317,11 +318,12 @@ export class EditEmployeeComponent implements OnInit {
         ('0' + (newFinalEndDate.getMonth() + 1)).slice(-2) + '-'
         + ('0' + newFinalEndDate.getDate()).slice(-2);
       const finalTimeEndBuild = newFinalEndDateString + 'T' + end;
-      const timeDtoToSave: TimeDto = new TimeDto(null, timeStartBuild, timeEndBuild, time.booleanDate, true, finalTimeEndBuild);
+      const timeDtoToSave: TimeDto =
+        new TimeDto(null, timeStartBuild, timeEndBuild, time.booleanDate, true, finalTimeEndBuild, this.ref_id);
       this.newTimes.push(timeDtoToSave);
       this.newTimes1.push(timeDtoToSave);
     } else {
-      const timeDtoToSave: TimeDto = new TimeDto(null, timeStartBuild, timeEndBuild, time.booleanDate, true, timeEndBuild);
+      const timeDtoToSave: TimeDto = new TimeDto(null, timeStartBuild, timeEndBuild, time.booleanDate, true, timeEndBuild, -1);
       this.newTimes.push(timeDtoToSave);
       this.newTimes1.push(timeDtoToSave);
     }
@@ -336,7 +338,8 @@ export class EditEmployeeComponent implements OnInit {
             + ('0' + newDate.getDate()).slice(-2);
           const newTimeStartBuild: string = newDateString + 'T' + start;
           const newTimeEndBuild: string = newDateString + 'T' + end;
-          const repeatedTimeDto: TimeDto = new TimeDto(null, newTimeStartBuild, newTimeEndBuild, false, false, newTimeEndBuild);
+          const repeatedTimeDto: TimeDto =
+            new TimeDto(null, newTimeStartBuild, newTimeEndBuild, false, false, newTimeEndBuild, this.ref_id);
           this.newTimes.push(repeatedTimeDto);
           this.newTimes1.push(repeatedTimeDto);
         }
@@ -355,11 +358,13 @@ export class EditEmployeeComponent implements OnInit {
             + ('0' + newEndDate.getDate()).slice(-2);
           const newTimeStartBuild: string = newStartDateString + 'T' + start;
           const newTimeEndBuild: string = newEndDateString + 'T' + end;
-          const repeatedTimeDto: TimeDto = new TimeDto(null, newTimeStartBuild, newTimeEndBuild, false, false, newTimeEndBuild);
+          const repeatedTimeDto: TimeDto =
+            new TimeDto(null, newTimeStartBuild, newTimeEndBuild, false, false, newTimeEndBuild, this.ref_id);
           this.newTimes.push(repeatedTimeDto);
           this.newTimes1.push(repeatedTimeDto);
         }
       }
+      this.ref_id++;
     }
     this.timeCreationForm.reset();
     const checkbox = document.getElementById('fullDayCheck') as HTMLInputElement;

@@ -1,5 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.entity;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.TimeDto;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -24,6 +26,9 @@ public class Time {
 
     @Column
     private LocalDateTime finalEndDate;
+
+    @Column
+    private Long ref_id;
 
     public Boolean getVisible() {
         return visible;
@@ -73,6 +78,14 @@ public class Time {
         this.end = end;
     }
 
+    public Long getRef_id() {
+        return ref_id;
+    }
+
+    public void setRef_id(Long ref_id) {
+        this.ref_id = ref_id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -83,12 +96,13 @@ public class Time {
             start.equals(time.start) &&
             finalEndDate.equals(time.finalEndDate) &&
             visible.equals(time.visible) &&
+            ref_id.equals(time.ref_id) &&
             end.equals(time.end);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, employee, start, end, visible, finalEndDate);
+        return Objects.hash(id, ref_id, employee, start, end, visible, finalEndDate);
     }
 
     @Override
@@ -100,6 +114,7 @@ public class Time {
             ", end=" + end +
             ", visible=" + visible +
             ", finalEndDate=" + finalEndDate +
+            ", ref_id=" + ref_id +
             '}';
     }
 
@@ -110,6 +125,7 @@ public class Time {
         private LocalDateTime end;
         private LocalDateTime finalEndDate;
         private Boolean visible;
+        private Long ref_id;
 
         private TimeBuilder() {
         }
@@ -148,6 +164,11 @@ public class Time {
             return this;
         }
 
+        public TimeBuilder withRef_Id(Long ref_id) {
+            this.ref_id = ref_id;
+            return this;
+        }
+
         public Time build() {
             Time time = new Time();
             time.setId(id);
@@ -156,6 +177,7 @@ public class Time {
             time.setEnd(end);
             time.setVisible(visible);
             time.setFinalEndDate(finalEndDate);
+            time.setRef_id(ref_id);
             return time;
         }
     }

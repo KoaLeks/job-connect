@@ -5,7 +5,8 @@ export class TimeDto {
     public end: string,
     public booleanDate: boolean,
     public visible: boolean,
-    public finalEndDate: string
+    public finalEndDate: string,
+    public ref_id: number
   ) {
   }
 }
