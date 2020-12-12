@@ -1,13 +1,13 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Message;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Task;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.AddressRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.TaskRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
+import at.ac.tuwien.sepm.groupphase.backend.service.MailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +26,17 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final AddressRepository addressRepository;
     private final TaskRepository taskRepository;
+    private final MailService mailService;
 
     @Autowired
     public EventServiceImpl(EventRepository eventRepository,
                             AddressRepository addressRepository,
-                            TaskRepository taskRepository) {
+                            TaskRepository taskRepository,
+                            MailService mailService) {
         this.eventRepository = eventRepository;
         this.addressRepository = addressRepository;
         this.taskRepository = taskRepository;
+        this.mailService = mailService;
     }
 
     @Override
@@ -50,6 +53,7 @@ public class EventServiceImpl implements EventService {
                 taskRepository.save(task);
             }
         }
+        mailService.sendNotification(event);
         return savedEvent;
     }
 
