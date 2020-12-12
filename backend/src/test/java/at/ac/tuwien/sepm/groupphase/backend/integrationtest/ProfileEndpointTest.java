@@ -7,10 +7,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EmployeeMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EmployerMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.RegisterEmployeeMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.RegisterEmployerMapper;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Employee;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Employer;
-import at.ac.tuwien.sepm.groupphase.backend.entity.InterestArea;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Profile;
+import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.repository.*;
 import at.ac.tuwien.sepm.groupphase.backend.security.JwtTokenizer;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -53,6 +50,9 @@ public class ProfileEndpointTest implements TestData {
 
     @Autowired
     private InterestRepository interestRepository;
+
+    @Autowired
+    private TimeRepository timeRepository;
 
     @Autowired
     private InterestAreaRepository interestAreaRepository;
@@ -148,6 +148,25 @@ public class ProfileEndpointTest implements TestData {
         .withDescription(DESCRIPTION)
         .build();
 
+    private final Time time = Time.TimeBuilder.aTime()
+        .withId(TIME_ID)
+        .withStart(START_TIME)
+        .withEnd(END_TIME)
+        .withFinalEndDate(FINAL_END_TIME)
+        .withEmployee(EMPLOYEE_TIME)
+        .withVisible(VISIBLE)
+        .withRef_Id(REF_ID)
+        .build();
+
+    private final TimeDto timeDto = TimeDto.TimeDtoBuilder.aTimeDto()
+        .withId(TIME_ID)
+        .withStart(START_TIME)
+        .withEnd(END_TIME)
+        .withFinalEndDate(FINAL_END_TIME)
+        .withVisible(VISIBLE)
+        .withRef_Id(REF_ID)
+        .build();
+
     @BeforeEach
     public void beforeEach() {
         employeeRepository.deleteAll();
@@ -155,6 +174,7 @@ public class ProfileEndpointTest implements TestData {
         profileRepository.deleteAll();
         interestRepository.deleteAll();
         interestAreaRepository.deleteAll();
+        timeRepository.deleteAll();
         employee = Employee.EmployeeBuilder.aEmployee()
             .withProfile(Profile.ProfileBuilder.aProfile()
                 .isEmployer(false)
@@ -519,4 +539,103 @@ public class ProfileEndpointTest implements TestData {
         assertEquals(HttpStatus.OK.value(), newResponse.getStatus());
         assertEquals(interestRepository.count(), 0);
     }
+
+    @Test
+    public void updateTimeOfValidEmployeeTest() throws Exception {
+        employeeRepository.save(employee);
+
+        Set<TimeDto> timeDtoSet = new HashSet<>();
+        timeDto.setId(null);
+        timeDtoSet.add(timeDto);
+
+        EditEmployeeDto editEmployeeDto = EditEmployeeDto.EditEmployeeDtoBuilder.aEmployeeDto()
+            .withEditProfileDto(EditProfileDto.EditProfileDtoBuilder.aEditProfileDto()
+                .withEmail(EMPLOYEE_EMAIL)
+                .withFirstName(EDIT_EMPLOYEE_LAST_NAME)
+                .withLastName(EDIT_EMPLOYEE_FIRST_NAME)
+                .build())
+            .withTimes(timeDtoSet)
+            .withGender(EMPLOYEE_GENDER)
+            .withBirthDate(EMPLOYEE_BIRTH_DATE)
+            .build();
+
+        String editBody = objectMapper.writeValueAsString(editEmployeeDto);
+
+        MvcResult mvcResult = this.mockMvc.perform(put(EDIT_EMPLOYEE_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(editBody))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(timeRepository.count(), 1);;
+    }
+
+    @Test
+    public void deleteTimeOfValidEmployeeTest() throws Exception {
+        employeeRepository.save(employee);
+
+        Set<TimeDto> timeDtoSet = new HashSet<>();
+        timeDto.setId(null);
+        timeDtoSet.add(timeDto);
+
+        EditEmployeeDto editEmployeeDto = EditEmployeeDto.EditEmployeeDtoBuilder.aEmployeeDto()
+            .withEditProfileDto(EditProfileDto.EditProfileDtoBuilder.aEditProfileDto()
+                .withEmail(EMPLOYEE_EMAIL)
+                .withFirstName(EDIT_EMPLOYEE_LAST_NAME)
+                .withLastName(EDIT_EMPLOYEE_FIRST_NAME)
+                .build())
+            .withTimes(timeDtoSet)
+            .withGender(EMPLOYEE_GENDER)
+            .withBirthDate(EMPLOYEE_BIRTH_DATE)
+            .build();
+
+        String editBody = objectMapper.writeValueAsString(editEmployeeDto);
+
+        MvcResult mvcResult = this.mockMvc.perform(put(EDIT_EMPLOYEE_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(editBody))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(timeRepository.count(), 1);
+
+        EditEmployeeDto newEditEmployeeDto = EditEmployeeDto.EditEmployeeDtoBuilder.aEmployeeDto()
+            .withEditProfileDto(EditProfileDto.EditProfileDtoBuilder.aEditProfileDto()
+                .withEmail(EMPLOYEE_EMAIL)
+                .withFirstName(EDIT_EMPLOYEE_LAST_NAME)
+                .withLastName(EDIT_EMPLOYEE_FIRST_NAME)
+                .build())
+            .withTimes(null)
+            .withGender(EMPLOYEE_GENDER)
+            .withBirthDate(EMPLOYEE_BIRTH_DATE)
+            .build();
+
+        String newEditBody = objectMapper.writeValueAsString(newEditEmployeeDto);
+
+        MvcResult newMvcResult = this.mockMvc.perform(put(EDIT_EMPLOYEE_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(newEditBody))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse newResponse = newMvcResult.getResponse();
+        assertEquals(HttpStatus.OK.value(), newResponse.getStatus());
+        assertEquals(timeRepository.count(), 0);
+    }
+
+
+
+
+
+
+
+
+
 }
