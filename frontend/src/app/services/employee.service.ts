@@ -20,7 +20,7 @@ export class EmployeeService {
    */
   getEmployeeByEmail(email: String) {
     console.log('Get employee by email ' + email);
-    return this.httpClient.get<EditEmployee>(this.employeeBaseUri + '/' + email);;
+    return this.httpClient.get<EditEmployee>(this.employeeBaseUri + '/' + email);
   }
 
   /**

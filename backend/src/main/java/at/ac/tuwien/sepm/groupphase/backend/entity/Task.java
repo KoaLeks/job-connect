@@ -79,20 +79,6 @@ public class Task {
     }
 
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Task task = (Task) o;
-        return Objects.equals(id, task.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
     @Override
     public String toString() {
         return "Task{" +
@@ -104,6 +90,25 @@ public class Task {
             ", employees=" + employees +
             ", interestArea=" + interestArea +
             '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return Objects.equals(id, task.id) &&
+            Objects.equals(description, task.description) &&
+            Objects.equals(employeeCount, task.employeeCount) &&
+            Objects.equals(paymentHourly, task.paymentHourly) &&
+            Objects.equals(event, task.event) &&
+            Objects.equals(employees, task.employees) &&
+            Objects.equals(interestArea, task.interestArea);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, description, employeeCount, paymentHourly, event, employees, interestArea);
     }
 
     public static final class TaskBuilder{

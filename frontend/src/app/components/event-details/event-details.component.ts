@@ -8,6 +8,9 @@ import {Task} from '../../dtos/task';
 import {InterestArea} from '../../dtos/interestArea';
 import {EmployerService} from '../../services/employer.service';
 import {DetailedEvent} from '../../dtos/detailed-event';
+import {FormBuilder, Validators} from '@angular/forms';
+import {Application} from '../../dtos/application';
+import {ApplicationService} from '../../services/application.service';
 
 @Component({
   selector: 'app-event-details',
@@ -59,13 +62,17 @@ export class EventDetailsComponent implements OnInit {
   //       new InterestArea(-1, 'interest area hier', 'beschreibung', 'hab ka mehr', 'auch hier ka'))
   //   ]
   // );
+  applyTaskForm;
 
   constructor(private route: ActivatedRoute, private employerService: EmployerService,
-              private eventService: EventService) {
+              private eventService: EventService, private formBuilder: FormBuilder, private applicationService: ApplicationService) {
     this.route.params.subscribe(params => {
       this.id = params.id;
     });
-
+    this.applyTaskForm = this.formBuilder.group({
+      applicationText: [null, Validators.required],
+      inputTask: [null]
+    });
   }
 
   arrayBufferToBase64(buffer) {
@@ -99,5 +106,17 @@ export class EventDetailsComponent implements OnInit {
         this.error = true;
         this.errorMessage = error.error;
       });
+  }
+
+  apply(value: any) {
+    const application = new Application(value.inputTask, value.applicationText);
+    this.applicationService.applyTask(application).subscribe(() => {
+        this.applyTaskForm.reset();
+      },
+      error => {
+        this.error = true;
+        this.errorMessage = error.error;
+      }
+    );
   }
 }

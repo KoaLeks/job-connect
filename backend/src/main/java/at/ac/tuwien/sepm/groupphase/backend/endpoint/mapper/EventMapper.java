@@ -14,6 +14,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 import java.util.List;
+import java.util.Set;
 
 @Mapper(uses = { EventService.class, EmployerMapper.class, EmployerService.class})
 public interface EventMapper {

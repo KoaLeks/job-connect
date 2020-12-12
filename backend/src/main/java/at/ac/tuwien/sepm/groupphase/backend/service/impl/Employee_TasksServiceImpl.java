@@ -25,14 +25,14 @@ public class Employee_TasksServiceImpl implements Employee_TasksService {
 
     @Override
     public Long applyForTask(Employee employee, Task task) {
-        LOGGER.debug("Create application from employee {} for task {}", employee, task);
+        LOGGER.debug("Create application from employee {} for task {}", employee.getId(), task.getId());
         Employee_Tasks employee_tasks = new Employee_Tasks();
         employee_tasks.setEmployee(employee);
         employee_tasks.setTask(task);
         if(employee_tasksRepository.findFirstByEmployeeAndTask(employee, task) == null){
             return employee_tasksRepository.save(employee_tasks).getId();
         }else{
-            throw new AlreadyHandledException(String.format("Already applied for Task: %s", task));
+            throw new AlreadyHandledException(String.format("Already applied for Task: %s", task.getId()));
         }
 
     }

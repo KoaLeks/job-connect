@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,7 +53,7 @@ public class ApplicationEndpoint {
 
     @PutMapping(value = "/apply")
     @ApiOperation(value = "Handle application from employee and send Notification", authorizations = {@Authorization(value = "apiKey")})
-    @Secured("ROLE_EMPLOYEE")
+    @PreAuthorize("hasAuthority('ROLE_EMPLOYEE')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CrossOrigin(origins = "http://localhost:4200")
     public void apply(@Valid @RequestBody ApplicationDto applicationDto, @RequestHeader String authorization){
@@ -75,7 +76,7 @@ public class ApplicationEndpoint {
 
     @PostMapping(value = "/changeStatus")
     @ApiOperation(value = "Change status of application and send Notification", authorizations = {@Authorization(value = "apiKey")})
-    @Secured("ROLE_EMPLOYER")
+    @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CrossOrigin(origins = "http://localhost:4200")
     public void changeApplicationStatus(@Valid @RequestBody ApplicationStatusDto applicationStatusDto, @RequestHeader String authorization){

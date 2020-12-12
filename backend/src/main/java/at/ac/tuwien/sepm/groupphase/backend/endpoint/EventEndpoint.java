@@ -1,9 +1,10 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedEventDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventInquiryDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
@@ -12,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
@@ -21,7 +24,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/events")
-@Transactional
+@Validated
 public class EventEndpoint {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -35,11 +38,11 @@ public class EventEndpoint {
     }
 
     @PostMapping
+    @ApiOperation(value = "Publish a new event", authorizations = {@Authorization(value = "apiKey")})
     @ResponseStatus(HttpStatus.CREATED)
-    @ApiOperation(value = "Publish a new event")
     @CrossOrigin(origins = "http://localhost:4200")
-    @Secured("ROLE_EMPLOYER")
-    public EventInquiryDto create(@Valid @RequestBody EventInquiryDto eventInquiryDto) {
+    @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
+    public EventInquiryDto create(@Valid @RequestBody EventInquiryDto eventInquiryDto, @RequestHeader String authorization) {
         LOGGER.info("POST /api/v1/events/{}", eventInquiryDto);
 
         return eventMapper.eventToEventInquiryDto(
@@ -50,6 +53,7 @@ public class EventEndpoint {
     @GetMapping(value = "/{id}/details")
     @ApiOperation(value = "Get event details")
     @CrossOrigin(origins = "http://localhost:4200")
+    @Transactional
     public DetailedEventDto getEventDetails(@PathVariable Long id) {
         LOGGER.info("GET /api/v1/events/{}/details", id);
         return eventMapper.eventToDetailedEventDto(eventService.findById(id));
@@ -66,7 +70,7 @@ public class EventEndpoint {
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Update an event", authorizations = {@Authorization(value = "apiKey")})
-    @Secured("ROLE_EMPLOYER")
+    @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
     public EventInquiryDto update(@Valid @RequestBody EventInquiryDto eventInquiryDto) {
         LOGGER.info("PUT /api/v1/events/{}", eventInquiryDto);
 

@@ -73,7 +73,7 @@ public class EmployerServiceImpl implements EmployerService {
 
     @Override
     public Employer findByEvent(Event event) {
-        LOGGER.info("Find Employer by Event: {}", event);
+        LOGGER.info("Find Employer by Event: {}", event.getId());
         Employer employer = employerRepository.findFirstByEvents(event);
         if(employer != null){
             return employer;
