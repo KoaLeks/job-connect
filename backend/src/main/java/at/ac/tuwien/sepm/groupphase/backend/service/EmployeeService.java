@@ -3,6 +3,8 @@ package at.ac.tuwien.sepm.groupphase.backend.service;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Employee;
 import at.ac.tuwien.sepm.groupphase.backend.exception.UniqueConstraintException;
 
+import java.util.List;
+
 public interface EmployeeService {
 
     /**
@@ -25,4 +27,11 @@ public interface EmployeeService {
      * @return the ID of the updated employee
      */
     Long updateEmployee(Employee employee);
+
+    /**
+     * Find all employees
+     *
+     * @return list of all employees
+     */
+    List<Employee> findAll();
 }

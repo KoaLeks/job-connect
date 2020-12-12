@@ -10,6 +10,8 @@ import {Interest} from '../../dtos/interest';
 import {ProfileDto} from '../../dtos/profile-dto';
 import {UpdateHeaderService} from '../../services/update-header.service';
 import {TimeDto} from '../../dtos/TimeDto';
+import {InterestArea} from '../../dtos/interestArea';
+import {InterestAreaService} from '../../services/interestArea.service';
 
 @Component({
   selector: 'app-edit-employee',
@@ -46,10 +48,13 @@ export class EditEmployeeComponent implements OnInit {
   sundayArray: TimeDto[] = [];
   newTimes1: TimeDto[] = [];
   ref_id: number = 0;
+  interestForm;
+  interestAreas: InterestArea[];
+  employeeInterests: Interest[] = [];
 
   constructor(private authService: AuthService, private router: Router, private formBuilder: FormBuilder,
               private employeeService: EmployeeService, private interestService: InterestService,
-              private updateHeaderService: UpdateHeaderService) {
+              private updateHeaderService: UpdateHeaderService, private interestAreaService: InterestAreaService) {
     this.editForm = this.formBuilder.group({
       email: ['', [Validators.required]],
       firstName: ['', [Validators.required]],
@@ -59,6 +64,11 @@ export class EditEmployeeComponent implements OnInit {
       picture: null,
       birthDate: [null, [Validators.required]]
     }, {validators: [this.isAdult('birthDate')]});
+    this.interestForm = this.formBuilder.group({
+      name: ['', [Validators.required]],
+      description: ['', [Validators.required]],
+      interestArea: ['']
+    });
     this.timeCreationForm = this.formBuilder.group({
       date: [null, Validators.required],
       timeStart: [null, Validators.required],
@@ -98,24 +108,7 @@ export class EditEmployeeComponent implements OnInit {
     if (this.authService.getUserRole() !== 'EMPLOYEE') {
       this.router.navigate(['edit-profile']);
     }
-    this.load(); // loads the employee after getting the list of interests
-  }
-
-  /**
-   * Loads interests and then calls function to load the employee
-   */
-  load() {
-    this.interestService.getInterests().subscribe(
-      (interests: Interest[]) => {
-        console.log(interests);
-        this.interests = interests;
-        this.loadEmployeeDetails();
-      },
-      error => {
-        this.error = true;
-        this.errorMessage = error.error;
-      }
-    );
+    this.loadEmployeeDetails(); // loads the employee
   }
 
   /**
@@ -142,15 +135,7 @@ export class EditEmployeeComponent implements OnInit {
         console.log(this.employee);
 
         if (this.employee.interestDtos !== undefined && this.employee.interestDtos.length > 0) {
-          for (let i = 0; i < this.employee.interestDtos.length; i++) {
-            for (let j = 0; j < this.interests.length; j++) {
-              if (this.employee.interestDtos[i].id === this.interests[j].id) {
-                const checkbox = document.getElementById(this.interests[j].id.toString()) as HTMLInputElement;
-                checkbox.checked = true;
-                break;
-              }
-            }
-          }
+          this.employeeInterests = this.employee.interestDtos;
         }
       },
       error => {
@@ -210,13 +195,14 @@ export class EditEmployeeComponent implements OnInit {
       console.log('employee before sending:');
       console.log(this.employee);
       this.newTimes1 = [];
+      this.employee.interestDtos = this.employeeInterests;
       this.employeeService.updateEmployee(this.employee).subscribe(
         (id) => {
           this.newTimes = [];
           console.log('User profile updated successfully id: ' + id);
           // this.router.navigate(['/']);
           this.inputImage.nativeElement.value = ''; // resets fileUpload button
-          this.load();
+          this.loadEmployeeDetails();
           this.updateHeaderService.updateProfile.next(true);
         },
         error => {
@@ -268,23 +254,35 @@ export class EditEmployeeComponent implements OnInit {
     this.picture = null;
   }
 
-  toggleInterest(event, id: number) {
-    if (event.target.checked) {
-      // if the interest checkbox has been checked => add it to users interests
-      for (const i of this.interests) {
-        if (i.id === id) {
-          this.employee.interestDtos.push(i);
-          break;
+  loadInterestAreas() {
+    if (this.interestAreas === undefined || this.interestAreas.length === 0) {
+      this.interestAreaService.getInterestAreas().subscribe(
+        (interestAreas) => {
+          this.interestAreas = interestAreas;
+        },
+        error => {
+          this.error = true;
+          this.errorMessage = error.error;
         }
-      }
-    } else {
-      // if the interest checkbox has been unchecked => remove it from users interests
-      for (let i = 0; i < this.employee.interestDtos.length; i++) {
-        if (this.employee.interestDtos[i].id === id) {
-          this.employee.interestDtos.splice(i, 1);
-          break;
-        }
-      }
+      );
+    }
+  }
+
+  addInterest(interest: Interest) {
+    interest.simpleInterestAreaDto = {
+      id: this.interestForm.value.interestArea,
+      area: null,
+      description: null,
+    };
+    this.employeeInterests.push(interest);
+    this.interestForm.reset();
+    console.log('interests: ' + JSON.stringify(this.employeeInterests));
+  }
+
+  deleteInterest(interest: Interest) {
+    const index = this.employeeInterests.indexOf(interest);
+    if (index !== -1) {
+      this.employeeInterests.splice(index, 1);
     }
   }
 

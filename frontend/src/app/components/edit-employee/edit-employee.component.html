@@ -5,6 +5,59 @@
   </button>
 </div>
 
+<!-- Modal ADD Interest-->
+<div class="modal fade" id="Add-Interest" tabindex="-1" role="dialog" aria-labelledby="addInterestLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" style="width:33%" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="addInterestLabel">Neues Interesse</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Interest FORM -->
+        <form [formGroup]="interestForm" (ngSubmit)="addInterest(interestForm.value)">
+          <div class="form-group">
+            <label for="InputInterestName">Name<b>*</b></label>
+            <input type="text" maxlength="100" class="form-control" id="InputInterestName"
+                   formControlName="name" pattern="[a-zA-Z]+([ ]|[a-zA-Z]|[0-9])*">
+          </div>
+          <div class="form-group">
+            <label for="InputInterestDescription">Beschreibung<b>*</b></label>
+            <input type="text" maxlength="1000" class="form-control" id="InputInterestDescription"
+                   formControlName="description" pattern="[a-zA-Z]+([ ]|[a-zA-Z]|[0-9])*">
+          </div>
+          <div class="form-group" *ngIf="this.interestAreas !== undefined && this.interestAreas.length !== 0">
+            <label for="InputInterestInterestArea" style="margin-bottom: 0px">Interessengebiet</label><br>
+            <small><i>(Wenn du kein Interessengebiet auswählst, kann dieses Interesse nicht für
+              deine möglichen Aufgabenvorschläge verwendet werden.)</i></small>
+            <select class="form-control" id="InputInterestInterestArea" formControlName="interestArea">
+              <option [value]=null>kein Interessengebiet</option>
+              <ng-container *ngFor="let interestArea of this.interestAreas">
+                <option [value]="interestArea.id">Gebiet: {{interestArea.area}} -
+                  Beschreibung: {{interestArea.description}}</option>
+              </ng-container>
+            </select>
+          </div>
+
+
+          <!-- Interest FORM -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" data-toggle="modal"
+                    data-target="#Add-Interest" [disabled]="!interestForm.valid">Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal ADD Interest-->
+
 <div class="jumbotron mt-5">
   <h1 class="display-4">Profil bearbeiten</h1>
   <hr class="my-4">
@@ -58,7 +111,7 @@
         <label for="gender">Geschlecht*</label>
         <select class="form-control" name="gender" formControlName="gender" id="gender">
           <option value="" hidden disabled>Geschlecht auswählen</option>
-          <option *ngFor="let gender of genderOptions" [ngValue]="gender">{{gender}}</option>
+          <option *ngFor="let gender of genderOptions" [ngValue]="gender">{{gender==='MALE'?'Männlich':gender=='FEMALE'?'Weiblich':'Divers'}}</option>
         </select>
       </div>
 
@@ -95,13 +148,27 @@
                   placeholder="Beschreibung ..." maxlength="10000"></textarea>
       </div>
 
+      <!-- interests -->
       <div>
-        Interessen auswählen
-        <div class="form-group" *ngFor="let i of interests">
-          <input type="checkbox" name="{{i.id}}" id="{{i.id}}" (change)="toggleInterest($event, i.id)">
-          <label for="{{i.id}}">{{i.name}}</label>
+        <label>Interessen:</label>
+        <div *ngIf="employeeInterests.length !== 0">
+          <ul>
+            <ng-container *ngFor="let interest of employeeInterests">
+              <li>
+                <div>
+                  {{interest.name}}: {{interest.description}}
+                  <button type="button" class="small" (click)="deleteInterest(interest)">&times;</button>
+                </div>
+              </li>
+            </ng-container>
+          </ul>
         </div>
       </div>
+      <!-- Button trigger modal ADD Interest-->
+      <button type="button" class="btn btn-primary" data-toggle="modal"
+              data-target="#Add-Interest" (click)="loadInterestAreas()">
+        Interesse hinzufügen
+      </button>
 
       <!-- TIME Management begin-->
       <br>

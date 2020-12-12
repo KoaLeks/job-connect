@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventInquiryDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
@@ -34,7 +35,7 @@ public class EventEndpoint {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @ApiOperation(value = "Publish a new event", authorizations = {@Authorization(value = "apiKey")})
+    @ApiOperation(value = "Publish a new event")
     @CrossOrigin(origins = "http://localhost:4200")
     public EventInquiryDto create(@Valid @RequestBody EventInquiryDto eventInquiryDto) {
         LOGGER.info("POST /api/v1/events/{}", eventInquiryDto);
@@ -44,6 +45,14 @@ public class EventEndpoint {
 
     }
 
+    @GetMapping(value = "/{id}/details")
+    @ApiOperation(value = "Get event details")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public DetailedEventDto getEventDetails(@PathVariable Long id) {
+        LOGGER.info("GET /api/v1/events/{}/details", id);
+        return eventMapper.eventToDetailedEventDto(eventService.findById(id));
+    }
+
     @GetMapping
     @ApiOperation(value = "Get list of events")
     @CrossOrigin(origins = "http://localhost:4200")
@@ -51,12 +60,12 @@ public class EventEndpoint {
         LOGGER.info("GET /api/v1/events");
         return eventMapper.eventsToSimpleEventsDtos(eventService.findAll());
     }
+
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Update an event", authorizations = {@Authorization(value = "apiKey")})
     public EventInquiryDto update(@Valid @RequestBody EventInquiryDto eventInquiryDto) {
         LOGGER.info("PUT /api/v1/events/{}", eventInquiryDto);
-
         return eventMapper.eventToEventInquiryDto(
             eventService.saveEvent(eventMapper.eventInquiryDtoToEvent(eventInquiryDto)));
 

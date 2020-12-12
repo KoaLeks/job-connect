@@ -110,7 +110,7 @@ public class EditEmployeeDto {
 
     @Override
     public String toString() {
-        return "EmployeeDto{" +
+        return "EditEmployeeDto{" +
             "id=" + id +
             ", editProfileDto=" + editProfileDto +
             ", tasks=" + tasks +

@@ -7,6 +7,7 @@ import javax.validation.constraints.Size;
 import java.util.Objects;
 
 public class ProfileDto {
+
     private Long id;
 
     @NotNull(message = "Nachname darf nicht NULL sein")

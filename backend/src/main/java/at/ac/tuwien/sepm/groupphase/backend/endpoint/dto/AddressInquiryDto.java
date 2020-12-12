@@ -77,7 +77,7 @@ public class AddressInquiryDto {
         this.additional = additional;
     }
 
-    @AssertTrue(message = "Nur össterreichische Bundesländer sind gültig")
+    @AssertTrue(message = "Nur österreichische Bundesländer sind gültig")
     public boolean isValidState() {
         if (getState() != null) {
             return getState().equals("Wien") ||

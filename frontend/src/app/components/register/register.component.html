@@ -126,7 +126,7 @@
             <select class="form-control" type="text" name="gender" formControlName="gender" id="gender"
                    placeholder="Gender">
               <option [ngValue]=null hidden disabled>Wählen Sie Ihr Geschlecht</option>
-              <option *ngFor="let gender of genderOptions" [ngValue]="gender">{{gender}}</option>
+              <option *ngFor="let gender of genderOptions" [ngValue]="gender">{{gender==='MALE'?'Männlich':gender=='FEMALE'?'Weiblich':'Divers'}}</option>
             </select>
           </div>
 

@@ -6,8 +6,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedMessageDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventInquiryDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Address;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.repository.AddressRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.security.JwtTokenizer;
@@ -29,7 +28,9 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.time.LocalDateTime;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -81,6 +82,31 @@ public class EventEndpointTest implements TestData {
         .withEmployer(EMPLOYER)
         .withAddress(address)
         .withTask(TASKS_EVENT)
+        .build();
+
+    private final Employer employer = Employer.EmployerBuilder.aEmployer()
+        .withProfile(
+            Profile.ProfileBuilder.aProfile()
+            .withId(EMPLOYER_ID)
+            .withName(EMPLOYER_LAST_NAME)
+            .withForename(EMPLOYER_FIRST_NAME)
+            .withEmail(EMPLOYER_EMAIL)
+            .withPassword(EMPLOYER_PASSWORD)
+            .withPublicInfo(EMPLOYER_PUBLIC_INFO)
+            .build()
+        )
+        .withCompanyName(EMPLOYER_COMPANY_NAME)
+        .withDescription(EMPLOYER_COMPANY_DESCRIPTION)
+        .withEvents(null)
+        .build();
+
+    private final Task task = Task.TaskBuilder.aTask()
+        .withDescription(DESCRIPTION_TASK)
+        .withEmployeeCount(EMPLOYEE_COUNT)
+        .withPaymentHourly(PAYMENT_HOURLY)
+        .withEvent(EVENT)
+        .withEmployees(EMPLOYEES)
+        .withInterestArea(INTEREST_AREA)
         .build();
 
     @BeforeEach

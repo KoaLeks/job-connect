@@ -23,7 +23,7 @@ public class Employee {
     @ManyToMany
     private Set<Task> tasks;
 
-    @ManyToMany
+    @OneToMany(mappedBy = "employee")
     private Set<Interest> interests;
 
     @Enumerated(EnumType.STRING)
@@ -116,6 +116,7 @@ public class Employee {
             ", gender=" + gender +
             ", birthdate=" + birthDate +
             ", times=" + times.size() +
+            ", birthDate=" + birthDate +
             '}';
     }
 

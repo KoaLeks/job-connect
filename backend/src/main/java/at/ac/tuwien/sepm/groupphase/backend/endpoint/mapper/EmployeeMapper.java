@@ -8,6 +8,8 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Time;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -23,11 +25,11 @@ public class EmployeeMapper {
         this.timeMapper = timeMapper;
     }
 
-    public Employee employeeDtoToEmployee(EmployeeDto employeeDto){
+    public Employee employeeDtoToEmployee(EmployeeDto employeeDto) {
         var emp_builder = Employee.EmployeeBuilder.aEmployee();
         Profile profile = profileMapper.profileDtoToProfile(employeeDto.getProfileDto());
         emp_builder.withProfile(profile);
-        Set<Interest> interests = interestMapper.interestDtoToInterest(employeeDto.getInterestDtos());
+        Set<Interest> interests = interestMapper.interestDtoSetToInterestSet(employeeDto.getInterestDtos());
         emp_builder.withInterests(interests);
         emp_builder.withGender(employeeDto.getGender());
         emp_builder.withBirthDate(employeeDto.getBirthDate());
@@ -37,11 +39,11 @@ public class EmployeeMapper {
         return emp_builder.build();
     }
 
-    public Employee editEmployeeDtoToEmployee(EditEmployeeDto editEmployeeDto){
+    public Employee editEmployeeDtoToEmployee(EditEmployeeDto editEmployeeDto) {
         var emp_builder = Employee.EmployeeBuilder.aEmployee();
         Profile profile = profileMapper.editProfileDtoToProfile(editEmployeeDto.getEditProfileDto());
         emp_builder.withProfile(profile);
-        Set<Interest> interests = interestMapper.interestDtoToInterest(editEmployeeDto.getInterestDtos());
+        Set<Interest> interests = interestMapper.interestDtoSetToInterestSet(editEmployeeDto.getInterestDtos());
         emp_builder.withInterests(interests);
         emp_builder.withGender(editEmployeeDto.getGender());
         emp_builder.withBirthDate(editEmployeeDto.getBirthDate());
@@ -51,16 +53,38 @@ public class EmployeeMapper {
         return emp_builder.build();
     }
 
-    public EmployeeDto employeeToEmployeeDto(Employee employee){
+    public EmployeeDto employeeToEmployeeDto(Employee employee) {
         var empDto_builder = EmployeeDto.EmployeeDtoBuilder.aEmployeeDto();
-        ProfileDto profileDto = profileMapper.profileToProfileDto(employee.getProfile());
-        empDto_builder.withProfileDto(profileDto);
-        Set<InterestDto> interestDtos = interestMapper.interestToInterestDto(employee.getInterests());
+        empDto_builder.withProfileDto(profileMapper.profileToProfileDto(employee.getProfile()));
+        Set<InterestDto> interestDtos = interestMapper.interestSetToInterestDtoSet(employee.getInterests());
         empDto_builder.withInterestDtos(interestDtos);
         empDto_builder.withGender(employee.getGender());
         empDto_builder.withBirthDate(employee.getBirthDate());
         Set<TimeDto> timeDtos = timeMapper.ToTimeDtoSet(employee.getTimes());
         empDto_builder.withTimes(timeDtos);
         return empDto_builder.build();
+    }
+
+    public SimpleEmployeeDto employeeToSimpleEmployeeDto(Employee employee){
+        var empDto_builder = SimpleEmployeeDto.SimpleEmployeeDtoBuilder.aSimpleEmployeeDto();
+        empDto_builder.withId(employee.getId());
+        empDto_builder.withSimpleProfileDto(profileMapper.profileToSimpleProfileDto(employee.getProfile()));
+        empDto_builder.withInterestDtos(interestMapper.interestSetToInterestDtoSet(employee.getInterests()));
+        empDto_builder.withBirthDate(employee.getBirthDate());
+        empDto_builder.withGender(employee.getGender());
+        return empDto_builder.build();
+    }
+
+    public List<SimpleEmployeeDto> employeesToSimpleEmployeeDtos(List<Employee> employees) {
+        if (employees == null) {
+            return null;
+        }
+
+        List<SimpleEmployeeDto> list = new ArrayList<>(employees.size());
+        for (Employee employee : employees) {
+            list.add(employeeToSimpleEmployeeDto(employee));
+        }
+
+        return list;
     }
 }

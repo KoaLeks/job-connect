@@ -64,7 +64,7 @@ export class EditEmployerComponent implements OnInit {
           this.picture = 'data:image/png;base64,' + this.picture;
           this.hasPicture = true;
         }
-        console.log(profile);
+        // console.log(profile);
       },
       error => {
         this.error = true;
@@ -116,7 +116,7 @@ export class EditEmployerComponent implements OnInit {
 
       this.employerService.updateEmployer(employer).subscribe(
         () => {
-          console.log('User profile updated successfully');
+          // console.log('User profile updated successfully');
           // this.router.navigate(['/']);
           this.inputImage.nativeElement.value = ''; // resets fileUpload button
           this.loadEmployerDetails();
@@ -126,8 +126,6 @@ export class EditEmployerComponent implements OnInit {
           this.error = true;
           this.errorMessage = error.error;
         });
-    } else {
-      console.log('Invalid input');
     }
   }
 

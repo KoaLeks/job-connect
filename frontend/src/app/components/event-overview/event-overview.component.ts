@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Event} from '../../dtos/event';
 import {EventService} from '../../services/event.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-event-overview',

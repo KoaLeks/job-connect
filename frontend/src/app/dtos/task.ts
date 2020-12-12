@@ -1,5 +1,5 @@
-import {Event} from './event';
 import {InterestArea} from './interestArea';
+import {SimpleEmployee} from './simple-employee';
 
 export class Task {
   constructor(
@@ -8,7 +8,7 @@ export class Task {
     public employeeCount: number,
     public paymentHourly: number,
     public eventId: number,
-    public employees: string, // TODO Change to correct dataTypes
+    public employees: SimpleEmployee[],
     public interestArea: InterestArea) {
   }
 }
