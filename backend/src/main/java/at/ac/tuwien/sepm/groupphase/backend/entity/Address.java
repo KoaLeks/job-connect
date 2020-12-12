@@ -72,7 +72,7 @@ public class Address {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Address address = (Address) o;
-        return id == address.id &&
+        return Objects.equals(id, address.id) &&
             Objects.equals(city, address.city) &&
             Objects.equals(state, address.state) &&
             Objects.equals(zip, address.zip) &&

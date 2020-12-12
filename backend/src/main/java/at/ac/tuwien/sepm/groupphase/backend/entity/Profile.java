@@ -109,12 +109,16 @@ public class Profile {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Profile profile = (Profile) o;
-        return Objects.equals(id, profile.id);
+        return Objects.equals(id, profile.id) &&
+            Objects.equals(lastName, profile.lastName) &&
+            Objects.equals(firstName, profile.firstName) &&
+            Objects.equals(email, profile.email) &&
+            Objects.equals(password, profile.password);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, lastName, firstName, email, password);
     }
 
     @Override

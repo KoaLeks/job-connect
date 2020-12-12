@@ -83,12 +83,15 @@ public class EmployeeDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         EmployeeDto employee = (EmployeeDto) o;
-        return Objects.equals(id, employee.id);
+        return Objects.equals(id, employee.id) &&
+            Objects.equals(profileDto, employee.profileDto) &&
+            Objects.equals(gender, employee.gender) &&
+            Objects.equals(birthDate, employee.birthDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, profileDto, gender, birthDate);
     }
 
     @Override

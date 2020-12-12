@@ -63,12 +63,14 @@ public class InterestArea {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         InterestArea that = (InterestArea) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(id, that.id) &&
+            Objects.equals(area, that.area) &&
+            Objects.equals(description, that.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, area, description);
     }
 
     @Override
