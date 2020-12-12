@@ -15,9 +15,7 @@ public interface TimeMapper {
 
     Set<Time> toTimeSet(Set<TimeDto> timeDtos);
 
-    @Mapping(source = "employee.id", target = "employee_ID")
     TimeDto timeToTimeDto(Time time);
 
-    @Mapping(source = "employee_ID", target = "employee")
     Time timeDtoToTime(TimeDto timeDto);
 }

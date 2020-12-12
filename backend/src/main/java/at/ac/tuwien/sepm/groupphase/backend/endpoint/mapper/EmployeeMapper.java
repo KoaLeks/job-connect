@@ -45,7 +45,8 @@ public class EmployeeMapper {
         emp_builder.withInterests(interests);
         emp_builder.withGender(editEmployeeDto.getGender());
         emp_builder.withBirthDate(editEmployeeDto.getBirthDate());
-        emp_builder.withTimes(editEmployeeDto.getTimes());
+        Set<Time> times = timeMapper.toTimeSet(editEmployeeDto.getTimes());
+        emp_builder.withTimes(times);
 
         return emp_builder.build();
     }

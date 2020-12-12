@@ -30,7 +30,8 @@ public class EditEmployeeDto {
     @IsAdult(message = "Benutzer müssen volljährig sein")
     private LocalDateTime birthDate;
 
-    private Set<Time> times;
+    @Valid
+    private Set<TimeDto> times;
 
     public Long getId() {
         return id;
@@ -80,11 +81,11 @@ public class EditEmployeeDto {
         this.birthDate = birthDate;
     }
 
-    public Set<Time> getTimes() {
+    public Set<TimeDto> getTimes() {
         return times;
     }
 
-    public void setTimes(Set<Time> times) {
+    public void setTimes(Set<TimeDto> times) {
         this.times = times;
     }
 
@@ -98,7 +99,8 @@ public class EditEmployeeDto {
             Objects.equals(tasks, that.tasks) &&
             Objects.equals(interestDtos, that.interestDtos) &&
             gender == that.gender &&
-            Objects.equals(birthDate, that.birthDate);
+            Objects.equals(birthDate, that.birthDate) &&
+            Objects.equals(times, that.times);
     }
 
     @Override
@@ -126,7 +128,7 @@ public class EditEmployeeDto {
         private Set<InterestDto> interestDtos;
         private Gender gender;
         private LocalDateTime birthDate;
-        private Set<Time> times;
+        private Set<TimeDto> times;
 
         private EditEmployeeDtoBuilder(){}
 
@@ -153,7 +155,7 @@ public class EditEmployeeDto {
             this.birthDate = birthDate;
             return this;
         }
-        public EditEmployeeDto.EditEmployeeDtoBuilder withTimes(Set<Time> times){
+        public EditEmployeeDto.EditEmployeeDtoBuilder withTimes(Set<TimeDto> times){
             this.times = times;
             return this;
         }
