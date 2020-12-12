@@ -23,12 +23,12 @@
           <div class="form-group">
             <label for="InputInterestName">Name<b>*</b></label>
             <input type="text" maxlength="100" class="form-control" id="InputInterestName"
-                   formControlName="name" pattern="[a-zA-Z]+([ ]|[a-zA-Z]|[0-9])*">
+                   formControlName="name" pattern="[a-zA-ZÖöÜüÄä]+([ ]|[a-zA-ZÜüÖöÄä]|[0-9])*">
           </div>
           <div class="form-group">
             <label for="InputInterestDescription">Beschreibung<b>*</b></label>
             <input type="text" maxlength="1000" class="form-control" id="InputInterestDescription"
-                   formControlName="description" pattern="[a-zA-Z]+([ ]|[a-zA-Z]|[0-9])*">
+                   formControlName="description" pattern="[a-zA-ZÜüÄäÖö]+([ ]|[a-zA-ZÜüÄäÖö]|[0-9])*">
           </div>
           <div class="form-group" *ngIf="this.interestAreas !== undefined && this.interestAreas.length !== 0">
             <label for="InputInterestInterestArea" style="margin-bottom: 0px">Interessengebiet</label><br>
