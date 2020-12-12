@@ -24,7 +24,7 @@ public class TaskInquiryDto {
 
     private Long eventId;
 
-    private Set<Employee> employees;
+    private Set<Employee_Tasks> employees;
 
     private InterestArea interestArea;
 
@@ -68,11 +68,11 @@ public class TaskInquiryDto {
         this.eventId = eventId;
     }
 
-    public Set<Employee> getEmployees() {
+    public Set<Employee_Tasks> getEmployees() {
         return employees;
     }
 
-    public void setEmployees(Set<Employee> employees) {
+    public void setEmployees(Set<Employee_Tasks> employees) {
         this.employees = employees;
     }
 
@@ -127,7 +127,7 @@ public class TaskInquiryDto {
         private Integer employeeCount;
         private Double paymentHourly;
         private Long eventId;
-        private Set<Employee> employees;
+        private Set<Employee_Tasks> employees;
         private InterestArea interestArea;
 
         private TaskInquiryDtoBuilder() {
@@ -162,7 +162,7 @@ public class TaskInquiryDto {
             return this;
         }
 
-        public TaskInquiryDtoBuilder withEmployees(Set<Employee> employees) {
+        public TaskInquiryDtoBuilder withEmployees(Set<Employee_Tasks> employees) {
             this.employees = employees;
             return this;
         }

@@ -71,7 +71,7 @@ public interface TestData {
     Integer EMPLOYEE_COUNT = 3;
     Double PAYMENT_HOURLY = 10.0;
     Event EVENT = null;
-    Set<Employee> EMPLOYEES = null;
+    Set<Employee_Tasks> EMPLOYEES = null;
     InterestArea INTEREST_AREA = null;
 
     Long EVENT_ID = 1L;

@@ -41,7 +41,7 @@ public class ProfileDetailsService implements ProfileService {
 
             List<GrantedAuthority> grantedAuthorities;
             if (profile.isEmployer())
-                grantedAuthorities = AuthorityUtils.createAuthorityList("ROLE_EMPLOYER", "ROLE_EMPLOYEE");
+                grantedAuthorities = AuthorityUtils.createAuthorityList("ROLE_EMPLOYER");
             else
                 grantedAuthorities = AuthorityUtils.createAuthorityList("ROLE_EMPLOYEE");
 

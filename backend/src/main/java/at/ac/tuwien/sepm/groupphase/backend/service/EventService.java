@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Task;
 
 import java.util.List;
 
@@ -27,4 +28,6 @@ public interface EventService {
      * @return event with given id
      */
     Event findById(Long id);
+
+    Event findByTask(Task task);
 }

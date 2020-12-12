@@ -20,8 +20,9 @@ public class Employee {
     @MapsId
     private Profile profile;
 
-    @ManyToMany
-    private Set<Task> tasks;
+
+    @OneToMany(mappedBy = "employee")
+    private Set<Employee_Tasks> tasks;
 
     @ManyToMany
     private Set<Interest> interests;
@@ -33,6 +34,14 @@ public class Employee {
     @NotNull
     @IsAdult
     private LocalDateTime birthDate;
+
+    public Set<Employee_Tasks> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(Set<Employee_Tasks> tasks) {
+        this.tasks = tasks;
+    }
 
     public Long getId() {
         return id;
@@ -50,13 +59,6 @@ public class Employee {
         this.profile = profile;
     }
 
-    public Set<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(Set<Task> tasks) {
-        this.tasks = tasks;
-    }
 
     public Set<Interest> getInterests() {
         return interests;
@@ -110,7 +112,7 @@ public class Employee {
     public static final class EmployeeBuilder {
         private Long id;
         private Profile profile;
-        private Set<Task> tasks;
+        private Set<Employee_Tasks> tasks;
         private Set<Interest> interests;
         private Gender gender;
         private LocalDateTime birthDate;
@@ -129,7 +131,7 @@ public class Employee {
             return this;
         }
 
-        public EmployeeBuilder withTasks(Set<Task> tasks) {
+        public EmployeeBuilder withTasks(Set<Employee_Tasks> tasks) {
             this.tasks = tasks;
             return this;
         }

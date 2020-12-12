@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Employer;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Profile;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.UniqueConstraintException;
@@ -69,4 +70,17 @@ public class EmployerServiceImpl implements EmployerService {
         profileRepository.save(employer.getProfile());
         return employerRepository.save(employer).getId();
     }
+
+    @Override
+    public Employer findByEvent(Event event) {
+        LOGGER.info("Find Employer by Event: {}", event);
+        Employer employer = employerRepository.findFirstByEvents(event);
+        if(employer != null){
+            return employer;
+        }else{
+            throw new NotFoundException(String.format("Could not find Employer from Event %s", event));
+        }
+    }
+
+
 }

@@ -2,12 +2,8 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.*;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.*;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Employee;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Employer;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Profile;
-import at.ac.tuwien.sepm.groupphase.backend.service.EmployeeService;
-import at.ac.tuwien.sepm.groupphase.backend.service.EmployerService;
-import at.ac.tuwien.sepm.groupphase.backend.service.ProfileService;
+import at.ac.tuwien.sepm.groupphase.backend.entity.*;
+import at.ac.tuwien.sepm.groupphase.backend.service.*;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import org.slf4j.Logger;

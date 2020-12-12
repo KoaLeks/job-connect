@@ -6,6 +6,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Profile {
@@ -36,6 +37,9 @@ public class Profile {
     //If user is an Employee or Employer
     @Column(nullable = false)
     private boolean employer;
+
+    @OneToMany
+    private Set<Notification> notifications;
 
     @Lob
     private Byte[] picture;
