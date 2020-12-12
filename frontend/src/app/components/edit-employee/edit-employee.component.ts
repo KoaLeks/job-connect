@@ -221,6 +221,8 @@ export class EditEmployeeComponent implements OnInit {
         error => {
           this.error = true;
           this.errorMessage = error.error;
+          this.newTimes = [];
+          this.newTimes1 = [];
         });
     } else {
       console.log('Invalid input');
