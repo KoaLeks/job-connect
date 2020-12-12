@@ -78,7 +78,7 @@ public class InterestArea {
             ", area='" + area + '\'' +
             ", description='" + description + '\'' +
             ", interests=" + interests +
-            ", tasks=" + tasks.size() +
+            ", tasks=" + (tasks != null ? tasks.size(): null) +
             '}';
     }
 

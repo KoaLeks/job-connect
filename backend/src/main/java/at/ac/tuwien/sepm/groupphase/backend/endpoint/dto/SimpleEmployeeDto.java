@@ -1,6 +1,5 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
-import at.ac.tuwien.sepm.groupphase.backend.entity.Interest;
 import at.ac.tuwien.sepm.groupphase.backend.util.Gender;
 
 import java.time.LocalDateTime;
@@ -10,7 +9,7 @@ public class SimpleEmployeeDto {
 
     private Long id;
     private SimpleProfileDto simpleProfileDto;
-    private Set<Interest> interests;
+    private Set<InterestDto> interestDtos;
     private Gender gender;
     private LocalDateTime birthDate;
 
@@ -32,12 +31,12 @@ public class SimpleEmployeeDto {
         this.simpleProfileDto = simpleProfileDto;
     }
 
-    public Set<Interest> getInterests() {
-        return interests;
+    public Set<InterestDto> getInterestDtos() {
+        return interestDtos;
     }
 
-    public void setInterests(Set<Interest> interests) {
-        this.interests = interests;
+    public void setInterestDtos(Set<InterestDto> interestDtos) {
+        this.interestDtos = interestDtos;
     }
 
     public Gender getGender() {
@@ -59,7 +58,7 @@ public class SimpleEmployeeDto {
     public static final class SimpleEmployeeDtoBuilder {
         private Long id;
         private SimpleProfileDto simpleProfileDto;
-        private Set<Interest> interests;
+        private Set<InterestDto> interestDtos;
         private Gender gender;
         private LocalDateTime birthDate;
 
@@ -80,8 +79,8 @@ public class SimpleEmployeeDto {
             return this;
         }
 
-        public SimpleEmployeeDtoBuilder withInterests(Set<Interest> interests) {
-            this.interests = interests.size() == 0 ? null : interests;
+        public SimpleEmployeeDtoBuilder withInterestDtos(Set<InterestDto> interestDtos) {
+            this.interestDtos = interestDtos.size() == 0 ? null : interestDtos;
             return this;
         }
 
@@ -99,7 +98,7 @@ public class SimpleEmployeeDto {
             SimpleEmployeeDto simpleEmployeeDto = new SimpleEmployeeDto();
             simpleEmployeeDto.setId(id);
             simpleEmployeeDto.setSimpleProfileDto(simpleProfileDto);
-            simpleEmployeeDto.setInterests(interests);
+            simpleEmployeeDto.setInterestDtos(interestDtos);
             simpleEmployeeDto.setGender(gender);
             simpleEmployeeDto.setBirthDate(birthDate);
             return simpleEmployeeDto;

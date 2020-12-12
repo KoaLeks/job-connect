@@ -106,6 +106,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<Employee> findAll() {
         LOGGER.info("Find all employees");
-        return employeeRepository.getAllEmployeesAndFetchInterests();
+        return employeeRepository.findAllByOrderByProfile_FirstName();
     }
 }

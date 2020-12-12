@@ -46,7 +46,6 @@ export class EmployeeOverviewComponent implements OnInit {
     this.pageEmployees = this.employees
       .map((employee, i) => ({id: i + 1, ...employee}))
       .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
-    console.log('refresh');
   }
 
   private defaultServiceErrorHandling(error: any) {
@@ -57,15 +56,5 @@ export class EmployeeOverviewComponent implements OnInit {
     } else {
       this.errorMessage = error.error;
     }
-  }
-
-  public arrayBufferToBase64(buffer): String {
-    let binary = '';
-    const bytes = new Uint8Array(buffer);
-    const len = bytes.byteLength;
-    for (let i = 0; i < len; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    return window.btoa(binary);
   }
 }

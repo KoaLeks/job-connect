@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
+import java.util.Optional;
 
 @Service
 public class EmployerServiceImpl implements EmployerService {
@@ -38,6 +39,14 @@ public class EmployerServiceImpl implements EmployerService {
         employer.getProfile().setPassword(passwordEncoder.encode(employer.getProfile().getPassword()));
         employer.setId(profileService.createProfile(employer.getProfile()));
         return employerRepository.save(employer).getId();
+    }
+
+    @Override
+    public Employer findOneById(Long id) {
+        LOGGER.info("Find employer with id {}", id);
+        Optional<Employer> employer = employerRepository.findById(id);
+        if (employer.isPresent()) return employer.get();
+        else throw new NotFoundException(String.format("Could not find employer with id %s", id));
     }
 
     @Override
