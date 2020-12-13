@@ -169,12 +169,12 @@ public class ProfileEndpointTest implements TestData {
 
     @BeforeEach
     public void beforeEach() {
+        timeRepository.deleteAll();
         employeeRepository.deleteAll();
         employerRepository.deleteAll();
         profileRepository.deleteAll();
         interestRepository.deleteAll();
         interestAreaRepository.deleteAll();
-        timeRepository.deleteAll();
         employee = Employee.EmployeeBuilder.aEmployee()
             .withProfile(Profile.ProfileBuilder.aProfile()
                 .isEmployer(false)
@@ -319,7 +319,7 @@ public class ProfileEndpointTest implements TestData {
             () -> {
                 //Reads the errors from the body
                 String content = responseFail.getContentAsString();
-                assertEquals("Email address already in use", content);
+                assertEquals("E-Mail Adresse wird bereits verwendet", content);
             }
         );
 
