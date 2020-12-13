@@ -15,6 +15,9 @@
       </li>
     </ul>
     <ul class="navbar-nav mr-5" *ngIf="authService.isLoggedIn()">
+      <li class="nav-item">
+        <a class="nav-link nav-class" routerLink="/notifications" routerLinkActive="active">Benachrichtigungen <span id="notification-count" class="badge badge-light">4</span></a>
+      </li>
       <div class="collapse navbar-collapse" id="navbar-list-4">
         <ul class="navbar-nav">
           <li class="nav-item dropdown">

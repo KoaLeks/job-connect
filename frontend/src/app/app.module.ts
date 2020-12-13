@@ -21,6 +21,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { EditPasswordComponent } from './components/edit-password/edit-password.component';
 import {UpdateHeaderService} from './services/update-header.service';
 import { EventDetailsComponent } from './components/event-details/event-details.component';
+import { NotificationComponent } from './components/notification/notification.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { EventDetailsComponent } from './components/event-details/event-details.
     RegisterComponent,
     EditPasswordComponent,
     EventDetailsComponent,
+    NotificationComponent,
   ],
   imports: [
     BrowserModule,

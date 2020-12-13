@@ -138,12 +138,12 @@ export class EventDetailsComponent implements OnInit {
   apply(value: any) {
     const application = new Application(value.inputTask, value.applicationText);
     this.applicationService.applyTask(application).subscribe(() => {
-        this.applyTaskForm.reset();
       },
       error => {
         this.error = true;
         this.errorMessage = error.error;
       }
     );
+    this.applyTaskForm.reset();
   }
 }

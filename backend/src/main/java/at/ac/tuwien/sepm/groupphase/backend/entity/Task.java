@@ -87,7 +87,6 @@ public class Task {
             ", employeeCount=" + employeeCount +
             ", paymentHourly=" + paymentHourly +
             ", event=" + event +
-            ", employees=" + employees +
             ", interestArea=" + interestArea +
             '}';
     }
@@ -102,13 +101,12 @@ public class Task {
             Objects.equals(employeeCount, task.employeeCount) &&
             Objects.equals(paymentHourly, task.paymentHourly) &&
             Objects.equals(event, task.event) &&
-            Objects.equals(employees, task.employees) &&
             Objects.equals(interestArea, task.interestArea);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, employeeCount, paymentHourly, event, employees, interestArea);
+        return Objects.hash(id, description, employeeCount, paymentHourly, event, interestArea);
     }
 
     public static final class TaskBuilder{
