@@ -116,11 +116,11 @@ public class Employee {
         return "Employee{" +
             "id=" + id +
             ", profile=" + profile +
-            ", tasks=" + tasks +
-            ", interests=" + (interests == null ? "null":interests.size()) +
+            //", tasks=" + tasks +
+            //", interests=" + (interests == null ? "null":interests.size()) +
             ", gender=" + gender +
             ", birthdate=" + birthDate +
-            ", times=" + (times == null ? "null":times.size()) +
+            //", times=" + (times == null ? "null":times.size()) +
             ", birthDate=" + birthDate +
             '}';
     }
