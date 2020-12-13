@@ -26,42 +26,6 @@ export class EventDetailsComponent implements OnInit {
   hasPicture = false;
   id: number;
   eventDetails: DetailedEvent;
-  //   = new Event(-1, '2020-12-10', '2020-12-21', 'wow super titel',
-  //   'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna ' +
-  //   'aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea ' +
-  //   'takimata ' +
-  //   'sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor ' +
-  //   'invidunt ' +
-  //   'ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita ' +
-  //   'kasd ' +
-  //   'gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed' +
-  //   ' diam ' +
-  //   'nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo' +
-  //   ' dolores ' +
-  //   'et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.Duis autem vel eum iriure dolor in ' +
-  //   'hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu f',
-  //   new Employer(1, 'Nix is mit Fix', 'super tolle beschreibung hier', 'vorname', 'nachname',
-  //     'a@a', '1111111', 'des is privat'),
-  //   new Address(-1, 'Wien', 'Wien', 1020, 'teststrasse 8', '12/08'),
-  //   [
-  //     new Task(-1, 'wow', 22, 3, -1, '10',
-  //       new InterestArea(-1, 'interest area hier', 'beschreibungbeschreibungbeschreibungbeschreibungbeschreibungbeschreibungbeschreibungbeschreibung', 'hab ka mehr', 'auch hier ka')),
-  //     new Task(-1, 'wow', 22, 3, -1, '10',
-  //       new InterestArea(-1, 'interest area hier', 'beschreibung', 'hab ka mehr', 'auch hier ka')),
-  //     new Task(-1, 'wow', 22, 3, -1, '10',
-  //       new InterestArea(-1, 'interest area hier', 'beschreibung', 'hab ka mehr', 'auch hier ka')),
-  //     new Task(-1, 'wow', 22, 3, -1, '10',
-  //       new InterestArea(-1, 'interest area hier', 'beschreibung', 'hab ka mehr', 'auch hier ka')),
-  //     new Task(-1, 'wow', 22, 3, -1, '10',
-  //       new InterestArea(-1, 'interest area hier', 'beschreibung', 'hab ka mehr', 'auch hier ka')),
-  //     new Task(-1, 'wow', 22, 3, -1, '10',
-  //       new InterestArea(-1, 'interest area hier', 'beschreibung', 'hab ka mehr', 'auch hier ka')),
-  //     new Task(-1, 'wow', 22, 3, -1, '10',
-  //       new InterestArea(-1, 'interest area hier', 'beschreibung', 'hab ka mehr', 'auch hier ka')),
-  //     new Task(-1, 'wow', 22, 3, -1, '10',
-  //       new InterestArea(-1, 'interest area hier', 'beschreibung', 'hab ka mehr', 'auch hier ka'))
-  //   ]
-  // );
   applyTaskForm;
 
   constructor(private route: ActivatedRoute, private employerService: EmployerService,
@@ -70,7 +34,7 @@ export class EventDetailsComponent implements OnInit {
       this.id = params.id;
     });
     this.applyTaskForm = this.formBuilder.group({
-      applicationText: [null, Validators.required],
+      applicationText: ['Sehr geehrte Damen und Herren, \n\r hiermit bewerbe ich mich für die Stelle.', Validators.required],
       inputTask: [null]
     });
   }

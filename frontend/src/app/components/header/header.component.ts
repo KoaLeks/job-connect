@@ -3,7 +3,8 @@ import {AuthService} from '../../services/auth.service';
 import {EmployerService} from '../../services/employer.service';
 import {EmployeeService} from '../../services/employee.service';
 import {UpdateHeaderService} from '../../services/update-header.service';
-
+import {NotificationService} from '../../services/notification.service';
+import {SimpleNotification} from '../../dtos/simple-notification';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -17,9 +18,11 @@ export class HeaderComponent implements OnInit {
   hasPicture = false;
   error = false;
   errorMessage;
+  notifications: SimpleNotification[];
+  count: number;
 
   constructor(public authService: AuthService, public employerService: EmployerService, public employeeService: EmployeeService,
-              private updateHeaderService: UpdateHeaderService) {
+              private updateHeaderService: UpdateHeaderService, private notificationService: NotificationService) {
     this.updateHeaderService.updateProfile.subscribe(value => {
       if (this.authService.isLoggedIn()) {
         this.loadPicture();
@@ -29,8 +32,29 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     if (this.authService.isLoggedIn()) {
+      this.count = 0;
       this.loadPicture();
+      this.loadNotifications();
     }
+  }
+
+  private loadNotifications() {
+    this.notificationService.getNotifications().subscribe(
+      (notifications: SimpleNotification[]) => {
+        this.notifications = notifications;
+        this.countNewNotifications(notifications);
+        console.log(notifications.length);
+      }
+    );
+  }
+
+  private countNewNotifications(notifications: any[]) {
+    notifications.forEach(
+      notification => {
+        if (!notification.seen) {
+          this.count++;
+        }
+      });
   }
 
   private loadPicture() {

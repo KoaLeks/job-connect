@@ -41,7 +41,7 @@
               </thead>
               <ng-container *ngFor="let task of eventDetails.tasks">
                 <tr class="d-flex">
-                  <td class="col-7 text-justify">{{task.interestArea.description}}</td>
+                  <td class="col-7 text-justify">{{task.description}}</td>
                   <td class="col-3 text-center">{{task.employees.length}}/{{task.employeeCount}}</td>
                   <td class="col-2 text-center">{{task.paymentHourly}}</td>
                 </tr>
@@ -72,7 +72,6 @@
       </div>
     </div>
   </div>
-</ng-container>
 
 <!-- Modal ADD TASK-->
 <div class="modal fade" id="Apply-Task" tabindex="-1" role="dialog" aria-labelledby="addTaskLabel" aria-hidden="true">
@@ -91,7 +90,7 @@
           <select class="form-control" id="inputTask" formControlName="inputTask">
             <option [value]=null>kein Stelle ausgewählt</option>
             <ng-container *ngFor="let task of this.eventDetails.tasks">
-              <option [value]="task.id">Stelle: {{task.interestArea}} -
+              <option [value]="task.id">Stelle: {{task.interestArea.area}} -
                 Beschreibung: {{task.description}}</option>
             </ng-container>
           </select>
@@ -99,7 +98,7 @@
         <div class="form-group">
           <label for="applicationText">Schreibe deine eigene Bewerbung:</label>
           <textarea name="applicationText" formControlName="applicationText" class="form-control" id="applicationText"
-                    maxlength="10000" >Sehr geehrte Damen und Herren, \n\r hiermit bewerbe ich mich für die Stelle "{{this.applyTaskForm.value.description}}" </textarea>
+                    maxlength="10000" >{{this.applyTaskForm.value.description}} </textarea>
         </div>
         <!-- TASK FORM -->
         <div class="modal-footer">
@@ -113,3 +112,5 @@
   </div>
 </div>
 <!-- Modal ADD TASK-->
+
+</ng-container>
