@@ -1,10 +1,12 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
+import at.ac.tuwien.sepm.groupphase.backend.entity.Time;
 import at.ac.tuwien.sepm.groupphase.backend.util.Gender;
 import at.ac.tuwien.sepm.groupphase.backend.util.annotation.IsAdult;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 public class RegisterEmployeeDto extends ProfileDto{
 
@@ -14,6 +16,8 @@ public class RegisterEmployeeDto extends ProfileDto{
     @NotNull(message = "Geburtstag darf nicht NULL sein")
     @IsAdult(message = "Benutzer muss volljährig sein")
     private LocalDateTime birthDate;
+
+    private Set<Time> times;
 
     public Gender getGender() {
         return gender;
@@ -31,6 +35,14 @@ public class RegisterEmployeeDto extends ProfileDto{
         this.birthDate = birthDate;
     }
 
+    public Set<Time> getTimes() {
+        return times;
+    }
+
+    public void setTimes(Set<Time> times) {
+        this.times = times;
+    }
+
     @Override
     public String toString() {
         return "RegisterEmployeeDto{" +
@@ -41,6 +53,7 @@ public class RegisterEmployeeDto extends ProfileDto{
             ", publicInfo='" + this.getPublicInfo() + '\'' +
             ", gender='" + gender + '\'' +
             ", birthDate='" + birthDate + '\'' +
+            ", times=" + times + '\'' +
             '}';
     }
 }

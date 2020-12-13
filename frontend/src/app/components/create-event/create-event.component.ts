@@ -102,8 +102,6 @@ export class CreateEventComponent implements OnInit {
       id: this.taskCreationForm.value.interestArea,
       area: null,
       description: null,
-      interests: null,
-      tasks: null
     };
     this.tasks.push(task);
     this.taskCreationForm.reset();
@@ -137,12 +135,14 @@ export class CreateEventComponent implements OnInit {
    * Get profile id
    */
   loadEmployerId() {
-    this.employerService.getEmployerByEmail(this.authService.getTokenIdentifier()).subscribe(
-      (profile) => {
-        this.employerId = profile.profileDto.id;
-        console.log(this.employerId);
-      }
-    );
+    if (this.employerId === undefined || this.employerId === null) {
+      this.employerService.getEmployerByEmail(this.authService.getTokenIdentifier()).subscribe(
+        (profile) => {
+          this.employerId = profile.profileDto.id;
+          console.log(this.employerId);
+        }
+      );
+    }
   }
 
 }

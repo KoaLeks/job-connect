@@ -22,6 +22,7 @@ import { EditPasswordComponent } from './components/edit-password/edit-password.
 import {UpdateHeaderService} from './services/update-header.service';
 import { EventDetailsComponent } from './components/event-details/event-details.component';
 import { NotificationComponent } from './components/notification/notification.component';
+import { EmployeeOverviewComponent } from './components/employee-overview/employee-overview.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { NotificationComponent } from './components/notification/notification.co
     EditPasswordComponent,
     EventDetailsComponent,
     NotificationComponent,
+    EmployeeOverviewComponent,
   ],
   imports: [
     BrowserModule,

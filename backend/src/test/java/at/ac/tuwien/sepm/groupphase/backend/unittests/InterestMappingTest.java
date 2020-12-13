@@ -23,7 +23,7 @@ public class InterestMappingTest {
         .withName(INTEREST_NAME)
         .withDescription(INTEREST_DESCRIPTION)
         .withInterestArea(INTEREST_AREA)
-        .withEmployees(INTEREST_EMPLOYEES)
+        .withEmployee(INTEREST_EMPLOYEE)
         .build();
 
     @Autowired

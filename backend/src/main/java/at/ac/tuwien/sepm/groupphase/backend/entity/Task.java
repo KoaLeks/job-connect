@@ -78,6 +78,22 @@ public class Task {
         this.interestArea = interestArea;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return Objects.equals(id, task.id) &&
+            Objects.equals(description, task.description) &&
+            Objects.equals(paymentHourly, task.paymentHourly) &&
+            Objects.equals(employeeCount, task.employeeCount) &&
+            Objects.equals(interestArea, task.interestArea);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, description, paymentHourly, employeeCount, interestArea);
+    }
 
     @Override
     public String toString() {
@@ -87,26 +103,9 @@ public class Task {
             ", employeeCount=" + employeeCount +
             ", paymentHourly=" + paymentHourly +
             ", event=" + event +
+            ", employees=" + (employees == null ? "null":employees.size()) +
             ", interestArea=" + interestArea +
             '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Task task = (Task) o;
-        return Objects.equals(id, task.id) &&
-            Objects.equals(description, task.description) &&
-            Objects.equals(employeeCount, task.employeeCount) &&
-            Objects.equals(paymentHourly, task.paymentHourly) &&
-            Objects.equals(event, task.event) &&
-            Objects.equals(interestArea, task.interestArea);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, description, employeeCount, paymentHourly, event, interestArea);
     }
 
     public static final class TaskBuilder{

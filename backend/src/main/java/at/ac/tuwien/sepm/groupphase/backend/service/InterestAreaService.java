@@ -20,4 +20,11 @@ public interface InterestAreaService {
      * @return list of all InterestAreas.
      */
     List<InterestArea> findAll();
+
+    /**
+     * Find a InterestArea by id.
+     *
+     * @return InterestArea with id.
+     */
+    InterestArea findById(Long id);
 }

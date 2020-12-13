@@ -109,7 +109,6 @@ export class EventDetailsComponent implements OnInit {
       (detailedEvent: DetailedEvent) => {
         // console.log('Event ' + JSON.stringify(detailedEvent));
         this.eventDetails = detailedEvent;
-        console.log(JSON.stringify(detailedEvent.employer.simpleProfileDto));
         // converts bytesArray to Base64
         this.arrayBufferToBase64(detailedEvent.employer.simpleProfileDto.picture);
         if (detailedEvent.employer.simpleProfileDto.picture != null) {

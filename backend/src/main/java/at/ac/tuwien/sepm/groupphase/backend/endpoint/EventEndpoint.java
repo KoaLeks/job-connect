@@ -73,7 +73,6 @@ public class EventEndpoint {
     @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
     public EventInquiryDto update(@Valid @RequestBody EventInquiryDto eventInquiryDto) {
         LOGGER.info("PUT /api/v1/events/{}", eventInquiryDto);
-
         return eventMapper.eventToEventInquiryDto(
             eventService.saveEvent(eventMapper.eventInquiryDtoToEvent(eventInquiryDto)));
 

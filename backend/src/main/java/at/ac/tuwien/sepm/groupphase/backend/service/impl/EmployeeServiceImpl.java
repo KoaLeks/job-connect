@@ -1,24 +1,31 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
-import at.ac.tuwien.sepm.groupphase.backend.entity.Employee;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Interest;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Profile;
+import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.UniqueConstraintException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EmployeeRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.InterestRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.ProfileRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.TimeRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.EmployeeService;
 import at.ac.tuwien.sepm.groupphase.backend.service.ProfileService;
-import org.hibernate.Hibernate;
+import org.apache.tomcat.jni.Local;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.invoke.MethodHandles;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.LinkedList;
+import java.util.List;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -30,15 +37,18 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final ProfileService profileService;
     private final ProfileRepository profileRepository;
     private final InterestRepository interestRepository;
+    private final TimeRepository timeRepository;
 
     @Autowired
     public EmployeeServiceImpl(EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder,
-                               ProfileService profileService, ProfileRepository profileRepository, InterestRepository interestRepository) {
+                               ProfileService profileService, ProfileRepository profileRepository, InterestRepository interestRepository,
+                               TimeRepository timeRepository) {
         this.employeeRepository = employeeRepository;
         this.passwordEncoder = passwordEncoder;
         this.profileService = profileService;
         this.profileRepository = profileRepository;
         this.interestRepository = interestRepository;
+        this.timeRepository = timeRepository;
     }
 
     @Override
@@ -53,15 +63,22 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee findOneByEmail(String email) {
         LOGGER.info("Find employee with email {}", email);
         Employee employee = employeeRepository.findByProfile_Email(email);
-        if (employee == null) throw new NotFoundException(String.format("Could not find employee with email %s", email));
+        if (employee == null)
+            throw new NotFoundException(String.format("Could not find employee with email %s", email));
 
-        Set<Interest> interests = interestRepository.findByEmployees_Id(employee.getProfile().getId());
+        Set<Interest> interests = interestRepository.findByEmployee_Id(employee.getProfile().getId());
         employee.setInterests(interests);
+
+        Set<Time> times = timeRepository.findByEmployee_Profile_Id(employee.getProfile().getId());
+        employee.setTimes(times);
+
+        timeRepository.deleteByFinalEndDateBefore(LocalDateTime.now());
 
         return employee;
     }
 
     @Override
+    @Transactional
     public Long updateEmployee(Employee employee) {
         LOGGER.info("Update employee: {}", employee);
 
@@ -70,7 +87,81 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.getProfile().setPassword(profile.getPassword());
         employee.setId(profile.getId());
         employee.getProfile().setId(profile.getId());
+
+        if (employee.getTimes() != null && employee.getTimes().size() != 0) {
+            Set<Time> timesFromFrontend = employee.getTimes(); //times that are sent from Frontend -> does not include deleted times by user
+            Set<Time> existingTimes = timeRepository.findByEmployee_Profile_Id(employee.getProfile().getId()); // all currently saved times from database for this user
+            HashSet<Long> keptIds = new HashSet<>(timesFromFrontend.size()); // these times should be saved again
+            ArrayList<Long> IdsToDelete = new ArrayList<>();
+
+            for (Time time : timesFromFrontend) {
+                if (time.getId() == null) {
+                    time.setEmployee(employee);
+                    timeRepository.save(time);
+                } else {
+                    keptIds.add(time.getId());
+                }
+            }
+
+            for (Time time : existingTimes) {
+                if (!keptIds.contains(time.getId())) {
+                    IdsToDelete.add(time.getRef_id());
+                    timeRepository.deleteById(time.getId());
+                }
+            }
+
+            Set<Time> newExistingTimes = timeRepository.findByEmployee_Profile_Id(employee.getProfile().getId());
+            for (Time time : newExistingTimes) {
+                for (Long id : IdsToDelete) {
+                    if (id != -1 && time.getRef_id().equals(id)) {
+                        timeRepository.deleteById(time.getId());
+                    }
+                }
+            }
+
+        } else {
+            Set<Time> deletableTimes = timeRepository.findByEmployee_Profile_Id(employee.getProfile().getId());
+            if (deletableTimes != null && deletableTimes.size() != 0) {
+                for (Time time : deletableTimes) {
+                    timeRepository.deleteById(time.getId());
+                }
+            }
+        }
+
         employeeRepository.save(employee);
+
+        if(employee.getInterests() != null && employee.getInterests().size() != 0) {
+            Set<Interest> interests = employee.getInterests();
+            Set<Interest> savedInterests = interestRepository.findByEmployee_Id(employee.getProfile().getId());
+            HashSet<Long> keptIds = new HashSet<>(interests.size());
+            for (Interest i : interests) {
+                if(i.getId() == null) {
+                    i.setEmployee(employee);
+                    interestRepository.save(i);
+                } else {
+                 keptIds.add(i.getId());
+                }
+            }
+            for (Interest i : savedInterests) {
+                if(!keptIds.contains(i.getId())) {
+                    interestRepository.deleteById(i.getId());
+                }
+            }
+        } else {
+            Set<Interest> deletableInterests = interestRepository.findByEmployee_Id(employee.getProfile().getId());
+            if(deletableInterests != null && deletableInterests.size() != 0) {
+                for (Interest i : deletableInterests) {
+                    interestRepository.deleteById(i.getId());
+                }
+            }
+        }
+
         return profileRepository.save(employee.getProfile()).getId();
+    }
+
+    @Override
+    public List<Employee> findAll() {
+        LOGGER.info("Find all employees");
+        return employeeRepository.findAllByOrderByProfile_FirstName();
     }
 }

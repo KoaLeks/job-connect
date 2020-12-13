@@ -9,7 +9,7 @@ public class InterestDto {
 
     private String description;
 
-    private InterestAreaDto interestAreaDto;
+    private SimpleInterestAreaDto simpleInterestAreaDto;
 
     //private Set<Employee> employees;
 
@@ -37,14 +37,13 @@ public class InterestDto {
         this.description = description;
     }
 
-    public InterestAreaDto getInterestAreaDto() {
-        return interestAreaDto;
+    public SimpleInterestAreaDto getSimpleInterestAreaDto() {
+        return simpleInterestAreaDto;
     }
 
-    public void setInterestAreaDto(InterestAreaDto interestAreaDto) {
-        this.interestAreaDto = interestAreaDto;
+    public void setSimpleInterestAreaDto(SimpleInterestAreaDto simpleInterestAreaDto) {
+        this.simpleInterestAreaDto = simpleInterestAreaDto;
     }
-
 
     @Override
     public boolean equals(Object o) {
@@ -54,12 +53,12 @@ public class InterestDto {
         return Objects.equals(id, that.id) &&
             Objects.equals(name, that.name) &&
             Objects.equals(description, that.description) &&
-            Objects.equals(interestAreaDto, that.interestAreaDto);
+            Objects.equals(simpleInterestAreaDto, that.simpleInterestAreaDto);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, interestAreaDto);
+        return Objects.hash(id, name, description, simpleInterestAreaDto);
     }
 
     @Override
@@ -68,7 +67,7 @@ public class InterestDto {
             "id=" + id +
             ", name='" + name + '\'' +
             ", description='" + description + '\'' +
-            ", interestArea=" + interestAreaDto +
+            ", simpleInterestAreaDto=" + simpleInterestAreaDto +
             '}';
     }
 
@@ -76,7 +75,7 @@ public class InterestDto {
         private Long id;
         private String name;
         private String description;
-        private InterestAreaDto interestAreaDto;
+        private SimpleInterestAreaDto simpleInterestAreaDto;
 
         private InterestDtoBuilder() {
         }
@@ -100,8 +99,8 @@ public class InterestDto {
             return this;
         }
 
-        public InterestDto.InterestDtoBuilder withInterestAreaDto(InterestAreaDto interestAreaDto) {
-            this.interestAreaDto = interestAreaDto;
+        public InterestDto.InterestDtoBuilder withSimpleInterestAreaDto(SimpleInterestAreaDto simpleInterestAreaDto) {
+            this.simpleInterestAreaDto = simpleInterestAreaDto;
             return this;
         }
 
@@ -110,7 +109,7 @@ public class InterestDto {
             interestDto.setId(id);
             interestDto.setName(name);
             interestDto.setDescription(description);
-            interestDto.setInterestAreaDto(interestAreaDto);
+            interestDto.setSimpleInterestAreaDto(simpleInterestAreaDto);
             return interestDto;
         }
     }

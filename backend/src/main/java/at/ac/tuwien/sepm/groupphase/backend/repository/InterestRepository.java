@@ -7,6 +7,6 @@ import java.util.Set;
 
 public interface InterestRepository extends JpaRepository<Interest, Long> {
 
-    Set<Interest> findByEmployees_Id(Long id);
+    Set<Interest> findByEmployee_Id(Long id);
 
 }

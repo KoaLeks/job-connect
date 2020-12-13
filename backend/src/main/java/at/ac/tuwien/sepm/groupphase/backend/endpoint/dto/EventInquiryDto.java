@@ -102,7 +102,7 @@ public class EventInquiryDto {
         this.tasks = tasks;
     }
 
-    @AssertTrue(message = "Start Date must be earlier than End Date")
+    @AssertTrue(message = "Start Datum muss vor dem End Datum liegen")
     public boolean isValidDate() {
         if (end != null && start != null) {
             return end.isAfter(start);
@@ -116,12 +116,17 @@ public class EventInquiryDto {
         if (this == o) return true;
         if (!(o instanceof EventInquiryDto)) return false;
         EventInquiryDto that = (EventInquiryDto) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(id, that.id) &&
+            Objects.equals(start, that.start) &&
+            Objects.equals(end, that.end) &&
+            Objects.equals(title, that.title) &&
+            Objects.equals(description, that.description) &&
+            Objects.equals(address, that.address);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, start, end, title, description, address);
     }
 
     @Override

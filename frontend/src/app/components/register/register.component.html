@@ -10,6 +10,13 @@
       </div>
 
       <div class="modal-body">
+        <div *ngIf="error" class="alert alert-warning alert-dismissible fade show" role="alert">
+          <strong>Registrierung fehlgeschlagen!</strong> {{ errorMessage }}
+          <button type="button" (click)="vanishError()" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
         <form class="form" [formGroup]="isEmployee ? registerFormEmployee : registerFormEmployer"
               (ngSubmit)="registerUser()">
           <div *ngIf="!isEmployee">
@@ -126,7 +133,7 @@
             <select class="form-control" type="text" name="gender" formControlName="gender" id="gender"
                    placeholder="Gender">
               <option [ngValue]=null hidden disabled>Wählen Sie Ihr Geschlecht</option>
-              <option *ngFor="let gender of genderOptions" [ngValue]="gender">{{gender}}</option>
+              <option *ngFor="let gender of genderOptions" [ngValue]="gender">{{gender==='MALE'?'Männlich':gender=='FEMALE'?'Weiblich':'Divers'}}</option>
             </select>
           </div>
 

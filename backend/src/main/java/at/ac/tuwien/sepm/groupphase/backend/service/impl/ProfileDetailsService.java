@@ -73,7 +73,7 @@ public class ProfileDetailsService implements ProfileService {
             }
             return profileRepository.save(profile).getId();
         } catch (DataIntegrityViolationException e) {
-            throw new UniqueConstraintException("Email address already in use");
+            throw new UniqueConstraintException("E-Mail Adresse wird bereits verwendet");
         }
     }
 
