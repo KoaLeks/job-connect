@@ -1,3 +1,18 @@
+.delete-interest-button {
+  background-color: #e9ecef;
+  border-color: #e9ecef;
+  color: #465c69;
+
+}
+.delete-interest-button:hover {
+  border-color: #ff4747;
+}
+
+
+.delete-time-button:hover {
+  cursor: pointer;
+}
+
 .container {
   position: relative;
   text-align: center;

@@ -10,6 +10,7 @@ import {Address} from '../../dtos/address';
 import {InterestArea} from '../../dtos/interestArea';
 import {InterestAreaService} from '../../services/interestArea.service';
 import {EmployerService} from '../../services/employer.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-create-event',
@@ -19,6 +20,8 @@ import {EmployerService} from '../../services/employer.service';
 export class CreateEventComponent implements OnInit {
 
   error: boolean = false;
+  success = false;
+  event: Event;
   errorMessage: string = '';
   addressCreationForm;
   eventCreationForm;
@@ -30,7 +33,7 @@ export class CreateEventComponent implements OnInit {
   constructor(public authService: AuthService, private formBuilder: FormBuilder, private addressService: AddressService,
               private eventService: EventService, private taskService: TaskService,
               private interestAreaService: InterestAreaService,
-              private employerService: EmployerService) {
+              private employerService: EmployerService, private router: Router,) {
     this.addressCreationForm = this.formBuilder.group({
       city: [null, Validators.required],
       state: [null, Validators.required],
@@ -59,6 +62,9 @@ export class CreateEventComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.authService.getUserRole() !== 'EMPLOYER') {
+      this.router.navigate(['']);
+    }
   }
 
 
@@ -80,7 +86,13 @@ export class CreateEventComponent implements OnInit {
       publicInfo: null
     };
     this.eventService.createEvent(event).subscribe(
-      () => {},
+      createdEvent => {
+        this.event = createdEvent;
+        this.success = true;
+        this.eventCreationForm.reset();
+        this.addressCreationForm.reset();
+        this.taskCreationForm.reset();
+      },
       error => {
         this.defaultServiceErrorHandling(error);
       }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EventService} from '../../services/event.service';
 import {Event} from '../../dtos/event';
@@ -114,6 +114,9 @@ export class EventDetailsComponent implements OnInit {
         if (detailedEvent.employer.simpleProfileDto.picture != null) {
           this.picture = 'data:image/png;base64,' + this.picture;
           this.hasPicture = true;
+        } else {
+          this.picture = null;
+          this.hasPicture = false;
         }
       },
       error => {

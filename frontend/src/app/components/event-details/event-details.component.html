@@ -1,6 +1,5 @@
 <ng-container *ngIf="eventDetails">
-  <div class="container m-5">
-    <div class="card">
+    <div class="card mt-5">
       <div class="card-header">
         <div class="container">
           <div class="row justify-content-between">
@@ -8,7 +7,7 @@
               {{eventDetails.title}}
             </div>
             <div class="col-md-3 mt-3 text-right h5">
-              Beginn: {{eventDetails.start.slice(0, 10)}}
+              Beginn: {{eventDetails.start.slice(0, 10)}}<br>{{eventDetails.start.slice(11, 16)}}
             </div>
           </div>
           <div class="row justify-content-between">
@@ -16,7 +15,7 @@
               {{eventDetails.address.addressLine}}, {{eventDetails.address.zip}} {{eventDetails.address.city}}
             </div>
             <div class="col-md-3 text-right h5">
-              Ende: {{eventDetails.end.slice(0, 10)}}
+              Ende: {{eventDetails.end.slice(0, 10)}}<br>{{eventDetails.end.slice(11, 16)}}
             </div>
           </div>
         </div>
@@ -41,7 +40,7 @@
               </thead>
               <ng-container *ngFor="let task of eventDetails.tasks">
                 <tr class="d-flex">
-                  <td class="col-7 text-justify">{{task.interestArea.description}}</td>
+                  <td class="col-7 text-justify">{{task.description}}</td>
                   <td class="col-3 text-center">{{task.employees.length}}/{{task.employeeCount}}</td>
                   <td class="col-2 text-center">{{task.paymentHourly}}</td>
                 </tr>
@@ -49,7 +48,12 @@
             </table>
           </div>
         <div class="col-md-4 justify-content-end text-md-center">
-          <img class="rounded-circle" src="{{picture}}" width="100em" height="100em"  >
+          <img *ngIf="hasPicture" class="rounded-circle" src="{{picture}}" width="100em" height="100em"  >
+          <svg *ngIf="!hasPicture" width="6em" height="6em" viewBox="0 0 16 16" style="color: #465c69;" class="bi bi-person-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987 0 0 0 8 15a6.987 6.987 0 0 0 5.468-2.63z"/>
+            <path fill-rule="evenodd" d="M8 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+            <path fill-rule="evenodd" d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8z"/>
+          </svg>
           <h3  style="border-bottom: 1px solid #ccc;">
             {{eventDetails.employer.companyName}}
           </h3>
@@ -71,7 +75,6 @@
         </button>
       </div>
     </div>
-  </div>
 </ng-container>
 
 <!-- Modal Apply for Task-->
