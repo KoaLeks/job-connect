@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Message;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Task;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.AddressRepository;
@@ -32,8 +33,9 @@ public class EventServiceImpl implements EventService {
 
     @Autowired
     public EventServiceImpl(TaskService taskService, EventRepository eventRepository,
-                            AddressRepository addressRepository, MailService mailService,
-                            TaskRepository taskRepository) {
+                            AddressRepository addressRepository,
+                            TaskRepository taskRepository,
+                            MailService mailService) {
         this.taskService = taskService;
         this.eventRepository = eventRepository;
         this.addressRepository = addressRepository;
@@ -55,7 +57,7 @@ public class EventServiceImpl implements EventService {
                 taskRepository.save(task);
             }
         }
-        mailService.sendNotification(event);
+        mailService.sendNotificationToAvailableEmployees(event);
         return savedEvent;
     }
 

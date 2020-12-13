@@ -109,4 +109,8 @@ export class HeaderComponent implements OnInit {
     this.picture = window.btoa(binary);
   }
 
+  private getNotifications() {
+
+  }
+
 }

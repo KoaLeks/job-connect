@@ -21,6 +21,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { EditPasswordComponent } from './components/edit-password/edit-password.component';
 import {UpdateHeaderService} from './services/update-header.service';
 import { EventDetailsComponent } from './components/event-details/event-details.component';
+import { NotificationComponent } from './components/notification/notification.component';
 import { EmployeeOverviewComponent } from './components/employee-overview/employee-overview.component';
 import { NotificationListComponent } from './components/notification-list/notification-list.component';
 
@@ -40,6 +41,7 @@ import { NotificationListComponent } from './components/notification-list/notifi
     RegisterComponent,
     EditPasswordComponent,
     EventDetailsComponent,
+    NotificationComponent,
     EmployeeOverviewComponent,
     NotificationListComponent,
   ],

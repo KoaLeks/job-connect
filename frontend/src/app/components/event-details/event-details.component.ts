@@ -11,6 +11,11 @@ import {DetailedEvent} from '../../dtos/detailed-event';
 import {FormBuilder, Validators} from '@angular/forms';
 import {Application} from '../../dtos/application';
 import {ApplicationService} from '../../services/application.service';
+import {EmployeeService} from '../../services/employee.service';
+import {AuthService} from '../../services/auth.service';
+import {Employee} from '../../dtos/employee';
+import { ProfileDto} from '../../dtos/profile-dto';
+import {EditEmployee} from '../../dtos/edit-employee';
 
 @Component({
   selector: 'app-event-details',
@@ -26,15 +31,18 @@ export class EventDetailsComponent implements OnInit {
   hasPicture = false;
   id: number;
   eventDetails: DetailedEvent;
+  loggedInEmployee: boolean;
+  employee: any;
   applyTaskForm;
 
-  constructor(private route: ActivatedRoute, private employerService: EmployerService,
-              private eventService: EventService, private formBuilder: FormBuilder, private applicationService: ApplicationService) {
+  constructor(private authService: AuthService, private route: ActivatedRoute, private employerService: EmployerService,
+              private eventService: EventService, private formBuilder: FormBuilder, private applicationService: ApplicationService,
+              private employeeService: EmployeeService) {
     this.route.params.subscribe(params => {
       this.id = params.id;
     });
     this.applyTaskForm = this.formBuilder.group({
-      applicationText: ['Sehr geehrte Damen und Herren, \n\r hiermit bewerbe ich mich für die Stelle.', Validators.required],
+      applicationText: [null, Validators.required],
       inputTask: [null]
     });
   }
@@ -51,6 +59,13 @@ export class EventDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getEventDetails();
+    if (this.authService.isLoggedIn() && this.authService.getUserRole() === 'EMPLOYEE') {
+      this.loggedInEmployee = true;
+      this.employeeService.getEmployeeByEmail(this.authService.getTokenIdentifier()).subscribe(
+        (profile: EditEmployee) => {
+          this.employee = profile.profileDto;
+        });
+    }
   }
 
   private getEventDetails() {
@@ -71,15 +86,27 @@ export class EventDetailsComponent implements OnInit {
       });
   }
 
+  createApplication() {
+    if (this.applyTaskForm.value.inputTask === null || this.applyTaskForm.value.inputTask === 'null') {
+      this.applyTaskForm.controls['applicationText'].setValue('');
+    } else {
+      const n: number = this.applyTaskForm.value.inputTask;
+      const task = this.eventDetails.tasks.find ((t: Task) => t.id.toString() === n.toString());
+      this.applyTaskForm.controls['applicationText'].setValue('Sehr geehrte Damen und Herren, \n\rhiermit bewerbe ich mich für die Stelle "'
+        +  task.interestArea.description + '" für das Event ' + this.eventDetails.title + '\n\rMit freundlichen Grüßen\n'
+        + this.employee.firstName + ' ' + this.employee.lastName);
+    }
+  }
+
   apply(value: any) {
     const application = new Application(value.inputTask, value.applicationText);
     this.applicationService.applyTask(application).subscribe(() => {
-        this.applyTaskForm.reset();
       },
       error => {
         this.error = true;
         this.errorMessage = error.error;
       }
     );
+    this.applyTaskForm.reset();
   }
 }

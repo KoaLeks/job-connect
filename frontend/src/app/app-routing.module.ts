@@ -10,6 +10,7 @@ import {EditProfileComponent} from './components/edit-profile/edit-profile.compo
 import {EventOverviewComponent} from './components/event-overview/event-overview.component';
 import {CreateEventComponent} from './components/create-event/create-event.component';
 import {EventDetailsComponent} from './components/event-details/event-details.component';
+import {NotificationComponent} from './components/notification/notification.component';
 import {EmployeeOverviewComponent} from './components/employee-overview/employee-overview.component';
 
 const routes: Routes = [
@@ -18,10 +19,11 @@ const routes: Routes = [
   {path: 'message', canActivate: [AuthGuard], component: MessageComponent},
   {path: 'create-event', component: CreateEventComponent},
   {path: 'message', canActivate: [AuthGuard], component: MessageComponent},
-  {path: 'edit-profile', canActivate: [AuthGuard, EditGuard], component: EditProfileComponent},
-  {path: 'edit-employee', canActivate: [AuthGuard], component: EditEmployeeComponent},
-  {path: 'edit-employer', canActivate: [AuthGuard], component: EditEmployerComponent},
+  {path: 'edit-profile', canActivate: [EditGuard], component: EditProfileComponent},
+  {path: 'edit-employee', component: EditEmployeeComponent},
+  {path: 'edit-employer', component: EditEmployerComponent},
   {path: 'events/:id/details', component: EventDetailsComponent},
+  {path: 'notifications', component: NotificationComponent},
   {path: 'employee-overview', canActivate: [AuthGuard], component: EmployeeOverviewComponent},
 ];
 

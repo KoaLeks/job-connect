@@ -65,17 +65,18 @@
         </div>
       </div>
       <div class="card-footer text-muted">
-        <button type="button" class="btn btn-primary" data-toggle="modal"
-                data-target="#Apply-Task">
+        <button type="button" class="btn btn-primary" data-toggle="modal" (click)="createApplication()"
+                data-target="#Apply-Task" [disabled]="!loggedInEmployee">
           Bewirb dich jetzt!
         </button>
       </div>
     </div>
   </div>
+</ng-container>
 
-<!-- Modal ADD TASK-->
+<!-- Modal Apply for Task-->
 <div class="modal fade" id="Apply-Task" tabindex="-1" role="dialog" aria-labelledby="addTaskLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="addTaskLabel">Bewerbung</h5>
@@ -87,7 +88,8 @@
       <form [formGroup]="applyTaskForm" (ngSubmit)="apply(applyTaskForm.value)">
         <div class="form-group" *ngIf="this.eventDetails.tasks !== undefined && this.eventDetails.tasks.length !== 0">
           <label for="inputTask">Für welche Stelle möchtest du dich bewerben</label>
-          <select class="form-control" id="inputTask" formControlName="inputTask">
+          <select  class="form-control" id="inputTask" formControlName="inputTask"
+                   (change)='createApplication()'>
             <option [value]=null>kein Stelle ausgewählt</option>
             <ng-container *ngFor="let task of this.eventDetails.tasks">
               <option [value]="task.id">Stelle: {{task.interestArea.area}} -
@@ -98,19 +100,16 @@
         <div class="form-group">
           <label for="applicationText">Schreibe deine eigene Bewerbung:</label>
           <textarea name="applicationText" formControlName="applicationText" class="form-control" id="applicationText"
-                    maxlength="10000" >{{this.applyTaskForm.value.description}} </textarea>
+                    maxlength="10000" > </textarea>
         </div>
         <!-- TASK FORM -->
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary" data-toggle="modal"
-                  data-target="#Add-Task" [disabled]="!applyTaskForm.valid">Senden
+                  data-target="#Apply-Task" [disabled]="!applyTaskForm.valid">Senden
           </button>
         </div>
       </form>
     </div>
   </div>
 </div>
-<!-- Modal ADD TASK-->
-
-</ng-container>
