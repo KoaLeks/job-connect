@@ -11,6 +11,7 @@ import {EventOverviewComponent} from './components/event-overview/event-overview
 import {CreateEventComponent} from './components/create-event/create-event.component';
 import {EventDetailsComponent} from './components/event-details/event-details.component';
 import {EmployeeOverviewComponent} from './components/employee-overview/employee-overview.component';
+import {PageNotFoundComponent} from './components/page-not-found/page-not-found.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -23,6 +24,7 @@ const routes: Routes = [
   {path: 'edit-employer', canActivate: [AuthGuard], component: EditEmployerComponent},
   {path: 'events/:id/details', component: EventDetailsComponent},
   {path: 'employee-overview', canActivate: [AuthGuard], component: EmployeeOverviewComponent},
+  {path: '**', component: PageNotFoundComponent},
 ];
 
 @NgModule({
