@@ -83,12 +83,16 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return Objects.equals(id, task.id);
+        return Objects.equals(id, task.id) &&
+            Objects.equals(description, task.description) &&
+            Objects.equals(paymentHourly, task.paymentHourly) &&
+            Objects.equals(employeeCount, task.employeeCount) &&
+            Objects.equals(interestArea, task.interestArea);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, description, paymentHourly, employeeCount, interestArea);
     }
 
     @Override
@@ -99,7 +103,7 @@ public class Task {
             ", employeeCount=" + employeeCount +
             ", paymentHourly=" + paymentHourly +
             ", event=" + event +
-            ", employees=" + employees +
+            ", employees=" + employees.size() +
             ", interestArea=" + interestArea +
             '}';
     }

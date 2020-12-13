@@ -1,9 +1,62 @@
 <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
-  <strong>Error! </strong> {{ errorMessage }}
+  <strong>Fehler! </strong> {{ errorMessage }}
   <button type="button" (click)="vanishError()" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
+
+<!-- Modal ADD Interest-->
+<div class="modal fade" id="Add-Interest" tabindex="-1" role="dialog" aria-labelledby="addInterestLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" style="width:33%" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="addInterestLabel">Neues Interesse</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Interest FORM -->
+        <form [formGroup]="interestForm" (ngSubmit)="addInterest(interestForm.value)">
+          <div class="form-group">
+            <label for="InputInterestName">Name<b>*</b></label>
+            <input type="text" maxlength="100" class="form-control" id="InputInterestName"
+                   formControlName="name" pattern="[a-zA-ZÖöÜüÄä]+([ ]|[a-zA-ZÜüÖöÄä]|[0-9])*">
+          </div>
+          <div class="form-group">
+            <label for="InputInterestDescription">Beschreibung<b>*</b></label>
+            <input type="text" maxlength="1000" class="form-control" id="InputInterestDescription"
+                   formControlName="description" pattern="[a-zA-ZÜüÄäÖö]+([ ]|[a-zA-ZÜüÄäÖö]|[0-9])*">
+          </div>
+          <div class="form-group" *ngIf="this.interestAreas !== undefined && this.interestAreas.length !== 0">
+            <label for="InputInterestInterestArea" style="margin-bottom: 0px">Interessengebiet</label><br>
+            <small><i>(Wenn du kein Interessengebiet auswählst, kann dieses Interesse nicht für
+              deine möglichen Aufgabenvorschläge verwendet werden.)</i></small>
+            <select class="form-control" id="InputInterestInterestArea" formControlName="interestArea">
+              <option [value]=null>kein Interessengebiet</option>
+              <ng-container *ngFor="let interestArea of this.interestAreas">
+                <option [value]="interestArea.id">Gebiet: {{interestArea.area}} -
+                  Beschreibung: {{interestArea.description}}</option>
+              </ng-container>
+            </select>
+          </div>
+
+
+          <!-- Interest FORM -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" data-toggle="modal"
+                    data-target="#Add-Interest" [disabled]="!interestForm.valid">Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal ADD Interest-->
 
 <div class="jumbotron mt-5">
   <h1 class="display-4">Profil bearbeiten</h1>
@@ -58,7 +111,7 @@
         <label for="gender">Geschlecht*</label>
         <select class="form-control" name="gender" formControlName="gender" id="gender">
           <option value="" hidden disabled>Geschlecht auswählen</option>
-          <option *ngFor="let gender of genderOptions" [ngValue]="gender">{{gender}}</option>
+          <option *ngFor="let gender of genderOptions" [ngValue]="gender">{{gender==='MALE'?'Männlich':gender=='FEMALE'?'Weiblich':'Divers'}}</option>
         </select>
       </div>
 
@@ -95,13 +148,332 @@
                   placeholder="Beschreibung ..." maxlength="10000"></textarea>
       </div>
 
+      <!-- interests -->
       <div>
-        Interessen auswählen
-        <div class="form-group" *ngFor="let i of interests">
-          <input type="checkbox" name="{{i.id}}" id="{{i.id}}" (change)="toggleInterest($event, i.id)">
-          <label for="{{i.id}}">{{i.name}}</label>
+        <label>Interessen:</label>
+        <div *ngIf="employeeInterests.length !== 0">
+          <ul>
+            <ng-container *ngFor="let interest of employeeInterests">
+              <li>
+                <div>
+                  {{interest.name}}: {{interest.description}}
+                  <button type="button" class="small" (click)="deleteInterest(interest)">&times;</button>
+                </div>
+              </li>
+            </ng-container>
+          </ul>
         </div>
       </div>
+      <!-- Button trigger modal ADD Interest-->
+      <button type="button" class="btn btn-primary" data-toggle="modal"
+              data-target="#Add-Interest" (click)="loadInterestAreas()">
+        Interesse hinzufügen
+      </button>
+
+      <!-- TIME Management begin-->
+      <br>
+      <br>
+      <h5>
+        <div data-toggle="tooltip" data-placement="top" title="Somit kannst du Jobs ganz leicht nach deiner verfügbaren Zeit filtern und bekommst auch nur Mails für neue Jobs, bei denen du auch Zeit hast!">
+          Hier siehst du, wann du Zeit zum Arbeiten hast
+          <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-info-circle" fill="currentColor"
+               xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+            <path
+              d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z"/>
+            <circle cx="8" cy="4.5" r="1"/>
+          </svg>
+        </div>
+      </h5>
+      <table class="table table-bordered">
+        <thead>
+        <tr>
+          <th scope="col">Montag</th>
+          <th scope="col">Dienstag</th>
+          <th scope="col">Mittwoch</th>
+          <th scope="col">Donnerstag</th>
+          <th scope="col">Freitag</th>
+          <th scope="col">Samstag</th>
+          <th scope="col">Sonntag</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>
+            <ng-container *ngFor="let day of mondayArray">
+              <ng-container *ngIf="day.visible">
+                <ng-container *ngIf="(day.end.substr(0, 10) !== day.finalEndDate.substr(0, 10)); else onlyOnce">
+                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-container>
+                <ng-template #onlyOnce>
+                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-template>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) === day.end.substr(0, 10)">
+                  <br>{{day.start.substr(11, 5)}}
+                  bis {{day.end.substr(11, 5)}}
+                </ng-container>
+                <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
+                  <br>ganztägig
+                </ng-container>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) !== day.end.substr(0, 10)">
+                  <br>{{day.start.substr(11, 5)}}
+                  bis Folgetag
+                </ng-container>
+                <div style="color: red" (click)="deleteTimeFromOverview(day, mondayArray)">
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                    <path fill-rule="evenodd"
+                          d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                  </svg>
+                </div>
+                <hr/>
+              </ng-container>
+            </ng-container>
+          </td>
+          <td>
+            <ng-container *ngFor="let day of tuesdayArray">
+              <ng-container *ngIf="day.visible">
+                <ng-container *ngIf="(day.end.substr(0, 10) !== day.finalEndDate.substr(0, 10)); else onlyOnce">
+                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-container>
+                <ng-template #onlyOnce>
+                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-template>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) === day.end.substr(0, 10)">
+                  <br>{{day.start.substr(11, 5)}}
+                  bis {{day.end.substr(11, 5)}}
+                </ng-container>
+                <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
+                  <br>ganztägig
+                </ng-container>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) !== day.end.substr(0, 10)">
+                  <br>{{day.start.substr(11, 5)}}
+                  bis Folgetag
+                </ng-container>
+                <div style="color: red" (click)="deleteTimeFromOverview(day, tuesdayArray)">
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                    <path fill-rule="evenodd"
+                          d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                  </svg>
+                </div>
+                <hr/>
+              </ng-container>
+            </ng-container>
+          </td>
+          <td>
+            <ng-container *ngFor="let day of wednesdayArray">
+              <ng-container *ngIf="day.visible">
+                <ng-container *ngIf="(day.end.substr(0, 10) !== day.finalEndDate.substr(0, 10)); else onlyOnce">
+                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-container>
+                <ng-template #onlyOnce>
+                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-template>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) === day.end.substr(0, 10)">
+                  <br>{{day.start.substr(11, 5)}}
+                  bis {{day.end.substr(11, 5)}}
+                </ng-container>
+                <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
+                  <br>ganztägig
+                </ng-container>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) !== day.end.substr(0, 10)">
+                  <br>{{day.start.substr(11, 5)}}
+                  bis Folgetag
+                </ng-container>
+                <div style="color: red" (click)="deleteTimeFromOverview(day, wednesdayArray)">
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                    <path fill-rule="evenodd"
+                          d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                  </svg>
+                </div>
+                <hr/>
+              </ng-container>
+            </ng-container>
+          </td>
+          <td>
+            <ng-container *ngFor="let day of thursdayArray">
+              <ng-container *ngIf="day.visible">
+                <ng-container *ngIf="(day.end.substr(0, 10) !== day.finalEndDate.substr(0, 10)); else onlyOnce">
+                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-container>
+                <ng-template #onlyOnce>
+                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-template>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) === day.end.substr(0, 10)">
+                  <br>{{day.start.substr(11, 5)}}
+                  bis {{day.end.substr(11, 5)}}
+                </ng-container>
+                <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
+                  <br>ganztägig
+                </ng-container>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) !== day.end.substr(0, 10)">
+                  <br>{{day.start.substr(11, 5)}}
+                  bis Folgetag
+                </ng-container>
+                <div style="color: red" (click)="deleteTimeFromOverview(day, thursdayArray)">
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                    <path fill-rule="evenodd"
+                          d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                  </svg>
+                </div>
+                <hr/>
+              </ng-container>
+            </ng-container>
+          </td>
+          <td>
+            <ng-container *ngFor="let day of fridayArray">
+              <ng-container *ngIf="day.visible">
+                <ng-container *ngIf="(day.end.substr(0, 10) !== day.finalEndDate.substr(0, 10)); else onlyOnce">
+                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-container>
+                <ng-template #onlyOnce>
+                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-template>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) === day.end.substr(0, 10)">
+                  <br>{{day.start.substr(11, 5)}}
+                  bis {{day.end.substr(11, 5)}}
+                </ng-container>
+                <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
+                  <br>ganztägig
+                </ng-container>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) !== day.end.substr(0, 10)">
+                  <br>{{day.start.substr(11, 5)}}
+                  bis Folgetag
+                </ng-container>
+                <div style="color: red" (click)="deleteTimeFromOverview(day, fridayArray)">
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                    <path fill-rule="evenodd"
+                          d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                  </svg>
+                </div>
+                <hr/>
+              </ng-container>
+            </ng-container>
+          </td>
+          <td>
+            <ng-container *ngFor="let day of saturdayArray">
+              <ng-container *ngIf="day.visible">
+                <ng-container *ngIf="(day.end.substr(0, 10) !== day.finalEndDate.substr(0, 10)); else onlyOnce">
+                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-container>
+                <ng-template #onlyOnce>
+                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-template>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) === day.end.substr(0, 10)">
+                  <br>{{day.start.substr(11, 5)}}
+                  bis {{day.end.substr(11, 5)}}
+                </ng-container>
+                <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
+                  <br>ganztägig
+                </ng-container>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) !== day.end.substr(0, 10)">
+                  <br>{{day.start.substr(11, 5)}}
+                  bis Folgetag
+                </ng-container>
+                <div style="color: red" (click)="deleteTimeFromOverview(day, saturdayArray)">
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                    <path fill-rule="evenodd"
+                          d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                  </svg>
+                </div>
+                <hr/>
+              </ng-container>
+            </ng-container>
+          </td>
+          <td>
+            <ng-container *ngFor="let day of sundayArray">
+              <ng-container *ngIf="day.visible">
+                <ng-container *ngIf="(day.end.substr(0, 10) !== day.finalEndDate.substr(0, 10)); else onlyOnce">
+                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-container>
+                <ng-template #onlyOnce>
+                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                </ng-template>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) === day.end.substr(0, 10)">
+                  <br>{{day.start.substr(11, 5)}}
+                  bis {{day.end.substr(11, 5)}}
+                </ng-container>
+                <ng-container *ngIf="day.start.substr(11, 5) === '00:00' && day.end.substr(11, 5) === '23:59'">
+                  <br>ganztägig
+                </ng-container>
+                <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
+                && day.start.substr(0, 10) !== day.end.substr(0, 10)">
+                  <br>{{day.start.substr(11, 5)}}
+                  bis Folgetag
+                </ng-container>
+                <div style="color: red" (click)="deleteTimeFromOverview(day, sundayArray)">
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                    <path fill-rule="evenodd"
+                          d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                  </svg>
+                </div>
+                <hr/>
+              </ng-container>
+            </ng-container>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <br>
+      <!-- Button trigger time adding Modal -->
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addTimeModal">
+        neue Zeitspanne hinzufügen
+      </button>
+
+      <div *ngIf="newTimes1.length != 0">
+        <br><br>
+        <h5>neu erstellt: </h5>
+        <ng-container *ngFor="let time of newTimes1">
+          <div *ngIf="time.visible">
+            <button type="button" class="small" (click)="deleteTime(time)">&times;</button>
+            <a style="margin: 1em"> <b>Datum:</b> {{time.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</a>
+            <a style="margin-right: 1em"> <b>Von:</b> {{time.start.substr(11, 5)}} Uhr</a>
+            <a> <b>Bis:</b> {{time.end.substr(11, 5)}} Uhr | </a>
+            <ng-container *ngIf="time.booleanDate">
+              wiederholt sich wöchentlich? <a style="color: green"><b>ja</b></a>
+            </ng-container>
+            <ng-container *ngIf="!time.booleanDate">
+              wiederholt sich wöchentlich? <a style="color: red"><b>nein</b></a>
+            </ng-container>
+
+          </div>
+        </ng-container>
+      </div>
+
+      <!-- TIME Management end-->
 
       <div class="form-group form-check">
         <!--button type="button" routerLink="/" class="btn btn-outline-secondary float-right">Abbrechen</button-->
@@ -111,6 +483,106 @@
   </div>
 </div>
 
-<button class="btn btn-primary float-right" (click)="changePassword=true" data-target="#passwordUpdateModal" data-toggle="modal">Passwort ändern</button>
+<button class="btn btn-primary float-right" (click)="changePassword=true" data-target="#passwordUpdateModal"
+        data-toggle="modal">Passwort ändern
+</button>
 <app-edit-password [changePassword]="changePassword"></app-edit-password>
 
+<!-- time adding Modal -->
+<div class="modal fade" id="addTimeModal" tabindex="-1" role="dialog" aria-labelledby="addTimeModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addTimeModalLabel">neue Zeitspanne hinzufügen</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form [formGroup]="timeCreationForm" (ngSubmit)="addTime(timeCreationForm.value)">
+          <div class="form-group">
+            <label for="availableDate">Datum</label>
+            <input type="date" id="availableDate" formControlName="date" class="form-control" style="margin-bottom: 1em"
+                   max='9999-12-31'
+                   pattern="2[0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]"> <!-- only year 2000 or later is allowed -->
+          </div>
+
+          <div>
+            <input type="checkbox" id="fullDayCheck" style="margin-right: 1em" class="switch"
+                   (click)="toggleStartEndMethod()">
+            <label for="fullDayCheck">ganzer Tag?</label>
+          </div>
+
+          <div class="form-group" *ngIf="!toggleStartEnd">
+            <label for="availableTimeStart">Von</label>
+            <input type="time" id="availableTimeStart" class="form-control" formControlName="timeStart"
+                   style="margin-bottom: 1em">
+          </div>
+          <div class="form-group" *ngIf="!toggleStartEnd && !toggleStartEndNightShift">
+            <label for="availableTimeEnd">Bis</label>
+            <input type="time" id="availableTimeEnd" class="form-control" formControlName="timeEnd">
+          </div>
+
+          <div>
+            <input type="checkbox" id="nightShift" style="margin-right: 1em" class="switch"
+                   (click)="toggleNightShift(); addNightShift()">
+            <label for="nightShift">
+              <div data-toggle="tooltip" data-placement="top"
+                   title="falls Jobs bis in die Morgenstunden dauern und du sie trotzdem vorgeschlagen bekommen möchtest">
+                bis zum Folgetag um 3:00 Uhr in der Früh?
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-info-circle" fill="currentColor"
+                     xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                  <path
+                    d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z"/>
+                  <circle cx="8" cy="4.5" r="1"/>
+                </svg>
+              </div>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <input type="checkbox" id="weekly" style="margin-right: 1em" class="form-control; switch"
+                   formControlName="booleanDate">
+            <label for="weekly">soll sich wöchentlich wiederholen? <i>(ein Semester lang)</i></label>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Schließen</button>
+            <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#addTimeModal"
+                    [disabled]="!timeCreationForm.valid">Speichern
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- time adding Modal -->
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>

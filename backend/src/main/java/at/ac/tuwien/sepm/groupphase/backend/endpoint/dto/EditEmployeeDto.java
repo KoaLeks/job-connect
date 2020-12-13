@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Task;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Time;
 import at.ac.tuwien.sepm.groupphase.backend.util.Gender;
 import at.ac.tuwien.sepm.groupphase.backend.util.annotation.IsAdult;
 
@@ -28,6 +29,9 @@ public class EditEmployeeDto {
     @NotNull(message = "Geburtstag darf nicht NULL sein")
     @IsAdult(message = "Benutzer müssen volljährig sein")
     private LocalDateTime birthDate;
+
+    @Valid
+    private Set<TimeDto> times;
 
     public Long getId() {
         return id;
@@ -77,6 +81,14 @@ public class EditEmployeeDto {
         this.birthDate = birthDate;
     }
 
+    public Set<TimeDto> getTimes() {
+        return times;
+    }
+
+    public void setTimes(Set<TimeDto> times) {
+        this.times = times;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -87,23 +99,25 @@ public class EditEmployeeDto {
             Objects.equals(tasks, that.tasks) &&
             Objects.equals(interestDtos, that.interestDtos) &&
             gender == that.gender &&
-            Objects.equals(birthDate, that.birthDate);
+            Objects.equals(birthDate, that.birthDate) &&
+            Objects.equals(times, that.times);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, editProfileDto, tasks, interestDtos, gender, birthDate);
+        return Objects.hash(id, editProfileDto, tasks, interestDtos, gender, birthDate, times);
     }
 
     @Override
     public String toString() {
-        return "EmployeeDto{" +
+        return "EditEmployeeDto{" +
             "id=" + id +
             ", editProfileDto=" + editProfileDto +
             ", tasks=" + tasks +
             ", interestDtos=" + interestDtos +
             ", gender=" + gender +
             ", birthDate=" + birthDate +
+            ", times=" + (times == null ? "null":times.size()) +
             '}';
     }
 
@@ -114,6 +128,7 @@ public class EditEmployeeDto {
         private Set<InterestDto> interestDtos;
         private Gender gender;
         private LocalDateTime birthDate;
+        private Set<TimeDto> times;
 
         private EditEmployeeDtoBuilder(){}
 
@@ -140,6 +155,10 @@ public class EditEmployeeDto {
             this.birthDate = birthDate;
             return this;
         }
+        public EditEmployeeDto.EditEmployeeDtoBuilder withTimes(Set<TimeDto> times){
+            this.times = times;
+            return this;
+        }
 
         public EditEmployeeDto build(){
             EditEmployeeDto editEmployeeDto = new EditEmployeeDto();
@@ -149,6 +168,7 @@ public class EditEmployeeDto {
             editEmployeeDto.setTasks(tasks);
             editEmployeeDto.setGender(gender);
             editEmployeeDto.setBirthDate(birthDate);
+            editEmployeeDto.setTimes(times);
             return editEmployeeDto;
         }
     }

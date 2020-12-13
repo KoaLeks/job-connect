@@ -78,7 +78,7 @@ public class InterestEndpointTest implements TestData {
             .withName(INTEREST_NAME)
             .withDescription(INTEREST_DESCRIPTION)
             .withInterestArea(interestArea)
-            .withEmployees(INTEREST_EMPLOYEES)
+            .withEmployee(INTEREST_EMPLOYEE)
             .build();
 
         interestRepository.save(interest);

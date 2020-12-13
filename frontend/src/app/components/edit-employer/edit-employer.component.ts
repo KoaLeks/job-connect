@@ -64,7 +64,7 @@ export class EditEmployerComponent implements OnInit {
           this.picture = 'data:image/png;base64,' + this.picture;
           this.hasPicture = true;
         }
-        console.log(profile);
+        // console.log(profile);
       },
       error => {
         this.error = true;
@@ -116,7 +116,7 @@ export class EditEmployerComponent implements OnInit {
 
       this.employerService.updateEmployer(employer).subscribe(
         () => {
-          console.log('User profile updated successfully');
+          // console.log('User profile updated successfully');
           // this.router.navigate(['/']);
           this.inputImage.nativeElement.value = ''; // resets fileUpload button
           this.loadEmployerDetails();
@@ -126,8 +126,6 @@ export class EditEmployerComponent implements OnInit {
           this.error = true;
           this.errorMessage = error.error;
         });
-    } else {
-      console.log('Invalid input');
     }
   }
 
@@ -140,12 +138,26 @@ export class EditEmployerComponent implements OnInit {
 
   onFileSelected(event) {
     console.log(event);
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.selectedPicture = reader.result.toString();
-    };
-    reader.readAsDataURL(file);
+    // checks if files size is smaller than 5MB
+    if (event.target.files[0].size <= 5242880) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.selectedPicture = reader.result.toString();
+        if (this.selectedPicture.startsWith('data:image/png;base64') || this.selectedPicture.startsWith('data:image/jpeg;base64')) {
+          this.picture = this.selectedPicture;
+          this.hasPicture = true;
+          reader.readAsDataURL(file);
+        } else {
+          this.selectedPicture = null;
+          this.error = true;
+          this.errorMessage = 'Das Bild muss im JPEG oder PNG Format sein.';
+        }
+      };
+    } else {
+      this.error = true;
+      this.errorMessage = 'Das Bild darf maximal 5 MB groß sein.';
+    }
   }
 
   arrayBufferToBase64(buffer) {

@@ -73,12 +73,15 @@ public class Employer {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Employer employer = (Employer) o;
-        return Objects.equals(id, employer.id);
+        return Objects.equals(id, employer.id) &&
+            Objects.equals(profile, employer.profile) &&
+            Objects.equals(companyName, employer.companyName) &&
+            Objects.equals(description, employer.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, profile, companyName, description);
     }
 
     @Override
@@ -88,7 +91,7 @@ public class Employer {
             ", profile=" + profile +
             ", companyName='" + companyName + '\'' +
             ", description='" + description + '\'' +
-            ", events=" + events +
+            ", events=" + events.size() +
             '}';
     }
 

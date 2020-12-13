@@ -9,6 +9,7 @@ public interface EmployerRepository extends JpaRepository<Employer, Long> {
 
     /**
      * Find an employer with a certain email address
+     *
      * @param email to look for
      * @return the employer
      */

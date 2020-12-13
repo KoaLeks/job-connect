@@ -100,8 +100,7 @@ public class ProfileDto {
             Objects.equals(firstName, that.firstName) &&
             Objects.equals(email, that.email) &&
             Objects.equals(password, that.password) &&
-            Objects.equals(publicInfo, that.publicInfo) &&
-            Objects.equals(picture, that.picture);
+            Objects.equals(publicInfo, that.publicInfo);
     }
 
     @Override

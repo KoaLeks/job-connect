@@ -97,12 +97,17 @@ public class Event {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Event event = (Event) o;
-        return Objects.equals(id, event.id);
+        return Objects.equals(id, event.id) &&
+            Objects.equals(start, event.start) &&
+            Objects.equals(end, event.end) &&
+            Objects.equals(title, event.title) &&
+            Objects.equals(description, event.description) &&
+            Objects.equals(address, event.address);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, start, end, title, description, address);
     }
 
     @Override
@@ -115,7 +120,7 @@ public class Event {
             ", description='" + description + '\'' +
             ", employer=" + employer +
             ", address=" + address +
-            ", tasks=" + tasks +
+            ", tasks=" + tasks.size() +
             '}';
     }
 

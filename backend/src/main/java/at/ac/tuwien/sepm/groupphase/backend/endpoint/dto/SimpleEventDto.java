@@ -68,12 +68,16 @@ public class SimpleEventDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SimpleEventDto simpleEvent = (SimpleEventDto) o;
-        return Objects.equals(id, simpleEvent.id);
+        return Objects.equals(id, simpleEvent.id) &&
+            Objects.equals(start, simpleEvent.start) &&
+            Objects.equals(end, simpleEvent.end) &&
+            Objects.equals(title, simpleEvent.title) &&
+            Objects.equals(description, simpleEvent.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, start, end, title, description);
     }
 
     @Override

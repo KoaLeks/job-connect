@@ -13,6 +13,9 @@
       <li class="nav-item">
         <a class="nav-link nav-class" routerLink="/events" routerLinkActive="active">Events</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link nav-class" routerLink="/employee-overview" *ngIf="authService.isLoggedIn() && authService.getUserRole() === 'EMPLOYER'">ArbeitnehmerInnen</a>
+      </li>
     </ul>
     <ul class="navbar-nav mr-5" *ngIf="authService.isLoggedIn()">
       <div class="collapse navbar-collapse" id="navbar-list-4">
