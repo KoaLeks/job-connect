@@ -144,8 +144,16 @@ export class EditEmployerComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = () => {
         this.selectedPicture = reader.result.toString();
+        if (this.selectedPicture.startsWith('data:image/png;base64') || this.selectedPicture.startsWith('data:image/jpeg;base64')) {
+          this.picture = this.selectedPicture;
+          this.hasPicture = true;
+          reader.readAsDataURL(file);
+        } else {
+          this.selectedPicture = null;
+          this.error = true;
+          this.errorMessage = 'Das Bild muss im JPEG oder PNG Format sein.';
+        }
       };
-      reader.readAsDataURL(file);
     } else {
       this.error = true;
       this.errorMessage = 'Das Bild darf maximal 5 MB groß sein.';
