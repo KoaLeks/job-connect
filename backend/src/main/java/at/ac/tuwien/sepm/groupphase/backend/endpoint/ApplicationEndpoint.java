@@ -80,7 +80,7 @@ public class ApplicationEndpoint {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CrossOrigin(origins = "http://localhost:4200")
     public void changeApplicationStatus(@Valid @RequestBody ApplicationStatusDto applicationStatusDto, @RequestHeader String authorization){
-        LOGGER.info("POST /api/v1/profiles/applicationStatus/ body: {}", applicationStatusDto);
+        LOGGER.info("POST /api/v1/applications/applicationStatus/ body: {}", applicationStatusDto);
 
         Employee_Tasks employee_tasks = applicationStatusMapper.applicationStatusDtoToEmployee_tasks(applicationStatusDto);
         String mail = tokenService.getEmailFromHeader(authorization);

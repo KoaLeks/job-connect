@@ -43,6 +43,7 @@ public class NotificationEndpoint {
     @ResponseStatus(HttpStatus.OK)
     @CrossOrigin(origins = "http://localhost:4200")
     public Set<SimpleNotificationDto> getNotifications(@RequestHeader String authorization){
+        LOGGER.info("GET /api/v1/notifications");
         String mail = tokenService.getEmailFromHeader(authorization);
         Profile profile = profileService.findProfileByEmail(mail);
         return notificationMapper.notificationsToSimpleNotificationsDtos(notificationService.getAllByProfileId(profile.getId()));
