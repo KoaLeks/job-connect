@@ -46,8 +46,10 @@ export class RegisterComponent implements OnInit {
       publicInfo: [''],
       gender: [null, [Validators.required]],
       birthDate: [null, [Validators.required]]
-    }, {validators: [this.mustMatch('password', 'confirmPassword'),
-      this.isAdult('birthDate')]});
+    }, {
+      validators: [this.mustMatch('password', 'confirmPassword'),
+        this.isAdult('birthDate')]
+    });
   }
 
   ngOnInit(): void {
@@ -113,6 +115,7 @@ export class RegisterComponent implements OnInit {
     this.submitted = false;
     this.registerFormEmployer.reset();
     this.registerFormEmployee.reset();
+    this.vanishError();
   }
 
   /**
@@ -158,16 +161,16 @@ export class RegisterComponent implements OnInit {
         this.clearForm();
         this.router.navigate(['']);
       },
-        error => {
-          console.log('Could not create user due to:');
-          console.log(error);
-          this.error = true;
-          if (error.error !== null && typeof error.error === 'object') {
-            this.errorMessage = error.error.error;
-          } else {
-            this.errorMessage = error.error;
-          }
+      error => {
+        console.log('Could not create user due to:');
+        console.log(error);
+        this.error = true;
+        if (error.error !== null && typeof error.error === 'object') {
+          this.errorMessage = error.error.error;
+        } else {
+          this.errorMessage = error.error;
         }
+      }
     );
   }
 
