@@ -19,6 +19,8 @@ import {EmployerService} from '../../services/employer.service';
 export class CreateEventComponent implements OnInit {
 
   error: boolean = false;
+  success = false;
+  event: Event;
   errorMessage: string = '';
   addressCreationForm;
   eventCreationForm;
@@ -80,7 +82,13 @@ export class CreateEventComponent implements OnInit {
       publicInfo: null
     };
     this.eventService.createEvent(event).subscribe(
-      () => {},
+      createdEvent => {
+        this.event = createdEvent;
+        this.success = true;
+        this.eventCreationForm.reset();
+        this.addressCreationForm.reset();
+        this.taskCreationForm.reset();
+      },
       error => {
         this.defaultServiceErrorHandling(error);
       }
