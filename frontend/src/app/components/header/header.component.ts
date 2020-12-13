@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {EmployerService} from '../../services/employer.service';
 import {EmployeeService} from '../../services/employee.service';
-import {Router} from '@angular/router';
 import {UpdateHeaderService} from '../../services/update-header.service';
 
 @Component({
@@ -44,6 +43,8 @@ export class HeaderComponent implements OnInit {
           if (profile.profileDto.picture != null) {
             this.picture = 'data:image/png;base64,' + this.picture;
             this.hasPicture = true;
+          } else {
+            this.hasPicture = false;
           }
           console.log(profile);
         },
@@ -61,6 +62,8 @@ export class HeaderComponent implements OnInit {
           if (profile.profileDto.picture != null) {
             this.picture = 'data:image/png;base64,' + this.picture;
             this.hasPicture = true;
+          } else {
+            this.hasPicture = false;
           }
           console.log(profile);
         },

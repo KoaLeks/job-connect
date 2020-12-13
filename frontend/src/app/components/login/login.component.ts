@@ -43,6 +43,8 @@ export class LoginComponent implements OnInit {
      */
     loginUser() {
         this.submitted = true;
+        // removes previous errors
+        this.vanishError();
         if (this.loginForm.valid) {
             const authRequest: AuthRequest = new AuthRequest(this.loginForm.controls.email.value, this.loginForm.controls.password.value);
             this.authenticateUser(authRequest);

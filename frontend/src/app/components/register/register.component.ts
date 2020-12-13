@@ -123,6 +123,8 @@ export class RegisterComponent implements OnInit {
    */
   registerUser(): void {
     this.submitted = true;
+    // removes previous errors
+    this.vanishError();
     if (this.isPrivatePerson) {
       this.registerFormEmployer.get('companyName').setValue('Privatperson');
     }
