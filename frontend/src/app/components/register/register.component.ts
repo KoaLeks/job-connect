@@ -46,8 +46,10 @@ export class RegisterComponent implements OnInit {
       publicInfo: [''],
       gender: [null, [Validators.required]],
       birthDate: [null, [Validators.required]]
-    }, {validators: [this.mustMatch('password', 'confirmPassword'),
-      this.isAdult('birthDate')]});
+    }, {
+      validators: [this.mustMatch('password', 'confirmPassword'),
+        this.isAdult('birthDate')]
+    });
   }
 
   ngOnInit(): void {
@@ -113,6 +115,7 @@ export class RegisterComponent implements OnInit {
     this.submitted = false;
     this.registerFormEmployer.reset();
     this.registerFormEmployee.reset();
+    this.vanishError();
   }
 
   /**
@@ -120,6 +123,8 @@ export class RegisterComponent implements OnInit {
    */
   registerUser(): void {
     this.submitted = true;
+    // removes previous errors
+    this.vanishError();
     if (this.isPrivatePerson) {
       this.registerFormEmployer.get('companyName').setValue('Privatperson');
     }
@@ -127,7 +132,8 @@ export class RegisterComponent implements OnInit {
       const newEmployee: Employee = new Employee(this.registerFormEmployee.controls.firstName.value,
         this.registerFormEmployee.controls.lastName.value, this.registerFormEmployee.controls.email.value,
         this.registerFormEmployee.controls.password.value, this.registerFormEmployee.controls.publicInfo.value,
-        this.registerFormEmployee.controls.gender.value, new Date(this.registerFormEmployee.controls.birthDate.value));
+        this.registerFormEmployee.controls.gender.value, new Date(this.registerFormEmployee.controls.birthDate.value),
+        null);
       this.createProfile(newEmployee);
     } else if (this.registerFormEmployer.valid && !this.isEmployee) {
       // tslint:disable-next-line:max-line-length
@@ -157,16 +163,16 @@ export class RegisterComponent implements OnInit {
         this.clearForm();
         this.router.navigate(['']);
       },
-        error => {
-          console.log('Could not create user due to:');
-          console.log(error);
-          this.error = true;
-          if (error.error !== null && typeof error.error === 'object') {
-            this.errorMessage = error.error.error;
-          } else {
-            this.errorMessage = error.error;
-          }
+      error => {
+        console.log('Could not create user due to:');
+        console.log(error);
+        this.error = true;
+        if (error.error !== null && typeof error.error === 'object') {
+          this.errorMessage = error.error.error;
+        } else {
+          this.errorMessage = error.error;
         }
+      }
     );
   }
 

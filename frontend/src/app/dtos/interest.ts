@@ -5,7 +5,7 @@ export class Interest {
     public id: Number,
     public name: String,
     public description: String,
-    public interestArea: InterestArea,
+    public simpleInterestAreaDto: InterestArea,
   ) {
   }
 }

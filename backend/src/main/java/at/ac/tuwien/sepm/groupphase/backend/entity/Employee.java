@@ -20,11 +20,10 @@ public class Employee {
     @MapsId
     private Profile profile;
 
+    @ManyToMany
+    private Set<Task> tasks;
 
     @OneToMany(mappedBy = "employee")
-    private Set<Employee_Tasks> tasks;
-
-    @ManyToMany
     private Set<Interest> interests;
 
     @Enumerated(EnumType.STRING)
@@ -35,12 +34,15 @@ public class Employee {
     @IsAdult
     private LocalDateTime birthDate;
 
-    public Set<Employee_Tasks> getTasks() {
-        return tasks;
+    @OneToMany(mappedBy = "employee")
+    private Set<Time> times;
+
+    public Set<Time> getTimes() {
+        return times;
     }
 
-    public void setTasks(Set<Employee_Tasks> tasks) {
-        this.tasks = tasks;
+    public void setTimes(Set<Time> times) {
+        this.times = times;
     }
 
     public Long getId() {
@@ -59,6 +61,13 @@ public class Employee {
         this.profile = profile;
     }
 
+    public Set<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(Set<Task> tasks) {
+        this.tasks = tasks;
+    }
 
     public Set<Interest> getInterests() {
         return interests;
@@ -89,12 +98,15 @@ public class Employee {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Employee employee = (Employee) o;
-        return Objects.equals(id, employee.id);
+        return Objects.equals(id, employee.id) &&
+            Objects.equals(profile, employee.profile) &&
+            Objects.equals(gender, employee.gender) &&
+            Objects.equals(birthDate, employee.birthDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, profile, gender, birthDate);
     }
 
     @Override
@@ -106,16 +118,19 @@ public class Employee {
             ", interests=" + interests +
             ", gender=" + gender +
             ", birthdate=" + birthDate +
+            ", times=" + (times == null ? "null":times.size()) +
+            ", birthDate=" + birthDate +
             '}';
     }
 
     public static final class EmployeeBuilder {
         private Long id;
         private Profile profile;
-        private Set<Employee_Tasks> tasks;
+        private Set<Task> tasks;
         private Set<Interest> interests;
         private Gender gender;
         private LocalDateTime birthDate;
+        private Set<Time> times;
 
 
         private EmployeeBuilder() {
@@ -131,7 +146,7 @@ public class Employee {
             return this;
         }
 
-        public EmployeeBuilder withTasks(Set<Employee_Tasks> tasks) {
+        public EmployeeBuilder withTasks(Set<Task> tasks) {
             this.tasks = tasks;
             return this;
         }
@@ -141,13 +156,18 @@ public class Employee {
             return this;
         }
 
-        public EmployeeBuilder withGender(Gender gender){
+        public EmployeeBuilder withGender(Gender gender) {
             this.gender = gender;
             return this;
         }
 
-        public EmployeeBuilder withBirthDate(LocalDateTime birthDate){
+        public EmployeeBuilder withBirthDate(LocalDateTime birthDate) {
             this.birthDate = birthDate;
+            return this;
+        }
+
+        public EmployeeBuilder withTimes(Set<Time> times) {
+            this.times = times;
             return this;
         }
 
@@ -159,6 +179,7 @@ public class Employee {
             employee.setTasks(tasks);
             employee.setGender(gender);
             employee.setBirthDate(birthDate);
+            employee.setTimes(times);
             return employee;
         }
     }

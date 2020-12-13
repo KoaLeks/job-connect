@@ -27,4 +27,10 @@ public class InterestServiceImpl implements InterestService {
         LOGGER.debug("Find all Interests");
         return interestRepository.findAll();
     }
+
+    @Override
+    public void deleteById(Long id) {
+        LOGGER.debug("delete interest with id");
+        interestRepository.deleteById(id);
+    }
 }

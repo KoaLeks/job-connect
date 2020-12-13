@@ -63,7 +63,8 @@ public class EmployeeMappingTest implements TestData {
             () -> assertEquals(EMPLOYEE_FIRST_NAME, employeeDto.getProfileDto().getFirstName()),
             () -> assertEquals(EMPLOYEE_EMAIL, employeeDto.getProfileDto().getEmail()),
             () -> assertEquals(EMPLOYEE_GENDER, employeeDto.getGender()),
-            () -> assertEquals(EMPLOYEE_BIRTH_DATE, employeeDto.getBirthDate())
+            () -> assertEquals(EMPLOYEE_BIRTH_DATE, employeeDto.getBirthDate()),
+            () -> assertEquals(EMPLOYEE_TIMESET, employeeDto.getTimes())
         );
     }
 
@@ -77,7 +78,8 @@ public class EmployeeMappingTest implements TestData {
             () -> assertEquals(EMPLOYEE_FIRST_NAME, employee.getProfile().getFirstName()),
             () -> assertEquals(EMPLOYEE_EMAIL, employee.getProfile().getEmail()),
             () -> assertEquals(EMPLOYEE_GENDER, employeeDto.getGender()),
-            () -> assertEquals(EMPLOYEE_BIRTH_DATE, employeeDto.getBirthDate())
+            () -> assertEquals(EMPLOYEE_BIRTH_DATE, employeeDto.getBirthDate()),
+            () -> assertEquals(EMPLOYEE_TIMESET, employeeDto.getTimes())
         );
     }
 }

@@ -15,41 +15,43 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <!-- TASK FORM -->
-      <form [formGroup]="taskCreationForm" (ngSubmit)="addTask(taskCreationForm.value)">
-        <div class="form-group">
-          <label for="InputTaskDescription">Beschreibung<b>*</b></label>
-          <input type="text" maxlength="1000" class="form-control" id="InputTaskDescription"
-                 formControlName="description" pattern="[a-zA-Z]+([ ]|[a-zA-Z]|[0-9])*">
-        </div>
-        <div class="form-group">
-          <label for="InputEmployeeCount">Benötigte MitarbeiterInnen<b>*</b></label>
-          <input type="number" min="1" pattern="[0-9]*" class="form-control" id="InputEmployeeCount" formControlName="employeeCount">
-        </div>
-        <div class="form-group">
-          <label for="InputPaymentHourly">Bezahlung in Euro/pro Stunde<b>*</b></label>
-          <input type="number" min="0" class="form-control" id="InputPaymentHourly" formControlName="paymentHourly">
-        </div>
-        <div class="form-group" *ngIf="this.interestAreas !== undefined && this.interestAreas.length !== 0">
-          <label for="InputInterestArea">Interessengebiet</label>
-          <select class="form-control" id="InputInterestArea" formControlName="interestArea">
-            <option [value]=null>kein Interessengebiet ausgewählt</option>
-            <ng-container *ngFor="let interestArea of this.interestAreas">
-              <option [value]="interestArea.id">Gebiet: {{interestArea.area}} -
-                Beschreibung: {{interestArea.description}}</option>
-            </ng-container>
-
-          </select>
-        </div>
-
+      <div class="modal-body">
         <!-- TASK FORM -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" data-toggle="modal"
-                  data-target="#Add-Task" [disabled]="!taskCreationForm.valid">Submit
-          </button>
-        </div>
-      </form>
+        <form [formGroup]="taskCreationForm" (ngSubmit)="addTask(taskCreationForm.value)">
+          <div class="form-group">
+            <label for="InputTaskDescription">Beschreibung<b>*</b></label>
+            <input type="text" maxlength="1000" class="form-control" id="InputTaskDescription"
+                   formControlName="description" pattern="[a-zA-ZÖöÜüÄä]+([ ]|[a-zA-ZÖöÜüÄä]|[0-9])*">
+          </div>
+          <div class="form-group">
+            <label for="InputEmployeeCount">Benötigte MitarbeiterInnen<b>*</b></label>
+            <input type="number" min="1" pattern="[0-9]*" class="form-control" id="InputEmployeeCount" formControlName="employeeCount">
+          </div>
+          <div class="form-group">
+            <label for="InputPaymentHourly">Bezahlung in Euro/pro Stunde<b>*</b></label>
+            <input type="number" min="0" class="form-control" id="InputPaymentHourly" formControlName="paymentHourly">
+          </div>
+          <div class="form-group" *ngIf="this.interestAreas !== undefined && this.interestAreas.length !== 0">
+            <label for="InputInterestArea">Interessengebiet</label>
+            <select class="form-control" id="InputInterestArea" formControlName="interestArea">
+              <option [value]=null>kein Interessengebiet ausgewählt</option>
+              <ng-container *ngFor="let interestArea of this.interestAreas">
+                <option [value]="interestArea.id">Gebiet: {{interestArea.area}} -
+                  Beschreibung: {{interestArea.description}}</option>
+              </ng-container>
+
+            </select>
+          </div>
+
+          <!-- TASK FORM -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" data-toggle="modal"
+                    data-target="#Add-Task" [disabled]="!taskCreationForm.valid">Submit
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </div>

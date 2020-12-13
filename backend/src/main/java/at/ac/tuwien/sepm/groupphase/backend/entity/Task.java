@@ -17,8 +17,8 @@ public class Task {
     private Double paymentHourly;
     @ManyToOne
     private Event event;
-    @OneToMany(mappedBy = "task")
-    private Set<Employee_Tasks> employees;
+    @ManyToMany(mappedBy = "tasks")
+    private Set<Employee> employees;
     @ManyToOne
     private InterestArea interestArea;
 
@@ -62,11 +62,11 @@ public class Task {
         this.event = event;
     }
 
-    public Set<Employee_Tasks> getEmployees() {
+    public Set<Employee> getEmployees() {
         return employees;
     }
 
-    public void setEmployees(Set<Employee_Tasks> employees) {
+    public void setEmployees(Set<Employee> employees) {
         this.employees = employees;
     }
 
@@ -78,6 +78,22 @@ public class Task {
         this.interestArea = interestArea;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return Objects.equals(id, task.id) &&
+            Objects.equals(description, task.description) &&
+            Objects.equals(paymentHourly, task.paymentHourly) &&
+            Objects.equals(employeeCount, task.employeeCount) &&
+            Objects.equals(interestArea, task.interestArea);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, description, paymentHourly, employeeCount, interestArea);
+    }
 
     @Override
     public String toString() {
@@ -87,28 +103,9 @@ public class Task {
             ", employeeCount=" + employeeCount +
             ", paymentHourly=" + paymentHourly +
             ", event=" + event +
-            ", employees=" + employees +
+            ", employees=" + employees.size() +
             ", interestArea=" + interestArea +
             '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Task task = (Task) o;
-        return Objects.equals(id, task.id) &&
-            Objects.equals(description, task.description) &&
-            Objects.equals(employeeCount, task.employeeCount) &&
-            Objects.equals(paymentHourly, task.paymentHourly) &&
-            Objects.equals(event, task.event) &&
-            Objects.equals(employees, task.employees) &&
-            Objects.equals(interestArea, task.interestArea);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, description, employeeCount, paymentHourly, event, employees, interestArea);
     }
 
     public static final class TaskBuilder{
@@ -117,7 +114,7 @@ public class Task {
         private Integer employeeCount;
         private Double paymentHourly;
         private Event event;
-        private Set<Employee_Tasks> employees;
+        private Set<Employee> employees;
         private InterestArea interestArea;
 
         private TaskBuilder(){}
@@ -144,7 +141,7 @@ public class Task {
             this.event = event;
             return this;
         }
-        public TaskBuilder withEmployees(Set<Employee_Tasks> employees){
+        public TaskBuilder withEmployees(Set<Employee> employees){
             this.employees = employees;
             return this;
         }

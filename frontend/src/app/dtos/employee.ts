@@ -1,4 +1,5 @@
 import {Gender} from './gender.enum';
+import {TimeDto} from './TimeDto';
 
 export class Employee {
   constructor(
@@ -8,6 +9,7 @@ export class Employee {
     public password: string,
     public publicInfo: string,
     public gender: Gender,
-    public birthDate: Date
+    public birthDate: Date,
+    public times: TimeDto[]
   ) {}
 }

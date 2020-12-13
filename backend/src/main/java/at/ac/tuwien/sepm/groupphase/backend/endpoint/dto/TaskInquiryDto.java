@@ -100,12 +100,15 @@ public class TaskInquiryDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TaskInquiryDto that = (TaskInquiryDto) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(id, that.id) &&
+            Objects.equals(description, that.description) &&
+            Objects.equals(employeeCount, that.employeeCount) &&
+            Objects.equals(paymentHourly, that.paymentHourly);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, description, employeeCount, paymentHourly);
     }
 
     @Override
