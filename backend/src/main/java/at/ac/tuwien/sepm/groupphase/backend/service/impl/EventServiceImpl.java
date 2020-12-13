@@ -8,6 +8,7 @@ import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.TaskRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.service.TaskService;
+import at.ac.tuwien.sepm.groupphase.backend.service.MailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,15 +28,17 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final AddressRepository addressRepository;
     private final TaskRepository taskRepository;
+    private final MailService mailService;
 
     @Autowired
     public EventServiceImpl(TaskService taskService, EventRepository eventRepository,
-                            AddressRepository addressRepository,
+                            AddressRepository addressRepository, MailService mailService,
                             TaskRepository taskRepository) {
         this.taskService = taskService;
         this.eventRepository = eventRepository;
         this.addressRepository = addressRepository;
         this.taskRepository = taskRepository;
+        this.mailService = mailService;
     }
 
     @Override
@@ -52,6 +55,7 @@ public class EventServiceImpl implements EventService {
                 taskRepository.save(task);
             }
         }
+        mailService.sendNotification(event);
         return savedEvent;
     }
 
