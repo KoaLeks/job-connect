@@ -103,7 +103,7 @@ public class Task {
             ", employeeCount=" + employeeCount +
             ", paymentHourly=" + paymentHourly +
             ", event=" + event +
-            ", employees=" + employees.size() +
+            ", employees=" + (employees == null ? "null":employees.size()) +
             ", interestArea=" + interestArea +
             '}';
     }

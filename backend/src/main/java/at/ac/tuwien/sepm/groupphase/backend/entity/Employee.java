@@ -115,7 +115,7 @@ public class Employee {
             "id=" + id +
             ", profile=" + profile +
             ", tasks=" + tasks +
-            ", interests=" + interests +
+            ", interests=" + (interests == null ? "null":interests.size()) +
             ", gender=" + gender +
             ", birthdate=" + birthDate +
             ", times=" + (times == null ? "null":times.size()) +

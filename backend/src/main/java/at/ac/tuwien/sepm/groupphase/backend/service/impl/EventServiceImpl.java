@@ -53,7 +53,7 @@ public class EventServiceImpl implements EventService {
                 taskRepository.save(task);
             }
         }
-        mailService.sendNotification(event);
+        mailService.sendNotificationToAvailableEmployees(event);
         return savedEvent;
     }
 
