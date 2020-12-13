@@ -42,6 +42,9 @@ export class AuthService {
   }
 
   getToken() {
+    if(localStorage.getItem('authToken') == null ){
+      return '';
+    }
     return localStorage.getItem('authToken');
   }
 
