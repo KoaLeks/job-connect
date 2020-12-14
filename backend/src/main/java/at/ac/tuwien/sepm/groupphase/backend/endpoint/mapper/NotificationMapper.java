@@ -18,6 +18,9 @@ public interface NotificationMapper {
     @Mapping(source = "task.id", target = "taskId")
     SimpleNotificationDto notificationToSimpleNotificationDto(Notification notification);
 
+    @Mapping(source = "taskId", target = "task.id")
+    Notification simpleNotificationDtoToNotification(SimpleNotificationDto notification);
+
     @IterableMapping(qualifiedByName = "simpleNotification")
     Set<SimpleNotificationDto> notificationsToSimpleNotificationsDtos(Set<Notification> notifications);
 }

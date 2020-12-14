@@ -43,6 +43,12 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
+    public Notification updateNotification(Notification notification) {
+        LOGGER.debug("Update Notification {}", notification);
+        return notificationRepository.save(notification);
+    }
+
+    @Override
     public void deleteNotification(Long id, String authorization) {
         LOGGER.debug("Delete notification with id: {}", id);
 

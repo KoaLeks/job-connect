@@ -15,6 +15,14 @@ public interface NotificationService {
     Notification createNotification(Notification notification);
 
     /**
+     * Update a notification
+     *
+     * @param notification to update
+     * @return the updated notification
+     */
+    Notification updateNotification(Notification notification);
+
+    /**
      * Get all notifications for a recipient
      *
      * @param id of the profile

@@ -28,6 +28,11 @@ export class HeaderComponent implements OnInit {
         this.loadPicture();
       }
     });
+    this.updateHeaderService.updateSeenNotifications.subscribe(notification => {
+      this.notifications.find(n => n.id === notification.id).seen = true;
+      this.count = this.countNewNotifications(this.notifications);
+      this.notificationService.updateNotification(notification).subscribe();
+    });
   }
 
   ngOnInit() {
@@ -42,19 +47,20 @@ export class HeaderComponent implements OnInit {
     this.notificationService.getNotifications().subscribe(
       (notifications: SimpleNotification[]) => {
         this.notifications = notifications;
-        this.countNewNotifications(notifications);
-        // console.log(JSON.stringify(notifications));
+        this.count = this.countNewNotifications(notifications);
       }
     );
   }
 
   private countNewNotifications(notifications: any[]) {
+    let count = 0;
     notifications.forEach(
       notification => {
         if (!notification.seen) {
-          this.count++;
+          count++;
         }
       });
+    return count;
   }
 
   private loadPicture() {

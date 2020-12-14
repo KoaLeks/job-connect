@@ -99,7 +99,7 @@ public class Employee {
         if (o == null || getClass() != o.getClass()) return false;
         Employee employee = (Employee) o;
         return Objects.equals(id, employee.id) &&
-            Objects.equals(profile, employee.profile) &&
+//            Objects.equals(profile, employee.profile) &&
             Objects.equals(gender, employee.gender) &&
             Objects.equals(birthDate, employee.birthDate);
     }

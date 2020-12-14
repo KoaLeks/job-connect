@@ -4,6 +4,7 @@ import {AuthService} from '../../services/auth.service';
 import {ApplicationStatus} from '../../dtos/application-status';
 import {ApplicationService} from '../../services/application.service';
 import {NotificationService} from '../../services/notification.service';
+import {UpdateHeaderService} from '../../services/update-header.service';
 
 @Component({
   selector: 'app-notification-list',
@@ -15,7 +16,7 @@ export class NotificationListComponent implements OnInit {
   @Input() notifications: SimpleNotification[];
 
   constructor(private authService: AuthService, private applicationService: ApplicationService,
-              private notificationService: NotificationService) { }
+              private notificationService: NotificationService, private updateHeaderService: UpdateHeaderService) { }
 
   ngOnInit(): void {
   }
@@ -23,27 +24,35 @@ export class NotificationListComponent implements OnInit {
   accept(notification: SimpleNotification) {
     const acceptApplication = new ApplicationStatus(notification.taskId, notification.sender.id, notification.id, true);
     this.applicationService.changeApplicationStatus(acceptApplication).subscribe();
-    this.removeNotfication(notification.id);
+    this.removeNotification(notification.id);
   }
 
   decline(notification: SimpleNotification) {
     console.log(JSON.stringify(notification));
     const declineApplication = new ApplicationStatus(notification.taskId, notification.sender.id, notification.id, false);
     this.applicationService.changeApplicationStatus(declineApplication).subscribe();
-    this.removeNotfication(notification.id);
+    this.removeNotification(notification.id);
   }
 
   deleteNotification(id: number) {
     this.notificationService.deleteNotification(id).subscribe();
-    this.removeNotfication(id);
+    this.removeNotification(id);
   }
 
-  removeNotfication(id: number) {
+  removeNotification(id: number) {
     const index = this.notifications.findIndex(notification => notification.id === id);
     this.notifications.splice(index, 1);
   }
 
-  public trackId(index: number, notification: any) {
+  updateSeenStatus(notification: SimpleNotification) {
+    if (!notification.seen) {
+      notification.seen = true;
+      this.updateHeaderService.emitUpdatedNotification(notification);
+      console.log('notification');
+    }
+  }
+
+  public trackId(index: number, notification: SimpleNotification) {
     return notification.id;
   }
 
