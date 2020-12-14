@@ -74,6 +74,7 @@ public class ApplicationEndpoint {
         notification.setRecipient(employer.getProfile());
         notification.setSender(employee.getProfile());
         notification.setSeen(false);
+        notification.setTask(task);
         notification.setType(NotificationType.APPLICATION.name());
         notificationService.createNotification(notification);
     }
