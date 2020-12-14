@@ -92,7 +92,7 @@ public class Task {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, paymentHourly, employeeCount, interestArea);
+        return Objects.hash(id, description, paymentHourly, employeeCount);
     }
 
     @Override

@@ -3,10 +3,7 @@ package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.UniqueConstraintException;
-import at.ac.tuwien.sepm.groupphase.backend.repository.EmployeeRepository;
-import at.ac.tuwien.sepm.groupphase.backend.repository.InterestRepository;
-import at.ac.tuwien.sepm.groupphase.backend.repository.ProfileRepository;
-import at.ac.tuwien.sepm.groupphase.backend.repository.TimeRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.*;
 import at.ac.tuwien.sepm.groupphase.backend.service.EmployeeService;
 import at.ac.tuwien.sepm.groupphase.backend.service.ProfileService;
 import org.apache.tomcat.jni.Local;
@@ -38,17 +35,19 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final ProfileRepository profileRepository;
     private final InterestRepository interestRepository;
     private final TimeRepository timeRepository;
+    private final Employee_TasksRepository employee_tasksRepository;
 
     @Autowired
     public EmployeeServiceImpl(EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder,
                                ProfileService profileService, ProfileRepository profileRepository, InterestRepository interestRepository,
-                               TimeRepository timeRepository) {
+                               TimeRepository timeRepository, Employee_TasksRepository employee_tasksRepository) {
         this.employeeRepository = employeeRepository;
         this.passwordEncoder = passwordEncoder;
         this.profileService = profileService;
         this.profileRepository = profileRepository;
         this.interestRepository = interestRepository;
         this.timeRepository = timeRepository;
+        this.employee_tasksRepository = employee_tasksRepository;
     }
 
     @Override
@@ -89,6 +88,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         Set<Time> times = timeRepository.findByEmployee_Profile_Id(employee.get().getProfile().getId());
         employee.get().setTimes(times);
+
+        Set<Employee_Tasks> tasks = Set.copyOf(employee_tasksRepository.findAll());
+        employee.get().setTasks(tasks);
 
         timeRepository.deleteByFinalEndDateBefore(LocalDateTime.now());
 

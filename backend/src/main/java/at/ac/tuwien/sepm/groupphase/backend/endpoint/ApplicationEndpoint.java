@@ -8,6 +8,7 @@ import at.ac.tuwien.sepm.groupphase.backend.service.*;
 import at.ac.tuwien.sepm.groupphase.backend.util.NotificationType;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.invoke.MethodHandles;
+import java.util.HashSet;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/api/v1/applications")
@@ -100,16 +103,26 @@ public class ApplicationEndpoint {
         notification.setProfile(p);
         notification.setSeen(false);
         if(employee_tasks.getAccepted()){
-            notification.setMessage(String.format("Your application to the Event \"%s\" has been accepted", event.getTitle()));
-            notification.setType(NotificationType.EVENT_ACCEPTED.name());
             // add employee to task
             Task t = taskService.findOneById(employee_tasks.getTask().getId());
-            t.getEmployees().add(employee_tasks.getEmployee());
+            Hibernate.initialize(t.getEmployees());
+//            LOGGER.info("task t: {}", t);
+            Set<Employee> newEmployees = new HashSet<>();
+            newEmployees.addAll(t.getEmployees());
+            newEmployees.add(employee_tasks.getEmployee());
+            t.setEmployees(newEmployees);
             taskService.updateTask(t);
             // add task to employee
             Employee e = employeeService.findOneById(employee_tasks.getEmployee().getId());
-            e.getTasks().add(employee_tasks);
+            Hibernate.initialize(e.getTasks());
+//            LOGGER.info("employee e: {}", e.getTasks());
+            Set<Employee_Tasks> newTasks = new HashSet<>();
+            newTasks.addAll(e.getTasks());
+            newTasks.add(employee_tasks);
+            e.setTasks(newTasks);
             employeeService.updateEmployee(e);
+            notification.setMessage(String.format("Your application to the Event \"%s\" has been accepted", event.getTitle()));
+            notification.setType(NotificationType.EVENT_ACCEPTED.name());
         }else{
             notification.setMessage(String.format("Your application to the Event \"%s\" has been declined", event.getTitle()));
             notification.setType(NotificationType.EVENT_DECLINED.name());
