@@ -23,6 +23,7 @@ import {UpdateHeaderService} from './services/update-header.service';
 import { EventDetailsComponent } from './components/event-details/event-details.component';
 import { NotificationComponent } from './components/notification/notification.component';
 import { EmployeeOverviewComponent } from './components/employee-overview/employee-overview.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { NotificationListComponent } from './components/notification-list/notification-list.component';
 
 @NgModule({
@@ -44,6 +45,7 @@ import { NotificationListComponent } from './components/notification-list/notifi
     NotificationComponent,
     EmployeeOverviewComponent,
     NotificationListComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,

@@ -102,9 +102,9 @@ public class Task {
             ", description='" + description + '\'' +
             ", employeeCount=" + employeeCount +
             ", paymentHourly=" + paymentHourly +
-            ", event=" + event +
+            ", event=" + (event == null ? null : event) +
             ", employees=" + (employees == null ? "null":employees.size()) +
-            ", interestArea=" + interestArea +
+            ", interestArea=" + (interestArea == null ? null : interestArea) +
             '}';
     }
 

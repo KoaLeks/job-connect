@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +31,7 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
+    @Transactional
     public void sendNotificationToAvailableEmployees(Event event) {
         LOGGER.debug("sending notification to available employees for event({})", event);
         List<Employee> employeeList = getAvailableEmployees(event);
@@ -38,6 +41,7 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
+    @Transactional
     public List<Employee> getAvailableEmployees(Event event) {
         LOGGER.debug("get available employees for event({})", event);
         List<Employee> employeeList = employeeService.findAll();

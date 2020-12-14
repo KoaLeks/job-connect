@@ -229,19 +229,18 @@ export class EditEmployeeComponent implements OnInit {
     if (event.target.files[0].size <= 5242880) {
       const file = event.target.files[0];
       const reader = new FileReader();
+      reader.readAsDataURL(file);
       reader.onload = () => {
         this.selectedPicture = reader.result.toString();
         if (this.selectedPicture.startsWith('data:image/png;base64') || this.selectedPicture.startsWith('data:image/jpeg;base64')) {
           this.picture = this.selectedPicture;
           this.hasPicture = true;
-          reader.readAsDataURL(file);
         } else {
           this.selectedPicture = null;
           this.error = true;
           this.errorMessage = 'Das Bild muss im JPEG oder PNG Format sein.';
         }
       };
-      reader.readAsDataURL(file);
     } else {
       this.error = true;
       this.errorMessage = 'Das Bild darf maximal 5 MB groß sein.';
@@ -260,6 +259,7 @@ export class EditEmployeeComponent implements OnInit {
 
   deletePicture() {
     this.hasPicture = false;
+    this.selectedPicture = null;
     this.picture = null;
   }
 

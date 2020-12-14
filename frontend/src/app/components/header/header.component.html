@@ -1,4 +1,5 @@
-<nav class="navbar navbar-expand-lg header-class" xmlns="http://www.w3.org/1999/html">
+<nav class="navbar navbar-expand-lg header-class">
+  <div class="container">
   <ng-container class="m-5">
   <a routerLink="">
     <img src="assets\logo.png" width="150rem" height="45rem" class="m-2 logo-class">
@@ -50,6 +51,8 @@
         </ul>
       </div>
     </ul>
+
+
     <div class="dropdown"  *ngIf="!authService.isLoggedIn()">
       <button class="btn dropdown-toggle login-button" type="button" id="dropdownLoginButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Einloggen
@@ -61,6 +64,7 @@
     </div>
   </div>
   </ng-container>
+  </div>
 </nav>
 <app-login [isEmployee]="isEmployee"></app-login>
 <ng-template #popContent><app-notification-list [notifications]="notifications" ></app-notification-list></ng-template>

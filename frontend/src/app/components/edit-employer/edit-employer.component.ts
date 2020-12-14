@@ -142,12 +142,12 @@ export class EditEmployerComponent implements OnInit {
     if (event.target.files[0].size <= 5242880) {
       const file = event.target.files[0];
       const reader = new FileReader();
+      reader.readAsDataURL(file);
       reader.onload = () => {
         this.selectedPicture = reader.result.toString();
         if (this.selectedPicture.startsWith('data:image/png;base64') || this.selectedPicture.startsWith('data:image/jpeg;base64')) {
           this.picture = this.selectedPicture;
           this.hasPicture = true;
-          reader.readAsDataURL(file);
         } else {
           this.selectedPicture = null;
           this.error = true;
