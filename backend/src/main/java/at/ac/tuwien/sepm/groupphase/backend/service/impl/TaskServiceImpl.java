@@ -31,4 +31,10 @@ public class TaskServiceImpl implements TaskService {
             throw new NotFoundException(String.format("Could not find Task with id %s", id));
         }
     }
+
+    @Override
+    public Long updateTask(Task task) {
+        LOGGER.debug("Update task: {}", task);
+        return taskRepository.save(task).getId();
+    }
 }

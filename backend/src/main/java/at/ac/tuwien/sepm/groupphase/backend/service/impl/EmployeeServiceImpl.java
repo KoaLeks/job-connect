@@ -78,6 +78,24 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public Employee findOneById(Long id) {
+        LOGGER.info("Find employee with id {}", id);
+        Optional<Employee> employee = employeeRepository.findById(id);
+        if (employee == null)
+            throw new NotFoundException(String.format("Could not find employee with id %s", id));
+
+        Set<Interest> interests = interestRepository.findByEmployee_Id(employee.get().getProfile().getId());
+        employee.get().setInterests(interests);
+
+        Set<Time> times = timeRepository.findByEmployee_Profile_Id(employee.get().getProfile().getId());
+        employee.get().setTimes(times);
+
+        timeRepository.deleteByFinalEndDateBefore(LocalDateTime.now());
+
+        return employee.get();
+    }
+
+    @Override
     @Transactional
     public Long updateEmployee(Employee employee) {
         LOGGER.info("Update employee: {}", employee);

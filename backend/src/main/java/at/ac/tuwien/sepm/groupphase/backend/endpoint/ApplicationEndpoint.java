@@ -57,7 +57,7 @@ public class ApplicationEndpoint {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CrossOrigin(origins = "http://localhost:4200")
     public void apply(@Valid @RequestBody ApplicationDto applicationDto, @RequestHeader String authorization){
-        LOGGER.info("PUT /api/v1/profiles/apply message: {}", applicationDto);
+        LOGGER.info("PUT /api/v1/applications/apply message: {}", applicationDto);
         String mail = tokenService.getEmailFromHeader(authorization);
         Employee employee = employeeService.findOneByEmail(mail);
         Task task = taskService.findOneById(applicationDto.getTask());
@@ -102,6 +102,14 @@ public class ApplicationEndpoint {
         if(employee_tasks.getAccepted()){
             notification.setMessage(String.format("Your application to the Event \"%s\" has been accepted", event.getTitle()));
             notification.setType(NotificationType.EVENT_ACCEPTED.name());
+            // add employee to task
+            Task t = taskService.findOneById(employee_tasks.getTask().getId());
+            t.getEmployees().add(employee_tasks.getEmployee());
+            taskService.updateTask(t);
+            // add task to employee
+            Employee e = employeeService.findOneById(employee_tasks.getEmployee().getId());
+            e.getTasks().add(employee_tasks);
+            employeeService.updateEmployee(e);
         }else{
             notification.setMessage(String.format("Your application to the Event \"%s\" has been declined", event.getTitle()));
             notification.setType(NotificationType.EVENT_DECLINED.name());

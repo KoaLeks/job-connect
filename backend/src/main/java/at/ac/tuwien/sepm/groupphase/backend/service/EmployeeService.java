@@ -22,6 +22,13 @@ public interface EmployeeService {
     Employee findOneByEmail(String email);
 
     /**
+     * Find an employee by id
+     * @param id to look for
+     * @return the employee
+     */
+    Employee findOneById(Long id);
+
+    /**
      * Update an employee
      * @param employee to update
      * @return the ID of the updated employee

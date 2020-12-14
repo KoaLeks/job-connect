@@ -29,5 +29,9 @@ public interface EventService {
      */
     Event findById(Long id);
 
+    /**
+     * Find event by task
+     * @return event with given task
+     */
     Event findByTask(Task task);
 }
