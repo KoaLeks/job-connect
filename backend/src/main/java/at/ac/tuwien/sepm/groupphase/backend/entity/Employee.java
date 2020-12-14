@@ -20,7 +20,6 @@ public class Employee {
     @MapsId
     private Profile profile;
 
-
     @OneToMany(mappedBy = "employee")
     private Set<Employee_Tasks> tasks;
 

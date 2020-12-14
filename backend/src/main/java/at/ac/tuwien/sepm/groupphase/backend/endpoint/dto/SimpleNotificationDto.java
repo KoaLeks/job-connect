@@ -6,6 +6,8 @@ import java.util.Objects;
 
 public class SimpleNotificationDto {
     @NotNull
+    private Long id;
+    @NotNull
     @NotBlank
     private String message;
     @NotNull
@@ -14,6 +16,12 @@ public class SimpleNotificationDto {
     private boolean seen;
     @NotNull
     private SimpleEventDto event;
+    @NotNull
+    private SimpleProfileDto recipient;
+    @NotNull
+    private SimpleProfileDto sender;
+    @NotNull
+    private Long taskId;
 
     public String getMessage() {
         return message;
@@ -47,6 +55,38 @@ public class SimpleNotificationDto {
         this.event = event;
     }
 
+    public SimpleProfileDto getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(SimpleProfileDto recipient) {
+        this.recipient = recipient;
+    }
+
+    public SimpleProfileDto getSender() {
+        return sender;
+    }
+
+    public void setSender(SimpleProfileDto sender) {
+        this.sender = sender;
+    }
+
+    public Long getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(Long taskId) {
+        this.taskId = taskId;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -55,21 +95,29 @@ public class SimpleNotificationDto {
         return seen == that.seen &&
             Objects.equals(message, that.message) &&
             Objects.equals(type, that.type) &&
-            Objects.equals(event, that.event);
+            Objects.equals(event, that.event) &&
+            Objects.equals(recipient, that.recipient) &&
+            Objects.equals(sender, that.sender) &&
+            Objects.equals(taskId, that.taskId) &&
+            Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(message, type, seen, event);
+        return Objects.hash(message, type, seen, event, recipient, sender, taskId, id);
     }
 
     @Override
     public String toString() {
         return "SimpleNotificationDto{" +
-            "message='" + message + '\'' +
+            "id=" + id +
+            ", message='" + message + '\'' +
             ", type='" + type + '\'' +
             ", seen=" + seen +
             ", event=" + event +
+            ", recipient=" + recipient +
+            ", sender=" + sender +
+            ", taskId=" + sender +
             '}';
     }
 }

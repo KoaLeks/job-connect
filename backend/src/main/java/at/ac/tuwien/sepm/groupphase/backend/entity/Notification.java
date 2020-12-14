@@ -23,7 +23,13 @@ public class Notification {
     private Event event;
 
     @ManyToOne
-    private Profile profile;
+    private Profile recipient;
+
+    @ManyToOne
+    private Profile sender;
+
+    @OneToOne
+    private Task task;
 
     public Long getId() {
         return id;
@@ -65,12 +71,28 @@ public class Notification {
         this.event = event;
     }
 
-    public Profile getProfile() {
-        return profile;
+    public Profile getRecipient() {
+        return recipient;
     }
 
-    public void setProfile(Profile profile) {
-        this.profile = profile;
+    public void setRecipient(Profile recipient) {
+        this.recipient = recipient;
+    }
+
+    public Profile getSender() {
+        return sender;
+    }
+
+    public void setSender(Profile sender) {
+        this.sender = sender;
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
     }
 
     @Override
@@ -83,12 +105,13 @@ public class Notification {
             Objects.equals(message, that.message) &&
             Objects.equals(type, that.type) &&
             Objects.equals(event, that.event) &&
-            Objects.equals(profile, that.profile);
+            Objects.equals(recipient, that.recipient) &&
+            Objects.equals(sender, that.sender);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, message, type, seen, event, profile);
+        return Objects.hash(id, message, type, seen, event, recipient, sender);
     }
 
     @Override
@@ -99,7 +122,8 @@ public class Notification {
             ", type='" + type + '\'' +
             ", seen=" + seen +
             ", event=" + event +
-            ", profile=" + profile +
+            ", recipient=" + recipient +
+            ", sender=" + sender +
             '}';
     }
 

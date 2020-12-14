@@ -1,8 +1,6 @@
-import {assertPlatform, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Globals} from '../global/globals';
 import {HttpClient} from '@angular/common/http';
-import {EditEmployee} from '../dtos/edit-employee';
-import {Observable} from 'rxjs';
 import {Application} from '../dtos/application';
 import {ApplicationStatus} from '../dtos/application-status';
 

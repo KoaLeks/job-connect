@@ -1,5 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.entity;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleTaskDto;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -59,7 +61,7 @@ public class Employee_Tasks {
         Employee_Tasks that = (Employee_Tasks) o;
         return Objects.equals(id, that.id) &&
             Objects.equals(employee, that.employee) &&
-            Objects.equals(task, that.task) &&
+            Objects.equals(task.getId(), that.task.getId()) &&
             Objects.equals(accepted, that.accepted);
     }
 
@@ -73,7 +75,7 @@ public class Employee_Tasks {
         return "Employee_Tasks{" +
             "id=" + id +
             ", employee=" + employee +
-            ", task=" + task +
+            ", task=" + task.getId() +
             ", accepted=" + accepted +
             '}';
     }

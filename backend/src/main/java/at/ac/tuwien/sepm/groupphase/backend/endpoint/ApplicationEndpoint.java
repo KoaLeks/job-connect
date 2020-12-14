@@ -71,7 +71,8 @@ public class ApplicationEndpoint {
         Notification notification = new Notification();
         notification.setEvent(event);
         notification.setMessage(applicationDto.getMessage());
-        notification.setProfile(employer.getProfile());
+        notification.setRecipient(employer.getProfile());
+        notification.setSender(employee.getProfile());
         notification.setSeen(false);
         notification.setType(NotificationType.APPLICATION.name());
         notificationService.createNotification(notification);
@@ -95,18 +96,17 @@ public class ApplicationEndpoint {
             throw new AuthorizationServiceException(String.format("No Authorization to modify the Event from Task: %s", task.getId()));
         }
 
-        employee_tasksService.updateStatus(employee_tasks);
         Notification notification = new Notification();
         notification.setEvent(event);
         Profile p = new Profile();
         p.setId(employee_tasks.getEmployee().getId());
-        notification.setProfile(p);
+        notification.setRecipient(p);
+        notification.setSender(employer.getProfile());
+        notification.setTask(employee_tasks.getTask());
         notification.setSeen(false);
         if(employee_tasks.getAccepted()){
             // add employee to task
             Task t = taskService.findOneById(employee_tasks.getTask().getId());
-            Hibernate.initialize(t.getEmployees());
-//            LOGGER.info("task t: {}", t);
             Set<Employee> newEmployees = new HashSet<>();
             newEmployees.addAll(t.getEmployees());
             newEmployees.add(employee_tasks.getEmployee());
@@ -114,8 +114,6 @@ public class ApplicationEndpoint {
             taskService.updateTask(t);
             // add task to employee
             Employee e = employeeService.findOneById(employee_tasks.getEmployee().getId());
-            Hibernate.initialize(e.getTasks());
-//            LOGGER.info("employee e: {}", e.getTasks());
             Set<Employee_Tasks> newTasks = new HashSet<>();
             newTasks.addAll(e.getTasks());
             newTasks.add(employee_tasks);
@@ -127,6 +125,8 @@ public class ApplicationEndpoint {
             notification.setMessage(String.format("Your application to the Event \"%s\" has been declined", event.getTitle()));
             notification.setType(NotificationType.EVENT_DECLINED.name());
         }
+        employee_tasksService.updateStatus(employee_tasks);
+        notificationService.deleteNotification(applicationStatusDto.getNotification(), authorization);
         notificationService.createNotification(notification);
     }
 }

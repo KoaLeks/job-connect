@@ -46,7 +46,7 @@ public class NotificationEndpoint {
         LOGGER.info("GET /api/v1/notifications");
         String mail = tokenService.getEmailFromHeader(authorization);
         Profile profile = profileService.findProfileByEmail(mail);
-        return notificationMapper.notificationsToSimpleNotificationsDtos(notificationService.getAllByProfileId(profile.getId()));
+        return notificationMapper.notificationsToSimpleNotificationsDtos(notificationService.findAllByRecipient_Id(profile.getId()));
     }
 
     @DeleteMapping(value = "/{id}")

@@ -34,13 +34,12 @@ public class Employee_TasksServiceImpl implements Employee_TasksService {
         }else{
             throw new AlreadyHandledException(String.format("Already applied for Task: %s", task.getId()));
         }
-
     }
 
     @Override
     public void updateStatus(Employee_Tasks employee_tasks) {
         LOGGER.debug("Update status of Application: {}", employee_tasks);
-        Employee_Tasks toUpdate = employee_tasksRepository.findFirstByEmployeeAndTask(employee_tasks.getEmployee(), employee_tasks.getTask());
+        Employee_Tasks toUpdate = employee_tasksRepository.findFirstByEmployee_Profile_IdAndTask_Id(employee_tasks.getEmployee().getId(), employee_tasks.getTask().getId());
         if(toUpdate == null) throw new NotFoundException(String.format("Employee_Tasks application not found: %s", employee_tasks));
         if(toUpdate.getAccepted() != null){
             String status = toUpdate.getAccepted() ? "accepted" : "declined";

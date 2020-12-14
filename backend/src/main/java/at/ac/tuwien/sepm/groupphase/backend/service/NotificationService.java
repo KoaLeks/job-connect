@@ -15,12 +15,12 @@ public interface NotificationService {
     Notification createNotification(Notification notification);
 
     /**
-     * Get all notifications from a profile
+     * Get all notifications for a recipient
      *
      * @param id of the profile
      * @return list of all notifications from a profile
      */
-    Set<Notification> getAllByProfileId(Long id);
+    Set<Notification> findAllByRecipient_Id(Long id);
 
     /**
      * Delete a notification

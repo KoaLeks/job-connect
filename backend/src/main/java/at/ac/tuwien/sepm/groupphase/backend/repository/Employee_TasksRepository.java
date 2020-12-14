@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface Employee_TasksRepository extends JpaRepository<Employee_Tasks, Long> {
     Employee_Tasks findFirstByEmployeeAndTask(Employee employee, Task task);
+    Employee_Tasks findFirstByEmployee_Profile_IdAndTask_Id(Long employee, Long task);
 }

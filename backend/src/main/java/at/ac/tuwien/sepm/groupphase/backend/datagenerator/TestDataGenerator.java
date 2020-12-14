@@ -214,7 +214,6 @@ public class TestDataGenerator {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @PostConstruct
     public void generateEmployers() {
         if (employerRepository.findAll().size() > 0) {
             LOGGER.debug("employers already generated");
@@ -246,6 +245,7 @@ public class TestDataGenerator {
 
     @PostConstruct
     private void generateEmployees() {
+        generateEmployers();
         if (employeeRepository.findAll().size() > 0) {
             LOGGER.debug("employees already generated");
         } else {

@@ -15,4 +15,9 @@ export class NotificationService {
     console.log('GET notifications');
     return this.httpClient.get<SimpleNotification[]>(this.notificationBaseUri);
   }
+
+  deleteNotification(id: number) {
+    console.log('Delete notification with id: ' + id);
+    return this.httpClient.delete(this.notificationBaseUri + '/' + id);
+  }
 }

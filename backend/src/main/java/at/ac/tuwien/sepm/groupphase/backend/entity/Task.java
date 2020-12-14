@@ -17,7 +17,7 @@ public class Task {
     private Double paymentHourly;
     @ManyToOne
     private Event event;
-    @ManyToMany(mappedBy = "tasks")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "tasks")
     private Set<Employee> employees;
     @ManyToOne
     private InterestArea interestArea;
@@ -87,7 +87,7 @@ public class Task {
             Objects.equals(description, task.description) &&
             Objects.equals(paymentHourly, task.paymentHourly) &&
             Objects.equals(employeeCount, task.employeeCount) &&
-            Objects.equals(interestArea, task.interestArea);
+            Objects.equals(interestArea.getId(), task.interestArea.getId());
     }
 
     @Override
@@ -102,9 +102,9 @@ public class Task {
             ", description='" + description + '\'' +
             ", employeeCount=" + employeeCount +
             ", paymentHourly=" + paymentHourly +
-            ", event=" + (event == null ? null : event) +
+            ", event=" + (event == null ? null : event.getId()) +
             ", employees=" + (employees == null ? "null":employees.size()) +
-            ", interestArea=" + (interestArea == null ? null : interestArea) +
+            ", interestArea=" + (interestArea == null ? null : interestArea.getId()) +
             '}';
     }
 

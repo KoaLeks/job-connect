@@ -3,6 +3,7 @@ import {SimpleNotification} from '../../dtos/simple-notification';
 import {AuthService} from '../../services/auth.service';
 import {ApplicationStatus} from '../../dtos/application-status';
 import {ApplicationService} from '../../services/application.service';
+import {NotificationService} from '../../services/notification.service';
 
 @Component({
   selector: 'app-notification-list',
@@ -13,19 +14,37 @@ export class NotificationListComponent implements OnInit {
 
   @Input() notifications: SimpleNotification[];
 
-  constructor(private authService: AuthService, private applicationService: ApplicationService) { }
+  constructor(private authService: AuthService, private applicationService: ApplicationService,
+              private notificationService: NotificationService) { }
 
   ngOnInit(): void {
   }
 
-  // TODO save task id in SimpleNotification dto
   accept(notification: SimpleNotification) {
-    console.log(JSON.stringify(notification));
-    this.applicationService.changeApplicationStatus(new ApplicationStatus(1, 41, true));
+    const acceptApplication = new ApplicationStatus(notification.taskId, notification.sender.id, notification.id, true);
+    this.applicationService.changeApplicationStatus(acceptApplication).subscribe();
+    this.removeNotfication(notification.id);
   }
 
   decline(notification: SimpleNotification) {
     console.log(JSON.stringify(notification));
-    this.applicationService.changeApplicationStatus(new ApplicationStatus(1, 41, false));
+    const declineApplication = new ApplicationStatus(notification.taskId, notification.sender.id, notification.id, false);
+    this.applicationService.changeApplicationStatus(declineApplication).subscribe();
+    this.removeNotfication(notification.id);
   }
+
+  deleteNotification(id: number) {
+    this.notificationService.deleteNotification(id).subscribe();
+    this.removeNotfication(id);
+  }
+
+  removeNotfication(id: number) {
+    const index = this.notifications.findIndex(notification => notification.id === id);
+    this.notifications.splice(index, 1);
+  }
+
+  public trackId(index: number, notification: any) {
+    return notification.id;
+  }
+
 }

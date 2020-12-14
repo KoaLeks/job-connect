@@ -77,6 +77,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional
     public Employee findOneById(Long id) {
         LOGGER.info("Find employee with id {}", id);
         Optional<Employee> employee = employeeRepository.findById(id);
@@ -180,6 +181,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional
     public List<Employee> findAll() {
         LOGGER.info("Find all employees");
         return employeeRepository.findAllByOrderByProfile_FirstName();

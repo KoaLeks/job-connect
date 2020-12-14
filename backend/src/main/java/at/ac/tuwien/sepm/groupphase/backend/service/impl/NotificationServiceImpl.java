@@ -37,9 +37,9 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public Set<Notification> getAllByProfileId(Long id) {
+    public Set<Notification> findAllByRecipient_Id(Long id) {
         LOGGER.debug("Get all notifications from Profile with id: {}", id);
-        return notificationRepository.getAllByProfileId(id);
+        return notificationRepository.findAllByRecipient_Id(id);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class NotificationServiceImpl implements NotificationService {
         String mail = tokenService.getEmailFromHeader(authorization);
         Profile profile = profileService.findProfileByEmail(mail);
         Optional<Notification> notification = notificationRepository.findById(id);
-        if(!profile.equals(notification.get().getProfile()))
+        if(!profile.equals(notification.get().getRecipient()))
         {
             throw new AuthorizationServiceException(String.format("No Authorization to delete the Notification: %s", id));
         }

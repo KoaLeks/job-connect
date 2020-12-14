@@ -11,6 +11,8 @@ public class ApplicationStatusDto {
     @NotNull
     private Long employee;
     @NotNull
+    private Long notification;
+    @NotNull
     private boolean accepted;
 
     public Long getTask() {
@@ -37,6 +39,14 @@ public class ApplicationStatusDto {
         this.accepted = accepted;
     }
 
+    public Long getNotification() {
+        return notification;
+    }
+
+    public void setNotification(Long notification) {
+        this.notification = notification;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -44,12 +54,13 @@ public class ApplicationStatusDto {
         ApplicationStatusDto that = (ApplicationStatusDto) o;
         return accepted == that.accepted &&
             Objects.equals(task, that.task) &&
-            Objects.equals(employee, that.employee);
+            Objects.equals(employee, that.employee) &&
+            Objects.equals(notification, that.notification);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(task, employee, accepted);
+        return Objects.hash(task, employee, notification, accepted);
     }
 
     @Override
@@ -57,6 +68,7 @@ public class ApplicationStatusDto {
         return "ApplicationStatusDto{" +
             "task=" + task +
             ", employee=" + employee +
+            ", notification=" + notification +
             ", accepted=" + accepted +
             '}';
     }

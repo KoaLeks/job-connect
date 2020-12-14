@@ -43,7 +43,7 @@ export class HeaderComponent implements OnInit {
       (notifications: SimpleNotification[]) => {
         this.notifications = notifications;
         this.countNewNotifications(notifications);
-        console.log(notifications.length);
+        // console.log(JSON.stringify(notifications));
       }
     );
   }

@@ -9,5 +9,5 @@ import java.util.Set;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
-    Set<Notification> getAllByProfileId(Long id);
+    Set<Notification> findAllByRecipient_Id(Long id);
 }
