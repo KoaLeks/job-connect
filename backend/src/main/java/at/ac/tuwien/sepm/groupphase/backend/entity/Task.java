@@ -17,8 +17,8 @@ public class Task {
     private Double paymentHourly;
     @ManyToOne
     private Event event;
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "tasks")
-    private Set<Employee> employees;
+    @OneToMany(mappedBy = "task")
+    private Set<Employee_Tasks> employees;
     @ManyToOne
     private InterestArea interestArea;
 
@@ -62,11 +62,11 @@ public class Task {
         this.event = event;
     }
 
-    public Set<Employee> getEmployees() {
+    public Set<Employee_Tasks> getEmployees() {
         return employees;
     }
 
-    public void setEmployees(Set<Employee> employees) {
+    public void setEmployees(Set<Employee_Tasks> employees) {
         this.employees = employees;
     }
 
@@ -114,7 +114,7 @@ public class Task {
         private Integer employeeCount;
         private Double paymentHourly;
         private Event event;
-        private Set<Employee> employees;
+        private Set<Employee_Tasks> employees;
         private InterestArea interestArea;
 
         private TaskBuilder(){}
@@ -141,7 +141,7 @@ public class Task {
             this.event = event;
             return this;
         }
-        public TaskBuilder withEmployees(Set<Employee> employees){
+        public TaskBuilder withEmployees(Set<Employee_Tasks> employees){
             this.employees = employees;
             return this;
         }

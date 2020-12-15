@@ -106,20 +106,6 @@ public class ApplicationEndpoint {
         notification.setTask(employee_tasks.getTask());
         notification.setSeen(false);
         if(employee_tasks.getAccepted()){
-            // add employee to task
-            Task t = taskService.findOneById(employee_tasks.getTask().getId());
-            Set<Employee> newEmployees = new HashSet<>();
-            newEmployees.addAll(t.getEmployees());
-            newEmployees.add(employee_tasks.getEmployee());
-            t.setEmployees(newEmployees);
-            taskService.updateTask(t);
-            // add task to employee
-            Employee e = employeeService.findOneById(employee_tasks.getEmployee().getId());
-            Set<Employee_Tasks> newTasks = new HashSet<>();
-            newTasks.addAll(e.getTasks());
-            newTasks.add(employee_tasks);
-            e.setTasks(newTasks);
-            employeeService.updateEmployee(e);
             notification.setMessage(String.format("Your application to the Event \"%s\" has been accepted", event.getTitle()));
             notification.setType(NotificationType.EVENT_ACCEPTED.name());
         }else{

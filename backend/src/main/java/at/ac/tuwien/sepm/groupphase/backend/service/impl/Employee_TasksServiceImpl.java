@@ -9,6 +9,7 @@ import at.ac.tuwien.sepm.groupphase.backend.repository.Employee_TasksRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.Employee_TasksService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
@@ -19,6 +20,7 @@ public class Employee_TasksServiceImpl implements Employee_TasksService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final Employee_TasksRepository employee_tasksRepository;
 
+    @Autowired
     public Employee_TasksServiceImpl(Employee_TasksRepository employee_tasksRepository) {
         this.employee_tasksRepository = employee_tasksRepository;
     }

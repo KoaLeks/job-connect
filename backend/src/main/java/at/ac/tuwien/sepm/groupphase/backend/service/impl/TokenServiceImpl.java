@@ -5,6 +5,7 @@ import at.ac.tuwien.sepm.groupphase.backend.service.TokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,6 +13,7 @@ public class TokenServiceImpl implements TokenService {
 
     private final SecurityProperties securityProperties;
 
+    @Autowired
     public TokenServiceImpl(SecurityProperties securityProperties) {
         this.securityProperties = securityProperties;
     }

@@ -8,6 +8,7 @@ import at.ac.tuwien.sepm.groupphase.backend.service.ProfileService;
 import at.ac.tuwien.sepm.groupphase.backend.service.TokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,7 @@ public class NotificationServiceImpl implements NotificationService {
     private final TokenService tokenService;
     private final ProfileService profileService;
 
+    @Autowired
     public NotificationServiceImpl(NotificationRepository notificationRepository, TokenService tokenService, ProfileService profileService) {
         this.notificationRepository = notificationRepository;
         this.tokenService = tokenService;
