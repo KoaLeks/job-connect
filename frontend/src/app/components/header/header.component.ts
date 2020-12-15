@@ -33,6 +33,11 @@ export class HeaderComponent implements OnInit {
       this.count = this.countNewNotifications(this.notifications);
       this.notificationService.updateNotification(notification).subscribe();
     });
+    this.updateHeaderService.newLoggedInUser.subscribe(bool => {
+      if (bool) {
+        this.loadNotifications();
+      }
+    });
   }
 
   ngOnInit() {

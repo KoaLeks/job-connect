@@ -61,12 +61,13 @@ export class LoginComponent implements OnInit {
         console.log('Try to authenticate user: ' + authRequest.email);
         this.authService.loginUser(authRequest).subscribe(
             () => {
-                console.log('Successfully logged in user: ' + authRequest.email);
-                // @ts-ignore
+              console.log('Successfully logged in user: ' + authRequest.email);
+              // @ts-ignore
                 $('#loginModal').modal('hide');
-                this.updateHeaderService.updateProfile.next(true);
-                this.vanishError();
-                this.router.navigate(['/']);
+              this.updateHeaderService.updateProfile.next(true);
+              this.updateHeaderService.emitNewLoggedInUser(true);
+              this.vanishError();
+              this.router.navigate(['/']);
             },
             error => {
                 console.log('Could not log in due to:');

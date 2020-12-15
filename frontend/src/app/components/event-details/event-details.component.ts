@@ -96,7 +96,7 @@ export class EventDetailsComponent implements OnInit {
       const n: number = this.applyTaskForm.value.inputTask;
       const task = this.eventDetails.tasks.find ((t: Task) => t.id.toString() === n.toString());
       this.applyTaskForm.controls['applicationText'].setValue('Sehr geehrte Damen und Herren, \n\rhiermit bewerbe ich mich für die Stelle "'
-        +  task.interestArea.description + '" für das Event ' + this.eventDetails.title + '\n\rMit freundlichen Grüßen\n'
+        +  task.description + '" für das Event ' + this.eventDetails.title + '\n\rMit freundlichen Grüßen\n'
         + this.employee.firstName + ' ' + this.employee.lastName);
     }
   }
