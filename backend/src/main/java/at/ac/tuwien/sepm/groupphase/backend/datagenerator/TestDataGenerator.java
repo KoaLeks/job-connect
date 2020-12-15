@@ -243,9 +243,7 @@ public class TestDataGenerator {
         }
     }
 
-    @PostConstruct
     private void generateEmployees() {
-        generateEmployers();
         if (employeeRepository.findAll().size() > 0) {
             LOGGER.debug("employees already generated");
         } else {
@@ -306,11 +304,13 @@ public class TestDataGenerator {
 
     @PostConstruct
     public void generateEvents() {
+        generateEmployers();
+        generateEmployees();
+        generateInterestAreas();
         if (eventRepository.findAll().size() > 0) {
             LOGGER.debug("events already generated");
         } else {
 
-            generateInterestAreas();
             TEST_TASK1.setInterestArea(interestAreaRepository.getOne(1L));
             TEST_TASK2.setInterestArea(interestAreaRepository.getOne(1L));
             TEST_TASK3.setInterestArea(interestAreaRepository.getOne(2L));
