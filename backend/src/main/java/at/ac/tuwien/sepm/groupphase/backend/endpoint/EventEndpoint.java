@@ -68,12 +68,12 @@ public class EventEndpoint {
     }
 
     @PutMapping
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation(value = "Update an event", authorizations = {@Authorization(value = "apiKey")})
     @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
-    public EventInquiryDto update(@Valid @RequestBody EventInquiryDto eventInquiryDto) {
+    public void update(@Valid @RequestBody EventInquiryDto eventInquiryDto) {
         LOGGER.info("PUT /api/v1/events/{}", eventInquiryDto);
-        return eventMapper.eventToEventInquiryDto(
+        eventMapper.eventToEventInquiryDto(
             eventService.saveEvent(eventMapper.eventInquiryDtoToEvent(eventInquiryDto)));
 
     }

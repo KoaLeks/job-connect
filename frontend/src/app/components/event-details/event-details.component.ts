@@ -68,6 +68,17 @@ export class EventDetailsComponent implements OnInit {
     }
   }
 
+  private getNumberOfParticipants(task: Task) {
+    console.log(JSON.stringify(task.employees));
+    let count = 0;
+    task.employees.forEach(e => {
+      if (e.accepted === true) {
+        count++;
+      }
+    });
+    return count;
+  }
+
   private getEventDetails() {
     this.eventService.getEventDetails(this.id).subscribe(
       (detailedEvent: DetailedEvent) => {

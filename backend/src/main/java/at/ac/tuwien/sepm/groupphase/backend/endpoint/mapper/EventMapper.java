@@ -31,6 +31,11 @@ public interface EventMapper {
 
     DetailedEventDto eventToDetailedEventDto(Event event);
 
+    @Mapping(source = "employee_tasks.employee.id", target = "employeeId")
+    @Mapping(source = "employee_tasks.task.id", target = "taskId")
+    @Mapping(source = "employee_tasks.accepted", target = "accepted")
+    Employee_TasksDto toEmployee_TasksDto(Employee_Tasks employee_tasks);
+
     @Mapping(source = "event.id", target = "eventId")
     TaskInquiryDto toTaskInquiryDto(Task task);
 

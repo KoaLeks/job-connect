@@ -1,7 +1,5 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
-import at.ac.tuwien.sepm.groupphase.backend.entity.Employee;
-
 import java.util.Set;
 
 public class SimpleTaskDto {
@@ -11,7 +9,7 @@ public class SimpleTaskDto {
     private String description;
     private Integer employeeCount;
     private Double paymentHourly;
-    private Set<SimpleEmployeeDto> employees;
+    private Set<Employee_TasksDto> employees;
     private SimpleInterestAreaDto interestArea;
 
     @Override
@@ -67,11 +65,11 @@ public class SimpleTaskDto {
         this.paymentHourly = paymentHourly;
     }
 
-    public Set<SimpleEmployeeDto> getEmployees() {
+    public Set<Employee_TasksDto> getEmployees() {
         return employees;
     }
 
-    public void setEmployees(Set<SimpleEmployeeDto> employees) {
+    public void setEmployees(Set<Employee_TasksDto> employees) {
         this.employees = employees;
     }
 
@@ -90,7 +88,7 @@ public class SimpleTaskDto {
         private String description;
         private Integer employeeCount;
         private Double paymentHourly;
-        private Set<SimpleEmployeeDto> employees;
+        private Set<Employee_TasksDto> employees;
         private SimpleInterestAreaDto interestArea;
 
         private SimpleTaskDtoBuilder() {
@@ -125,7 +123,7 @@ public class SimpleTaskDto {
             return this;
         }
 
-        public SimpleTaskDtoBuilder withEmployees(Set<SimpleEmployeeDto> employees) {
+        public SimpleTaskDtoBuilder withEmployees(Set<Employee_TasksDto> employees) {
             this.employees = employees;
             return this;
         }
