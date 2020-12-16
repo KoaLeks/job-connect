@@ -15,7 +15,8 @@
           <div class="form-group">
             <label for="InputTaskDescription">Beschreibung<b>*</b></label>
             <input type="text" maxlength="1000" class="form-control" id="InputTaskDescription"
-                   formControlName="description" pattern="[a-zA-ZÖöÜüÄä]+([ ]|[a-zA-ZÖöÜüÄä]|[0-9])*">
+                   formControlName="description"
+                   pattern="[a-zA-ZÖöÜüÄä]+([ ]|[a-zA-ZÖöÜüÄä]|[0-9]|[.]|[,]|[(]|[)]|[-]|[/]|[^'\u0027])*">
           </div>
           <div class="form-group">
             <label for="InputEmployeeCount">Benötigte MitarbeiterInnen<b>*</b></label>
