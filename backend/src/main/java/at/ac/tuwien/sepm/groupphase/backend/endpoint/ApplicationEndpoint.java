@@ -106,10 +106,10 @@ public class ApplicationEndpoint {
         notification.setTask(employee_tasks.getTask());
         notification.setSeen(false);
         if(employee_tasks.getAccepted()){
-            notification.setMessage(String.format("Your application to the Event \"%s\" has been accepted", event.getTitle()));
+            notification.setMessage(String.format("Deine Bewerbung für das Event \"%s\" wurde akzeptiert", event.getTitle()));
             notification.setType(NotificationType.EVENT_ACCEPTED.name());
         }else{
-            notification.setMessage(String.format("Your application to the Event \"%s\" has been declined", event.getTitle()));
+            notification.setMessage(String.format("Deine Bewerbung für das Event \"%s\" wurde abgelehnt", event.getTitle()));
             notification.setType(NotificationType.EVENT_DECLINED.name());
         }
         employee_tasksService.updateStatus(employee_tasks);

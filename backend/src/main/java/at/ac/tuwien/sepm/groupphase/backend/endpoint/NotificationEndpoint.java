@@ -60,7 +60,7 @@ public class NotificationEndpoint {
 
     @PutMapping(value = "/{id}")
     @ApiOperation(value = "Get all Notifications of jwt sub Profile", authorizations = {@Authorization(value = "apiKey")})
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     @CrossOrigin(origins = "http://localhost:4200")
     public void updateNotification(@RequestBody SimpleNotificationDto simpleNotificationDto, @RequestHeader String authorization){
         LOGGER.info("Update /api/v1/notifications/{}", simpleNotificationDto.getId());
