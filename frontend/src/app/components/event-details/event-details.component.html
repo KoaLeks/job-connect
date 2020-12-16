@@ -95,7 +95,7 @@
                    (change)='createApplication()'>
             <option [value]=null>kein Stelle ausgewählt</option>
             <ng-container *ngFor="let task of this.eventDetails.tasks">
-              <option [value]="task.id">Stelle: {{task.interestArea.area}} -
+              <option *ngIf="getNumberOfParticipants(task) < task.employeeCount" [value]="task.id">Stelle: {{task.interestArea.area}} -
                 Beschreibung: {{task.description}}</option>
             </ng-container>
           </select>
