@@ -6,7 +6,8 @@
 </div>
 
 <!-- Modal ADD Interest-->
-<div class="modal fade" id="Add-Interest" tabindex="-1" role="dialog" aria-labelledby="addInterestLabel" aria-hidden="true">
+<div class="modal fade" id="Add-Interest" tabindex="-1" role="dialog" aria-labelledby="addInterestLabel"
+     aria-hidden="true">
   <div class="modal-dialog modal-lg" style="width:33%" role="document">
     <div class="modal-content">
 
@@ -82,8 +83,9 @@
 
       <!-- first name -->
       <div class="form-group">
-        <label for="firstName">Vorname*</label>
-        <input class="form-control" type="text" name="firstName" formControlName="firstName" id="firstName">
+        <label for="firstName_edit_employee">Vorname*</label>
+        <input class="form-control" type="text" name="firstName" formControlName="firstName"
+               id="firstName_edit_employee">
 
         <div *ngIf="submitted && editForm.controls.firstName.errors"
              class="error">
@@ -95,8 +97,8 @@
 
       <!-- last name -->
       <div class="form-group">
-        <label for="lastName">Nachname*</label>
-        <input class="form-control" type="text" name="lastName" formControlName="lastName" id="lastName">
+        <label for="lastName_edit_employee">Nachname*</label>
+        <input class="form-control" type="text" name="lastName" formControlName="lastName" id="lastName_edit_employee">
         <div *ngIf="submitted && editForm.controls.lastName.errors"
              class="error">
           <small class="form-text text-info" *ngIf="editForm.controls.lastName.errors.required">Nachname muss
@@ -107,17 +109,18 @@
 
       <!-- gender -->
       <div class="form-group">
-        <label for="gender">Geschlecht*</label>
-        <select class="form-control" name="gender" formControlName="gender" id="gender">
+        <label for="gender_edit_employee">Geschlecht*</label>
+        <select class="form-control" name="gender" formControlName="gender" id="gender_edit_employee">
           <option value="" hidden disabled>Geschlecht auswählen</option>
-          <option *ngFor="let gender of genderOptions" [ngValue]="gender">{{gender==='MALE'?'Männlich':gender=='FEMALE'?'Weiblich':'Divers'}}</option>
+          <option *ngFor="let gender of genderOptions"
+                  [ngValue]="gender">{{gender === 'MALE' ? 'Männlich' : gender == 'FEMALE' ? 'Weiblich' : 'Divers'}}</option>
         </select>
       </div>
 
       <!-- BirthDate -->
       <div class="form-group">
-        <label for="birthDate">Geburtsdatum*</label>
-        <input type="date" class="form-control" id="birthDate" formControlName="birthDate">
+        <label for="birthDate_edit_employee">Geburtsdatum*</label>
+        <input type="date" class="form-control" id="birthDate_edit_employee" formControlName="birthDate">
       </div>
       <!--           BirthDate Employee error -->
       <div *ngIf="submitted && editForm.controls.birthDate.errors" class="error">
@@ -131,8 +134,8 @@
 
       <!-- email -->
       <div class="form-group">
-        <label for="email">E-Mail Adresse*</label>
-        <input type="email" name="email" formControlName="email" class="form-control" id="email" readonly>
+        <label for="email_edit_employee">E-Mail Adresse*</label>
+        <input type="email" name="email" formControlName="email" class="form-control" id="email_edit_employee" readonly>
         <div *ngIf="submitted && editForm.controls.email.errors" class="error">
           <small class="form-text text-info" *ngIf="editForm.controls.email.errors.required">E-Mail Adresse muss
             eingegeben werden
@@ -142,8 +145,8 @@
 
       <!-- public info -->
       <div class="form-group">
-        <label for="publicInfo">Öffentliche Profilbeschreibung</label>
-        <textarea name="publicInfo" formControlName="publicInfo" class="form-control" id="publicInfo"
+        <label for="publicInfo_edit_employee">Öffentliche Profilbeschreibung</label>
+        <textarea name="publicInfo" formControlName="publicInfo" class="form-control" id="publicInfo_edit_employee"
                   placeholder="Beschreibung ..." maxlength="10000"></textarea>
       </div>
 
@@ -153,14 +156,15 @@
         <div *ngIf="employeeInterests.length !== 0">
           <ul>
             <ng-container *ngFor="let interest of employeeInterests">
-                <div>
-                  {{interest.name}}: {{interest.description}}
-                  <button type="button" class="btn btn-xs btn-danger delete-interest-button btn-xs text-center" (click)="deleteInterest(interest)">
-                   <div class="deletebutton">
-                     &#10060;
-                   </div>
-                  </button>
-                </div>
+              <div>
+                {{interest.name}}: {{interest.description}}
+                <button type="button" class="btn btn-xs btn-danger delete-interest-button btn-xs text-center"
+                        (click)="deleteInterest(interest)">
+                  <div class="deletebutton">
+                    &#10060;
+                  </div>
+                </button>
+              </div>
             </ng-container>
           </ul>
         </div>
@@ -175,7 +179,8 @@
       <br>
       <br>
       <h5>
-        <div data-toggle="tooltip" data-placement="top" title="Somit kannst du Jobs ganz leicht nach deiner verfügbaren Zeit filtern und bekommst auch nur Mails für neue Jobs, bei denen du auch Zeit hast!">
+        <div data-toggle="tooltip" data-placement="top"
+             title="Somit kannst du Jobs ganz leicht nach deiner verfügbaren Zeit filtern und bekommst auch nur Mails für neue Jobs, bei denen du auch Zeit hast!">
           Hier siehst du, wann du Zeit zum Arbeiten hast
           <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-info-circle" fill="currentColor"
                xmlns="http://www.w3.org/2000/svg">
@@ -223,7 +228,8 @@
                   bis Folgetag
                 </ng-container>
                 <div style="color: #ff4747" (click)="deleteTimeFromOverview(day, mondayArray)">
-                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash delete-time-button" fill="currentColor"
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash delete-time-button"
+                       fill="currentColor"
                        xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
@@ -258,8 +264,8 @@
                   bis Folgetag
                 </ng-container>
                 <div style="color: #ff4747" (click)="deleteTimeFromOverview(day, tuesdayArray)">
-                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash delete-time-button" fill="currentColor"
-                       xmlns="http://www.w3.org/2000/svg">
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash delete-time-button"
+                       fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                     <path fill-rule="evenodd"
@@ -293,8 +299,8 @@
                   bis Folgetag
                 </ng-container>
                 <div style="color: #ff4747" (click)="deleteTimeFromOverview(day, wednesdayArray)">
-                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash delete-time-button" fill="currentColor"
-                       xmlns="http://www.w3.org/2000/svg">
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash delete-time-button"
+                       fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                     <path fill-rule="evenodd"
@@ -328,8 +334,8 @@
                   bis Folgetag
                 </ng-container>
                 <div style="color: #ff4747" (click)="deleteTimeFromOverview(day, thursdayArray)">
-                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash delete-time-button" fill="currentColor"
-                       xmlns="http://www.w3.org/2000/svg">
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash delete-time-button"
+                       fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                     <path fill-rule="evenodd"
@@ -363,8 +369,8 @@
                   bis Folgetag
                 </ng-container>
                 <div style="color: #ff4747" (click)="deleteTimeFromOverview(day, fridayArray)">
-                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash delete-time-button" fill="currentColor"
-                       xmlns="http://www.w3.org/2000/svg">
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash delete-time-button"
+                       fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                     <path fill-rule="evenodd"
@@ -398,8 +404,8 @@
                   bis Folgetag
                 </ng-container>
                 <div style="color: #ff4747" (click)="deleteTimeFromOverview(day, saturdayArray)">
-                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash delete-time-button" fill="currentColor"
-                       xmlns="http://www.w3.org/2000/svg">
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash delete-time-button"
+                       fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                     <path fill-rule="evenodd"
@@ -433,8 +439,8 @@
                   bis Folgetag
                 </ng-container>
                 <div style="color: #ff4747" (click)="deleteTimeFromOverview(day, sundayArray)">
-                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash delete-time-button" fill="currentColor"
-                       xmlns="http://www.w3.org/2000/svg">
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash delete-time-button"
+                       fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                     <path fill-rule="evenodd"
@@ -459,7 +465,8 @@
         <h5>neu erstellt: </h5>
         <ng-container *ngFor="let time of newTimes1">
           <div *ngIf="time.visible">
-            <button type="button" class="btn btn-xs btn-danger delete-interest-button btn-xs text-center" (click)="deleteTime(time)">
+            <button type="button" class="btn btn-xs btn-danger delete-interest-button btn-xs text-center"
+                    (click)="deleteTime(time)">
               <div class="deletebutton">
                 &#10060;
               </div>
@@ -479,7 +486,7 @@
       </div>
 
       <!-- TIME Management end-->
-
+      <hr>
       <div class="form-group form-check">
         <!--button type="button" routerLink="/" class="btn btn-outline-secondary float-right">Abbrechen</button-->
         <button type="button" (click)="update()" class="btn btn-outline-primary float-right">Speichern</button>

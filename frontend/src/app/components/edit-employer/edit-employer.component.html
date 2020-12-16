@@ -30,8 +30,9 @@
 
       <!-- first name -->
       <div class="form-group">
-        <label for="firstName">Vorname*</label>
-        <input class="form-control" type="text" name="firstName" formControlName="firstName" id="firstName"
+        <label for="firstName_edit_employer">Vorname*</label>
+        <input class="form-control" type="text" name="firstName" formControlName="firstName"
+               id="firstName_edit_employer"
                placeholder="Vorname">
 
         <div *ngIf="submitted && editForm.controls.firstName.errors"
@@ -44,8 +45,8 @@
 
       <!-- last name -->
       <div class="form-group">
-        <label for="lastName">Nachname*</label>
-        <input class="form-control" type="text" name="lastName" formControlName="lastName" id="lastName"
+        <label for="lastName_edit_employer">Nachname*</label>
+        <input class="form-control" type="text" name="lastName" formControlName="lastName" id="lastName_edit_employer"
                placeholder="Nachname">
         <div *ngIf="submitted && editForm.controls.lastName.errors"
              class="error">
@@ -57,8 +58,8 @@
 
       <!-- email -->
       <div class="form-group">
-        <label for="email">E-Mail Adresse*</label>
-        <input type="email" name="email" formControlName="email" class="form-control" id="email" readonly>
+        <label for="email_edit_employer">E-Mail Adresse*</label>
+        <input type="email" name="email" formControlName="email" class="form-control" id="email_edit_employer" readonly>
         <div *ngIf="submitted && editForm.controls.email.errors" class="error">
           <small class="form-text text-info" *ngIf="editForm.controls.email.errors.required">E-Mail Adresse muss
             eingegeben werden
@@ -68,15 +69,16 @@
 
       <!-- public info -->
       <div class="form-group">
-        <label for="publicInfo">Öffentliche Profilbeschreibung</label>
-        <textarea name="publicInfo" formControlName="publicInfo" class="form-control" id="publicInfo"
+        <label for="publicInfo_edit_employer">Öffentliche Profilbeschreibung</label>
+        <textarea name="publicInfo" formControlName="publicInfo" class="form-control" id="publicInfo_edit_employer"
                   placeholder="Beschreibung ..." maxlength="10000"></textarea>
       </div>
 
       <!-- company name -->
       <div class="form-group">
-        <label for="companyName">Name des Unternehmens*</label>
-        <input class="form-control" type="text" name="companyName" formControlName="companyName" id="companyName"
+        <label for="companyName_edit_employer">Name des Unternehmens*</label>
+        <input class="form-control" type="text" name="companyName" formControlName="companyName"
+               id="companyName_edit_employer"
                placeholder="Name">
 
         <div *ngIf="submitted && editForm.controls.companyName.errors"
@@ -89,9 +91,9 @@
 
       <!-- company description -->
       <div class="form-group">
-        <label for="companyDescription">Beschreibung des Unternehmens</label>
+        <label for="companyDescription_edit_employer">Beschreibung des Unternehmens</label>
         <textarea name="companyDescription" formControlName="companyDescription" class="form-control"
-                  id="companyDescription"
+                  id="companyDescription_edit_employer"
                   placeholder="Beschreibung ..." maxlength="10000"></textarea>
       </div>
 

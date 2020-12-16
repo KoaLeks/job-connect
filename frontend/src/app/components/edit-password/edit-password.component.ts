@@ -37,9 +37,10 @@ export class EditPasswordComponent implements OnInit {
         this.passwordUpdateForm.controls.currentPassword.value, this.passwordUpdateForm.controls.newPassword.value);
       console.log(editPassword);
       this.profileService.updatePassword(editPassword).subscribe(
-      (id: Number) => {
-        console.log('password updated successfully for ' + id);
-        // close the modal
+        (id: Number) => {
+          console.log('password updated successfully for ' + id);
+          // close the modal
+          this.vanishError();
           this.close.nativeElement.click();
         }, error => {
           this.error = true;
@@ -64,6 +65,7 @@ export class EditPasswordComponent implements OnInit {
    * Clears Form
    */
   clearForm(): void {
+    this.vanishError();
     this.submittedPasswordForm = false;
     this.passwordUpdateForm.reset();
   }
