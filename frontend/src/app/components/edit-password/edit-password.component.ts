@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {EditPassword} from '../../dtos/edit-password';
 import {ProfileService} from '../../services/profile.service';
 import {AuthService} from '../../services/auth.service';
+import {AlertService} from '../../alert';
 
 @Component({
   selector: 'app-edit-password',
@@ -13,13 +14,11 @@ export class EditPasswordComponent implements OnInit {
 
   @Input() changePassword: boolean;
   @ViewChild('close') close: ElementRef;
-  error: boolean = false;
-  errorMessage: string = '';
-
   passwordUpdateForm: FormGroup;
   submittedPasswordForm: boolean = false;
 
-  constructor(private formBuilder: FormBuilder, private profileService: ProfileService, private authService: AuthService) {
+  constructor(private formBuilder: FormBuilder, private profileService: ProfileService, private authService: AuthService,
+              private alertService: AlertService) {
     this.passwordUpdateForm = this.formBuilder.group({
       currentPassword: ['', [Validators.required, Validators.minLength(8)]],
       newPassword: ['', [Validators.required, Validators.minLength(8)]],
@@ -39,33 +38,19 @@ export class EditPasswordComponent implements OnInit {
       this.profileService.updatePassword(editPassword).subscribe(
         (id: Number) => {
           console.log('password updated successfully for ' + id);
+          this.alertService.clear();
           // close the modal
-          this.vanishError();
           this.close.nativeElement.click();
-        }, error => {
-          this.error = true;
-          if (error.error !== null && typeof error.error === 'object') {
-            this.errorMessage = error.error.error;
-          } else {
-            this.errorMessage = error.error;
-          }
         }
       );
     }
   }
 
   /**
-   * Error flag will be deactivated, which clears the error message
-   */
-  vanishError() {
-    this.error = false;
-  }
-
-  /**
    * Clears Form
    */
   clearForm(): void {
-    this.vanishError();
+    this.alertService.clear();
     this.submittedPasswordForm = false;
     this.passwordUpdateForm.reset();
   }

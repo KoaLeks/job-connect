@@ -1,10 +1,3 @@
-<div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
-  <strong>Fehler! </strong> {{ errorMessage }}
-  <button type="button" (click)="vanishError()" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
-</div>
-
 <!-- Modal ADD Interest-->
 <div class="modal fade" id="Add-Interest" tabindex="-1" role="dialog" aria-labelledby="addInterestLabel"
      aria-hidden="true">
@@ -61,7 +54,7 @@
 
 <div class="jumbotron mt-5">
   <h1 class="display-4">Profil bearbeiten</h1>
-  <hr class="my-4">
+  <hr class="my-4"/>
   <a *ngIf="!authService.isLoggedIn()" class="btn btn-primary btn-lg" routerLink="/login" role="button">Login</a>
   <div *ngIf="authService.isLoggedIn()">
 
@@ -81,65 +74,67 @@
       <input type="file" id="pictureUpload" accept="image/png, image/jpeg" (change)="onFileSelected($event)"
              required #pictureUpload style="position: fixed; top: -100em" #file>
 
-      <!-- first name -->
-      <div class="form-group">
-        <label for="firstName_edit_employee">Vorname*</label>
-        <input class="form-control" type="text" name="firstName" formControlName="firstName"
-               id="firstName_edit_employee">
+      <div class="row pt-3">
+        <div class="col-md-6 col-sm-6">
+          <!-- first name -->
+          <div class="form-group">
+            <label for="firstName_edit_employee">Vorname*</label>
+            <input class="form-control" type="text" name="firstName" formControlName="firstName"
+                   id="firstName_edit_employee">
 
-        <div *ngIf="submitted && editForm.controls.firstName.errors"
-             class="error">
-          <small class="form-text text-info" *ngIf="editForm.controls.firstName.errors.required">Vorname muss
-            eingegeben werden
-          </small>
+            <div *ngIf="submitted && editForm.controls.firstName.errors"
+                 class="error">
+              <small class="form-text text-info" *ngIf="editForm.controls.firstName.errors.required">Vorname muss
+                eingegeben werden
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-sm-6">
+          <!-- last name -->
+          <div class="form-group">
+            <label for="lastName_edit_employee">Nachname*</label>
+            <input class="form-control" type="text" name="lastName" formControlName="lastName"
+                   id="lastName_edit_employee">
+            <div *ngIf="submitted && editForm.controls.lastName.errors"
+                 class="error">
+              <small class="form-text text-info" *ngIf="editForm.controls.lastName.errors.required">Nachname muss
+                eingegeben werden
+              </small>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- last name -->
-      <div class="form-group">
-        <label for="lastName_edit_employee">Nachname*</label>
-        <input class="form-control" type="text" name="lastName" formControlName="lastName" id="lastName_edit_employee">
-        <div *ngIf="submitted && editForm.controls.lastName.errors"
-             class="error">
-          <small class="form-text text-info" *ngIf="editForm.controls.lastName.errors.required">Nachname muss
-            eingegeben werden
-          </small>
+      <div class="row">
+        <div class="col-md-6 col-sm-6">
+          <!-- gender -->
+          <div class="form-group">
+            <label for="gender_edit_employee">Geschlecht*</label>
+            <select class="form-control" name="gender" formControlName="gender" id="gender_edit_employee">
+              <option value="" hidden disabled>Geschlecht auswählen</option>
+              <option *ngFor="let gender of genderOptions"
+                      [ngValue]="gender">{{gender === 'MALE' ? 'Männlich' : gender == 'FEMALE' ? 'Weiblich' : 'Divers'}}</option>
+            </select>
+          </div>
         </div>
-      </div>
 
-      <!-- gender -->
-      <div class="form-group">
-        <label for="gender_edit_employee">Geschlecht*</label>
-        <select class="form-control" name="gender" formControlName="gender" id="gender_edit_employee">
-          <option value="" hidden disabled>Geschlecht auswählen</option>
-          <option *ngFor="let gender of genderOptions"
-                  [ngValue]="gender">{{gender === 'MALE' ? 'Männlich' : gender == 'FEMALE' ? 'Weiblich' : 'Divers'}}</option>
-        </select>
-      </div>
-
-      <!-- BirthDate -->
-      <div class="form-group">
-        <label for="birthDate_edit_employee">Geburtsdatum*</label>
-        <input type="date" class="form-control" id="birthDate_edit_employee" formControlName="birthDate">
-      </div>
-      <!--           BirthDate Employee error -->
-      <div *ngIf="submitted && editForm.controls.birthDate.errors" class="error">
-        <small class="form-text text-info" *ngIf="editForm.controls.birthDate.errors.required">
-          Bitte geben Sie Ihr Geburtsdatum ein!
-        </small>
-        <small class="form-text text-info" *ngIf="editForm.controls.birthDate.errors.notAdult">
-          Benutzer müssen volljährig sein!
-        </small>
-      </div>
-
-      <!-- email -->
-      <div class="form-group">
-        <label for="email_edit_employee">E-Mail Adresse*</label>
-        <input type="email" name="email" formControlName="email" class="form-control" id="email_edit_employee" readonly>
-        <div *ngIf="submitted && editForm.controls.email.errors" class="error">
-          <small class="form-text text-info" *ngIf="editForm.controls.email.errors.required">E-Mail Adresse muss
-            eingegeben werden
-          </small>
+        <div class="col-md-6 col-sm-6">
+          <!-- BirthDate -->
+          <div class="form-group">
+            <label for="birthDate_edit_employee">Geburtsdatum*</label>
+            <input type="date" class="form-control" id="birthDate_edit_employee" formControlName="birthDate">
+          </div>
+          <!--           BirthDate Employee error -->
+          <div *ngIf="submitted && editForm.controls.birthDate.errors" class="error">
+            <small class="form-text text-info" *ngIf="editForm.controls.birthDate.errors.required">
+              Bitte geben Sie Ihr Geburtsdatum ein!
+            </small>
+            <small class="form-text text-info" *ngIf="editForm.controls.birthDate.errors.notAdult">
+              Benutzer müssen volljährig sein!
+            </small>
+          </div>
         </div>
       </div>
 
@@ -150,30 +145,63 @@
                   placeholder="Beschreibung ..." maxlength="10000"></textarea>
       </div>
 
-      <!-- interests -->
-      <div>
-        <label>Interessen:</label>
-        <div *ngIf="employeeInterests.length !== 0">
-          <ul>
-            <ng-container *ngFor="let interest of employeeInterests">
-              <div>
-                {{interest.name}}: {{interest.description}}
-                <button type="button" class="btn btn-xs btn-danger delete-interest-button btn-xs text-center"
-                        (click)="deleteInterest(interest)">
-                  <div class="deletebutton">
-                    &#10060;
-                  </div>
-                </button>
-              </div>
-            </ng-container>
-          </ul>
+      <hr/>
+
+      <div class="row">
+        <!-- email -->
+        <div class="col-md-6 col-sm-6">
+          <div class="form-group">
+            <label for="email_edit_employee">E-Mail Adresse*</label>
+            <input type="email" name="email" formControlName="email" class="form-control" id="email_edit_employee"
+                   readonly>
+            <div *ngIf="submitted && editForm.controls.email.errors" class="error">
+              <small class="form-text text-info" *ngIf="editForm.controls.email.errors.required">E-Mail Adresse muss
+                eingegeben werden
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <!-- password -->
+        <div class="col-md-6 col-sm-6">
+          <label>Passwort</label>
+          <br>
+          <button class="btn btn-outline-secondary" (click)="changePassword=true" data-target="#passwordUpdateModal"
+                  data-toggle="modal">Passwort ändern
+          </button>
+          <app-edit-password [changePassword]="changePassword"></app-edit-password>
         </div>
       </div>
-      <!-- Button trigger modal ADD Interest-->
-      <button type="button" class="btn btn-primary" data-toggle="modal"
-              data-target="#Add-Interest" (click)="loadInterestAreas()">
-        Interesse hinzufügen
-      </button>
+
+      <hr/>
+
+      <!-- interests -->
+      <div>
+        <div>
+          <label>Interessen:</label>
+          <div *ngIf="employeeInterests.length !== 0">
+            <ul>
+              <ng-container *ngFor="let interest of employeeInterests">
+                <div>
+                  {{interest.name}}: {{interest.description}}
+                  <button type="button" class="btn btn-xs btn-danger delete-interest-button btn-xs text-center"
+                          (click)="deleteInterest(interest)">
+                    <div class="deletebutton">
+                      &#10060;
+                    </div>
+                  </button>
+                </div>
+              </ng-container>
+            </ul>
+          </div>
+        </div>
+        <!-- Button trigger modal ADD Interest-->
+        <button type="button" class="btn btn-outline-primary" data-toggle="modal"
+                data-target="#Add-Interest" (click)="loadInterestAreas()">
+          Interesse hinzufügen
+        </button>
+        <hr/>
+      </div>
 
       <!-- TIME Management begin-->
       <br>
@@ -456,7 +484,7 @@
       </table>
       <br>
       <!-- Button trigger time adding Modal -->
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addTimeModal">
+      <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#addTimeModal">
         neue Zeitspanne hinzufügen
       </button>
 
@@ -488,17 +516,11 @@
       <!-- TIME Management end-->
       <hr>
       <div class="form-group form-check">
-        <!--button type="button" routerLink="/" class="btn btn-outline-secondary float-right">Abbrechen</button-->
-        <button type="button" (click)="update()" class="btn btn-outline-primary float-right">Speichern</button>
+        <button type="button" (click)="update()" class="btn btn-primary float-right">Speichern</button>
       </div>
     </form>
   </div>
 </div>
-
-<button class="btn btn-primary float-right" (click)="changePassword=true" data-target="#passwordUpdateModal"
-        data-toggle="modal">Passwort ändern
-</button>
-<app-edit-password [changePassword]="changePassword"></app-edit-password>
 
 <!-- time adding Modal -->
 <div class="modal fade" id="addTimeModal" tabindex="-1" role="dialog" aria-labelledby="addTimeModal" aria-hidden="true">
@@ -573,28 +595,3 @@
 </div>
 
 <!-- time adding Modal -->
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>

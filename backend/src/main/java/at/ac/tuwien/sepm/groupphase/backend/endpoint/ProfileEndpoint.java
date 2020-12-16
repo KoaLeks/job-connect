@@ -92,9 +92,10 @@ public class ProfileEndpoint {
     @PutMapping(value = "/employer")
     @ApiOperation(value = "Update employer details", authorizations = {@Authorization(value = "apiKey")})
     @CrossOrigin(origins = "http://localhost:4200")
-    public Long updateEmployer(@Valid @RequestBody EditEmployerDto editEmployerDto) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateEmployer(@Valid @RequestBody EditEmployerDto editEmployerDto) {
         LOGGER.info("PUT /api/v1/profiles/employer body: {}", editEmployerDto);
-        return employerService.updateEmployer(employerMapper.editEmployerDtoToEmployer(editEmployerDto));
+        employerService.updateEmployer(employerMapper.editEmployerDtoToEmployer(editEmployerDto));
     }
 
     @PutMapping(value = "/updatePassword")

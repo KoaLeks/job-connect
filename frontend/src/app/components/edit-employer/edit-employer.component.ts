@@ -6,6 +6,7 @@ import {EmployerService} from '../../services/employer.service';
 import {ProfileDto} from '../../dtos/profile-dto';
 import {EditEmployer} from '../../dtos/edit-employer';
 import {UpdateHeaderService} from '../../services/update-header.service';
+import {Alert, AlertService} from '../../alert';
 
 @Component({
   selector: 'app-edit-employer',
@@ -13,8 +14,6 @@ import {UpdateHeaderService} from '../../services/update-header.service';
   styleUrls: ['./edit-employer.component.scss']
 })
 export class EditEmployerComponent implements OnInit {
-  error: boolean = false;
-  errorMessage: string = '';
   editForm: FormGroup;
   submitted: boolean;
   profile: any;
@@ -25,8 +24,9 @@ export class EditEmployerComponent implements OnInit {
   inputImage: ElementRef; // needed for resetting fileUpload button
   changePassword: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router, private formBuilder: FormBuilder,
-              private employerService: EmployerService, private updateHeaderService: UpdateHeaderService) {
+  constructor(public authService: AuthService, private router: Router, private formBuilder: FormBuilder,
+              private employerService: EmployerService, private updateHeaderService: UpdateHeaderService,
+              private alertService: AlertService) {
     this.editForm = this.formBuilder.group({
       email: ['', [Validators.required]],
       firstName: ['', [Validators.required]],
@@ -65,10 +65,6 @@ export class EditEmployerComponent implements OnInit {
           this.hasPicture = true;
         }
         // console.log(profile);
-      },
-      error => {
-        this.error = true;
-        this.errorMessage = error.error;
       }
     );
   }
@@ -121,19 +117,8 @@ export class EditEmployerComponent implements OnInit {
           this.inputImage.nativeElement.value = ''; // resets fileUpload button
           this.loadEmployerDetails();
           this.updateHeaderService.updateProfile.next(true);
-        },
-        error => {
-          this.error = true;
-          this.errorMessage = error.error;
         });
     }
-  }
-
-  /**
-   * Error flag will be deactivated, which clears the error message
-   */
-  vanishError() {
-    this.error = false;
   }
 
   onFileSelected(event) {
@@ -150,13 +135,11 @@ export class EditEmployerComponent implements OnInit {
           this.hasPicture = true;
         } else {
           this.selectedPicture = null;
-          this.error = true;
-          this.errorMessage = 'Das Bild muss im JPEG oder PNG Format sein.';
+          this.alertService.warn('Das Bild muss im JPEG oder PNG Format sein.', {autoClose: true});
         }
       };
     } else {
-      this.error = true;
-      this.errorMessage = 'Das Bild darf maximal 5 MB groß sein.';
+      this.alertService.warn('Das Bild darf maximal 5 MB groß sein.', {autoClose: true});
     }
   }
 

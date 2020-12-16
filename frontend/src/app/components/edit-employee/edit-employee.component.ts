@@ -12,6 +12,7 @@ import {UpdateHeaderService} from '../../services/update-header.service';
 import {TimeDto} from '../../dtos/TimeDto';
 import {InterestArea} from '../../dtos/interestArea';
 import {InterestAreaService} from '../../services/interestArea.service';
+import {AlertService} from '../../alert';
 
 @Component({
   selector: 'app-edit-employee',
@@ -19,8 +20,6 @@ import {InterestAreaService} from '../../services/interestArea.service';
   styleUrls: ['./edit-employee.component.scss']
 })
 export class EditEmployeeComponent implements OnInit {
-  error: boolean = false;
-  errorMessage: string = '';
   editForm: FormGroup;
   submitted: boolean;
   profile: any;
@@ -31,7 +30,6 @@ export class EditEmployeeComponent implements OnInit {
   hasPicture = false;
   @ViewChild('pictureUpload') // needed for resetting fileUpload button
   inputImage: ElementRef; // needed for resetting fileUpload button
-  interests: Interest[];
   changePassword: boolean = false;
   timeCreationForm;
   times: TimeDto[] = []; // for database entries
@@ -52,9 +50,10 @@ export class EditEmployeeComponent implements OnInit {
   interestAreas: InterestArea[];
   employeeInterests: Interest[] = [];
 
-  constructor(private authService: AuthService, private router: Router, private formBuilder: FormBuilder,
+  constructor(public authService: AuthService, private router: Router, private formBuilder: FormBuilder,
               private employeeService: EmployeeService, private interestService: InterestService,
-              private updateHeaderService: UpdateHeaderService, private interestAreaService: InterestAreaService) {
+              private updateHeaderService: UpdateHeaderService, private interestAreaService: InterestAreaService,
+              private alertService: AlertService) {
     this.editForm = this.formBuilder.group({
       email: ['', [Validators.required]],
       firstName: ['', [Validators.required]],
@@ -137,10 +136,6 @@ export class EditEmployeeComponent implements OnInit {
         if (this.employee.interestDtos !== undefined && this.employee.interestDtos.length > 0) {
           this.employeeInterests = this.employee.interestDtos;
         }
-      },
-      error => {
-        this.error = true;
-        this.errorMessage = error.error;
       }
     );
   }
@@ -206,21 +201,12 @@ export class EditEmployeeComponent implements OnInit {
           this.updateHeaderService.updateProfile.next(true);
         },
         error => {
-          this.error = true;
-          this.errorMessage = error.error;
           this.newTimes = [];
           this.newTimes1 = [];
         });
     } else {
       console.log('Invalid input');
     }
-  }
-
-  /**
-   * Error flag will be deactivated, which clears the error message
-   */
-  vanishError() {
-    this.error = false;
   }
 
   onFileSelected(event) {
@@ -237,13 +223,11 @@ export class EditEmployeeComponent implements OnInit {
           this.hasPicture = true;
         } else {
           this.selectedPicture = null;
-          this.error = true;
-          this.errorMessage = 'Das Bild muss im JPEG oder PNG Format sein.';
+          this.alertService.warn('Das Bild muss im JPEG oder PNG Format sein.', {autoClose: true});
         }
       };
     } else {
-      this.error = true;
-      this.errorMessage = 'Das Bild darf maximal 5 MB groß sein.';
+      this.alertService.warn('Das Bild darf maximal 5 MB groß sein.', {autoClose: true});
     }
   }
 
@@ -268,10 +252,6 @@ export class EditEmployeeComponent implements OnInit {
       this.interestAreaService.getInterestAreas().subscribe(
         (interestAreas) => {
           this.interestAreas = interestAreas;
-        },
-        error => {
-          this.error = true;
-          this.errorMessage = error.error;
         }
       );
     }
