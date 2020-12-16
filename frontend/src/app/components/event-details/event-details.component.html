@@ -7,7 +7,7 @@
               {{eventDetails.title}}
             </div>
             <div class="col-md-3 mt-3 text-right h5">
-              Beginn: {{eventDetails.start.slice(0, 10)}}<br>{{eventDetails.start.slice(11, 16)}}
+              Beginn: {{eventDetails.start.slice(0, 10) |  date:'dd-MM-yyyy'}}<br>{{eventDetails.start.slice(11, 16) }} Uhr
             </div>
           </div>
           <div class="row justify-content-between">
@@ -15,7 +15,7 @@
               {{eventDetails.address.addressLine}}, {{eventDetails.address.zip}} {{eventDetails.address.city}}
             </div>
             <div class="col-md-3 text-right h5">
-              Ende: {{eventDetails.end.slice(0, 10)}}<br>{{eventDetails.end.slice(11, 16)}}
+              Ende: {{eventDetails.end.slice(0, 10) |  date:'dd-MM-yyyy'}}<br>{{eventDetails.end.slice(11, 16)}} Uhr
             </div>
           </div>
         </div>
