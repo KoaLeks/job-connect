@@ -1,7 +1,7 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -24,6 +24,7 @@ import { EventDetailsComponent } from './components/event-details/event-details.
 import { EmployeeOverviewComponent } from './components/employee-overview/employee-overview.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { NotificationListComponent } from './components/notification-list/notification-list.component';
+import {Alert, AlertModule} from './alert';
 
 @NgModule({
   declarations: [
@@ -51,9 +52,11 @@ import { NotificationListComponent } from './components/notification-list/notifi
     ReactiveFormsModule,
     HttpClientModule,
     NgbModule,
-    FormsModule
+    FormsModule,
+    AlertModule
   ],
-  providers: [httpInterceptorProviders, UpdateHeaderService],
+  providers:
+    [httpInterceptorProviders, UpdateHeaderService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

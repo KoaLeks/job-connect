@@ -34,7 +34,7 @@ public class Employee_TasksServiceImpl implements Employee_TasksService {
         if(employee_tasksRepository.findFirstByEmployeeAndTask(employee, task) == null){
             return employee_tasksRepository.save(employee_tasks).getId();
         }else{
-            throw new AlreadyHandledException(String.format("Already applied for Task: %s", task.getId()));
+            throw new AlreadyHandledException(String.format("Sie haben sich bereits für die Aufgabe \"%s\" beworben", task.getDescription()));
         }
     }
 
@@ -44,8 +44,8 @@ public class Employee_TasksServiceImpl implements Employee_TasksService {
         Employee_Tasks toUpdate = employee_tasksRepository.findFirstByEmployee_Profile_IdAndTask_Id(employee_tasks.getEmployee().getId(), employee_tasks.getTask().getId());
         if(toUpdate == null) throw new NotFoundException(String.format("Employee_Tasks application not found: %s", employee_tasks));
         if(toUpdate.getAccepted() != null){
-            String status = toUpdate.getAccepted() ? "accepted" : "declined";
-            throw new AlreadyHandledException(String.format("The Application from %s for task %s already was %s", toUpdate.getEmployee().getProfile().getEmail(), toUpdate.getTask().getId(), status));
+            String status = toUpdate.getAccepted() ? "akzeptiert" : "abgelehnt";
+            throw new AlreadyHandledException(String.format("Die Bewerbung von %s für die Aufgabe %s wurde bereits %s", toUpdate.getEmployee().getProfile().getEmail(), toUpdate.getTask().getDescription(), status));
         }
         toUpdate.setAccepted(employee_tasks.getAccepted());
         employee_tasksRepository.save(toUpdate);
