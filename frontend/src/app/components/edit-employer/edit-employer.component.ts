@@ -73,6 +73,7 @@ export class EditEmployerComponent implements OnInit {
    * Check if the form is valid and call the service to update the employer
    */
   update() {
+    this.alertService.clear();
     this.submitted = true;
     if (this.editForm.valid) {
       let employer;

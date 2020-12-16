@@ -144,6 +144,7 @@ export class EditEmployeeComponent implements OnInit {
    * Check if the form is valid and call the service to update the employee
    */
   update() {
+    this.alertService.clear();
     this.submitted = true;
     if (this.editForm.valid) {
       for (const time of this.times) {

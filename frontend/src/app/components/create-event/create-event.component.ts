@@ -11,6 +11,7 @@ import {InterestArea} from '../../dtos/interestArea';
 import {InterestAreaService} from '../../services/interestArea.service';
 import {EmployerService} from '../../services/employer.service';
 import {Router} from '@angular/router';
+import {AlertService} from '../../alert';
 
 @Component({
   selector: 'app-create-event',
@@ -18,11 +19,7 @@ import {Router} from '@angular/router';
   styleUrls: ['./create-event.component.scss']
 })
 export class CreateEventComponent implements OnInit {
-
-  error: boolean = false;
-  success = false;
   event: Event;
-  errorMessage: string = '';
   addressCreationForm;
   eventCreationForm;
   taskCreationForm;
@@ -33,7 +30,7 @@ export class CreateEventComponent implements OnInit {
   constructor(public authService: AuthService, private formBuilder: FormBuilder, private addressService: AddressService,
               private eventService: EventService, private taskService: TaskService,
               private interestAreaService: InterestAreaService,
-              private employerService: EmployerService, private router: Router,) {
+              private employerService: EmployerService, private router: Router, private alertService: AlertService) {
     this.addressCreationForm = this.formBuilder.group({
       city: [null, Validators.required],
       state: [null, Validators.required],
@@ -72,6 +69,7 @@ export class CreateEventComponent implements OnInit {
    * Saves new Event
    */
   createEvent(event: Event, address: Address, tasks: Task[]) {
+    this.alertService.clear();
     event.address = address;
     event.tasks = tasks;
     // set Employer in event
@@ -88,13 +86,12 @@ export class CreateEventComponent implements OnInit {
     this.eventService.createEvent(event).subscribe(
       createdEvent => {
         this.event = createdEvent;
-        this.success = true;
         this.eventCreationForm.reset();
         this.addressCreationForm.reset();
         this.taskCreationForm.reset();
-      },
-      error => {
-        this.defaultServiceErrorHandling(error);
+        this.tasks = [];
+        this.router.navigate(['events/' + this.event.id + '/details']);
+        this.alertService.success('Event erfolgreich erstellt', {autoClose: true});
       }
     );
   }
@@ -123,23 +120,6 @@ export class CreateEventComponent implements OnInit {
     const index = this.tasks.indexOf(task);
     if (index !== -1) {
       this.tasks.splice(index, 1);
-    }
-  }
-
-  /**
-   * Error flag will be deactivated, which clears the error message
-   */
-  vanishError() {
-    this.error = false;
-  }
-
-  private defaultServiceErrorHandling(error: any) {
-    console.log(error);
-    this.error = true;
-    if (typeof error.error === 'object') {
-      this.errorMessage = error.error.error;
-    } else {
-      this.errorMessage = error.error;
     }
   }
 

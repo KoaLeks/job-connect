@@ -170,11 +170,11 @@ public class ProfileEndpointTest implements TestData {
     @BeforeEach
     public void beforeEach() {
         timeRepository.deleteAll();
+        interestRepository.deleteAll();
+        interestAreaRepository.deleteAll();
         employeeRepository.deleteAll();
         employerRepository.deleteAll();
         profileRepository.deleteAll();
-        interestRepository.deleteAll();
-        interestAreaRepository.deleteAll();
         employee = Employee.EmployeeBuilder.aEmployee()
             .withProfile(Profile.ProfileBuilder.aProfile()
                 .isEmployer(false)
@@ -374,7 +374,7 @@ public class ProfileEndpointTest implements TestData {
             .andReturn();
 
         MockHttpServletResponse response = mvcResult.getResponse();
-        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(HttpStatus.NO_CONTENT.value(), response.getStatus());
     }
 
     @Test
@@ -401,7 +401,7 @@ public class ProfileEndpointTest implements TestData {
             .andReturn();
 
         MockHttpServletResponse response = mvcResult.getResponse();
-        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(HttpStatus.NO_CONTENT.value(), response.getStatus());
     }
 
     @Test
@@ -498,7 +498,7 @@ public class ProfileEndpointTest implements TestData {
             .andReturn();
 
         MockHttpServletResponse response = mvcResult.getResponse();
-        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(HttpStatus.NO_CONTENT.value(), response.getStatus());
         assertEquals(interestRepository.count(), 1);
     }
 
@@ -534,7 +534,7 @@ public class ProfileEndpointTest implements TestData {
 
         // assert that added interest is in db
         MockHttpServletResponse response = mvcResult.getResponse();
-        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(HttpStatus.NO_CONTENT.value(), response.getStatus());
         assertEquals(interestRepository.count(), 1);
 
         EditEmployeeDto newEditEmployeeDto = EditEmployeeDto.EditEmployeeDtoBuilder.aEmployeeDto()
@@ -558,7 +558,7 @@ public class ProfileEndpointTest implements TestData {
             .andReturn();
 
         MockHttpServletResponse newResponse = newMvcResult.getResponse();
-        assertEquals(HttpStatus.OK.value(), newResponse.getStatus());
+        assertEquals(HttpStatus.NO_CONTENT.value(), newResponse.getStatus());
         assertEquals(interestRepository.count(), 0);
     }
 
@@ -591,7 +591,7 @@ public class ProfileEndpointTest implements TestData {
             .andReturn();
 
         MockHttpServletResponse response = mvcResult.getResponse();
-        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(HttpStatus.NO_CONTENT.value(), response.getStatus());
         assertEquals(timeRepository.count(), 1);
         ;
     }
@@ -625,7 +625,7 @@ public class ProfileEndpointTest implements TestData {
             .andReturn();
 
         MockHttpServletResponse response = mvcResult.getResponse();
-        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(HttpStatus.NO_CONTENT.value(), response.getStatus());
         assertEquals(timeRepository.count(), 1);
 
         EditEmployeeDto newEditEmployeeDto = EditEmployeeDto.EditEmployeeDtoBuilder.aEmployeeDto()
@@ -649,7 +649,7 @@ public class ProfileEndpointTest implements TestData {
             .andReturn();
 
         MockHttpServletResponse newResponse = newMvcResult.getResponse();
-        assertEquals(HttpStatus.OK.value(), newResponse.getStatus());
+        assertEquals(HttpStatus.NO_CONTENT.value(), newResponse.getStatus());
         assertEquals(timeRepository.count(), 0);
     }
 
