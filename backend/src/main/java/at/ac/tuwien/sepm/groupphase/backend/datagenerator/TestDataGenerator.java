@@ -574,5 +574,4 @@ public class TestDataGenerator {
             taskRepository.save(TEST_TASK4);
         }
     }
-
 }
