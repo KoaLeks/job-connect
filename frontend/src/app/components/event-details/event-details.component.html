@@ -41,7 +41,7 @@
               <ng-container *ngFor="let task of eventDetails.tasks">
                 <tr class="d-flex">
                   <td class="col-7 text-justify">{{task.description}}</td>
-                  <td class="col-3 text-center">{{task.employees.length}}/{{task.employeeCount}}</td>
+                  <td class="col-3 text-center">{{getNumberOfParticipants(task)}}/{{task.employeeCount}}</td>
                   <td class="col-2 text-center">{{task.paymentHourly}}</td>
                 </tr>
               </ng-container>
