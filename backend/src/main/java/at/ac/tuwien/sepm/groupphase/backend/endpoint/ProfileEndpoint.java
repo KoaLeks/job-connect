@@ -67,9 +67,10 @@ public class ProfileEndpoint {
     @PutMapping(value = "/employee")
     @ApiOperation(value = "Update employee details", authorizations = {@Authorization(value = "apiKey")})
     @CrossOrigin(origins = "http://localhost:4200")
-    public Long updateEmployee(@Valid @RequestBody EditEmployeeDto editEmployeeDto) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateEmployee(@Valid @RequestBody EditEmployeeDto editEmployeeDto) {
         LOGGER.info("PUT /api/v1/profiles/employee body: {}", editEmployeeDto);
-        return employeeService.updateEmployee(employeeMapper.editEmployeeDtoToEmployee(editEmployeeDto));
+        employeeService.updateEmployee(employeeMapper.editEmployeeDtoToEmployee(editEmployeeDto));
     }
 
     @PostMapping(value = "/employer")
@@ -99,13 +100,14 @@ public class ProfileEndpoint {
     @PutMapping(value = "/updatePassword")
     @ApiOperation(value = "Update profile password", authorizations = {@Authorization(value = "apiKey")})
     @CrossOrigin(origins = "http://localhost:4200")
-    public Long updatePassword(@Valid @RequestBody EditPasswordDto editPasswordDto) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updatePassword(@Valid @RequestBody EditPasswordDto editPasswordDto) {
         LOGGER.info("PUT /api/v1/profiles/updatePassword body: {}", editPasswordDto);
         this.profileService.checkIfValidCurrentPassword(editPasswordDto.getEmail(), editPasswordDto.getCurrentPassword());
 
         Profile profileToEdit = this.profileService.findProfileByEmail(editPasswordDto.getEmail());
         profileToEdit.setPassword(editPasswordDto.getNewPassword());
-        return this.profileService.updateProfile(profileToEdit);
+        this.profileService.updateProfile(profileToEdit);
     }
 
     @GetMapping(value = "/employee")

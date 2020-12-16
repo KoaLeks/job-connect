@@ -57,7 +57,7 @@ public class ApplicationEndpoint {
     @PutMapping(value = "/apply")
     @ApiOperation(value = "Handle application from employee and send Notification", authorizations = {@Authorization(value = "apiKey")})
     @PreAuthorize("hasAuthority('ROLE_EMPLOYEE')")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.CREATED)
     @CrossOrigin(origins = "http://localhost:4200")
     public void apply(@Valid @RequestBody ApplicationDto applicationDto, @RequestHeader String authorization){
         LOGGER.info("PUT /api/v1/applications/apply message: {}", applicationDto);

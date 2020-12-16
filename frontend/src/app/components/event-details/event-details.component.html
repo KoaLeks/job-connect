@@ -7,7 +7,7 @@
               {{eventDetails.title}}
             </div>
             <div class="col-md-3 mt-3 text-right h5">
-              Beginn: {{eventDetails.start.slice(0, 10)}}<br>{{eventDetails.start.slice(11, 16)}}
+              Beginn: {{eventDetails.start.slice(0, 10) |  date:'dd-MM-yyyy'}}<br>{{eventDetails.start.slice(11, 16) }} Uhr
             </div>
           </div>
           <div class="row justify-content-between">
@@ -15,7 +15,7 @@
               {{eventDetails.address.addressLine}}, {{eventDetails.address.zip}} {{eventDetails.address.city}}
             </div>
             <div class="col-md-3 text-right h5">
-              Ende: {{eventDetails.end.slice(0, 10)}}<br>{{eventDetails.end.slice(11, 16)}}
+              Ende: {{eventDetails.end.slice(0, 10) |  date:'dd-MM-yyyy'}}<br>{{eventDetails.end.slice(11, 16)}} Uhr
             </div>
           </div>
         </div>
@@ -41,7 +41,7 @@
               <ng-container *ngFor="let task of eventDetails.tasks">
                 <tr class="d-flex">
                   <td class="col-7 text-justify">{{task.description}}</td>
-                  <td class="col-3 text-center">{{task.employees.length}}/{{task.employeeCount}}</td>
+                  <td class="col-3 text-center">{{getNumberOfParticipants(task)}}/{{task.employeeCount}}</td>
                   <td class="col-2 text-center">{{task.paymentHourly}}</td>
                 </tr>
               </ng-container>
@@ -95,7 +95,7 @@
                    (change)='createApplication()'>
             <option [value]=null>kein Stelle ausgewählt</option>
             <ng-container *ngFor="let task of this.eventDetails.tasks">
-              <option [value]="task.id">Stelle: {{task.interestArea.area}} -
+              <option *ngIf="getNumberOfParticipants(task) < task.employeeCount" [value]="task.id">Stelle: {{task.interestArea.area}} -
                 Beschreibung: {{task.description}}</option>
             </ng-container>
           </select>
