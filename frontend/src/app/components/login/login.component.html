@@ -22,6 +22,9 @@
             <small class="form-text text-warning" *ngIf="loginForm.controls.email.errors.required">
               Bitte geben Sie Ihre E-Mail ein.
             </small>
+            <small class="form-text text-warning" *ngIf="loginForm.controls.email.errors.email">
+              Bitte geben Sie eine gültige E-Mail Adresse ein.
+            </small>
           </div>
           <div class="form-group input-group">
             <div class="input-group-prepend">
