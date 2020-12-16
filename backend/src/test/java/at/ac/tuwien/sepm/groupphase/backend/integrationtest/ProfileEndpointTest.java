@@ -327,27 +327,27 @@ public class ProfileEndpointTest implements TestData {
     }
 
     @Test
-    public void getEmployeeWithBlankEmailShouldReturnBadRequest() throws Exception {
-        MvcResult mvcResult = this.mockMvc.perform(get(GET_EMPLOYEE_BASE_URI+"   ")
+    public void getEmployeeWithNonExistingEmailShouldReturnNotFound() throws Exception {
+        MvcResult mvcResult = this.mockMvc.perform(get(GET_EMPLOYEE_BASE_URI + EMPLOYEE_EMAIL)
             .accept(MediaType.APPLICATION_JSON)
             .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)))
             .andDo(print())
             .andReturn();
 
         MockHttpServletResponse response = mvcResult.getResponse();
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
     }
 
     @Test
-    public void getEmployerWithBlankEmailShouldReturnBadRequest() throws Exception {
-        MvcResult mvcResult = this.mockMvc.perform(get(GET_EMPLOYER_BASE_URI+"  ")
+    public void getEmployerWithNonExistingEmailShouldReturnNotFound() throws Exception {
+        MvcResult mvcResult = this.mockMvc.perform(get(GET_EMPLOYER_BASE_URI + EMPLOYER_EMAIL)
             .accept(MediaType.APPLICATION_JSON)
             .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)))
             .andDo(print())
             .andReturn();
 
         MockHttpServletResponse response = mvcResult.getResponse();
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
     }
 
     @Test
@@ -443,6 +443,28 @@ public class ProfileEndpointTest implements TestData {
 
         MockHttpServletResponse response = mvcResult.getResponse();
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+    }
+
+    @Test
+    public void updateProfilePasswordWithNonMatchingPasswords_shouldReturnUnauthorized() throws Exception {
+        employeeRepository.save(employee);
+
+        EditPasswordDto editPasswordDto = new EditPasswordDto();
+        editPasswordDto.setEmail(EMPLOYEE_EMAIL);
+        editPasswordDto.setCurrentPassword(EMPLOYEE_PASSWORD + "wrong");
+        editPasswordDto.setNewPassword(EMPLOYEE_PASSWORD + "new");
+
+        String editPasswordBody = objectMapper.writeValueAsString(editPasswordDto);
+
+        MvcResult mvcResult = this.mockMvc.perform(put(EDIT_PASSWORD_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(editPasswordBody))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpStatus.UNAUTHORIZED.value(), response.getStatus());
     }
 
     @Test
@@ -570,7 +592,8 @@ public class ProfileEndpointTest implements TestData {
 
         MockHttpServletResponse response = mvcResult.getResponse();
         assertEquals(HttpStatus.OK.value(), response.getStatus());
-        assertEquals(timeRepository.count(), 1);;
+        assertEquals(timeRepository.count(), 1);
+        ;
     }
 
     @Test
@@ -629,13 +652,6 @@ public class ProfileEndpointTest implements TestData {
         assertEquals(HttpStatus.OK.value(), newResponse.getStatus());
         assertEquals(timeRepository.count(), 0);
     }
-
-
-
-
-
-
-
 
 
 }
