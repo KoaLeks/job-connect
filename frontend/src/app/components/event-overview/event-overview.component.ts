@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Event} from '../../dtos/event';
 import {EventService} from '../../services/event.service';
 import {Router} from '@angular/router';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
   selector: 'app-event-overview',
@@ -13,7 +14,7 @@ export class EventOverviewComponent implements OnInit {
   error: boolean = false;
   errorMessage: string = '';
 
-  constructor(private eventService: EventService) {
+  constructor(public authService: AuthService, private eventService: EventService) {
   }
 
   ngOnInit(): void {

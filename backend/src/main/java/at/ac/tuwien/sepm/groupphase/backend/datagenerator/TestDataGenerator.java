@@ -255,7 +255,7 @@ public class TestDataGenerator {
             for (String name : names) {
                 at.ac.tuwien.sepm.groupphase.backend.entity.Profile employeeProfile =
                     at.ac.tuwien.sepm.groupphase.backend.entity.Profile.ProfileBuilder.aProfile()
-                        .withEmail(name.replace(" ", ".").toLowerCase() + "@gmail.com")
+                        .withEmail(name.replace(" ", ".").toLowerCase() + "@jobconnect.test")
                         .withForename(name.split(" ")[0])
                         .withName(name.split(" ")[1])
                         .withPassword(passwordEncoder.encode(TEST_PASSWORD))
@@ -451,9 +451,9 @@ public class TestDataGenerator {
                 employeeRepository.findAll()) {
 
                 Time time1 = Time.TimeBuilder.aTime()
-                    .withStart(LocalDateTime.of(2020, 12, 24, 12, 0, 0, 0))
-                    .withEnd(LocalDateTime.of(2020, 12, 24, 18, 0, 0, 0))
-                    .withFinalEndDate(LocalDateTime.of(2020, 12, 24, 18, 0, 0, 0))
+                    .withStart(LocalDateTime.of(2020, 12, 28, 12, 0, 0, 0))
+                    .withEnd(LocalDateTime.of(2020, 12, 28, 18, 0, 0, 0))
+                    .withFinalEndDate(LocalDateTime.of(2020, 12, 28, 18, 0, 0, 0))
                     .withVisible(true)
                     .withRef_Id(-1L)
                     .withEmployee(employee)

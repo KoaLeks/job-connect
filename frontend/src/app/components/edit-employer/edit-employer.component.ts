@@ -155,6 +155,7 @@ export class EditEmployerComponent implements OnInit {
   }
 
   deletePicture() {
+    this.selectedPicture = null;
     this.hasPicture = false;
     this.picture = null;
   }

@@ -69,7 +69,7 @@ export class EventDetailsComponent implements OnInit {
   }
 
   private getNumberOfParticipants(task: Task) {
-    console.log(JSON.stringify(task.employees));
+    // console.log(JSON.stringify(task.employees));
     let count = 0;
     task.employees.forEach(e => {
       if (e.accepted === true) {
