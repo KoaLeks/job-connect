@@ -107,7 +107,7 @@ public class ProfileEndpointTest implements TestData {
 
     private Employer employer = Employer.EmployerBuilder.aEmployer()
         .withProfile(Profile.ProfileBuilder.aProfile()
-            .isEmployer(false)
+            .isEmployer(true)
             .withEmail(EMPLOYER_EMAIL)
             .withName(EMPLOYER_LAST_NAME)
             .withForename(EMPLOYER_FIRST_NAME)

@@ -48,7 +48,6 @@ public class MailServiceImpl implements MailService {
         List<Employee> availableEmployees = new ArrayList<>();
 
         for (Employee e: employeeList) {
-//            System.out.println(e);
             for (Interest i: e.getInterests()) {
                 for (Task t: event.getTasks()) {
                     if(i.getInterestArea() != null && i.getInterestArea().getId().equals(t.getInterestArea().getId())){
@@ -63,7 +62,6 @@ public class MailServiceImpl implements MailService {
                 }
             }
         }
-//        System.out.println(availableEmployees);
 
         return availableEmployees;
     }

@@ -41,7 +41,7 @@ public class InterestEndpointTest implements TestData {
     private MockMvc mockMvc;
 
     @Autowired
-    InterestRepository interestRepository;
+    private InterestRepository interestRepository;
 
     @Autowired
     private InterestAreaRepository interestAreaRepository;
@@ -55,7 +55,7 @@ public class InterestEndpointTest implements TestData {
     @Autowired
     private SecurityProperties securityProperties;
 
-    private final InterestArea interestArea = InterestArea.InterestAreaBuilder.aInterest()
+    private InterestArea interestArea = InterestArea.InterestAreaBuilder.aInterest()
         .withArea(AREA)
         .withDescription(DESCRIPTION)
         .withInterests(INTERESTS)
@@ -64,8 +64,14 @@ public class InterestEndpointTest implements TestData {
 
     @BeforeEach
     public void beforeEach() {
-        interestAreaRepository.deleteAll();
         interestRepository.deleteAll();
+        interestAreaRepository.deleteAll();
+        interestArea = InterestArea.InterestAreaBuilder.aInterest()
+            .withArea(AREA)
+            .withDescription(DESCRIPTION)
+            .withInterests(INTERESTS)
+            .withTasks(TASKS)
+            .build();
     }
 
     @Test
@@ -81,7 +87,7 @@ public class InterestEndpointTest implements TestData {
             .withEmployee(INTEREST_EMPLOYEE)
             .build();
 
-        interestRepository.save(interest);
+        Interest interest1 = interestRepository.save(interest);
 
         MvcResult mvcResult = this.mockMvc.perform(get(GET_INTERESTS_BASE_URI)
             .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)))
@@ -98,7 +104,7 @@ public class InterestEndpointTest implements TestData {
         assertEquals(1, interestDtos.size());
         InterestDto interestDto = interestDtos.get(0);
         assertAll(
-            () -> assertEquals(INTEREST_ID, interestDto.getId()),
+            () -> assertEquals(interestDto.getId(), interest1.getId()),
             () -> assertEquals(INTEREST_NAME, interestDto.getName()),
             () -> assertEquals(INTEREST_DESCRIPTION, interestDto.getDescription())
         );

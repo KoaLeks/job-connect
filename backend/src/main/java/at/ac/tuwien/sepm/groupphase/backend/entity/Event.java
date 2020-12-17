@@ -120,7 +120,6 @@ public class Event {
             ", description='" + description + '\'' +
             ", employer=" + employer +
             ", address=" + address +
-            ", tasks=" + tasks.size() +
             '}';
     }
 

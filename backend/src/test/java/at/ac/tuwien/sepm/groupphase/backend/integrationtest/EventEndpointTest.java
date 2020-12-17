@@ -6,9 +6,12 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedMessageDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventInquiryDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.RegisterEmployerMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.repository.AddressRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.EmployerRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.ProfileRepository;
 import at.ac.tuwien.sepm.groupphase.backend.security.JwtTokenizer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,6 +55,15 @@ public class EventEndpointTest implements TestData {
     private EventRepository eventRepository;
 
     @Autowired
+    private EmployerRepository employerRepository;
+
+    @Autowired
+    private ProfileRepository profileRepository;
+
+    @Autowired
+    private RegisterEmployerMapper registerEmployerMapper;
+
+    @Autowired
     private AddressRepository addressRepository;
 
     @Autowired
@@ -84,20 +96,16 @@ public class EventEndpointTest implements TestData {
         .withTask(TASKS_EVENT)
         .build();
 
-    private final Employer employer = Employer.EmployerBuilder.aEmployer()
-        .withProfile(
-            Profile.ProfileBuilder.aProfile()
-            .withId(EMPLOYER_ID)
+    private Employer employer = Employer.EmployerBuilder.aEmployer()
+        .withProfile(Profile.ProfileBuilder.aProfile()
+            .isEmployer(true)
+            .withEmail(EMPLOYER_EMAIL)
             .withName(EMPLOYER_LAST_NAME)
             .withForename(EMPLOYER_FIRST_NAME)
-            .withEmail(EMPLOYER_EMAIL)
             .withPassword(EMPLOYER_PASSWORD)
-            .withPublicInfo(EMPLOYER_PUBLIC_INFO)
-            .build()
-        )
+            .build())
         .withCompanyName(EMPLOYER_COMPANY_NAME)
         .withDescription(EMPLOYER_COMPANY_DESCRIPTION)
-        .withEvents(null)
         .build();
 
     private final Task task = Task.TaskBuilder.aTask()
@@ -113,6 +121,8 @@ public class EventEndpointTest implements TestData {
     public void beforeEach() {
         eventRepository.deleteAll();
         addressRepository.deleteAll();
+        employerRepository.deleteAll();
+        profileRepository.deleteAll();
         event = Event.EventBuilder.aEvent()
             .withStart(START)
             .withEnd(END)
@@ -126,6 +136,14 @@ public class EventEndpointTest implements TestData {
 
     @Test
     public void createValidEventTest() throws Exception {
+
+        Profile profile = profileRepository.save(employer.getProfile());
+        employer.setProfile(profile);
+        employer.setId(profile.getId());
+        Employer employer1 = employerRepository.save(employer);
+
+        event.setEmployer(employer1);
+
         String body = objectMapper.writeValueAsString(eventMapper.eventToEventInquiryDto(event));
 
         MvcResult mvcResult = this.mockMvc.perform(post(EVENTS_BASE_URI)
@@ -174,6 +192,12 @@ public class EventEndpointTest implements TestData {
 
     @Test
     public void updateEventAddressToNull_ThenBadRequest() throws Exception {
+        Profile profile = profileRepository.save(employer.getProfile());
+        employer.setProfile(profile);
+        employer.setId(profile.getId());
+        Employer employer1 = employerRepository.save(employer);
+
+        event.setEmployer(employer1);
         String body = objectMapper.writeValueAsString(eventMapper.eventToEventInquiryDto(event));
 
         MvcResult mvcResult = this.mockMvc.perform(post(EVENTS_BASE_URI)
@@ -207,6 +231,12 @@ public class EventEndpointTest implements TestData {
 
     @Test
     public void updateEventStartAndEndValidTest() throws Exception {
+        Profile profile = profileRepository.save(employer.getProfile());
+        employer.setProfile(profile);
+        employer.setId(profile.getId());
+        Employer employer1 = employerRepository.save(employer);
+
+        event.setEmployer(employer1);
         String body = objectMapper.writeValueAsString(eventMapper.eventToEventInquiryDto(event));
 
         MvcResult mvcResult = this.mockMvc.perform(post(EVENTS_BASE_URI)
@@ -233,11 +263,10 @@ public class EventEndpointTest implements TestData {
             .andDo(print())
             .andReturn();
         MockHttpServletResponse updateResponse = mvcUpdateResult.getResponse();
-        assertEquals(HttpStatus.OK.value(), updateResponse.getStatus());
+        assertEquals(HttpStatus.NO_CONTENT.value(), updateResponse.getStatus());
         assertEquals(eventRepository.count(), 1);
 
-        EventInquiryDto eventResponse = objectMapper.readValue(updateResponse.getContentAsString(),
-            EventInquiryDto.class);
+        Event eventResponse = eventRepository.findAll().stream().findFirst().get();
         assertEquals(LocalDateTime.of(2021, 12, 24, 17, 0, 0, 0),
             eventResponse.getStart());
         assertEquals(LocalDateTime.of(2021, 12, 24, 23, 45, 0, 0),
