@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.InterestAreaDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.InterestAreaMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.InterestArea;
 import at.ac.tuwien.sepm.groupphase.backend.repository.InterestAreaRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.InterestRepository;
 import at.ac.tuwien.sepm.groupphase.backend.security.JwtTokenizer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,6 +43,9 @@ public class InterestAreaEndpointTest implements TestData {
     private InterestAreaRepository interestAreaRepository;
 
     @Autowired
+    private InterestRepository interestRepository;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     @Autowired
@@ -62,6 +66,7 @@ public class InterestAreaEndpointTest implements TestData {
 
     @BeforeEach
     public void beforeEach() {
+        interestRepository.deleteAll();
         interestAreaRepository.deleteAll();
         interestArea = InterestArea.InterestAreaBuilder.aInterest()
             .withArea(AREA)

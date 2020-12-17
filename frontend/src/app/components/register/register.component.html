@@ -133,7 +133,7 @@
             <select class="form-control" type="text" name="gender" formControlName="gender" id="gender"
                    placeholder="Gender">
               <option [ngValue]=null hidden disabled>Wählen Sie Ihr Geschlecht</option>
-              <option *ngFor="let gender of genderOptions" [ngValue]="gender">{{gender==='MALE'?'Männlich':gender=='FEMALE'?'Weiblich':'Divers'}}</option>
+              <option *ngFor="let gender of genderOptions" [ngValue]="gender">{{gender==='MALE'?'Männlich':gender=='FEMALE'?'Weiblich':'Sonstiges'}}</option>
             </select>
           </div>
 
@@ -144,8 +144,7 @@
             <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.birthDate.errors.required">
               Bitte geben Sie Ihr Geburtsdatum ein!
             </small>
-            <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.birthDate.errors.notAdult">User
-              must be an adult!
+            <small class="form-text text-warning" *ngIf="registerFormEmployee.controls.birthDate.errors.notAdult">Sie müssen volljährig sein!
             </small>
           </div>
           <div *ngIf="isEmployee" class="form-group input-group">

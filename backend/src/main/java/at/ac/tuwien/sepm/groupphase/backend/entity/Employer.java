@@ -91,7 +91,6 @@ public class Employer {
             ", profile=" + profile +
             ", companyName='" + companyName + '\'' +
             ", description='" + description + '\'' +
-            ", events=" + (events == null ? "null" : events.size()) +
             '}';
     }
 
