@@ -3,6 +3,8 @@ import {Event} from '../../dtos/event';
 import {EventService} from '../../services/event.service';
 import {Router} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
+import {DetailedEvent} from '../../dtos/detailed-event';
+import {Task} from '../../dtos/task';
 
 @Component({
   selector: 'app-event-overview',
@@ -10,7 +12,7 @@ import {AuthService} from '../../services/auth.service';
   styleUrls: ['./event-overview.component.scss']
 })
 export class EventOverviewComponent implements OnInit {
-  events: Event[] = [];
+  events: DetailedEvent[] = [];
   error: boolean = false;
   errorMessage: string = '';
 
@@ -23,7 +25,7 @@ export class EventOverviewComponent implements OnInit {
 
   private loadEvents() {
     this.eventService.getEvents().subscribe(
-      (events: Event[]) => {
+      (events: DetailedEvent[]) => {
         this.events = events;
       },
       error => {
@@ -31,7 +33,20 @@ export class EventOverviewComponent implements OnInit {
       }
     );
   }
-
+  private getAmountOfFreeJobs(tasks: Task[]) {
+    let sum = 0;
+    for (let task of tasks) {
+      sum += task.employeeCount;
+    }
+    return sum;
+  }
+  private getAmountOfTakenJobs(tasks: Task[]) {
+    let sum = 0;
+    for (let task of tasks) {
+      sum += task.employees.length;
+    }
+    return sum;
+  }
   private defaultServiceErrorHandling(error: any) {
     console.log(error);
     this.error = true;

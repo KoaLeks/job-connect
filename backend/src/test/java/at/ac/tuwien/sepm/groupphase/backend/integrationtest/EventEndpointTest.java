@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.integrationtest;
 
 import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
 import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedMessageDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventInquiryDto;
@@ -285,8 +286,8 @@ public class EventEndpointTest implements TestData {
         assertEquals(HttpStatus.OK.value(), response.getStatus());
         assertEquals(MediaType.APPLICATION_JSON_VALUE, response.getContentType());
 
-        List<SimpleEventDto> simpleEventDtos = Arrays.asList(objectMapper.readValue(response.getContentAsString(),
-            SimpleEventDto[].class));
+        List<DetailedEventDto> simpleEventDtos = Arrays.asList(objectMapper.readValue(response.getContentAsString(),
+            DetailedEventDto[].class));
 
         assertEquals(0, simpleEventDtos.size());
     }
@@ -306,18 +307,18 @@ public class EventEndpointTest implements TestData {
         assertEquals(HttpStatus.OK.value(), response.getStatus());
         assertEquals(MediaType.APPLICATION_JSON_VALUE, response.getContentType());
 
-        List<SimpleEventDto> simpleEventDtos = Arrays.asList(objectMapper.readValue(response.getContentAsString(),
-            SimpleEventDto[].class));
+        List<DetailedEventDto> simpleEventDtos = Arrays.asList(objectMapper.readValue(response.getContentAsString(),
+            DetailedEventDto[].class));
 
         assertEquals(1, simpleEventDtos.size());
-        SimpleEventDto simpleEventDto = simpleEventDtos.get(0);
+        DetailedEventDto simpleEventDto = simpleEventDtos.get(0);
         assertAll(
             () -> assertEquals(event.getId(), simpleEventDto.getId()),
             () -> assertEquals(START, simpleEventDto.getStart()),
             () -> assertEquals(END, simpleEventDto.getEnd()),
             () -> assertEquals(TITLE_EVENT, simpleEventDto.getTitle()),
             () -> assertEquals(DESCRIPTION_EVENT, simpleEventDto.getDescription()),
-            () -> assertEquals(address, simpleEventDto.getAddress())
+            () -> assertEquals(address.getId(), simpleEventDto.getAddress().getId())
         );
     }
 

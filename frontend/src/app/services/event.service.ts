@@ -45,7 +45,7 @@ export class EventService {
   /**
    * Gets all events from the backend
    */
-  getEvents(): Observable<Event[]> {
-    return this.httpClient.get<Event[]>(this.eventBaseUri);
+  getEvents(): Observable<DetailedEvent[]> {
+    return this.httpClient.get<DetailedEvent[]>(this.eventBaseUri);
   }
 }

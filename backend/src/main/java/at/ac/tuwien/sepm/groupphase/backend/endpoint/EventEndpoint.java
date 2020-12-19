@@ -62,9 +62,10 @@ public class EventEndpoint {
     @GetMapping
     @ApiOperation(value = "Get list of events")
     @CrossOrigin(origins = "http://localhost:4200")
-    public List<SimpleEventDto> findAll() {
+    @Transactional
+    public List<DetailedEventDto> findAll() {
         LOGGER.info("GET /api/v1/events");
-        return eventMapper.eventsToSimpleEventsDtos(eventService.findAll());
+        return eventMapper.eventsToDetailedEventDtos(eventService.findAll());
     }
 
     @PutMapping

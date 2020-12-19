@@ -15,11 +15,9 @@ import java.util.List;
 @Mapper(uses = { EventService.class, EmployerMapper.class, EmployerService.class})
 public interface EventMapper {
 
-    @Named("simpleEvent")
-    SimpleEventDto eventToSimpleEventDto(Event event);
 
-    @IterableMapping(qualifiedByName = "simpleEvent")
-    List<SimpleEventDto> eventsToSimpleEventsDtos(List<Event> events);
+    @IterableMapping(qualifiedByName = "detailedEvent")
+    List<DetailedEventDto> eventsToDetailedEventDtos(List<Event> events);
 
     @Mapping(source = "employer.id", target = "employer")
     Event eventInquiryDtoToEvent(EventInquiryDto eventInquiryDto);
@@ -29,6 +27,7 @@ public interface EventMapper {
 
     EventInquiryDto eventToEventInquiryDto(Event event);
 
+    @Named("detailedEvent")
     DetailedEventDto eventToDetailedEventDto(Event event);
 
     @Mapping(source = "employee_tasks.employee.id", target = "employeeId")
