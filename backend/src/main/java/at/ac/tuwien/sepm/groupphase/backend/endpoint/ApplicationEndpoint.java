@@ -108,6 +108,7 @@ public class ApplicationEndpoint {
         if(employee_tasks.getAccepted()){
             notification.setMessage(String.format("Deine Bewerbung für das Event \"%s\" wurde akzeptiert", event.getTitle()));
             notification.setType(NotificationType.EVENT_ACCEPTED.name());
+            employeeService.deleteTime(applicationStatusDto.getEmployee(), applicationStatusDto.getTask());  // delete time
         }else{
             notification.setMessage(String.format("Deine Bewerbung für das Event \"%s\" wurde abgelehnt", event.getTitle()));
             notification.setType(NotificationType.EVENT_DECLINED.name());

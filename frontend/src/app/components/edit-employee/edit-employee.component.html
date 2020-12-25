@@ -239,10 +239,10 @@
             <ng-container *ngFor="let day of mondayArray">
               <ng-container *ngIf="day.visible">
                 <ng-container *ngIf="(day.end.substr(0, 10) !== day.finalEndDate.substr(0, 10)); else onlyOnce">
-                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd.MM.yyyy'}}</b>
                 </ng-container>
                 <ng-template #onlyOnce>
-                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd.MM.yyyy'}}</b>
                 </ng-template>
                 <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
                 && day.start.substr(0, 10) === day.end.substr(0, 10)">
@@ -275,10 +275,10 @@
             <ng-container *ngFor="let day of tuesdayArray">
               <ng-container *ngIf="day.visible">
                 <ng-container *ngIf="(day.end.substr(0, 10) !== day.finalEndDate.substr(0, 10)); else onlyOnce">
-                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd.MM.yyyy'}}</b>
                 </ng-container>
                 <ng-template #onlyOnce>
-                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd.MM.yyyy'}}</b>
                 </ng-template>
                 <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
                 && day.start.substr(0, 10) === day.end.substr(0, 10)">
@@ -310,10 +310,10 @@
             <ng-container *ngFor="let day of wednesdayArray">
               <ng-container *ngIf="day.visible">
                 <ng-container *ngIf="(day.end.substr(0, 10) !== day.finalEndDate.substr(0, 10)); else onlyOnce">
-                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd.MM.yyyy'}}</b>
                 </ng-container>
                 <ng-template #onlyOnce>
-                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd.MM.yyyy'}}</b>
                 </ng-template>
                 <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
                 && day.start.substr(0, 10) === day.end.substr(0, 10)">
@@ -345,10 +345,10 @@
             <ng-container *ngFor="let day of thursdayArray">
               <ng-container *ngIf="day.visible">
                 <ng-container *ngIf="(day.end.substr(0, 10) !== day.finalEndDate.substr(0, 10)); else onlyOnce">
-                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd.MM.yyyy'}}</b>
                 </ng-container>
                 <ng-template #onlyOnce>
-                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd.MM.yyyy'}}</b>
                 </ng-template>
                 <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
                 && day.start.substr(0, 10) === day.end.substr(0, 10)">
@@ -380,10 +380,10 @@
             <ng-container *ngFor="let day of fridayArray">
               <ng-container *ngIf="day.visible">
                 <ng-container *ngIf="(day.end.substr(0, 10) !== day.finalEndDate.substr(0, 10)); else onlyOnce">
-                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd.MM.yyyy'}}</b>
                 </ng-container>
                 <ng-template #onlyOnce>
-                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd.MM.yyyy'}}</b>
                 </ng-template>
                 <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
                 && day.start.substr(0, 10) === day.end.substr(0, 10)">
@@ -415,10 +415,10 @@
             <ng-container *ngFor="let day of saturdayArray">
               <ng-container *ngIf="day.visible">
                 <ng-container *ngIf="(day.end.substr(0, 10) !== day.finalEndDate.substr(0, 10)); else onlyOnce">
-                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd.MM.yyyy'}}</b>
                 </ng-container>
                 <ng-template #onlyOnce>
-                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd.MM.yyyy'}}</b>
                 </ng-template>
                 <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
                 && day.start.substr(0, 10) === day.end.substr(0, 10)">
@@ -450,10 +450,10 @@
             <ng-container *ngFor="let day of sundayArray">
               <ng-container *ngIf="day.visible">
                 <ng-container *ngIf="(day.end.substr(0, 10) !== day.finalEndDate.substr(0, 10)); else onlyOnce">
-                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                  wöchentlich bis <b>{{day.finalEndDate.substr(0, 10) |  date:'dd.MM.yyyy'}}</b>
                 </ng-container>
                 <ng-template #onlyOnce>
-                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</b>
+                  einmalig am <b>{{day.start.substr(0, 10) |  date:'dd.MM.yyyy'}}</b>
                 </ng-template>
                 <ng-container *ngIf="(day.start.substr(11, 5) !== '00:00' || day.end.substr(11, 5) !== '23:59')
                 && day.start.substr(0, 10) === day.end.substr(0, 10)">
@@ -501,7 +501,7 @@
                 &#10060;
               </div>
             </button>
-            <a style="margin: 1em"> <b>Datum:</b> {{time.start.substr(0, 10) |  date:'dd/MM/yyyy'}}</a>
+            <a style="margin: 1em"> <b>Datum:</b> {{time.start.substr(0, 10) |  date:'dd.MM.yyyy'}}</a>
             <a style="margin-right: 1em"> <b>Von:</b> {{time.start.substr(11, 5)}} Uhr</a>
             <a> <b>Bis:</b> {{time.end.substr(11, 5)}} Uhr | </a>
             <ng-container *ngIf="time.booleanDate">

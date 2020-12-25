@@ -41,4 +41,11 @@ public interface EmployeeService {
      * @return list of all employees
      */
     List<Employee> findAll();
+
+    /**
+     * Delete available time when employee gets accepted for an event
+     * @param employee_id look for times of this employee
+     * @param task_id look for start and end time of event where this task belongs to
+     */
+    void deleteTime(Long employee_id, Long task_id);
 }
