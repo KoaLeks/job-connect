@@ -77,16 +77,26 @@ public class ApplicationEndpoint {
         Employer employer = employerService.findByEvent(event);
 
         employee_tasksService.applyForTask(employee, task);
+        Notification application = new Notification();
+        application.setEvent(event);
+        application.setMessage(applicationDto.getMessage());
+        application.setRecipient(employer.getProfile());
+        application.setSender(employee.getProfile());
+        application.setSeen(false);
+        application.setTask(task);
+        application.setType(NotificationType.APPLICATION.name());
+
         Notification notification = new Notification();
         notification.setEvent(event);
-        notification.setMessage(applicationDto.getMessage());
+        notification.setMessage("Es gibt eine neue Bewerbung für das Event: " + event.getTitle());
         notification.setRecipient(employer.getProfile());
-        notification.setSender(employee.getProfile());
+        notification.setSender(null);
         notification.setSeen(false);
         notification.setTask(task);
-        notification.setType(NotificationType.APPLICATION.name());
+        notification.setType(NotificationType.NOTIFICATION.name());
+
+        notificationService.createNotification(application);
         notificationService.createNotification(notification);
-        // TODO send notification about new application to employer
     }
 
     @PostMapping(value = "/changeStatus")

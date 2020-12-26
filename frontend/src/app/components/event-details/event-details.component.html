@@ -1,4 +1,10 @@
 <ng-container *ngIf="eventDetails">
+
+  <!-- Application list -->
+  <app-application-list *ngIf="authService.getUserRole() === 'EMPLOYER' &&
+  authService.getTokenIdentifier() === eventDetails.employer.simpleProfileDto.email"
+                        [eventId]="id" [tasks]="eventDetails.tasks"></app-application-list>
+
     <div class="card mt-5">
       <div class="card-header">
         <div class="container">

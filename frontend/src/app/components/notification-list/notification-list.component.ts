@@ -21,19 +21,6 @@ export class NotificationListComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  accept(notification: SimpleNotification) {
-    const acceptApplication = new ApplicationStatus(notification.taskId, notification.sender.id, notification.id, true);
-    this.applicationService.changeApplicationStatus(acceptApplication).subscribe();
-    this.removeNotification(notification.id);
-  }
-
-  decline(notification: SimpleNotification) {
-    console.log(JSON.stringify(notification));
-    const declineApplication = new ApplicationStatus(notification.taskId, notification.sender.id, notification.id, false);
-    this.applicationService.changeApplicationStatus(declineApplication).subscribe();
-    this.removeNotification(notification.id);
-  }
-
   deleteNotification(id: number) {
     this.notificationService.deleteNotification(id).subscribe();
     this.removeNotification(id);
@@ -48,7 +35,6 @@ export class NotificationListComponent implements OnInit {
     if (!notification.seen) {
       notification.seen = true;
       this.updateHeaderService.emitUpdatedNotification(notification);
-      console.log('notification');
     }
   }
 
