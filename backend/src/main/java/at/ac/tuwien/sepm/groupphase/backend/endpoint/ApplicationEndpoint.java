@@ -2,7 +2,9 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.ApplicationDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.ApplicationStatusDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleNotificationDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.ApplicationStatusMapper;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.NotificationMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.service.*;
 import at.ac.tuwien.sepm.groupphase.backend.util.NotificationType;
@@ -38,11 +40,17 @@ public class ApplicationEndpoint {
     private final NotificationService notificationService;
     private final EmployerService employerService;
     private final EmployeeService employeeService;
+    private final NotificationMapper notificationMapper;
+
 
     private final TokenService tokenService;
 
     @Autowired
-    public ApplicationEndpoint(ApplicationStatusMapper applicationStatusMapper, EventService eventService, Employee_TasksService employee_tasksService, TaskService taskService, NotificationService notificationService, EmployerService employerService, EmployeeService employeeService, TokenService tokenService) {
+    public ApplicationEndpoint(ApplicationStatusMapper applicationStatusMapper, EventService eventService,
+                               Employee_TasksService employee_tasksService, TaskService taskService,
+                               NotificationService notificationService, EmployerService employerService,
+                               EmployeeService employeeService, TokenService tokenService,
+                               NotificationMapper notificationMapper) {
         this.applicationStatusMapper = applicationStatusMapper;
         this.eventService = eventService;
         this.employee_tasksService = employee_tasksService;
@@ -51,6 +59,7 @@ public class ApplicationEndpoint {
         this.employerService = employerService;
         this.employeeService = employeeService;
         this.tokenService = tokenService;
+        this.notificationMapper = notificationMapper;
     }
 
 
@@ -77,6 +86,7 @@ public class ApplicationEndpoint {
         notification.setTask(task);
         notification.setType(NotificationType.APPLICATION.name());
         notificationService.createNotification(notification);
+        // TODO send notification about new application to employer
     }
 
     @PostMapping(value = "/changeStatus")
@@ -116,5 +126,15 @@ public class ApplicationEndpoint {
         employee_tasksService.updateStatus(employee_tasks);
         notificationService.deleteNotification(applicationStatusDto.getNotification(), authorization);
         notificationService.createNotification(notification);
+    }
+
+    @GetMapping(value = "/events/{id}")
+    @ApiOperation(value = "Get all applications for an Event", authorizations = {@Authorization(value = "apiKey")})
+    @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
+    @ResponseStatus(HttpStatus.OK)
+    @CrossOrigin(origins = "http://localhost:4200")
+    public Set<SimpleNotificationDto> getAllApplicationsForEvent(@PathVariable Long id) {
+        LOGGER.info("Get /api/v1/applications/events/{}", id);
+        return notificationMapper.notificationsToSimpleNotificationsDtos(notificationService.findAllApplicationsByEvent_Id(id));
     }
 }

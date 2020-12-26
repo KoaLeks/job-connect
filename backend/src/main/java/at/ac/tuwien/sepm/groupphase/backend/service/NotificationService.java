@@ -31,6 +31,14 @@ public interface NotificationService {
     Set<Notification> findAllByRecipient_Id(Long id);
 
     /**
+     * Get all applications for an event
+     *
+     * @param id of the event
+     * @return list of all applications for an event
+     */
+    Set<Notification> findAllApplicationsByEvent_Id(Long id);
+
+    /**
      * Delete a notification
      *
      * @param id to delete
