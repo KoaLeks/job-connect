@@ -3,6 +3,7 @@ import {Globals} from '../global/globals';
 import {HttpClient} from '@angular/common/http';
 import {Application} from '../dtos/application';
 import {ApplicationStatus} from '../dtos/application-status';
+import {SimpleNotification} from '../dtos/simple-notification';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,11 @@ export class ApplicationService {
   changeApplicationStatus(applicationStatus: ApplicationStatus) {
     console.log('POST applicationStatus ' + JSON.stringify(applicationStatus));
     return this.httpClient.post(this.applicationBaseUri + '/changeStatus', applicationStatus);
+  }
+
+  getApplicationsForEvent(id: number) {
+    console.log('GET applications for event with id=' + id);
+    return this.httpClient.get<SimpleNotification[]>(this.applicationBaseUri + '/events/' + id);
   }
 
 }
