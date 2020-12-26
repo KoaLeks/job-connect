@@ -147,4 +147,7 @@ public class ApplicationEndpoint {
         LOGGER.info("Get /api/v1/applications/events/{}", id);
         return notificationMapper.notificationsToSimpleNotificationsDtos(notificationService.findAllApplicationsByEvent_Id(id));
     }
+
+    // TODO
+    // add PUT method: change favorite boolean of this application
 }

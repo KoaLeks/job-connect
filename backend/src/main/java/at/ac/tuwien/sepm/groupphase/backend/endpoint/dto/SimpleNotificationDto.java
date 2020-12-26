@@ -23,6 +23,8 @@ public class SimpleNotificationDto {
     @NotNull
     private Long taskId;
 
+    //private Boolean favorite;
+
     public String getMessage() {
         return message;
     }

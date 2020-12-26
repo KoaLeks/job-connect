@@ -31,6 +31,8 @@ public class Notification {
     @OneToOne
     private Task task;
 
+    //private Boolean favorite;
+
     public Long getId() {
         return id;
     }

@@ -27,6 +27,7 @@ export class ApplicationListComponent implements OnInit {
         this.applications = applications;
       }
     );
+    // this.sortApplications(); // sort by favorite; shows favorites on top of the list
   }
 
   getTaskDescription(id: number) {
@@ -62,4 +63,20 @@ export class ApplicationListComponent implements OnInit {
     const index = this.applications.findIndex(notification => notification.id === id);
     this.applications.splice(index, 1);
   }
+
+  likeApplicant(notification: SimpleNotification) {
+    notification.favorite = !notification.favorite; // toggle like
+    /*
+    this.applications.sort(function(x, y) {
+      return (x === y) ? 0 : x ? -1 : 1;
+    });
+     */
+  }
+
+  /*private sortApplications() {
+    // just for now: set every favorite to false, because it is initially null
+    for (const a of this.applications) {
+      a.favorite = false;
+    }
+  }*/
 }
