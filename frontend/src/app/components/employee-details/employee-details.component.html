@@ -1,0 +1,18 @@
+<div class="jumbotron mt-5" *ngIf="employee">
+  <div class="container mb-2">
+    <img *ngIf="hasPicture" id="img" src="{{picture}}" alt="profile_picture"
+         class="image">
+    <img *ngIf="!hasPicture" id="img_default" src="assets/user_default.svg" alt="default_profile_picture">
+  </div>
+  <div class="name text-center">
+    {{employee.simpleProfileDto.firstName + ' ' + employee.simpleProfileDto.lastName}}
+  </div>
+  <div class="age-gender text-center">
+    {{age}} Jahre | {{employee.gender === 'MALE' ? 'Männlich' : employee.gender == 'FEMALE' ? 'Weiblich' : 'Sonstiges'}}
+  </div>
+
+  <hr class="my-4"/>
+  <div>{{employee.simpleProfileDto.publicInfo}}</div>
+  <hr class="my-4"/>
+  <div *ngFor="let interest of employee.interestDtos">{{interest.name}}: {{interest.description}}</div>
+</div>

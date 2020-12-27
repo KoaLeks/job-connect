@@ -20,7 +20,7 @@ export class EmployeeOverviewComponent implements OnInit {
   collectionSize;
   pageEmployees: SimpleEmployee[];
 
-  constructor(private authService: AuthService, private router: Router, private employeeService: EmployeeService) {
+  constructor(private authService: AuthService, public router: Router, private employeeService: EmployeeService) {
   }
 
   ngOnInit(): void {

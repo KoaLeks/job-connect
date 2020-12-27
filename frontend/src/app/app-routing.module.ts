@@ -12,6 +12,7 @@ import {CreateEventComponent} from './components/create-event/create-event.compo
 import {EventDetailsComponent} from './components/event-details/event-details.component';
 import {EmployeeOverviewComponent} from './components/employee-overview/employee-overview.component';
 import {PageNotFoundComponent} from './components/page-not-found/page-not-found.component';
+import {EmployeeDetailsComponent} from './components/employee-details/employee-details.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -24,6 +25,7 @@ const routes: Routes = [
   {path: 'edit-employer', canActivate: [AuthGuard], component: EditEmployerComponent},
   {path: 'events/:id/details', component: EventDetailsComponent},
   {path: 'employee-overview', canActivate: [AuthGuard], component: EmployeeOverviewComponent},
+  {path: 'employee/:id/details', canActivate: [AuthGuard], component: EmployeeDetailsComponent},
   {path: '**', component: PageNotFoundComponent},
 ];
 

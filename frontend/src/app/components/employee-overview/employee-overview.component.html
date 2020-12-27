@@ -4,15 +4,13 @@
     <tr>
       <th scope="col">Vorname</th>
       <th scope="col">Nachname</th>
-      <th scope="col">E-Mail</th>
       <th scope="col">Profilbeschreibung</th>
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let employee of pageEmployees">
+    <tr *ngFor="let employee of pageEmployees" (click)="router.navigate(['employee', employee.simpleProfileDto.id, 'details'])" class="table-data">
       <td>{{ employee.simpleProfileDto.firstName}}</td>
       <td>{{ employee.simpleProfileDto.lastName}}</td>
-      <td>{{ employee.simpleProfileDto.email}}</td>
       <td>{{ employee.simpleProfileDto.publicInfo}}</td>
     </tr>
     </tbody>
