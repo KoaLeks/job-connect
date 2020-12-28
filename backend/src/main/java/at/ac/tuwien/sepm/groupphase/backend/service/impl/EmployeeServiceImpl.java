@@ -81,7 +81,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee findOneById(Long id) {
         LOGGER.info("Find employee with id {}", id);
         Optional<Employee> employee = employeeRepository.findById(id);
-        if (employee == null)
+        if (employee.isEmpty())
             throw new NotFoundException(String.format("Could not find employee with id %s", id));
 
         Set<Interest> interests = interestRepository.findByEmployee_Id(employee.get().getProfile().getId());

@@ -64,6 +64,13 @@ public class ProfileEndpoint {
         return employeeMapper.employeeToEmployeeDto(employeeService.findOneByEmail(email));
     }
 
+    @GetMapping(value = "/employee/{id}/details")
+    @ApiOperation(value = "Get an employees profile details by id", authorizations = {@Authorization(value = "apiKey")})
+    public SimpleEmployeeDto getEmployeeById(@PathVariable @NotNull Long id) {
+        LOGGER.info("GET /api/v1/profiles/employee/{}", id);
+        return employeeMapper.employeeToSimpleEmployeeDto(employeeService.findOneById(id));
+    }
+
     @PutMapping(value = "/employee")
     @ApiOperation(value = "Update employee details", authorizations = {@Authorization(value = "apiKey")})
     @CrossOrigin(origins = "http://localhost:4200")

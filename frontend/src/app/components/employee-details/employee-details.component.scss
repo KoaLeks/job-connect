@@ -1,0 +1,29 @@
+img {
+  width: 250px;
+  height: 250px
+}
+
+.image {
+  border-radius: 50%;
+  border: 4px solid #465c69;
+}
+
+.container {
+  position: relative;
+  text-align: center;
+  color: black;
+  width: min-content;
+  height: min-content;
+}
+
+.name {
+  font-size: 35px;
+}
+
+.age-gender {
+  font-size: 20px;
+}
+
+.desc-interests {
+  font-size: 20px;
+}

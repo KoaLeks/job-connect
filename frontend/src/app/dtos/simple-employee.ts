@@ -4,7 +4,7 @@ import {Interest} from './interest';
 export class SimpleEmployee {
   constructor(
     public simpleProfileDto: ProfileDto,
-    public interests: Interest[],
+    public interestDtos: Interest[],
     public gender: string,
     public birthDate: Date
   ) {}

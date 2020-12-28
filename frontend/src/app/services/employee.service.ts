@@ -25,6 +25,16 @@ export class EmployeeService {
   }
 
   /**
+   * Loads an employee from the backend using the id
+   * @param id to look for
+   */
+  getEmployeeById(id: Number) {
+    console.log('Get employee by id ' + id);
+    return this.httpClient.get<SimpleEmployee>(this.employeeBaseUri + '/' + id + '/details');
+  }
+
+
+  /**
    * Updates an employee with the given details
    * @param employee to update
    */

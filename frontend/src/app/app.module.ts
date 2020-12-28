@@ -14,7 +14,6 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {httpInterceptorProviders} from './interceptors';
 import { EditEmployerComponent } from './components/edit-employer/edit-employer.component';
 import { EditEmployeeComponent } from './components/edit-employee/edit-employee.component';
-import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 import { CreateEventComponent } from './components/create-event/create-event.component';
 import { EventOverviewComponent } from './components/event-overview/event-overview.component';
 import { RegisterComponent } from './components/register/register.component';
@@ -26,6 +25,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { NotificationListComponent } from './components/notification-list/notification-list.component';
 import {Alert, AlertModule} from './alert';
 import { ApplicationListComponent } from './components/application-list/application-list.component';
+import { EmployeeDetailsComponent } from './components/employee-details/employee-details.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +37,6 @@ import { ApplicationListComponent } from './components/application-list/applicat
     MessageComponent,
     EditEmployerComponent,
     EditEmployeeComponent,
-    EditProfileComponent,
     EventOverviewComponent,
     CreateEventComponent,
     RegisterComponent,
@@ -47,6 +46,7 @@ import { ApplicationListComponent } from './components/application-list/applicat
     NotificationListComponent,
     PageNotFoundComponent,
     ApplicationListComponent,
+    EmployeeDetailsComponent,
   ],
   imports: [
     BrowserModule,
