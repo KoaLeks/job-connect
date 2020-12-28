@@ -14,6 +14,7 @@ export class EmployeeDetailsComponent implements OnInit {
   hasPicture: boolean;
   picture;
   age: Number;
+  interestAreasDist: Set<String> = new Set<String>();
 
   constructor(private route: ActivatedRoute, private employeeService: EmployeeService) {
     this.route.params.subscribe(params => {
@@ -29,14 +30,21 @@ export class EmployeeDetailsComponent implements OnInit {
     this.employeeService.getEmployeeById(this.id).subscribe(
       (simpleEmployee: SimpleEmployee) => {
         this.employee = simpleEmployee;
-        console.log(this.employee);
+        // profile picture
         this.arrayBufferToBase64(this.employee.simpleProfileDto.picture);
         if (this.employee.simpleProfileDto.picture != null) {
           this.picture = 'data:image/png;base64,' + this.picture;
           this.hasPicture = true;
         }
+        // age
         const timeDiff = Math.abs(Date.now() - new Date(this.employee.birthDate).getTime());
         this.age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25);
+        // distinct interest areas
+        for (let i = 0; i < this.employee.interestDtos.length; i++) {
+          if (this.employee.interestDtos[i].simpleInterestAreaDto !== null) {
+            this.interestAreasDist.add(this.employee.interestDtos[i].simpleInterestAreaDto.area);
+          }
+        }
       }
     );
   }
