@@ -70,4 +70,13 @@ public class NotificationServiceImpl implements NotificationService {
         }
         notificationRepository.deleteById(id);
     }
+
+    @Override
+    public Notification changeFavorite(Notification notification) {
+        LOGGER.debug("Change favorite of notification with id: {} from {} to {}", notification.getId(), notification.getFavorite(), !notification.getFavorite());
+        notification.setFavorite(!notification.getFavorite());
+        return notificationRepository.save(notification);
+    }
+
+
 }

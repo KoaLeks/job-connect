@@ -44,4 +44,11 @@ public interface NotificationService {
      * @param id to delete
      */
     void deleteNotification(Long id, String authorization);
+
+    /**
+     * Change (toggle) favorite of Notification (true <-> false)
+     *
+     * @param notification to change Boolean favorite
+     */
+    Notification changeFavorite(Notification notification);
 }

@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,5 +66,15 @@ public class NotificationEndpoint {
     public void updateNotification(@RequestBody SimpleNotificationDto simpleNotificationDto, @RequestHeader String authorization){
         LOGGER.info("Update /api/v1/notifications/{}", simpleNotificationDto.getId());
         notificationService.updateNotification(notificationMapper.simpleNotificationDtoToNotification(simpleNotificationDto));
+    }
+
+    @PutMapping(value = "/changeFavorite")
+    @ApiOperation(value = "Change favorite of application", authorizations = {@Authorization(value = "apiKey")})
+    @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
+    @ResponseStatus(HttpStatus.OK)
+    @CrossOrigin(origins = "http://localhost:4200")
+    public SimpleNotificationDto changeFavoriteForApplication(@RequestBody SimpleNotificationDto simpleNotificationDto) {
+        LOGGER.info("Update /api/v1/notifications/changeFavorite/{}", simpleNotificationDto.getId());
+        return notificationMapper.notificationToSimpleNotificationDto(notificationService.changeFavorite(notificationMapper.simpleNotificationDtoToNotification(simpleNotificationDto)));
     }
 }

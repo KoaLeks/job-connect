@@ -16,6 +16,9 @@ export class ApplicationListComponent implements OnInit {
   @Input() eventId: number;
   @Input() tasks: Task[];
   applications: SimpleNotification[];
+  favorites: SimpleNotification[] = [];
+  hasApplications: boolean;
+  hasApplicationsFav: boolean;
 
   constructor(private authService: AuthService, private applicationService: ApplicationService,
               private notificationService: NotificationService) {
@@ -25,9 +28,24 @@ export class ApplicationListComponent implements OnInit {
     this.applicationService.getApplicationsForEvent(this.eventId).subscribe(
       (applications) => {
         this.applications = applications;
+        console.log(applications);
+        for (let i = 0; i < this.applications.length; i++) {
+          if (this.applications[i].favorite) {
+            this.favorites.push(this.applications[i]);
+            const index = this.applications.indexOf(this.applications[i]);
+            this.applications.splice(index, 1);
+          }
+        }
+        // sort applications & favorites by task
+        this.applications.sort((a, b) => (a.taskId > b.taskId) ? 1 : -1);
+        this.favorites.sort((a, b) => (a.taskId > b.taskId) ? 1 : -1);
       }
     );
-    // this.sortApplications(); // sort by favorite; shows favorites on top of the list
+    this.tasks.sort(function(a, b) {
+      if (a.description < b.description) { return -1; }
+      if (a.description > b.description) { return 1; }
+      return 0;
+    });
   }
 
   getTaskDescription(id: number) {
@@ -65,18 +83,49 @@ export class ApplicationListComponent implements OnInit {
   }
 
   likeApplicant(notification: SimpleNotification) {
-    notification.favorite = !notification.favorite; // toggle like
-    /*
-    this.applications.sort(function(x, y) {
-      return (x === y) ? 0 : x ? -1 : 1;
-    });
-     */
+    this.notificationService.changeFavorite(notification).subscribe(
+      (n) => {
+        notification.favorite = n.favorite;
+        if (notification.favorite) {
+          this.addToFavorites(notification);
+        } else {
+          this.removeFromFavorites(notification);
+        }
+      }
+    );
   }
 
-  /*private sortApplications() {
-    // just for now: set every favorite to false, because it is initially null
-    for (const a of this.applications) {
-      a.favorite = false;
+  private addToFavorites(notification: SimpleNotification) {
+    this.favorites.push(notification);
+    const index = this.applications.indexOf(notification);
+    this.applications.splice(index, 1);
+  }
+
+  private removeFromFavorites(notification: SimpleNotification) {
+    this.applications.splice(0, 0, notification); // alternative to arr.push (pushes to index 0 instead of last place)
+    const index = this.favorites.indexOf(notification);
+    this.favorites.splice(index, 1);
+  }
+
+  // checks whether task has application or not; if yes: show task and its applications, if not, dont show it at all
+  filterApplications(task: number) {
+    let counter = 0;
+      for (let i = 0; i < this.applications.length; i++) {
+          if (this.applications[i].taskId === task) {
+            counter++;
+          }
     }
-  }*/
+    this.hasApplications = (counter !== 0);
+  }
+
+  // same as filterApplications, but for favorites[]
+  filterApplicationsFavs(task: number) {
+    let counter = 0;
+    for (let i = 0; i < this.favorites.length; i++) {
+      if (this.favorites[i].taskId === task) {
+        counter++;
+      }
+    }
+    this.hasApplicationsFav = (counter !== 0);
+  }
 }
