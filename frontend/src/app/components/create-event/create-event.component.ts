@@ -59,9 +59,6 @@ export class CreateEventComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.authService.getUserRole() !== 'EMPLOYER') {
-      this.router.navigate(['']);
-    }
   }
 
 

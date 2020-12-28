@@ -39,9 +39,6 @@ export class EditEmployerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.authService.getUserRole() !== 'EMPLOYER') {
-      this.router.navigate(['edit-profile']);
-    }
     this.loadEmployerDetails();
   }
 

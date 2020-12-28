@@ -57,9 +57,8 @@
 <div class="jumbotron mt-5">
   <h1 class="display-4">Profil bearbeiten</h1>
   <hr class="my-4"/>
-  <a *ngIf="!authService.isLoggedIn()" class="btn btn-primary btn-lg" routerLink="/login" role="button">Login</a>
-  <div *ngIf="authService.isLoggedIn()">
 
+  <div>
     <form class="form" [formGroup]="editForm">
       <!-- profile picture -->
       <div>

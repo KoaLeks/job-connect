@@ -24,10 +24,6 @@ export class EmployeeOverviewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.authService.getUserRole() !== 'EMPLOYER') {
-      this.router.navigate(['']);
-    }
-
     this.loadEmployees();
   }
 
