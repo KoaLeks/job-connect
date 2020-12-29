@@ -7,3 +7,11 @@
 .btn-link {
   padding: 0;
 }
+
+.list-group{
+  max-height: 400px;
+  margin-bottom: 10px;
+  overflow:scroll;
+  -webkit-overflow-scrolling: touch;
+  overflow-y:auto
+}

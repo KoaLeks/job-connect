@@ -121,6 +121,8 @@
 </div>
 
 <!-- Application list -->
+<ng-container *ngIf="eventDetails != undefined"> <!-- added this, because it was throwing "TypeError: cannot read property 'employer' of undefined -->
 <app-application-list *ngIf="authService.getUserRole() === 'EMPLOYER' &&
   authService.getTokenIdentifier() === eventDetails.employer.simpleProfileDto.email"
                       [eventId]="id" [tasks]="eventDetails.tasks"></app-application-list>
+</ng-container>
