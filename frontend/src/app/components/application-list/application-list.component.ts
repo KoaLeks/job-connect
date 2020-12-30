@@ -5,6 +5,7 @@ import {Task} from '../../dtos/task';
 import {ApplicationStatus} from '../../dtos/application-status';
 import {AuthService} from '../../services/auth.service';
 import {NotificationService} from '../../services/notification.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-application-list',
@@ -15,30 +16,32 @@ export class ApplicationListComponent implements OnInit {
 
   @Input() eventId: number;
   @Input() tasks: Task[];
-  applications: SimpleNotification[];
-  favorites: SimpleNotification[] = [];
+  applications: SimpleNotification[] = []; // saves non-favorite applications
+  favorites: SimpleNotification[] = []; // saves favorite applications
   hasApplications: boolean;
   hasApplicationsFav: boolean;
 
   constructor(private authService: AuthService, private applicationService: ApplicationService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService, public router: Router) {
   }
 
   ngOnInit(): void {
     this.applicationService.getApplicationsForEvent(this.eventId).subscribe(
       (applications) => {
-        this.applications = applications;
+        // this.applications = applications;
         console.log(applications);
-        for (let i = 0; i < this.applications.length; i++) {
-          if (this.applications[i].favorite) {
-            this.favorites.push(this.applications[i]);
-            const index = this.applications.indexOf(this.applications[i]);
-            this.applications.splice(index, 1);
+
+        for (let i = 0; i < applications.length; i++) {
+          if (applications[i].favorite === true) {
+            this.favorites.push(applications[i]);
+          } else {
+            this.applications.push(applications[i]);
           }
         }
+
         // sort applications & favorites by task
-        this.applications.sort((a, b) => (a.taskId > b.taskId) ? 1 : -1);
-        this.favorites.sort((a, b) => (a.taskId > b.taskId) ? 1 : -1);
+        // this.applications.sort((a, b) => (a.taskId > b.taskId) ? 1 : -1);
+        // this.favorites.sort((a, b) => (a.taskId > b.taskId) ? 1 : -1);
       }
     );
     this.tasks.sort(function(a, b) {
@@ -52,10 +55,17 @@ export class ApplicationListComponent implements OnInit {
     return this.tasks.find(task => task.id === id).description;
   }
 
+  reloadComponent() {
+    this.router.navigateByUrl('', { skipLocationChange: true }).then(() => {
+      this.router.navigate(['events', this.eventId, 'details']);
+    });
+  }
+
   accept(notification: SimpleNotification) {
     const acceptApplication = new ApplicationStatus(notification.taskId, notification.sender.id, notification.id, true);
     this.applicationService.changeApplicationStatus(acceptApplication).subscribe();
     this.removeNotification(notification.id);
+    this.reloadComponent();
   }
 
   decline(notification: SimpleNotification) {
@@ -83,9 +93,11 @@ export class ApplicationListComponent implements OnInit {
   }
 
   likeApplicant(notification: SimpleNotification) {
+    // console.log('fav: ' + notification.favorite);
     this.notificationService.changeFavorite(notification).subscribe(
       (n) => {
         notification.favorite = n.favorite;
+        // console.log('new fav: ' + notification.favorite);
         if (notification.favorite) {
           this.addToFavorites(notification);
         } else {
@@ -110,10 +122,12 @@ export class ApplicationListComponent implements OnInit {
   // checks whether task has application or not; if yes: show task and its applications, if not, dont show it at all
   filterApplications(task: number) {
     let counter = 0;
+    if (this.applications) {
       for (let i = 0; i < this.applications.length; i++) {
-          if (this.applications[i].taskId === task) {
-            counter++;
-          }
+        if (this.applications[i].taskId === task) {
+          counter++;
+        }
+      }
     }
     this.hasApplications = (counter !== 0);
   }
@@ -121,9 +135,11 @@ export class ApplicationListComponent implements OnInit {
   // same as filterApplications, but for favorites[]
   filterApplicationsFavs(task: number) {
     let counter = 0;
-    for (let i = 0; i < this.favorites.length; i++) {
-      if (this.favorites[i].taskId === task) {
-        counter++;
+    if (this.favorites) {
+      for (let i = 0; i < this.favorites.length; i++) {
+        if (this.favorites[i].taskId === task) {
+          counter++;
+        }
       }
     }
     this.hasApplicationsFav = (counter !== 0);

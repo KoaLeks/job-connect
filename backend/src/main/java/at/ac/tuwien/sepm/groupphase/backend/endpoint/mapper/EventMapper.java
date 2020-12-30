@@ -12,7 +12,7 @@ import org.mapstruct.Named;
 
 import java.util.List;
 
-@Mapper(uses = { EventService.class, EmployerMapper.class, EmployerService.class})
+@Mapper(uses = { EventService.class, EmployeeMapper.class, EmployerMapper.class, EmployerService.class})
 public interface EventMapper {
 
 
@@ -30,7 +30,7 @@ public interface EventMapper {
     @Named("detailedEvent")
     DetailedEventDto eventToDetailedEventDto(Event event);
 
-    @Mapping(source = "employee_tasks.employee.id", target = "employeeId")
+    @Mapping(source = "employee_tasks.employee", target = "employee")
     @Mapping(source = "employee_tasks.task.id", target = "taskId")
     @Mapping(source = "employee_tasks.accepted", target = "accepted")
     Employee_TasksDto toEmployee_TasksDto(Employee_Tasks employee_tasks);

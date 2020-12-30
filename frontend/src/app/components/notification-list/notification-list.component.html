@@ -1,4 +1,5 @@
-<ul *ngFor="let notification of notifications; trackBy: trackId"  class="list-group">
+<ul class="list-group">
+<ng-container *ngFor="let notification of notifications; trackBy: trackId">
   <li class="list-group-item mb-2" (mouseover)="updateSeenStatus(notification)">
     <div class="row">
       <span *ngIf="!notification.seen" class="badge badge-danger float-left">new</span>
@@ -18,4 +19,5 @@
       </div>
     </div>
   </li>
+</ng-container>
 </ul>
