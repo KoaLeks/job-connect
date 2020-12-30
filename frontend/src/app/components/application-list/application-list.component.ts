@@ -55,10 +55,17 @@ export class ApplicationListComponent implements OnInit {
     return this.tasks.find(task => task.id === id).description;
   }
 
+  reloadComponent() {
+    this.router.navigateByUrl('', { skipLocationChange: true }).then(() => {
+      this.router.navigate(['events', this.eventId, 'details']);
+    });
+  }
+
   accept(notification: SimpleNotification) {
     const acceptApplication = new ApplicationStatus(notification.taskId, notification.sender.id, notification.id, true);
     this.applicationService.changeApplicationStatus(acceptApplication).subscribe();
     this.removeNotification(notification.id);
+    this.reloadComponent();
   }
 
   decline(notification: SimpleNotification) {
@@ -86,11 +93,11 @@ export class ApplicationListComponent implements OnInit {
   }
 
   likeApplicant(notification: SimpleNotification) {
-    console.log('fav: ' + notification.favorite);
+    // console.log('fav: ' + notification.favorite);
     this.notificationService.changeFavorite(notification).subscribe(
       (n) => {
         notification.favorite = n.favorite;
-        console.log('new fav: ' + notification.favorite);
+        // console.log('new fav: ' + notification.favorite);
         if (notification.favorite) {
           this.addToFavorites(notification);
         } else {
