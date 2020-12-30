@@ -79,5 +79,12 @@ public class EventEndpoint {
 
     }
 
+    @DeleteMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Delete event and related data")
+    public void delete(@PathVariable Long id) {
+        LOGGER.info("DELETE /api/v1/events/{}", id);
+        eventService.deleteEventById(id);
+    }
 
 }

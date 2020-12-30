@@ -12,8 +12,10 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.lang.invoke.MethodHandles;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class MailServiceImpl implements MailService {
@@ -77,12 +79,32 @@ public class MailServiceImpl implements MailService {
             message.setText("<center>" +
                     "<div style='font-family:\"Century Gothic\", sans-serif'>" +
                     "<h1 style='color:#FFA545'>Hi, " + employee.getProfile().getFirstName() + "</h1>" + "<br>" +
-                "<p style='font-size: medium'> Es gibt ein neues Event, das dich vielleicht interessieren könnte! Falls dus auschecken willst," +
+                "<p style='font-size: medium'> Es gibt ein neues Event, das dich vielleicht interessieren könnte! Falls du es auschecken willst," +
                 " findest du hier die nötigen Infos: " + "<br>"
                     + "Titel: " + event.getTitle() + "<br>" +
                     "Link zur Detailseite: " + "<a href='http://localhost:4200/events/" + event.getId() + "/details'>" +
                     "http://localhost:4200/events/"+ event.getId() + "/details</a></p></center></div>"
                 , true);
         });
+    }
+
+    @Override
+    public void sendMailAboutCanceledEvent(Event event, Set<Employee> employees) {
+        for (Employee employee : employees) {
+            mailSender.send(mimeMessage -> {
+                MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+                message.setFrom("from@mail.com");
+                message.setTo(employee.getProfile().getEmail());
+                message.setSubject("Event wurde abgesagt!");
+                message.setText("<center>" +
+                        "<div style='font-family:\"Century Gothic\", sans-serif'>" +
+                        "<h1 style='color:#FFA545'>Hallo, " + employee.getProfile().getFirstName() + "</h1>" + "<br>" +
+                        "<p style='font-size: medium'> Es tut uns sehr leid dich informieren zu müssen, dass das Event: " + event.getTitle() +
+                        " am " + event.getStart().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")) + " in " + event.getAddress().getState() +
+                        " abgesagt wurde." + "<br>" + "Falls du nach einer Alternative suchst, halte hier ausschau: " + "<br>"
+                        + "<a href='http://localhost:4200/events'>" + "http://localhost:4200/events" + "</a></p></div></center>"
+                    , true);
+            });
+        }
     }
 }

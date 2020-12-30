@@ -1,11 +1,10 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
-import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Message;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Task;
+import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.AddressRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.NotificationRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.TaskRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.service.TaskService;
@@ -15,8 +14,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import javax.validation.ValidationException;
 import java.lang.invoke.MethodHandles;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -30,17 +31,19 @@ public class EventServiceImpl implements EventService {
     private final AddressRepository addressRepository;
     private final TaskRepository taskRepository;
     private final MailService mailService;
+    private final NotificationRepository notificationRepository;
 
     @Autowired
     public EventServiceImpl(TaskService taskService, EventRepository eventRepository,
                             AddressRepository addressRepository,
                             TaskRepository taskRepository,
-                            MailService mailService) {
+                            MailService mailService, NotificationRepository notificationRepository) {
         this.taskService = taskService;
         this.eventRepository = eventRepository;
         this.addressRepository = addressRepository;
         this.taskRepository = taskRepository;
         this.mailService = mailService;
+        this.notificationRepository = notificationRepository;
     }
 
     @Override
@@ -84,6 +87,27 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findFirstByTasks(task);
         if(event != null) return event;
         else throw new NotFoundException(String.format("Could not find Event from given Task %s", task));
+    }
+
+    @Override
+    @Transactional
+    public void deleteEventById(Long id) {
+        LOGGER.debug("Delete event by Id: {}", id);
+        Event event = eventRepository.getOne(id);
+        Set<Employee> employeeSet = new HashSet<>();
+        Set<Task> tasks = event.getTasks();
+        for (Task t : tasks) {
+            Set<Employee_Tasks> employee_tasks = t.getEmployees();
+            for (Employee_Tasks e : employee_tasks) {
+                employeeSet.add(e.getEmployee());
+            }
+        }
+        Set<Notification> notifications = notificationRepository.findAllByEvent_Id(id);
+        notificationRepository.deleteAll(notifications);
+        eventRepository.deleteById(id);
+        new Thread(() -> {
+            mailService.sendMailAboutCanceledEvent(event, employeeSet);
+        }).start();
     }
 
 }

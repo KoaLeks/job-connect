@@ -9,6 +9,7 @@ import java.util.Set;
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
     Set<Notification> findAllByRecipient_Id(Long id);
+    Set<Notification> findAllByEvent_Id(Long id);
     Set<Notification> findAllByEvent_IdAndType(Long id, String type);
     Set<Notification> findAllByRecipient_IdAndTypeNot(Long id, String type);
 }
