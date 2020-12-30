@@ -76,9 +76,40 @@
                 data-target="#Apply-Task" [disabled]="!loggedInEmployee">
           Bewirb dich jetzt!
         </button>
+        <button type="button" style="float: right" *ngIf="eventDetails != undefined && authService.getUserRole() === 'EMPLOYER' &&
+         authService.getTokenIdentifier() === eventDetails.employer.simpleProfileDto.email"
+                class="btn btn-outline-danger" data-toggle="modal" data-target="#Delete-Event">
+          Event absagen!
+        </button>
       </div>
     </div>
 </ng-container>
+
+<!-- Modal Delete Event-->
+<div class="modal fade" id="Delete-Event" tabindex="-1" role="dialog" aria-labelledby="deleteEventLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteEvent">Event absagen</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Wenn Sie das Event absagen, werden das Event und die dazugehörigen Daten gelöscht. Weiters werden alle akzeptierten
+        Bewerber per Mail darüber informiert, dass dieses Event nicht stattfindet.<br><br>
+        <b>Sind Sie sicher, dass Sie dieses Event absagen und entfernen möchten?</b>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" routerLink="/events"
+                (click)="deleteEvent()">Absagen!</button>
+        <button type="button" class="btn btn-dark" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">Abbrechen</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Modal Apply for Task-->
 <div class="modal fade" id="Apply-Task" tabindex="-1" role="dialog" aria-labelledby="addTaskLabel" aria-hidden="true">

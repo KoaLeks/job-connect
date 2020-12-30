@@ -123,4 +123,14 @@ export class EventDetailsComponent implements OnInit {
     );
     this.applyTaskForm.reset();
   }
+
+  deleteEvent() {
+    this.eventService.deleteEvent(this.id).subscribe(
+      () => {},
+      error => {
+        this.error = true;
+        this.errorMessage = error.error;
+      }
+    );
+  }
 }
