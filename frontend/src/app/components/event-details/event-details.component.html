@@ -36,16 +36,24 @@
             <table class="table table-sm">
               <thead class="thead-dark">
               <tr class="d-flex">
-                <th class="col-7">Beschreibung</th>
+                <th class="col-5">Beschreibung</th>
                 <th class="col-3 text-center">Teilnehmer</th>
                 <th class="col-2 text-center">€/h</th>
+                <th *ngIf="authService.getTokenIdentifier() === eventDetails.employer.simpleProfileDto.email">Arbeitnehmer</th>
               </tr>
               </thead>
               <ng-container *ngFor="let task of eventDetails.tasks">
                 <tr class="d-flex">
-                  <td class="col-7 text-justify">{{task.description}}</td>
+                  <td class="col-5 text-justify">{{task.description}}</td>
                   <td class="col-3 text-center">{{getNumberOfParticipants(task)}}/{{task.employeeCount}}</td>
                   <td class="col-2 text-center">{{task.paymentHourly}}</td>
+                  <td *ngIf="authService.getTokenIdentifier() === eventDetails.employer.simpleProfileDto.email" class="col-2 text-right">
+                    <ng-container *ngFor="let acceptedEmployee of task.employees">
+                      <a *ngIf="acceptedEmployee.accepted" [routerLink]="['/employee', acceptedEmployee.employee.simpleProfileDto.id, 'details']">
+                        {{acceptedEmployee.employee.simpleProfileDto.firstName}} {{acceptedEmployee.employee.simpleProfileDto.lastName}}</a>
+                    </ng-container>
+                  </td>
+
                 </tr>
               </ng-container>
             </table>

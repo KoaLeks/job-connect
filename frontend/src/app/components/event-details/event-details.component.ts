@@ -1,11 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EventService} from '../../services/event.service';
-import {Event} from '../../dtos/event';
-import {Employer} from '../../dtos/employer';
-import {Address} from '../../dtos/address';
 import {Task} from '../../dtos/task';
-import {InterestArea} from '../../dtos/interestArea';
 import {EmployerService} from '../../services/employer.service';
 import {DetailedEvent} from '../../dtos/detailed-event';
 import {FormBuilder, Validators} from '@angular/forms';
@@ -13,8 +9,6 @@ import {Application} from '../../dtos/application';
 import {ApplicationService} from '../../services/application.service';
 import {EmployeeService} from '../../services/employee.service';
 import {AuthService} from '../../services/auth.service';
-import {Employee} from '../../dtos/employee';
-import { ProfileDto} from '../../dtos/profile-dto';
 import {EditEmployee} from '../../dtos/edit-employee';
 
 @Component({
