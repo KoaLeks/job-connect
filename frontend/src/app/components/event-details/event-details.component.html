@@ -75,7 +75,8 @@
       </div>
         <div class="row justify-content-center mt-3" style="border-top: 1px solid #ccc">
           <ng-container *ngFor="let task of eventDetails.tasks">
-            <h5> <span class="badge badge-pill badge-info mt-3 ml-1 mr-1" style="border-radius: 30px">{{task.interestArea.area}}</span></h5>
+            <h5> <span class="badge badge-pill badge-info mt-3 ml-1 mr-1" style="border-radius: 30px"
+                       *ngIf="task.interestArea !== null" >{{task.interestArea.area}}</span></h5>
           </ng-container>
         </div>
       </div>
@@ -109,7 +110,7 @@
         <b>Sind Sie sicher, dass Sie dieses Event absagen und entfernen möchten?</b>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal" routerLink="/events"
+        <button type="button" class="btn btn-danger" data-dismiss="modal" routerLink=""
                 (click)="deleteEvent()">Absagen!</button>
         <button type="button" class="btn btn-dark" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">Abbrechen</span>
@@ -137,7 +138,9 @@
                    (change)='createApplication()'>
             <option [value]=null>kein Stelle ausgewählt</option>
             <ng-container *ngFor="let task of this.eventDetails.tasks">
-              <option *ngIf="getNumberOfParticipants(task) < task.employeeCount" [value]="task.id">Stelle: {{task.interestArea.area}} -
+              <option *ngIf="getNumberOfParticipants(task) < task.employeeCount && task.interestArea !== null" [value]="task.id">Stelle: {{task.interestArea.area}} -
+                Beschreibung: {{task.description}}</option>
+              <option *ngIf="getNumberOfParticipants(task) < task.employeeCount && task.interestArea === null" [value]="task.id">Stelle: keine Angaben -
                 Beschreibung: {{task.description}}</option>
             </ng-container>
           </select>

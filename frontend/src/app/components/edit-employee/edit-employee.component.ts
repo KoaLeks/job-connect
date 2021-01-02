@@ -105,6 +105,7 @@ export class EditEmployeeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadEmployeeDetails(); // loads the employee
+    this.interestForm.reset();
   }
 
   /**
