@@ -11,7 +11,7 @@
     </div>
     <div class="row">
 <!--      <strong *ngIf="notification.sender != null">Sender: {{notification.sender.firstName}} {{notification.sender.lastName}} </strong>-->
-      <a class="btn btn-link p-0" [routerLink]="['/events', notification.event.id, 'details']"> Event: {{notification.event.title}}</a>
+      <a class="btn btn-link p-0" (click)="navigateToNewPage(notification.event.id)"> Event: {{notification.event.title}}</a>
     </div>
     <div class="row">
       <div class="col-12 text-left">

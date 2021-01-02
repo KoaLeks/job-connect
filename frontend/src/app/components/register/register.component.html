@@ -23,13 +23,13 @@
             <div class="form-group input-group">
               Ich bin eine/ein:
               <div class="form-check form-check-inline ml-2">
-                <input class="form-check-input" id="radioPerson" type="radio" (click)="setPrivatePerson(true)" checked>
+                <input class="form-check-input" id="radioPerson" type="radio" name="register" (click)="setPrivatePerson(true)" checked>
                 <label class="form-check-label" for="radioPerson">
                   Privatperson
                 </label>
               </div>
               <div class="form-check form-check-inline" >
-                <input class="form-check-input" id="radioCompany" type="radio" (click)="setPrivatePerson(false); resetCompanyName()" >
+                <input class="form-check-input" id="radioCompany" type="radio" name="register" (click)="setPrivatePerson(false); resetCompanyName()" >
                 <label class="form-check-label" for="radioCompany">
                   Unternehmen
                 </label>

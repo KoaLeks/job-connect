@@ -12,7 +12,13 @@
       <div class="collapse navbar-collapse header-content" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link nav-class" routerLink="/events" routerLinkActive="active">Events</a>
+            <a class="nav-link nav-class" routerLink="/events" routerLinkActive="active"
+               *ngIf="(authService.isLoggedIn() && authService.getUserRole() === 'EMPLOYEE') ||
+                !authService.isLoggedIn()">Events</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-class" routerLink="/events" routerLinkActive="active"
+               *ngIf="authService.isLoggedIn() && authService.getUserRole() === 'EMPLOYER'">Meine Events</a>
           </li>
           <li class="nav-item">
             <a class="nav-link nav-class" routerLink="/employee-overview"
