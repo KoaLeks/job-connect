@@ -5,12 +5,14 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventInquiryDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+import at.ac.tuwien.sepm.groupphase.backend.entity.EventSpecification;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,6 +23,8 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping(value = "/api/v1/events")
@@ -63,9 +67,18 @@ public class EventEndpoint {
     @ApiOperation(value = "Get list of events")
     @CrossOrigin(origins = "http://localhost:4200")
     @Transactional
-    public List<DetailedEventDto> findAll() {
+    @ResponseBody
+    public List<DetailedEventDto> search(@RequestParam(value = "search") String search) {
         LOGGER.info("GET /api/v1/events");
-        return eventMapper.eventsToDetailedEventDtos(eventService.findAll());
+        EventSpecification.EventSpecificationsBuilder builder = new EventSpecification.EventSpecificationsBuilder();
+        Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
+        Matcher matcher = pattern.matcher(search + ",");
+        while (matcher.find()){
+            builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
+        }
+        Specification<Event> spec = builder.build();
+
+        return eventMapper.eventsToDetailedEventDtos(eventService.findAll(spec));
     }
 
     @PutMapping

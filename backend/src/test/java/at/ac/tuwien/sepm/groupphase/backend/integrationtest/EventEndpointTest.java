@@ -19,6 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -93,6 +94,16 @@ public class EventEndpointTest implements TestData {
         .withStart(START)
         .withEnd(END)
         .withTitle(TITLE_EVENT)
+        .withDescription(DESCRIPTION_EVENT)
+        .withEmployer(EMPLOYER)
+        .withAddress(address)
+        .withTask(TASKS_EVENT)
+        .build();
+
+    private Event event2 = Event.EventBuilder.aEvent()
+        .withStart(START)
+        .withEnd(END)
+        .withTitle("Eventtitle2")
         .withDescription(DESCRIPTION_EVENT)
         .withEmployer(EMPLOYER)
         .withAddress(address)
@@ -360,6 +371,20 @@ public class EventEndpointTest implements TestData {
         assertEquals(taskRepository.count(), 0);
     }
 
+    @Test
+    public void SearchForEventWithValidTitle() {
+        addressRepository.save(address);
+        eventRepository.save(event);
+        eventRepository.save(event2);
+
+        EventSpecification spec =
+            new EventSpecification(new SearchCriteria("title", ":", "Flyer verteilen"));
+
+        List<Event> results = eventRepository.findAll(spec);
+
+        assert(results.contains(event));
+        assert(!results.contains(event2));
+    }
 }
 
 

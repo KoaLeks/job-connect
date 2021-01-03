@@ -1,7 +1,9 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+import at.ac.tuwien.sepm.groupphase.backend.entity.EventSpecification;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Task;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 
@@ -21,7 +23,10 @@ public interface EventService {
      *
      * @return  list of all event entries
      */
-    List<Event> findAll();
+    List<Event> findAll(Specification<Event> eventSpecification);
+
+
+    Iterable<Event> search(String search);
 
     /**
      * Find event by ID

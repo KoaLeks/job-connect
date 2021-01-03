@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Globals} from '../global/globals';
 import {Event} from '../dtos/event';
@@ -46,7 +46,13 @@ export class EventService {
    * Gets all events from the backend
    */
   getEvents(): Observable<DetailedEvent[]> {
-    return this.httpClient.get<DetailedEvent[]>(this.eventBaseUri);
+    return this.httpClient.get<DetailedEvent[]>(this.eventBaseUri + '?search');
+  }
+
+  searchEvent(event: DetailedEvent): Observable<DetailedEvent[]> {
+    console.log('Search events for: ' + JSON.stringify(event));
+    const params = new HttpParams().set('search', 'title:' + event.title);
+    return this.httpClient.get<DetailedEvent[]>(this.eventBaseUri, {params});
   }
 
   /**

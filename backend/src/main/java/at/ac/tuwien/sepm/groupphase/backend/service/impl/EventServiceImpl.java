@@ -12,6 +12,7 @@ import at.ac.tuwien.sepm.groupphase.backend.service.MailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -65,9 +66,9 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> findAll() {
-        LOGGER.debug("Find all events");
-        return eventRepository.findAll();
+    public List<Event> findAll(Specification<Event> eventSpecification) {
+        LOGGER.debug("Find events");
+        return eventRepository.findAll(eventSpecification);
     }
 
     @Override

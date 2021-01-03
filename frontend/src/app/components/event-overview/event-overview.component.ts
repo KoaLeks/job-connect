@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import {Event} from '../../dtos/event';
+import {Component, Input, OnInit} from '@angular/core';
 import {EventService} from '../../services/event.service';
-import {Router} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
 import {DetailedEvent} from '../../dtos/detailed-event';
 import {Task} from '../../dtos/task';
+import {FormBuilder} from '@angular/forms';
 
 @Component({
   selector: 'app-event-overview',
@@ -13,10 +12,17 @@ import {Task} from '../../dtos/task';
 })
 export class EventOverviewComponent implements OnInit {
   events: DetailedEvent[] = [];
+  foundEvents: DetailedEvent[] = [];
+  eventSearchForm;
   error: boolean = false;
   errorMessage: string = '';
 
-  constructor(public authService: AuthService, private eventService: EventService) {
+  constructor(public authService: AuthService, private eventService: EventService, private formBuilder: FormBuilder) {
+    this.eventSearchForm = this.formBuilder.group(
+      {
+        title: ''
+      }
+    );
   }
 
   ngOnInit(): void {
@@ -30,6 +36,16 @@ export class EventOverviewComponent implements OnInit {
       },
       error => {
         this.defaultServiceErrorHandling(error);
+      }
+    );
+  }
+  searchEvent(event: DetailedEvent) {
+    this.eventService.searchEvent(event).subscribe(
+      (events: DetailedEvent[]) => {
+        this.foundEvents = events;
+        console.log(this.foundEvents.length);
+      }, error => {
+
       }
     );
   }
