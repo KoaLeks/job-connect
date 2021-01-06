@@ -37,8 +37,10 @@ public class ProfileEndpoint {
     private final EmployerService employerService;
     private final EmployerMapper employerMapper;
 
+    private final MailService mailService;
+
     @Autowired
-    public ProfileEndpoint(ProfileService profileService, EmployeeService employeeService, RegisterEmployeeMapper registerEmployeeMapper, RegisterEmployerMapper registerEmployerMapper, EmployerService employerService, EmployerMapper employerMapper, EmployeeMapper employeeMapper) {
+    public ProfileEndpoint(ProfileService profileService, EmployeeService employeeService, RegisterEmployeeMapper registerEmployeeMapper, RegisterEmployerMapper registerEmployerMapper, EmployerService employerService, EmployerMapper employerMapper, EmployeeMapper employeeMapper, MailService mailService) {
         this.profileService = profileService;
         this.employeeService = employeeService;
         this.registerEmployeeMapper = registerEmployeeMapper;
@@ -46,6 +48,7 @@ public class ProfileEndpoint {
         this.registerEmployerMapper = registerEmployerMapper;
         this.employerService = employerService;
         this.employerMapper = employerMapper;
+        this.mailService = mailService;
     }
 
     @PostMapping(value = "/employee")
@@ -124,5 +127,14 @@ public class ProfileEndpoint {
     public List<SimpleEmployeeDto> getAllEmployees() {
         LOGGER.info("GET api/v1/profiles/employees");
         return this.employeeMapper.employeesToSimpleEmployeeDtos(employeeService.findAll());
+    }
+
+    @PostMapping(value = "/employee/contact")
+    @ApiOperation(value = "Contact an employee", authorizations = {@Authorization(value = "apiKey")})
+    @ResponseStatus(HttpStatus.OK)
+    @CrossOrigin(origins = "http://localhost:4200")
+    public void contactEmployee(@Valid @RequestBody ContactMessageDto contactMessageDto) {
+        LOGGER.info("POST api/v1/profiles/employee/contact body: {}", contactMessageDto);
+        this.mailService.sendContactMail(this.employeeService.findOneById(contactMessageDto.getTo()).getProfile().getEmail(), contactMessageDto.getSubject(), contactMessageDto.getMessage());
     }
 }

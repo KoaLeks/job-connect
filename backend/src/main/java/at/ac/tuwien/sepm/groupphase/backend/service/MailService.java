@@ -38,4 +38,13 @@ public interface MailService {
      * @param employees that need to be informed
      */
     void sendMailAboutCanceledEvent(Event event, Set<Employee> employees);
+
+    /**
+     * Sends an e-mail to the specified employee with given subject and message
+     *
+     * @param email address of the receiver
+     * @param subject of the mail
+     * @param message text of the mail
+     */
+    void sendContactMail(String email, String subject, String message);
 }

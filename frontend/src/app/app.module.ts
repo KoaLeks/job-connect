@@ -26,6 +26,7 @@ import { NotificationListComponent } from './components/notification-list/notifi
 import {Alert, AlertModule} from './alert';
 import { ApplicationListComponent } from './components/application-list/application-list.component';
 import { EmployeeDetailsComponent } from './components/employee-details/employee-details.component';
+import { ContactComponent } from './components/contact/contact.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { EmployeeDetailsComponent } from './components/employee-details/employee
     PageNotFoundComponent,
     ApplicationListComponent,
     EmployeeDetailsComponent,
+    ContactComponent,
   ],
   imports: [
     BrowserModule,

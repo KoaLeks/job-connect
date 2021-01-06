@@ -4,6 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {EditEmployee} from '../dtos/edit-employee';
 import {Observable} from 'rxjs';
 import {SimpleEmployee} from '../dtos/simple-employee';
+import {ContactMessage} from '../dtos/contact-message';
 
 @Injectable({
   providedIn: 'root'
@@ -49,5 +50,15 @@ export class EmployeeService {
   findAll(): Observable<SimpleEmployee[]> {
     console.log('Get all employees');
     return this.httpClient.get<SimpleEmployee[]>(this.employeeBaseUri);
+  }
+
+  /**
+   * Tells the backend to send a specified email to the employee
+   * @param contactMessage containing id of the employee and subject and text of the mail
+   */
+  contact(contactMessage: ContactMessage) {
+    console.log('Send contact message to employee');
+    console.log(contactMessage);
+    return this.httpClient.post(this.employeeBaseUri + '/contact', contactMessage);
   }
 }

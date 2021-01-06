@@ -109,4 +109,15 @@ public class MailServiceImpl implements MailService {
             });
         }
     }
+
+    @Override
+    public void sendContactMail(String email, String subject, String message) {
+        mailSender.send(mimeMessage -> {
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            mimeMessageHelper.setFrom("from@mail.com");
+            mimeMessageHelper.setTo(email);
+            mimeMessageHelper.setSubject(subject);
+            mimeMessageHelper.setText(message);
+        });
+    }
 }

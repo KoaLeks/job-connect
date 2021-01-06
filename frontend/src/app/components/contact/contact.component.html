@@ -1,0 +1,45 @@
+<div class="modal fade" id="contactModal" data-backdrop="static" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" style="width:33%" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Nachricht</h5>
+        <button type="button" (click)="clearForm()" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form class="form" [formGroup]="contactForm">
+          <div class="form-group">
+            <label for="subject">Betreff</label>
+            <input class="form-control" type="text" name="subject" formControlName="subject"
+                   id="subject">
+
+            <div *ngIf="submitted && contactForm.controls.subject.errors"
+                 class="error">
+              <small class="form-text text-info" *ngIf="contactForm.controls.subject.errors.required">
+                Betreff darf nicht leer sein
+              </small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="message">Text</label>
+            <textarea name="message" formControlName="message" class="form-control" id="message"
+                      maxlength="10000"></textarea>
+            <div *ngIf="submitted && contactForm.controls.subject.errors"
+                 class="error">
+              <small class="form-text text-info" *ngIf="contactForm.controls.subject.errors.required">
+                Betreff darf nicht leer sein
+              </small>
+            </div>
+          </div>
+
+          <button class="btn btn-outline-primary float-right" (click)="sendMessage()">Senden</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
