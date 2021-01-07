@@ -58,7 +58,6 @@ export class EmployeeService {
    */
   contact(contactMessage: ContactMessage) {
     console.log('Send contact message to employee');
-    console.log(contactMessage);
-    return this.httpClient.post(this.employeeBaseUri + '/contact', contactMessage);
+    return this.httpClient.post<ContactMessage>(this.employeeBaseUri + '/contact', contactMessage);
   }
 }

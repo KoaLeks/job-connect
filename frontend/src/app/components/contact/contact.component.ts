@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ContactMessage} from '../../dtos/contact-message';
 import {EmployeeService} from '../../services/employee.service';
@@ -9,9 +9,9 @@ import {EmployeeService} from '../../services/employee.service';
   styleUrls: ['./contact.component.scss']
 })
 export class ContactComponent implements OnInit {
+  @Input() employeeId: number;
   contactForm: FormGroup;
   submitted: boolean = false;
-
 
   constructor(private formBuilder: FormBuilder, private employeeService: EmployeeService) {
     this.contactForm = this.formBuilder.group({
@@ -26,9 +26,17 @@ export class ContactComponent implements OnInit {
   sendMessage(): void {
     this.submitted = true;
     if (this.contactForm.valid) {
-      const contactMessage: ContactMessage = new ContactMessage(97, this.contactForm.controls.subject.value,
+      const contactMessage: ContactMessage = new ContactMessage(this.employeeId, this.contactForm.controls.subject.value,
         this.contactForm.controls.message.value);
-      this.employeeService.contact(contactMessage);
+      console.log(JSON.stringify(contactMessage));
+      this.employeeService.contact(contactMessage).subscribe(
+        () => {
+          console.log('mail sent');
+          this.clearForm();
+        }, error => {
+          console.log('mail not sent');
+        }
+      );
     }
   }
 

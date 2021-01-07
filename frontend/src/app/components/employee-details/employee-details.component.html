@@ -35,4 +35,4 @@
   <a class="btn btn-link" data-target="#contactModal" data-toggle="modal">Kontaktieren Sie mich</a>
 </div>
 
-<app-contact></app-contact>
+<app-contact *ngIf="employee" [employeeId]="employee.simpleProfileDto.id"></app-contact>

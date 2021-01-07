@@ -135,6 +135,7 @@ public class ProfileEndpoint {
     @CrossOrigin(origins = "http://localhost:4200")
     public void contactEmployee(@Valid @RequestBody ContactMessageDto contactMessageDto) {
         LOGGER.info("POST api/v1/profiles/employee/contact body: {}", contactMessageDto);
-        this.mailService.sendContactMail(this.employeeService.findOneById(contactMessageDto.getTo()).getProfile().getEmail(), contactMessageDto.getSubject(), contactMessageDto.getMessage());
+        this.mailService.sendContactMail(this.employeeService.findOneById(contactMessageDto.getTo()).getProfile().getEmail(),
+            contactMessageDto.getSubject(), contactMessageDto.getMessage());
     }
 }

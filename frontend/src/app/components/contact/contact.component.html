@@ -14,7 +14,7 @@
           <div class="form-group">
             <label for="subject">Betreff</label>
             <input class="form-control" type="text" name="subject" formControlName="subject"
-                   id="subject">
+                   id="subject" maxlength="100">
 
             <div *ngIf="submitted && contactForm.controls.subject.errors"
                  class="error">
@@ -28,18 +28,22 @@
             <label for="message">Text</label>
             <textarea name="message" formControlName="message" class="form-control" id="message"
                       maxlength="10000"></textarea>
-            <div *ngIf="submitted && contactForm.controls.subject.errors"
+            <div *ngIf="submitted && contactForm.controls.message.errors"
                  class="error">
-              <small class="form-text text-info" *ngIf="contactForm.controls.subject.errors.required">
-                Betreff darf nicht leer sein
+              <small class="form-text text-info" *ngIf="contactForm.controls.message.errors.required">
+                Nachricht darf nicht leer sein
               </small>
             </div>
           </div>
 
-          <button class="btn btn-outline-primary float-right" (click)="sendMessage()">Senden</button>
         </form>
       </div>
-
+      <div class="modal-footer">
+        <button class="btn btn-outline-primary float-right"
+                [attr.data-dismiss]="contactForm.valid ? 'modal' : null"
+                (click)="sendMessage()">Senden
+        </button>
+      </div>
     </div>
   </div>
 </div>
