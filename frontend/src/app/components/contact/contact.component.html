@@ -3,7 +3,7 @@
     <div class="modal-content">
 
       <div class="modal-header">
-        <h5 class="modal-title">Nachricht</h5>
+        <h5 class="modal-title">Nachricht an {{this.employee.simpleProfileDto.firstName}} {{this.employee.simpleProfileDto.lastName}}</h5>
         <button type="button" (click)="clearForm()" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -21,6 +21,9 @@
               <small class="form-text text-info" *ngIf="contactForm.controls.subject.errors.required">
                 Betreff darf nicht leer sein
               </small>
+              <small class="form-text text-info" *ngIf="contactForm.controls.subject.errors.pattern">
+                Betreff muss ein gültiger Text sein
+              </small>
             </div>
           </div>
 
@@ -33,13 +36,17 @@
               <small class="form-text text-info" *ngIf="contactForm.controls.message.errors.required">
                 Nachricht darf nicht leer sein
               </small>
+              <small class="form-text text-info" *ngIf="contactForm.controls.message.errors.pattern">
+                Nachricht muss ein gültiger Text sein
+              </small>
             </div>
           </div>
 
         </form>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-outline-primary float-right"
+        <button (click)="clearForm()" class="btn btn-outline-secondary" data-dismiss="modal">Abbrechen</button>
+        <button class="btn btn-primary float-right"
                 [attr.data-dismiss]="contactForm.valid ? 'modal' : null"
                 (click)="sendMessage()">Senden
         </button>
