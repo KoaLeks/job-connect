@@ -3,8 +3,9 @@
     <div class="modal-content">
 
       <div class="modal-header">
-        <h5 class="modal-title">Nachricht an {{this.employee.simpleProfileDto.firstName}} {{this.employee.simpleProfileDto.lastName}}</h5>
-        <button type="button" (click)="clearForm()" class="close" data-dismiss="modal" aria-label="Close">
+        <h5 *ngIf="isEmployee" class="modal-title">Nachricht an {{this.receiver.simpleProfileDto.firstName}} {{this.receiver.simpleProfileDto.lastName}}</h5>
+        <h5 *ngIf="!isEmployee" class="modal-title">Nachricht an {{this.receiver.companyName}}</h5>
+        <button type="button" (click)="resetForm()" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -45,7 +46,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button (click)="clearForm()" class="btn btn-outline-secondary" data-dismiss="modal">Abbrechen</button>
+        <button (click)="resetForm()" class="btn btn-outline-secondary" data-dismiss="modal">Abbrechen</button>
         <button class="btn btn-primary float-right"
                 [attr.data-dismiss]="contactForm.valid ? 'modal' : null"
                 (click)="sendMessage()">Senden

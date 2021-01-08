@@ -51,13 +51,4 @@ export class EmployeeService {
     console.log('Get all employees');
     return this.httpClient.get<SimpleEmployee[]>(this.employeeBaseUri);
   }
-
-  /**
-   * Tells the backend to send a specified email to the employee
-   * @param contactMessage containing id of the employee and subject and text of the mail
-   */
-  contact(contactMessage: ContactMessage) {
-    console.log('Send contact message to employee');
-    return this.httpClient.post<ContactMessage>(this.employeeBaseUri + '/contact', contactMessage);
-  }
 }

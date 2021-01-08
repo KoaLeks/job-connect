@@ -38,9 +38,10 @@ public class ProfileEndpoint {
     private final EmployerMapper employerMapper;
 
     private final MailService mailService;
+    private final ContactMessageMapper contactMessageMapper;
 
     @Autowired
-    public ProfileEndpoint(ProfileService profileService, EmployeeService employeeService, RegisterEmployeeMapper registerEmployeeMapper, RegisterEmployerMapper registerEmployerMapper, EmployerService employerService, EmployerMapper employerMapper, EmployeeMapper employeeMapper, MailService mailService) {
+    public ProfileEndpoint(ProfileService profileService, EmployeeService employeeService, RegisterEmployeeMapper registerEmployeeMapper, RegisterEmployerMapper registerEmployerMapper, EmployerService employerService, EmployerMapper employerMapper, EmployeeMapper employeeMapper, MailService mailService, ContactMessageMapper contactMessageMapper) {
         this.profileService = profileService;
         this.employeeService = employeeService;
         this.registerEmployeeMapper = registerEmployeeMapper;
@@ -49,6 +50,7 @@ public class ProfileEndpoint {
         this.employerService = employerService;
         this.employerMapper = employerMapper;
         this.mailService = mailService;
+        this.contactMessageMapper = contactMessageMapper;
     }
 
     @PostMapping(value = "/employee")
@@ -129,13 +131,11 @@ public class ProfileEndpoint {
         return this.employeeMapper.employeesToSimpleEmployeeDtos(employeeService.findAll());
     }
 
-    @PostMapping(value = "/employee/contact")
-    @ApiOperation(value = "Contact an employee", authorizations = {@Authorization(value = "apiKey")})
-    @ResponseStatus(HttpStatus.OK)
+    @PostMapping(value = "/contact")
+    @ApiOperation(value = "Contact an employee/r", authorizations = {@Authorization(value = "apiKey")})
     @CrossOrigin(origins = "http://localhost:4200")
-    public void contactEmployee(@Valid @RequestBody ContactMessageDto contactMessageDto) {
-        LOGGER.info("POST api/v1/profiles/employee/contact body: {}", contactMessageDto);
-        this.mailService.sendContactMail(this.employeeService.findOneById(contactMessageDto.getTo()).getProfile().getEmail(),
-            contactMessageDto.getSubject(), contactMessageDto.getMessage());
+    public void contact(@Valid @RequestBody ContactMessageDto contactMessageDto) {
+        LOGGER.info("POST api/v1/profiles/contact body: {}", contactMessageDto.toString().replace("\n", ""));
+        this.mailService.sendContactMail(this.contactMessageMapper.contactMessageDtoToContactMessage(contactMessageDto));
     }
 }
