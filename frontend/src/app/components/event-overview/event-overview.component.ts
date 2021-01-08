@@ -55,7 +55,11 @@ export class EventOverviewComponent implements OnInit {
   private getAmountOfTakenJobs(tasks: Task[]) {
     let sum = 0;
     for (const task of tasks) {
-      sum += task.employees.length;
+      for (const employee of task.employees) {
+        if (employee.accepted === true) {
+          sum += 1;
+        }
+      }
     }
     return sum;
   }
