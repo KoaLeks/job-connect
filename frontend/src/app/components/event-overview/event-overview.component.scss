@@ -1,6 +1,9 @@
 .eventoverviewcontainer {
   font-family: 'Century Gothic', sans-serif;
 }
+.event-search-form {
+  font-family: 'Century Gothic', sans-serif;
+}
 .event-item {
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
@@ -20,4 +23,29 @@
 }
 .select-option-none {
   font-style: italic;
+}
+
+.search-button {
+  background-color: white;
+  color: #FFA545;
+  border-color: #FFA545;
+  font-weight: bold;
+}
+.search-button:hover{
+  background-color: #FFA545;
+  color: white;
+}
+.setting-button {
+  background-color: #465c69;
+  color: white;
+  border-color: #465c69;
+  font-weight: bold;
+}
+.setting-button:hover {
+  background-color: white;
+  color: #465c69;
+}
+
+.search-result-feedback {
+  font-family: 'Century Gothic', sans-serif;
 }

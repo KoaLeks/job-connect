@@ -1,27 +1,62 @@
-<form [formGroup]="eventSearchForm" (ngSubmit)="searchEvent(eventSearchForm.value)">
-  <div class="form-row">
-    <div class="form-group w-100">
+<form [formGroup]="eventSearchForm" class="event-search-form mb-5" (ngSubmit)="searchEvent(eventSearchForm.value)">
+  <div class="form-row align-items-end">
+    <div class="form-group mb-0 col-md-8">
       <label></label>
       <input type="text" class="form-control" placeholder="Suche nach Eventtitel" formControlName="title">
     </div>
-    <div class="form-group">
+    <div class="form-group mb-0 col-md-3">
+      <button type="submit" class="btn search-button w-100">Suchen</button>
+    </div>
+    <div class="form-group mb-0 col-md-1">
+      <button class="btn setting-button w-100 dropdown-toggle" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+          <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+          <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div class="collapse" id="collapseExample">
+  <div class="form-row">
+    <div class="col">
       <label></label>
-      <select class="form-control"  id="exampleFormControlSelect1" formControlName="interestAreaId">
+      <select class="form-control" id="exampleFormControlSelect1" formControlName="interestAreaId">
         <option value="" class="select-option-none">Bereich auswählen</option>
         <option *ngFor="let area of interestAreas" [ngValue]="area.id">{{area.description}} </option>
       </select>
     </div>
-    <div class="form-group">
+    <div class="col ml-2">
       <label></label>
       <select class="form-control" id="exampleFormControlSelect2" formControlName="employerId">
         <option value="" class="select-option-none">ArbeitgeberIn auswählen</option>
         <option *ngFor="let employer of employers" [ngValue]="employer.simpleProfileDto.id">{{employer.companyName}}</option>
       </select>
     </div>
-    <button type="submit" class="btn btn-outline-dark h-25 float-right mt-4">Suche</button>
+    <div class="col ml-2">
+      <label for="paymentRange"></label>
+      <input type="range" ngModel="0" class="form-control-range" id="paymentRange" min="0" max="50" formControlName="payment"
+             (change)="getSliderValue($event)" (input)="getSliderValue($event)">
+      <div>ab {{this.paymentValue}} €/h</div>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="col">
+      <label for="example-date-input" class="col-form-label">von</label>
+        <input class="form-control" type="date" value="2011-08-19" id="example-date-input" formControlName="start">
+    </div>
+    <div class="col">
+      <label for="example-date-input1" class="col-form-label">bis</label>
+        <input class="form-control" type="date" value="2011-08-19" id="example-date-input1" formControlName="end">
+    </div>
+    <div class="col">
+    </div>
+  </div>
+  <div class="form-row">
+  </div>
   </div>
 </form>
-<div class="alert alert-dark text-center w-100" role="alert" *ngIf="search && this.foundEvents.length === 0">
+
+<div class="search-result-feedback" role="alert" *ngIf="search && this.foundEvents.length === 0">
   Keine Events zur Auswahl gefunden
   <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-emoji-frown" fill="currentColor"
        xmlns="http://www.w3.org/2000/svg">
@@ -32,7 +67,7 @@
       d="M7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"/>
   </svg>
 </div>
-<div class="alert alert-success text-center w-100" role="alert" *ngIf="search && !(this.foundEvents.length === 0)">
+<div class="search-result-feedback" role="alert" *ngIf="search && !(this.foundEvents.length === 0)">
   {{this.foundEvents.length}} Event(s) gefunden!
 </div>
 
@@ -44,7 +79,7 @@
     </button>
   </div>
 
-  <ng-container *ngIf="foundEvents.length === 0">
+  <ng-container *ngIf="!search && foundEvents.length === 0">
     <div class="list-group mt-3" [routerLink]="['/events', event.id, 'details']" *ngFor="let event of events">
       <a class="list-group-item list-group-item-action flex-column align-items-start event-item">
         <div class="d-flex w-100 justify-content-between">

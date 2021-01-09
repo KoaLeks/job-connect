@@ -57,7 +57,9 @@ export class EventService {
       .set('title', event.title)
       .set('interestAreaId', String(event.interestAreaId))
       .set('employerId', String(event.employerId))
-      .set('payment', String(event.payment));
+      .set('payment', String(event.payment))
+      .set('start', event.start === '' ? '2000-01-01' : event.start)
+      .set('end', event.end === '' ? '2099-12-31' : event.end);
     return this.httpClient.get<DetailedEvent[]>(this.eventBaseUri, {params});
   }
 

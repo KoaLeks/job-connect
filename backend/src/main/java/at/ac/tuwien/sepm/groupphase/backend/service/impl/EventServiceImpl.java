@@ -85,14 +85,14 @@ public class EventServiceImpl implements EventService {
             System.out.println("actually got in");
             return eventRepository.findAll();
         }
-        else if(searchEventDto.getTitle() != null && searchEventDto.getTitle().isBlank()){
+        if(searchEventDto.getTitle() != null && searchEventDto.getTitle().isBlank()){
             searchEventDto.setTitle(null);
         }
 
-
         return eventRepository.searchEventsBySearchEventDto(
             searchEventDto.getTitle() == null ? searchEventDto.getTitle() : "%"+searchEventDto.getTitle()+"%",
-            searchEventDto.getEmployerId(), searchEventDto.getStart(), searchEventDto.getInterestAreaId(), searchEventDto.getPayment());
+            searchEventDto.getEmployerId(), searchEventDto.getStart(), searchEventDto.getEnd(),
+            searchEventDto.getInterestAreaId(), searchEventDto.getPayment());
 
     }
 

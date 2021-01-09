@@ -16,16 +16,17 @@ public interface EventRepository extends JpaRepository<Event, Long>, JpaSpecific
     Event findFirstByTasks(Task task);
 
 
-    @Query("SELECT distinct event from Event event " +
-        "inner join Task task on event.id=task.event.id " +
-        "inner join InterestArea area on task.interestArea.id=area.id " +
-        "where (?1 is null or lower(event.title) like lower(?1)) and " +
-        "(?2 is null or event.employer.id=?2) and " +
-        "(?3 is null or event.start <= ?3) and " +
-        "(?4 is null or area.id=?4) and " +
-        "(?5 is null or task.paymentHourly >= ?5)"
-    )
-    List<Event> searchEventsBySearchEventDto(String title, Long employerId, LocalDateTime start, Long interestAreaId
-    ,Long payment);
+    @Query(value =
+        "SELECT DISTINCT e.id,e.description, e.end, e.start, e.title, e.address_id, e.employer_profile_id FROM event e " +
+        "INNER JOIN task t ON e.id=t.event_id " +
+        "INNER JOIN interest_area a ON t.interest_area_id=a.id " +
+        "WHERE (?1 IS NULL OR e.title LIKE ?1) AND " +
+        "(?2 IS NULL OR e.employer_profile_id=?2) AND " +
+            "(FORMATDATETIME(e.start, 'yyyy-MM-dd') between ?3 and ?4) AND " +
+            "(?5 IS NULL OR a.id=?5) AND " +
+            "(?6 IS NULL OR t.payment_hourly>=?6)",
+        nativeQuery = true)
+    List<Event> searchEventsBySearchEventDto(String title, Long employerId, String start, String end,
+                                             Long interestAreaId, Long payment);
 
 }

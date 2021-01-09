@@ -24,6 +24,7 @@ export class EventOverviewComponent implements OnInit {
   interestAreas: InterestArea[];
   employers: SimpleEmployer[];
 
+  paymentValue: number = 0;
   search: boolean = false;
   error: boolean = false;
   errorMessage: string = '';
@@ -35,7 +36,9 @@ export class EventOverviewComponent implements OnInit {
         title: '',
         interestAreaId: '',
         employerId: '',
-        payment: ''
+        payment: '',
+        start: '',
+        end: ''
       }
     );
   }
@@ -93,5 +96,8 @@ export class EventOverviewComponent implements OnInit {
     } else {
       this.errorMessage = error.error;
     }
+  }
+  getSliderValue(event) {
+    this.paymentValue = event.target.value;
   }
 }

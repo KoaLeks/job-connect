@@ -7,8 +7,8 @@ public class SearchEventDto {
     private String title;
     private Long interestAreaId;
     private Long employerId;
-    private LocalDateTime start;
-    private LocalDateTime end;
+    private String start;
+    private String end;
     private Long payment;
     private boolean onlyAvailableTasks;
     private Long userId;
@@ -41,19 +41,19 @@ public class SearchEventDto {
         this.employerId = employerId;
     }
 
-    public LocalDateTime getStart() {
+    public String getStart() {
         return start;
     }
 
-    public void setStart(LocalDateTime start) {
+    public void setStart(String start) {
         this.start = start;
     }
 
-    public LocalDateTime getEnd() {
+    public String getEnd() {
         return end;
     }
 
-    public void setEnd(LocalDateTime end) {
+    public void setEnd(String end) {
         this.end = end;
     }
 
