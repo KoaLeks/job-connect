@@ -76,8 +76,9 @@ public class EventServiceImpl implements EventService {
     public List<Event> findAll(SearchEventDto searchEventDto) {
         LOGGER.debug("Find events");
         System.out.println("service:" + searchEventDto);
+        String title = searchEventDto.getTitle();
 
-        if(searchEventDto.getTitle() == null || searchEventDto.getTitle().isBlank() && searchEventDto.getInterestAreaId() == null &&
+        if(searchEventDto.getTitle() == null && searchEventDto.getInterestAreaId() == null &&
             searchEventDto.getEmployerId() == null && searchEventDto.getStart() == null &&
             searchEventDto.getEnd() == null && searchEventDto.getPayment() == null &&
             !searchEventDto.isOnlyAvailableTasks() && searchEventDto.getUserId() == null){
@@ -88,8 +89,10 @@ public class EventServiceImpl implements EventService {
             searchEventDto.setTitle(null);
         }
 
-        return eventRepository.searchEventsBySearchEventDto("%"+searchEventDto.getTitle()+"%", searchEventDto.getEmployerId(),
-            searchEventDto.getStart(), searchEventDto.getInterestAreaId(), searchEventDto.getPayment());
+
+        return eventRepository.searchEventsBySearchEventDto(
+            searchEventDto.getTitle() == null ? searchEventDto.getTitle() : "%"+searchEventDto.getTitle()+"%",
+            searchEventDto.getEmployerId(), searchEventDto.getStart(), searchEventDto.getInterestAreaId(), searchEventDto.getPayment());
 
     }
 
