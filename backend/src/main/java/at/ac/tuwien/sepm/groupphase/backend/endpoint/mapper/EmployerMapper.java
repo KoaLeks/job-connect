@@ -6,6 +6,9 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Profile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class EmployerMapper {
     private final ProfileMapper profileMapper;
@@ -82,5 +85,14 @@ public class EmployerMapper {
         } else {
             return null;
         }
+    }
+
+    public List<SimpleEmployerDto> employersToSimpleEmployerDtos(List<Employer> employers){
+        List<SimpleEmployerDto> simpleEmployerList = new ArrayList<>();
+        for (Employer employer:
+            employers) {
+            simpleEmployerList.add(employerToSimpleEmployerDto(employer));
+        }
+        return simpleEmployerList;
     }
 }

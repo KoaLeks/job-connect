@@ -12,10 +12,12 @@ import at.ac.tuwien.sepm.groupphase.backend.service.ProfileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -82,5 +84,9 @@ public class EmployerServiceImpl implements EmployerService {
         }
     }
 
-
+    @Override
+    public List<Employer> findAll() {
+        LOGGER.info("Get all employers");
+        return employerRepository.findAll();
+    }
 }

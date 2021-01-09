@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {Globals} from '../global/globals';
 import {Event} from '../dtos/event';
 import {DetailedEvent} from '../dtos/detailed-event';
+import {SearchEvent} from '../dtos/search-event';
 
 @Injectable({
   providedIn: 'root'
@@ -46,12 +47,17 @@ export class EventService {
    * Gets all events from the backend
    */
   getEvents(): Observable<DetailedEvent[]> {
-    return this.httpClient.get<DetailedEvent[]>(this.eventBaseUri + '?search');
+    console.log('Get all events');
+    return this.httpClient.get<DetailedEvent[]>(this.eventBaseUri);
   }
 
-  searchEvent(event: DetailedEvent): Observable<DetailedEvent[]> {
+  searchEvent(event: SearchEvent): Observable<DetailedEvent[]> {
     console.log('Search events for: ' + JSON.stringify(event));
-    const params = new HttpParams().set('search', 'title:' + event.title);
+    const params = new HttpParams()
+      .set('title', event.title)
+      .set('interestAreaId', String(event.interestAreaId))
+      .set('employerId', String(event.employerId))
+      .set('payment', String(event.payment));
     return this.httpClient.get<DetailedEvent[]>(this.eventBaseUri, {params});
   }
 

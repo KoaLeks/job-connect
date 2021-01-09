@@ -4,6 +4,12 @@ import {AuthService} from '../../services/auth.service';
 import {DetailedEvent} from '../../dtos/detailed-event';
 import {Task} from '../../dtos/task';
 import {FormBuilder} from '@angular/forms';
+import {SearchEvent} from '../../dtos/search-event';
+import {InterestAreaService} from '../../services/interestArea.service';
+import {InterestArea} from '../../dtos/interestArea';
+import {EmployerService} from '../../services/employer.service';
+import {Employer} from '../../dtos/employer';
+import {SimpleEmployer} from '../../dtos/simple-employer';
 
 @Component({
   selector: 'app-event-overview',
@@ -14,36 +20,52 @@ export class EventOverviewComponent implements OnInit {
   events: DetailedEvent[] = [];
   foundEvents: DetailedEvent[] = [];
   eventSearchForm;
+
+  interestAreas: InterestArea[];
+  employers: SimpleEmployer[];
+
+  search: boolean = false;
   error: boolean = false;
   errorMessage: string = '';
 
-  constructor(public authService: AuthService, private eventService: EventService, private formBuilder: FormBuilder) {
+  constructor(public authService: AuthService, private eventService: EventService, private interestAreaService: InterestAreaService,
+              private employerService: EmployerService, private formBuilder: FormBuilder) {
     this.eventSearchForm = this.formBuilder.group(
       {
-        title: ''
+        title: '',
+        interestAreaId: '',
+        employerId: '',
+        payment: ''
       }
     );
   }
 
   ngOnInit(): void {
-    this.loadEvents();
+    this.loadResources();
   }
-
-  private loadEvents() {
+  private loadResources() {
     this.eventService.getEvents().subscribe(
       (events: DetailedEvent[]) => {
         this.events = events;
-      },
-      error => {
-        this.defaultServiceErrorHandling(error);
+      }
+    );
+    this.interestAreaService.getInterestAreas().subscribe(
+      (areas: InterestArea[]) => {
+        this.interestAreas = areas;
+      }
+    );
+    this.employerService.getEmployers().subscribe(
+      (employers: SimpleEmployer[]) => {
+        this.employers = employers;
       }
     );
   }
-  searchEvent(event: DetailedEvent) {
+  searchEvent(event: SearchEvent) {
     this.eventService.searchEvent(event).subscribe(
       (events: DetailedEvent[]) => {
         this.foundEvents = events;
         console.log(this.foundEvents.length);
+        this.search = true;
       }, error => {
 
       }

@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventInquiryDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SearchEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
@@ -68,18 +69,12 @@ public class EventEndpoint {
     @CrossOrigin(origins = "http://localhost:4200")
     @Transactional
     @ResponseBody
-    public List<DetailedEventDto> search(@RequestParam(value = "search") String search) {
+    public List<DetailedEventDto> search(SearchEventDto searchEventDto) {
         LOGGER.info("GET /api/v1/events");
-        EventSpecification.EventSpecificationsBuilder builder = new EventSpecification.EventSpecificationsBuilder();
-        Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
-        Matcher matcher = pattern.matcher(search + ",");
-        while (matcher.find()){
-            builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
-        }
-        Specification<Event> spec = builder.build();
-
-        return eventMapper.eventsToDetailedEventDtos(eventService.findAll(spec));
+        System.out.println(searchEventDto);
+        return eventMapper.eventsToDetailedEventDtos(eventService.findAll(searchEventDto));
     }
+
 
     @PutMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)

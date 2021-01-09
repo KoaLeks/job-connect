@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SearchEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.AddressRepository;
@@ -15,9 +16,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import javax.transaction.Transactional;
 import javax.validation.ValidationException;
 import java.lang.invoke.MethodHandles;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +38,9 @@ public class EventServiceImpl implements EventService {
     private final TaskRepository taskRepository;
     private final MailService mailService;
     private final NotificationRepository notificationRepository;
+
+    @Autowired
+    private EntityManagerFactory emf;
 
     @Autowired
     public EventServiceImpl(TaskService taskService, EventRepository eventRepository,
@@ -64,11 +72,25 @@ public class EventServiceImpl implements EventService {
         mailService.sendNotificationToAvailableEmployees(event);
         return savedEvent;
     }
-
     @Override
-    public List<Event> findAll(Specification<Event> eventSpecification) {
+    public List<Event> findAll(SearchEventDto searchEventDto) {
         LOGGER.debug("Find events");
-        return eventRepository.findAll(eventSpecification);
+        System.out.println("service:" + searchEventDto);
+
+        if(searchEventDto.getTitle() == null || searchEventDto.getTitle().isBlank() && searchEventDto.getInterestAreaId() == null &&
+            searchEventDto.getEmployerId() == null && searchEventDto.getStart() == null &&
+            searchEventDto.getEnd() == null && searchEventDto.getPayment() == null &&
+            !searchEventDto.isOnlyAvailableTasks() && searchEventDto.getUserId() == null){
+            System.out.println("actually got in");
+            return eventRepository.findAll();
+        }
+        else if(searchEventDto.getTitle() != null && searchEventDto.getTitle().isBlank()){
+            searchEventDto.setTitle(null);
+        }
+
+        return eventRepository.searchEventsBySearchEventDto("%"+searchEventDto.getTitle()+"%", searchEventDto.getEmployerId(),
+            searchEventDto.getStart(), searchEventDto.getInterestAreaId(), searchEventDto.getPayment());
+
     }
 
     @Override

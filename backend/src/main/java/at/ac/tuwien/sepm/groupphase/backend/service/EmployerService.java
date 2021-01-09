@@ -5,6 +5,8 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Employer;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.exception.UniqueConstraintException;
 
+import java.util.List;
+
 
 public interface EmployerService {
 
@@ -35,4 +37,6 @@ public interface EmployerService {
     Long updateEmployer(Employer employer);
 
     Employer findByEvent(Event event);
+
+    List<Employer> findAll();
 }
