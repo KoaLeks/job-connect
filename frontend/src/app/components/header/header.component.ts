@@ -70,7 +70,7 @@ export class HeaderComponent implements OnInit {
 
   private loadPicture() {
     if (this.authService.getUserRole() === 'EMPLOYER') {
-      this.employerService.getEmployerByEmail(this.authService.getTokenIdentifier()).subscribe(
+      this.employerService.getEmployerByEmail().subscribe(
         (profile: any) => {
           this.profile = profile;
           // converts bytesArray to Base64
@@ -89,7 +89,7 @@ export class HeaderComponent implements OnInit {
         }
       );
     } else if (this.authService.getUserRole() === 'EMPLOYEE') {
-      this.employeeService.getEmployeeByEmail(this.authService.getTokenIdentifier()).subscribe(
+      this.employeeService.getEmployeeByEmail().subscribe(
         (profile: any) => {
           this.profile = profile;
           // converts bytesArray to Base64

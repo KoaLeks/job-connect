@@ -112,7 +112,7 @@ export class EditEmployeeComponent implements OnInit {
    * Get profile details to edit them
    */
   loadEmployeeDetails() {
-    this.employeeService.getEmployeeByEmail(this.authService.getTokenIdentifier()).subscribe(
+    this.employeeService.getEmployeeByEmail().subscribe(
       (employee: EditEmployee) => {
         this.employee = employee;
         this.editForm.controls['email'].setValue(employee.profileDto.email);

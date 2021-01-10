@@ -72,4 +72,44 @@ public class ApplicationStatusDto {
             ", accepted=" + accepted +
             '}';
     }
+
+    public static final  class ApplicationStatusDtoBuilder{
+        private Long task;
+        private Long employee;
+        private Long notification;
+        private boolean accepted;
+
+        private ApplicationStatusDtoBuilder(){}
+
+        public static ApplicationStatusDtoBuilder aApplicationStatusDto(){ return new ApplicationStatusDtoBuilder(); }
+
+        public ApplicationStatusDtoBuilder withTask(Long taskId){
+            this.task = taskId;
+            return this;
+        }
+
+        public ApplicationStatusDtoBuilder withEmployee(Long employeeId){
+            this.employee = employeeId;
+            return this;
+        }
+
+        public ApplicationStatusDtoBuilder withNotification(Long notificationId){
+            this.notification = notificationId;
+            return this;
+        }
+
+        public ApplicationStatusDtoBuilder isAccepted(boolean accepted){
+            this.accepted = accepted;
+            return this;
+        }
+
+        public ApplicationStatusDto build(){
+            ApplicationStatusDto applicationStatusDto = new ApplicationStatusDto();
+            applicationStatusDto.setAccepted(this.accepted);
+            applicationStatusDto.setEmployee(this.employee);
+            applicationStatusDto.setNotification(this.notification);
+            applicationStatusDto.setTask(this.task);
+            return applicationStatusDto;
+        }
+    }
 }

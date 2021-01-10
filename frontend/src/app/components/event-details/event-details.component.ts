@@ -10,6 +10,7 @@ import {ApplicationService} from '../../services/application.service';
 import {EmployeeService} from '../../services/employee.service';
 import {AuthService} from '../../services/auth.service';
 import {EditEmployee} from '../../dtos/edit-employee';
+import {empty} from 'rxjs';
 
 @Component({
   selector: 'app-event-details',
@@ -25,7 +26,7 @@ export class EventDetailsComponent implements OnInit {
   hasPicture = false;
   id: number;
   eventDetails: DetailedEvent;
-  loggedInEmployee: boolean;
+  loggedInEmployee = false;
   employee: any;
   applyTaskForm;
 
@@ -55,7 +56,7 @@ export class EventDetailsComponent implements OnInit {
     this.getEventDetails();
     if (this.authService.isLoggedIn() && this.authService.getUserRole() === 'EMPLOYEE') {
       this.loggedInEmployee = true;
-      this.employeeService.getEmployeeByEmail(this.authService.getTokenIdentifier()).subscribe(
+      this.employeeService.getEmployeeByEmail().subscribe(
         (profile: EditEmployee) => {
           this.employee = profile.profileDto;
         });

@@ -40,9 +40,11 @@ export class EmployeeDetailsComponent implements OnInit {
         const timeDiff = Math.abs(Date.now() - new Date(this.employee.birthDate).getTime());
         this.age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25);
         // distinct interest areas
-        for (let i = 0; i < this.employee.interestDtos.length; i++) {
-          if (this.employee.interestDtos[i].simpleInterestAreaDto !== null) {
-            this.interestAreasDist.add(this.employee.interestDtos[i].simpleInterestAreaDto.area);
+        if (this.employee.interestDtos !== null ) {
+          for (let i = 0; i < this.employee.interestDtos.length; i++) {
+            if (this.employee.interestDtos[i].simpleInterestAreaDto !== null) {
+              this.interestAreasDist.add(this.employee.interestDtos[i].simpleInterestAreaDto.area);
+            }
           }
         }
       }
