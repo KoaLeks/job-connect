@@ -66,7 +66,7 @@ export class EventService {
       .set('end', event.end === '' ? '2099-12-31' : event.end)
       .set('state', event.state)
       .set('onlyAvailableTasks', String(event.onlyAvailableTasks))
-      .set('userId', String(event.userId));
+      .set('userId', event.userId === false ? String(0) : String(event.userId));
     return this.httpClient.get<DetailedEvent[]>(this.eventBaseUri, {params});
   }
 

@@ -52,7 +52,6 @@ export class EventOverviewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.authService.isLoggedIn());
     this.loadResources();
   }
   private loadResources() {
