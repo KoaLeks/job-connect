@@ -25,7 +25,6 @@ export class CreateEventComponent implements OnInit {
   taskCreationForm;
   tasks: Task[] = [];
   interestAreas: InterestArea[];
-  employerId: number;
 
   constructor(public authService: AuthService, private formBuilder: FormBuilder, private addressService: AddressService,
               private eventService: EventService, private taskService: TaskService,
@@ -69,17 +68,6 @@ export class CreateEventComponent implements OnInit {
     this.alertService.clear();
     event.address = address;
     event.tasks = tasks;
-    // set Employer in event
-    event.employer = {
-      id: this.employerId,
-      companyName: null,
-      companyDescription: null,
-      firstName: null,
-      lastName: null,
-      email: null,
-      password: null,
-      publicInfo: null
-    };
     this.eventService.createEvent(event).subscribe(
       createdEvent => {
         this.event = createdEvent;
@@ -117,20 +105,6 @@ export class CreateEventComponent implements OnInit {
     const index = this.tasks.indexOf(task);
     if (index !== -1) {
       this.tasks.splice(index, 1);
-    }
-  }
-
-  /**
-   * Get profile id
-   */
-  loadEmployerId() {
-    if (this.employerId === undefined || this.employerId === null) {
-      this.employerService.getEmployerByEmail(this.authService.getTokenIdentifier()).subscribe(
-        (profile) => {
-          this.employerId = profile.profileDto.id;
-          console.log(this.employerId);
-        }
-      );
     }
   }
 

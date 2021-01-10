@@ -5,6 +5,7 @@ import at.ac.tuwien.sepm.groupphase.backend.util.Gender;
 import at.ac.tuwien.sepm.groupphase.backend.util.annotation.IsAdult;
 
 import javax.validation.constraints.NotNull;
+import java.rmi.registry.Registry;
 import java.time.LocalDateTime;
 import java.util.Set;
 
