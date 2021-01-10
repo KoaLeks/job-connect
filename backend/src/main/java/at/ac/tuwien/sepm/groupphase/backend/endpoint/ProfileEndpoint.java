@@ -46,7 +46,7 @@ public class ProfileEndpoint {
     private final TokenService tokenService;
 
     @Autowired
-    public ProfileEndpoint(ProfileService profileService, EmployeeService employeeService, RegisterEmployeeMapper registerEmployeeMapper, RegisterEmployerMapper registerEmployerMapper, EmployerService employerService, EmployerMapper employerMapper, EmployeeMapper employeeMapper, MailService mailService, ContactMessageMapper contactMessageMapper, TokenService tokenService) { {
+    public ProfileEndpoint(ProfileService profileService, EmployeeService employeeService, RegisterEmployeeMapper registerEmployeeMapper, RegisterEmployerMapper registerEmployerMapper, EmployerService employerService, EmployerMapper employerMapper, EmployeeMapper employeeMapper, MailService mailService, ContactMessageMapper contactMessageMapper, TokenService tokenService) {
         this.profileService = profileService;
         this.employeeService = employeeService;
         this.registerEmployeeMapper = registerEmployeeMapper;
