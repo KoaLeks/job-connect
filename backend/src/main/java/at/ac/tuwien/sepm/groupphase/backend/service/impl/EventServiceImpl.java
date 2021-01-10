@@ -10,20 +10,14 @@ import at.ac.tuwien.sepm.groupphase.backend.repository.TaskRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.service.TaskService;
 import at.ac.tuwien.sepm.groupphase.backend.service.MailService;
-import at.ac.tuwien.sepm.groupphase.backend.service.TokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
 import javax.transaction.Transactional;
 import javax.validation.ValidationException;
 import java.lang.invoke.MethodHandles;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -31,7 +25,6 @@ public class EventServiceImpl implements EventService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final TaskService taskService;
-    private final TokenService tokenService;
     private final EventRepository eventRepository;
     private final AddressRepository addressRepository;
     private final TaskRepository taskRepository;
@@ -42,12 +35,11 @@ public class EventServiceImpl implements EventService {
     private EntityManagerFactory emf;
 
     @Autowired
-    public EventServiceImpl(TaskService taskService, TokenService tokenService, EventRepository eventRepository,
+    public EventServiceImpl(TaskService taskService, EventRepository eventRepository,
                             AddressRepository addressRepository,
                             TaskRepository taskRepository,
                             MailService mailService, NotificationRepository notificationRepository) {
         this.taskService = taskService;
-        this.tokenService = tokenService;
         this.eventRepository = eventRepository;
         this.addressRepository = addressRepository;
         this.taskRepository = taskRepository;

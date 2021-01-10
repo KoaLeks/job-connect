@@ -370,21 +370,6 @@ public class EventEndpointTest implements TestData {
         assertEquals(addressRepository.count(), 0);
         assertEquals(taskRepository.count(), 0);
     }
-
-    @Test
-    public void SearchForEventWithValidTitle() {
-        addressRepository.save(address);
-        eventRepository.save(event);
-        eventRepository.save(event2);
-
-        EventSpecification spec =
-            new EventSpecification(new SearchCriteria("title", ":", "Flyer verteilen"));
-
-        List<Event> results = eventRepository.findAll(spec);
-
-        assert(results.contains(event));
-        assert(!results.contains(event2));
-    }
 }
 
 

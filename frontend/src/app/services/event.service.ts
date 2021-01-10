@@ -51,6 +51,10 @@ export class EventService {
     return this.httpClient.get<DetailedEvent[]>(this.eventBaseUri);
   }
 
+  /**
+   * searches events by given criteria
+   * @param event search criterias for events
+   */
   searchEvent(event: SearchEvent): Observable<DetailedEvent[]> {
     console.log('Search events for: ' + JSON.stringify(event));
     const params = new HttpParams()
@@ -62,7 +66,7 @@ export class EventService {
       .set('end', event.end === '' ? '2099-12-31' : event.end)
       .set('state', event.state)
       .set('onlyAvailableTasks', String(event.onlyAvailableTasks))
-      .set('userId', event.userId);
+      .set('userId', String(event.userId));
     return this.httpClient.get<DetailedEvent[]>(this.eventBaseUri, {params});
   }
 

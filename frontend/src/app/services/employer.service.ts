@@ -3,7 +3,6 @@ import {HttpClient} from '@angular/common/http';
 import {Globals} from '../global/globals';
 import {EditEmployer} from '../dtos/edit-employer';
 import {Observable} from 'rxjs';
-import {DetailedEvent} from '../dtos/detailed-event';
 import {SimpleEmployer} from '../dtos/simple-employer';
 
 @Injectable({
@@ -24,6 +23,10 @@ export class EmployerService {
     console.log('Get employer by email ' + email);
     return this.httpClient.get<any>(this.employerBaseUri + '/' + email);
   }
+
+  /**
+   * Get all employers from backend
+   */
   getEmployers(): Observable<SimpleEmployer[]> {
     console.log('Get all employers');
     return this.httpClient.get<SimpleEmployer[]>(this.employerBaseUri);

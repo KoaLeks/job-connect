@@ -1,9 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
-import at.ac.tuwien.sepm.groupphase.backend.entity.Employee;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Employer;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
-import at.ac.tuwien.sepm.groupphase.backend.exception.UniqueConstraintException;
 
 import java.util.List;
 
@@ -38,5 +36,10 @@ public interface EmployerService {
 
     Employer findByEvent(Event event);
 
+    /**
+     * Find all employers
+     *
+     * @return list of all employers
+     */
     List<Employer> findAll();
 }

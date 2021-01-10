@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {EventService} from '../../services/event.service';
 import {AuthService} from '../../services/auth.service';
 import {DetailedEvent} from '../../dtos/detailed-event';
@@ -8,12 +8,8 @@ import {SearchEvent} from '../../dtos/search-event';
 import {InterestAreaService} from '../../services/interestArea.service';
 import {InterestArea} from '../../dtos/interestArea';
 import {EmployerService} from '../../services/employer.service';
-import {Employer} from '../../dtos/employer';
 import {SimpleEmployer} from '../../dtos/simple-employer';
-import {compareSegments} from '@angular/compiler-cli/src/ngtsc/sourcemaps/src/segment_marker';
 import {EmployeeService} from '../../services/employee.service';
-import {ProfileDto} from '../../dtos/profile-dto';
-import {finalize} from 'rxjs/operators';
 import {EditEmployee} from '../../dtos/edit-employee';
 
 @Component({
@@ -29,7 +25,8 @@ export class EventOverviewComponent implements OnInit {
   interestAreas: InterestArea[];
   employers: SimpleEmployer[];
 
-  states: string[] = ['Burgenland', 'Kärnten', 'Niederösterreich', 'Oberösterreich', 'Salzburg', 'Steiermark', 'Tirol', 'Vorarlberg', 'Wien'];
+  states: string[] = ['Burgenland', 'Kärnten', 'Niederösterreich', 'Oberösterreich', 'Salzburg', 'Steiermark', 'Tirol', 'Vorarlberg',
+                      'Wien'];
   paymentValue: number = 0;
   search: boolean = false;
   error: boolean = false;
@@ -62,16 +59,22 @@ export class EventOverviewComponent implements OnInit {
     this.eventService.getEvents().subscribe(
       (events: DetailedEvent[]) => {
         this.events = events;
+      }, error => {
+        this.defaultServiceErrorHandling(error);
       }
     );
     this.interestAreaService.getInterestAreas().subscribe(
       (areas: InterestArea[]) => {
         this.interestAreas = areas;
+      }, error => {
+        this.defaultServiceErrorHandling(error);
       }
     );
     this.employerService.getEmployers().subscribe(
       (employers: SimpleEmployer[]) => {
         this.employers = employers;
+      }, error => {
+        this.defaultServiceErrorHandling(error);
       }
     );
   }
@@ -90,8 +93,7 @@ export class EventOverviewComponent implements OnInit {
             }
           );
         }, (error) => {
-          this.error = true;
-          this.errorMessage = error.error;
+          this.defaultServiceErrorHandling(error);
         }
       );
     } else {
@@ -100,8 +102,7 @@ export class EventOverviewComponent implements OnInit {
           this.foundEvents = events;
           this.search = true;
         }, error => {
-          this.error = true;
-          this.errorMessage = error.error;
+          this.defaultServiceErrorHandling(error);
         }
       );
     }

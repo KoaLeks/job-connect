@@ -3,19 +3,14 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventInquiryDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SearchEventDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
-import at.ac.tuwien.sepm.groupphase.backend.entity.EventSpecification;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +19,6 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping(value = "/api/v1/events")
