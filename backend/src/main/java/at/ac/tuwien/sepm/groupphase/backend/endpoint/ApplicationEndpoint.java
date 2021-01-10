@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleNotificationDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.ApplicationStatusMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.NotificationMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
+import at.ac.tuwien.sepm.groupphase.backend.exception.AlreadyHandledException;
 import at.ac.tuwien.sepm.groupphase.backend.service.*;
 import at.ac.tuwien.sepm.groupphase.backend.util.NotificationType;
 import io.swagger.annotations.ApiOperation;
@@ -75,6 +76,11 @@ public class ApplicationEndpoint {
         Task task = taskService.findOneById(applicationDto.getTask());
         Event event = eventService.findByTask(task);
         Employer employer = employerService.findByEvent(event);
+
+        Notification existingApplication = notificationService.findFirstByEvent_IdAndSender_Id(event.getId(), employee.getId());
+        if(!(existingApplication == null || existingApplication.getType().equalsIgnoreCase(NotificationType.NOTIFICATION.name()))){
+            throw new AlreadyHandledException(String.format("Sie haben sich bereits für den Task \"%s\" für dieses Event beworben.", existingApplication.getTask().getDescription()));
+        }
 
         employee_tasksService.applyForTask(employee, task);
         Notification application = new Notification();

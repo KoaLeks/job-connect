@@ -78,5 +78,9 @@ public class NotificationServiceImpl implements NotificationService {
         return notificationRepository.save(notification);
     }
 
-
+    @Override
+    public Notification findFirstByEvent_IdAndSender_Id(Long eventId, Long employeeId) {
+        LOGGER.debug("Find application from Employee {} with Event id {} ", employeeId, eventId);
+        return notificationRepository.findFirstByEvent_IdAndSender_Id(eventId, employeeId);
+    }
 }
