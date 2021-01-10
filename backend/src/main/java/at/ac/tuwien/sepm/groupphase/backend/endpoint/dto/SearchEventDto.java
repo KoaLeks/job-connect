@@ -12,10 +12,18 @@ public class SearchEventDto {
     private Long payment;
     private boolean onlyAvailableTasks;
     private Long userId;
+    private String state;
 
     public SearchEventDto() {
     }
 
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
 
     public String getTitle() {
         return title;
@@ -92,6 +100,7 @@ public class SearchEventDto {
             ", payment=" + payment +
             ", onlyAvailableTasks=" + onlyAvailableTasks +
             ", userId=" + userId +
+            ", state=" + state +
             '}';
     }
 }

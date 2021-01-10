@@ -8,6 +8,7 @@ export class SearchEvent {
     public end: string,
     public payment: number,
     public onlyAvailableTasks: boolean,
-    public userId: number) {
+    public userId: number,
+    public state: string) {
   }
 }

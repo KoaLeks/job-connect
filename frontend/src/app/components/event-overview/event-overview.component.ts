@@ -10,6 +10,11 @@ import {InterestArea} from '../../dtos/interestArea';
 import {EmployerService} from '../../services/employer.service';
 import {Employer} from '../../dtos/employer';
 import {SimpleEmployer} from '../../dtos/simple-employer';
+import {compareSegments} from '@angular/compiler-cli/src/ngtsc/sourcemaps/src/segment_marker';
+import {EmployeeService} from '../../services/employee.service';
+import {ProfileDto} from '../../dtos/profile-dto';
+import {finalize} from 'rxjs/operators';
+import {EditEmployee} from '../../dtos/edit-employee';
 
 @Component({
   selector: 'app-event-overview',
@@ -24,13 +29,16 @@ export class EventOverviewComponent implements OnInit {
   interestAreas: InterestArea[];
   employers: SimpleEmployer[];
 
+  states: string[] = ['Burgenland', 'Kärnten', 'Niederösterreich', 'Oberösterreich', 'Salzburg', 'Steiermark', 'Tirol', 'Vorarlberg', 'Wien'];
   paymentValue: number = 0;
   search: boolean = false;
   error: boolean = false;
   errorMessage: string = '';
 
+  currProfile: EditEmployee;
+
   constructor(public authService: AuthService, private eventService: EventService, private interestAreaService: InterestAreaService,
-              private employerService: EmployerService, private formBuilder: FormBuilder) {
+              private employerService: EmployerService, private employeeService: EmployeeService, private formBuilder: FormBuilder) {
     this.eventSearchForm = this.formBuilder.group(
       {
         title: '',
@@ -38,12 +46,16 @@ export class EventOverviewComponent implements OnInit {
         employerId: '',
         payment: '',
         start: '',
-        end: ''
+        end: '',
+        state: '',
+        onlyAvailableTasks: false,
+        userId: ''
       }
     );
   }
 
   ngOnInit(): void {
+    console.log(this.authService.isLoggedIn());
     this.loadResources();
   }
   private loadResources() {
@@ -64,26 +76,46 @@ export class EventOverviewComponent implements OnInit {
     );
   }
   searchEvent(event: SearchEvent) {
-    this.eventService.searchEvent(event).subscribe(
-      (events: DetailedEvent[]) => {
-        this.foundEvents = events;
-        console.log(this.foundEvents.length);
-        this.search = true;
-      }, error => {
-
-      }
-    );
+    if (event.userId) {
+      this.employeeService.getEmployeeByEmail(this.authService.getTokenIdentifier()).subscribe(
+        (profile: EditEmployee) => {
+          event.userId = profile.profileDto.id;
+          this.eventService.searchEvent(event).subscribe(
+            (events: DetailedEvent[]) => {
+              this.foundEvents = events;
+              this.search = true;
+            }, error => {
+              this.error = true;
+              this.errorMessage = error.error;
+            }
+          );
+        }, (error) => {
+          this.error = true;
+          this.errorMessage = error.error;
+        }
+      );
+    } else {
+      this.eventService.searchEvent(event).subscribe(
+        (events: DetailedEvent[]) => {
+          this.foundEvents = events;
+          this.search = true;
+        }, error => {
+          this.error = true;
+          this.errorMessage = error.error;
+        }
+      );
+    }
   }
   private getAmountOfFreeJobs(tasks: Task[]) {
     let sum = 0;
-    for (let task of tasks) {
+    for (const task of tasks) {
       sum += task.employeeCount;
     }
     return sum;
   }
   private getAmountOfTakenJobs(tasks: Task[]) {
     let sum = 0;
-    for (let task of tasks) {
+    for (const task of tasks) {
       sum += task.employees.length;
     }
     return sum;

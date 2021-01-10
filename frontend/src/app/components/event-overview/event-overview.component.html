@@ -8,51 +8,84 @@
       <button type="submit" class="btn search-button w-100">Suchen</button>
     </div>
     <div class="form-group mb-0 col-md-1">
-      <button class="btn setting-button w-100 dropdown-toggle" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
-          <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
-          <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
+      <button class="btn setting-button w-100 dropdown-toggle" type="button" data-toggle="collapse"
+              data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear"
+             viewBox="0 0 16 16">
+          <path
+            d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+          <path
+            d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
         </svg>
       </button>
     </div>
   </div>
   <div class="collapse" id="collapseExample">
-  <div class="form-row">
-    <div class="col">
-      <label></label>
-      <select class="form-control" id="exampleFormControlSelect1" formControlName="interestAreaId">
-        <option value="" class="select-option-none">Bereich auswählen</option>
-        <option *ngFor="let area of interestAreas" [ngValue]="area.id">{{area.description}} </option>
-      </select>
+    <div class="form-row">
+      <div class="col">
+        <label></label>
+        <select class="form-control" id="exampleFormControlSelect1" formControlName="interestAreaId">
+          <option value="" class="select-option-none">Bereich auswählen</option>
+          <option *ngFor="let area of interestAreas" [ngValue]="area.id">{{area.description}} </option>
+        </select>
+      </div>
+      <div class="col">
+        <label></label>
+        <select class="form-control" id="exampleFormControlSelect2" formControlName="employerId">
+          <option value="" class="select-option-none">ArbeitgeberIn auswählen</option>
+          <option *ngFor="let employer of employers"
+                  [ngValue]="employer.simpleProfileDto.id">{{employer.companyName}}</option>
+        </select>
+      </div>
+      <div class="col">
+        <label for="paymentRange"></label>
+        <input type="range" ngModel="0" class="form-control-range" id="paymentRange" min="0" max="50"
+               formControlName="payment"
+               (change)="getSliderValue($event)" (input)="getSliderValue($event)">
+        <div>ab {{this.paymentValue}} €/h</div>
+      </div>
     </div>
-    <div class="col ml-2">
-      <label></label>
-      <select class="form-control" id="exampleFormControlSelect2" formControlName="employerId">
-        <option value="" class="select-option-none">ArbeitgeberIn auswählen</option>
-        <option *ngFor="let employer of employers" [ngValue]="employer.simpleProfileDto.id">{{employer.companyName}}</option>
-      </select>
-    </div>
-    <div class="col ml-2">
-      <label for="paymentRange"></label>
-      <input type="range" ngModel="0" class="form-control-range" id="paymentRange" min="0" max="50" formControlName="payment"
-             (change)="getSliderValue($event)" (input)="getSliderValue($event)">
-      <div>ab {{this.paymentValue}} €/h</div>
-    </div>
-  </div>
-  <div class="form-row">
-    <div class="col">
-      <label for="example-date-input" class="col-form-label">von</label>
+    <div class="form-row">
+      <div class="col">
+        <label for="example-date-input" class="col-form-label">von</label>
         <input class="form-control" type="date" value="2011-08-19" id="example-date-input" formControlName="start">
-    </div>
-    <div class="col">
-      <label for="example-date-input1" class="col-form-label">bis</label>
+      </div>
+      <div class="col">
+        <label for="example-date-input1" class="col-form-label">bis</label>
         <input class="form-control" type="date" value="2011-08-19" id="example-date-input1" formControlName="end">
+      </div>
+      <div class="col col-state">
+        <label></label>
+        <select class="form-control" id="stateSelect" formControlName="state">
+          <option value="" class="select-option-none">Bundesland auswählen</option>
+          <option *ngFor="let state of states" [ngValue]="state">{{state}}</option>
+        </select>
+      </div>
     </div>
-    <div class="col">
+    <div class="form-row mt-4">
+      <div class="col">
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" formControlName="onlyAvailableTasks">
+          <label class="form-check-label" for="inlineCheckbox1">Nur Events mit freien Stellen anzeigen</label>
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" id="inlineCheckbox2" formControlName="userId" [attr.disabled]="authService.isLoggedIn() && authService.getUserRole() === 'EMPLOYEE' ? null : true">
+          <label class="form-check-label" for="inlineCheckbox2">Smart Filter
+            <button type="button" class="btn btn-sm mr-2 pb-2 info-button" placement="right" ngbTooltip="
+            Wenn du als ArbeitnehmerIn eingeloggt bist und in deinem Profil Zeiten, sowie Interessensgebiete angegeben hast, kannst du diese Option verwenden, um Events zu finden, die genau zu dir passen!">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+              <path d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+            </svg>
+            </button>
+          </label>
+        </div>
+      </div>
+      <div class="col">
+      </div>
     </div>
-  </div>
-  <div class="form-row">
-  </div>
   </div>
 </form>
 
@@ -114,12 +147,14 @@
             </svg>
             {{event.tasks.length}}
           </small>
-            <small class="text-muted ml-5">
-              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-person-check" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6 5c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10zm4.854-7.85a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
-              </svg>
-              {{getAmountOfTakenJobs(event.tasks)}}/{{getAmountOfFreeJobs(event.tasks)}}
-            </small>
+          <small class="text-muted ml-5">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
+                 class="bi bi-person-check" viewBox="0 0 16 16">
+              <path fill-rule="evenodd"
+                    d="M8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6 5c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10zm4.854-7.85a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+            {{getAmountOfTakenJobs(event.tasks)}}/{{getAmountOfFreeJobs(event.tasks)}}
+          </small>
 
 
         <p class="mb-1">
@@ -169,8 +204,10 @@
             {{event.tasks.length}}
           </small>
           <small class="text-muted ml-5">
-            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-person-check" viewBox="0 0 16 16">
-              <path fill-rule="evenodd" d="M8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6 5c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10zm4.854-7.85a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
+                 class="bi bi-person-check" viewBox="0 0 16 16">
+              <path fill-rule="evenodd"
+                    d="M8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6 5c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10zm4.854-7.85a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
             </svg>
             {{getAmountOfTakenJobs(event.tasks)}}/{{getAmountOfFreeJobs(event.tasks)}}
           </small>
