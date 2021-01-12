@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.groupphase.backend.datagenerator;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.repository.*;
 import at.ac.tuwien.sepm.groupphase.backend.util.Gender;
+import com.github.javafaker.Faker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
@@ -10,10 +11,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.lang.invoke.MethodHandles;
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.ZoneId;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Profile("generateData")
 @Component
@@ -477,6 +484,92 @@ public class TestDataGenerator {
     }
 
     @PostConstruct
+    public void generateActualEvents(){
+
+        generateEmployers();
+        generateEmployees();
+        generateInterestAreas();
+        generateInterests();
+        generateTimes();
+
+        Faker faker = new Faker(new Locale("de-AT"));
+        Random random = new Random();
+//        private static final LocalDateTime TEST_EVENT_START1
+//            = LocalDateTime.of(2020, 12, 24, 12, 0, 0, 0);
+//         Addresses
+//        private static final Address TEST_ADDRESS1 = Address.AddressBuilder.aAddress()
+//            .withAddressLine("Mariahilfer Straße 5")
+//            .withCity("Wien")
+//            .withState("Wien")
+//            .withZip(1070)
+//            .build();
+        int sizeTasks = 0;
+        for (int i = 1; i <= 32; i++) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(2021, Calendar.APRIL, 30);
+            Date start = faker.date().between(new Date(System.currentTimeMillis()), calendar.getTime());
+            Date end = faker.date().future(14, TimeUnit.DAYS, start);
+            Address address = Address.AddressBuilder.aAddress()
+                .withAddressLine(faker.address().streetAddress())
+                .withCity(faker.address().city())
+                .withState(faker.address().state())
+                .withZip(Integer.parseInt(faker.address().zipCode()))
+                .build();
+            Set<Task> tasks = generateRandomTasks();
+            Event event = Event.EventBuilder.aEvent()
+                .withTitle("Event " + i)
+                .withDescription("Description " + i)
+                .withStart(convertToLocalDateTime(start))
+                .withEnd(convertToLocalDateTime(end))
+                .withAddress(addressRepository.save(address))
+                .withTask(tasks)
+                .withEmployer(employerRepository.findByProfile_Id(Long.valueOf(random.nextInt(40) + 1)))
+                .build();
+            Event savedEvent = eventRepository.save(event);
+            for (Task task : tasks) {
+                task.setEvent(savedEvent);
+                taskRepository.save(task);
+            }
+//            List<Task> list = taskRepository.saveAll(tasks);
+        }
+//        LOGGER.info("all tasks size = " + sizeTasks);
+    }
+
+    public LocalDateTime convertToLocalDateTime(Date dateToConvert) {
+        return Instant.ofEpochMilli(dateToConvert.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
+    }
+
+    public Set<Task> generateRandomTasks() {
+        Set<Task> tasks = new HashSet<>();
+        List<InterestArea> areas = interestAreaRepository.findAll();
+        Random random = new Random();
+
+        try {
+            RandomAccessFile randomAccessFile = new RandomAccessFile("src/main/resources/tasks.txt", "r");
+            int length = (int)randomAccessFile.length();
+            for (int i = random.nextInt(3) + 1; i > 0; i--) {
+                int pos = random.nextInt(length);
+                randomAccessFile.seek(pos);
+                randomAccessFile.readLine();
+                String line = randomAccessFile.readLine();
+                if (line == null) continue;
+                Task task = new Task();
+                task.setDescription(line.substring(line.indexOf(",") + 1));
+                task.setEmployeeCount(1 + random.nextInt(9));
+                task.setPaymentHourly((double) (5 + random.nextInt(20)));
+                task.setInterestArea(areas.get(random.nextInt(areas.size() - 1)));
+                tasks.add(task);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return tasks;
+    }
+
+
+    //@PostConstruct
     public void generateEvents() {
         generateEmployers();
         generateEmployees();

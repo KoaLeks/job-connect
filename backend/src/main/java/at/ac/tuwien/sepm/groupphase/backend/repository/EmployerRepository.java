@@ -17,5 +17,19 @@ public interface EmployerRepository extends JpaRepository<Employer, Long> {
      */
     Employer findByProfile_Email(String email);
 
+    /**
+     * Find an employer with a certain id
+     *
+     * @param id to look for
+     * @return the employer
+     */
+    Employer findByProfile_Id(Long id);
+
+    /**
+     * Find an employer with a certain event
+     *
+     * @param event to look for
+     * @return the employer
+     */
     Employer findFirstByEvents(Event event);
 }
