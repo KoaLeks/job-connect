@@ -1,8 +1,11 @@
 package at.ac.tuwien.sepm.groupphase.backend.datagenerator;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
+import at.ac.tuwien.sepm.groupphase.backend.exception.AlreadyHandledException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.*;
+import at.ac.tuwien.sepm.groupphase.backend.service.Employee_TasksService;
 import at.ac.tuwien.sepm.groupphase.backend.util.Gender;
+import at.ac.tuwien.sepm.groupphase.backend.util.NotificationType;
 import com.github.javafaker.Faker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -205,13 +208,16 @@ public class TestDataGenerator {
     private final InterestAreaRepository interestAreaRepository;
     private final InterestRepository interestRepository;
     private final TimeRepository timeRepository;
+    private final Employee_TasksService employee_tasksService;
+    private final NotificationRepository notificationRepository;
 
 
     public TestDataGenerator(EmployeeRepository employeeRepository, EmployerRepository employerRepository,
                              ProfileRepository profileRepository, PasswordEncoder passwordEncoder,
                              EventRepository eventRepository, AddressRepository addressRepository,
                              TaskRepository taskRepository, InterestAreaRepository interestAreaRepository,
-                             InterestRepository interestRepository, TimeRepository timeRepository) {
+                             InterestRepository interestRepository, TimeRepository timeRepository,
+                             Employee_TasksService employee_tasksService, NotificationRepository notificationRepository) {
         this.employeeRepository = employeeRepository;
         this.employerRepository = employerRepository;
         this.profileRepository = profileRepository;
@@ -222,6 +228,8 @@ public class TestDataGenerator {
         this.passwordEncoder = passwordEncoder;
         this.interestRepository = interestRepository;
         this.timeRepository = timeRepository;
+        this.employee_tasksService = employee_tasksService;
+        this.notificationRepository = notificationRepository;
     }
 
     public void generateEmployers() {
@@ -494,16 +502,6 @@ public class TestDataGenerator {
 
         Faker faker = new Faker(new Locale("de-AT"));
         Random random = new Random();
-//        private static final LocalDateTime TEST_EVENT_START1
-//            = LocalDateTime.of(2020, 12, 24, 12, 0, 0, 0);
-//         Addresses
-//        private static final Address TEST_ADDRESS1 = Address.AddressBuilder.aAddress()
-//            .withAddressLine("Mariahilfer Straße 5")
-//            .withCity("Wien")
-//            .withState("Wien")
-//            .withZip(1070)
-//            .build();
-        int sizeTasks = 0;
         for (int i = 1; i <= 32; i++) {
             Calendar calendar = Calendar.getInstance();
             calendar.set(2021, Calendar.APRIL, 30);
@@ -530,13 +528,43 @@ public class TestDataGenerator {
                 task.setEvent(savedEvent);
                 taskRepository.save(task);
             }
-//            List<Task> list = taskRepository.saveAll(tasks);
         }
-//        LOGGER.info("all tasks size = " + sizeTasks);
+        generateApplications();
     }
 
     public LocalDateTime convertToLocalDateTime(Date dateToConvert) {
         return Instant.ofEpochMilli(dateToConvert.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
+    }
+
+    public void generateApplications() {
+        Random random = new Random();
+        List<Task> tasks = taskRepository.findAll();
+        for (int i = 0; i < 50; i++) {
+            Optional<Employee> employee = employeeRepository.findById(41L + random.nextInt(30));
+            Employee randomEmployee = employee.get();
+            Task randomTask = tasks.get(random.nextInt(tasks.size() - 1));
+            Event event = eventRepository.findFirstByTasks(randomTask);
+            Employer employer = employerRepository.findFirstByEvents(event);
+            String message = "Sehr geehrte Damen und Herren,\n"+
+                "hiermit bewerbe ich mich für die Stelle \"" + randomTask.getDescription() +"\" für das Event " + event.getTitle() +
+                "Mit freundlichen Grüßen\n" +
+                randomEmployee.getProfile().getFirstName() + " " + randomEmployee.getProfile().getLastName();
+            try {
+                employee_tasksService.applyForTask(randomEmployee, randomTask);
+            } catch (AlreadyHandledException e) {
+                i--;
+                continue;
+            }
+            Notification notification = new Notification();
+            notification.setEvent(event);
+            notification.setMessage(message);
+            notification.setRecipient(employer.getProfile());
+            notification.setSender(randomEmployee.getProfile());
+            notification.setSeen(false);
+            notification.setTask(randomTask);
+            notification.setType(NotificationType.APPLICATION.name());
+            notificationRepository.save(notification);
+        }
     }
 
     public Set<Task> generateRandomTasks() {
