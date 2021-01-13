@@ -30,4 +30,12 @@ export class EmployerService {
     console.log('Update employer profile');
     return this.httpClient.put(this.employerBaseUri, JSON.parse(JSON.stringify(employer).replace('profileDto', 'editProfileDto')));
   }
+
+  /**
+   * Deletes an employer
+   */
+  deleteEmployer() {
+    console.log('Delete profile');
+    return this.httpClient.delete(this.employerBaseUri);
+  }
 }

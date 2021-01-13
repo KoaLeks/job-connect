@@ -22,7 +22,6 @@ export class EditEmployerComponent implements OnInit {
   hasPicture = false;
   @ViewChild('pictureUpload') // needed for resetting fileUpload button
   inputImage: ElementRef; // needed for resetting fileUpload button
-  changePassword: boolean = false;
 
   constructor(public authService: AuthService, private router: Router, private formBuilder: FormBuilder,
               private employerService: EmployerService, private updateHeaderService: UpdateHeaderService,
@@ -156,6 +155,4 @@ export class EditEmployerComponent implements OnInit {
     this.hasPicture = false;
     this.picture = null;
   }
-
-
 }

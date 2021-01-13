@@ -1,4 +1,3 @@
-
 <!-- Modal ADD TASK-->
 <div class="modal fade" id="Add-Task" tabindex="-1" role="dialog" aria-labelledby="addTaskLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -20,7 +19,8 @@
           </div>
           <div class="form-group">
             <label for="InputEmployeeCount">Benötigte MitarbeiterInnen<b>*</b></label>
-            <input type="number" min="1" pattern="[0-9]*" class="form-control" id="InputEmployeeCount" formControlName="employeeCount">
+            <input type="number" min="1" pattern="[0-9]*" class="form-control" id="InputEmployeeCount"
+                   formControlName="employeeCount">
           </div>
           <div class="form-group">
             <label for="InputPaymentHourly">Bezahlung in Euro/pro Stunde<b>*</b></label>
@@ -40,9 +40,9 @@
 
           <!-- TASK FORM -->
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
             <button type="submit" class="btn btn-primary" data-toggle="modal"
-                    data-target="#Add-Task" [disabled]="!taskCreationForm.valid">Submit
+                    data-target="#Add-Task" [disabled]="!taskCreationForm.valid">Speichern
             </button>
           </div>
         </form>
@@ -142,13 +142,15 @@
         <h5>Jobs: </h5>
         <ng-container *ngFor="let task of tasks">
           <div>
-            Aufgabe: {{task.description}} Bezahlung: {{task.paymentHourly}}€/h Benötigte MitarbeiterInnen: {{task.employeeCount}}
+            Aufgabe: {{task.description}} Bezahlung: {{task.paymentHourly}}€/h Benötigte
+            MitarbeiterInnen: {{task.employeeCount}}
             <button type="button" class="small" (click)="deleteTask(task)">&times;</button>
           </div>
         </ng-container>
       </div>
+      <hr>
       <alert></alert>
-      <div class="form-group form-check">
+      <div class="form-group form-check form">
         <button type="submit" style="float: right" class="btn btn-primary"
                 [disabled]="!eventCreationForm.valid || !addressCreationForm.valid ||
                  this.tasks.length == 0">Speichern

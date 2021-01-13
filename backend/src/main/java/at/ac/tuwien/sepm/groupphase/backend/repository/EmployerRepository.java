@@ -18,4 +18,6 @@ public interface EmployerRepository extends JpaRepository<Employer, Long> {
     Employer findByProfile_Email(String email);
 
     Employer findFirstByEvents(Event event);
+
+    void deleteByProfile_Email(String email);
 }

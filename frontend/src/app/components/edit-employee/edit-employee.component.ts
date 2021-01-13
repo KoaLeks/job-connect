@@ -30,7 +30,6 @@ export class EditEmployeeComponent implements OnInit {
   hasPicture = false;
   @ViewChild('pictureUpload') // needed for resetting fileUpload button
   inputImage: ElementRef; // needed for resetting fileUpload button
-  changePassword: boolean = false;
   timeCreationForm;
   times: TimeDto[] = []; // for database entries
   newTimes: TimeDto[] = []; // for newly added entries

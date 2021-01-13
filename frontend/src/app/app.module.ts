@@ -27,6 +27,7 @@ import {Alert, AlertModule} from './alert';
 import { ApplicationListComponent } from './components/application-list/application-list.component';
 import { EmployeeDetailsComponent } from './components/employee-details/employee-details.component';
 import { ContactComponent } from './components/contact/contact.component';
+import { DeleteProfileComponent } from './components/delete-profile/delete-profile.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { ContactComponent } from './components/contact/contact.component';
     ApplicationListComponent,
     EmployeeDetailsComponent,
     ContactComponent,
+    DeleteProfileComponent,
   ],
   imports: [
     BrowserModule,

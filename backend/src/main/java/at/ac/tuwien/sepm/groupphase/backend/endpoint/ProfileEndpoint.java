@@ -4,6 +4,7 @@ import antlr.Token;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.*;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.*;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
+import at.ac.tuwien.sepm.groupphase.backend.exception.UniqueConstraintException;
 import at.ac.tuwien.sepm.groupphase.backend.service.*;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
@@ -110,7 +111,7 @@ public class ProfileEndpoint {
     @CrossOrigin(origins = "http://localhost:4200")
     public EmployerDto getEmployer(@RequestHeader String authorization) {
         Employer employer = tokenService.getEmployerFromHeader(authorization);
-        LOGGER.info("GET /api/v1/profiles/employer/{}", employer.getProfile().getEmail() );
+        LOGGER.info("GET /api/v1/profiles/employer/{}", employer.getProfile().getEmail());
         return employerMapper.employerToEmployerDto(employer);
     }
 
@@ -121,7 +122,7 @@ public class ProfileEndpoint {
     public void updateEmployer(@Valid @RequestBody EditEmployerDto editEmployerDto, @RequestHeader String authorization) {
         LOGGER.info("PUT /api/v1/profiles/employer body: {}", editEmployerDto);
         Employer employer = tokenService.getEmployerFromHeader(authorization);
-        if(!employer.getId().equals(editEmployerDto.getId())) {
+        if (!employer.getId().equals(editEmployerDto.getId())) {
             throw new AuthorizationServiceException("Keine Berechtigung für die Bearbeitung des gewünschten Accounts");
         }
         employerService.updateEmployer(employerMapper.editEmployerDtoToEmployer(editEmployerDto));
@@ -154,5 +155,20 @@ public class ProfileEndpoint {
     public void contact(@Valid @RequestBody ContactMessageDto contactMessageDto) {
         LOGGER.info("POST api/v1/profiles/contact body: {}", contactMessageDto.toString().replace("\n", ""));
         this.mailService.sendContactMail(this.contactMessageMapper.contactMessageDtoToContactMessage(contactMessageDto));
+    }
+
+    @DeleteMapping("/employer")
+    @ApiOperation(value = "Delete an employer", authorizations = {@Authorization(value = "apiKey")})
+    @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
+    @CrossOrigin(origins = "http://localhost:4200")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteEmployer(@RequestHeader String authorization) {
+        String email = tokenService.getEmailFromHeader(authorization);
+        LOGGER.info("DELETE api/v1/profiles/employer {}", email);
+        if (employerService.hasActiveEvents(email)) {
+            throw new UniqueConstraintException("Profil kann nicht gelöscht werden. Es gibt noch laufende oder zukünftige Events.");
+        } else {
+            employerService.deleteByEmail(email);
+        }
     }
 }
