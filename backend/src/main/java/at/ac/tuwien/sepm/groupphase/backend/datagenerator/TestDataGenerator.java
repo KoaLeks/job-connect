@@ -2,7 +2,9 @@ package at.ac.tuwien.sepm.groupphase.backend.datagenerator;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.exception.AlreadyHandledException;
+import at.ac.tuwien.sepm.groupphase.backend.exception.NoAvailableSpacesException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.*;
+import at.ac.tuwien.sepm.groupphase.backend.service.EmployeeService;
 import at.ac.tuwien.sepm.groupphase.backend.service.Employee_TasksService;
 import at.ac.tuwien.sepm.groupphase.backend.util.Gender;
 import at.ac.tuwien.sepm.groupphase.backend.util.NotificationType;
@@ -210,6 +212,7 @@ public class TestDataGenerator {
     private final TimeRepository timeRepository;
     private final Employee_TasksService employee_tasksService;
     private final NotificationRepository notificationRepository;
+    private final EmployeeService employeeService;
 
 
     public TestDataGenerator(EmployeeRepository employeeRepository, EmployerRepository employerRepository,
@@ -217,7 +220,8 @@ public class TestDataGenerator {
                              EventRepository eventRepository, AddressRepository addressRepository,
                              TaskRepository taskRepository, InterestAreaRepository interestAreaRepository,
                              InterestRepository interestRepository, TimeRepository timeRepository,
-                             Employee_TasksService employee_tasksService, NotificationRepository notificationRepository) {
+                             Employee_TasksService employee_tasksService, NotificationRepository notificationRepository,
+                             EmployeeService employeeService) {
         this.employeeRepository = employeeRepository;
         this.employerRepository = employerRepository;
         this.profileRepository = profileRepository;
@@ -230,6 +234,7 @@ public class TestDataGenerator {
         this.timeRepository = timeRepository;
         this.employee_tasksService = employee_tasksService;
         this.notificationRepository = notificationRepository;
+        this.employeeService = employeeService;
     }
 
     public void generateEmployers() {
@@ -513,7 +518,7 @@ public class TestDataGenerator {
                 .withState(faker.address().state())
                 .withZip(Integer.parseInt(faker.address().zipCode()))
                 .build();
-            Set<Task> tasks = generateRandomTasks();
+            Set<Task> tasks = generateRandomTasks(3);
             Event event = Event.EventBuilder.aEvent()
                 .withTitle("Event " + i)
                 .withDescription("Description " + i)
@@ -529,45 +534,91 @@ public class TestDataGenerator {
                 taskRepository.save(task);
             }
         }
-        generateApplications();
+        generateApplications(350, 1f);
     }
 
     public LocalDateTime convertToLocalDateTime(Date dateToConvert) {
         return Instant.ofEpochMilli(dateToConvert.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 
-    public void generateApplications() {
+    public void updateApplications(Event event, Employee_Tasks employee_tasks, Employer employer, Long applicationId) {
+        Notification notification = new Notification();
+        notification.setEvent(event);
+        notification.setRecipient(employee_tasks.getEmployee().getProfile());
+        notification.setSender(employer.getProfile());
+        notification.setTask(employee_tasks.getTask());
+        notification.setSeen(false);
+        if(employee_tasks.getAccepted()){
+            notification.setMessage(String.format("Deine Bewerbung für das Event \"%s\" wurde akzeptiert", event.getTitle()));
+            notification.setType(NotificationType.EVENT_ACCEPTED.name());
+            employeeService.deleteTime(employee_tasks.getEmployee().getId(), employee_tasks.getTask().getId());
+        }else{
+            notification.setMessage(String.format("Deine Bewerbung für das Event \"%s\" wurde abgelehnt", event.getTitle()));
+            notification.setType(NotificationType.EVENT_DECLINED.name());
+        }
+
+        employee_tasksService.updateStatus(employee_tasks);
+        notificationRepository.deleteById(applicationId);
+        notificationRepository.save(notification);
+    }
+
+    public void generateApplications(int count, float ratio) {
         Random random = new Random();
         List<Task> tasks = taskRepository.findAll();
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < count; i++) {
             Optional<Employee> employee = employeeRepository.findById(41L + random.nextInt(30));
-            Employee randomEmployee = employee.get();
+            Employee randomEmployee = employee.isPresent() ? employee.get() : null;
             Task randomTask = tasks.get(random.nextInt(tasks.size() - 1));
             Event event = eventRepository.findFirstByTasks(randomTask);
             Employer employer = employerRepository.findFirstByEvents(event);
-            String message = "Sehr geehrte Damen und Herren,\n"+
-                "hiermit bewerbe ich mich für die Stelle \"" + randomTask.getDescription() +"\" für das Event " + event.getTitle() +
-                "Mit freundlichen Grüßen\n" +
+            String message = "Sehr geehrte Damen und Herren,\r\n"+
+                "hiermit bewerbe ich mich für die Stelle \"" + randomTask.getDescription() +"\" für das Event " + event.getTitle() + "\r\n" +
+                "Mit freundlichen Grüßen\r\n" +
                 randomEmployee.getProfile().getFirstName() + " " + randomEmployee.getProfile().getLastName();
-            try {
-                employee_tasksService.applyForTask(randomEmployee, randomTask);
-            } catch (AlreadyHandledException e) {
+
+            Notification existingApplication = notificationRepository.findFirstByEvent_IdAndSender_Id(event.getId(), randomEmployee.getId());
+            if(!(existingApplication == null || existingApplication.getType().equalsIgnoreCase(NotificationType.NOTIFICATION.name()))){
                 i--;
                 continue;
             }
+            try {
+                employee_tasksService.applyForTask(randomEmployee, randomTask);
+            } catch (AlreadyHandledException | NoAvailableSpacesException e) {
+                //i--;
+                continue;
+            }
+
+            Notification application = new Notification();
+            application.setEvent(event);
+            application.setMessage(message);
+            application.setRecipient(employer.getProfile());
+            application.setSender(randomEmployee.getProfile());
+            application.setSeen(false);
+            application.setTask(randomTask);
+            application.setType(NotificationType.APPLICATION.name());
+
             Notification notification = new Notification();
             notification.setEvent(event);
-            notification.setMessage(message);
+            notification.setMessage("Es gibt eine neue Bewerbung für das Event: " + event.getTitle());
             notification.setRecipient(employer.getProfile());
-            notification.setSender(randomEmployee.getProfile());
+            notification.setSender(null);
             notification.setSeen(false);
             notification.setTask(randomTask);
-            notification.setType(NotificationType.APPLICATION.name());
+            notification.setType(NotificationType.NOTIFICATION.name());
+
+            Long applicationId = notificationRepository.save(application).getId();
             notificationRepository.save(notification);
+            if (random.nextDouble() <= ratio) {
+                Employee_Tasks employee_tasks = new Employee_Tasks();
+                employee_tasks.setAccepted(random.nextBoolean());
+                employee_tasks.setEmployee(randomEmployee);
+                employee_tasks.setTask(randomTask);
+                updateApplications(event, employee_tasks, employer, applicationId);
+            }
         }
     }
 
-    public Set<Task> generateRandomTasks() {
+    public Set<Task> generateRandomTasks(int maxTasks) {
         Set<Task> tasks = new HashSet<>();
         List<InterestArea> areas = interestAreaRepository.findAll();
         Random random = new Random();
@@ -575,7 +626,7 @@ public class TestDataGenerator {
         try {
             RandomAccessFile randomAccessFile = new RandomAccessFile("src/main/resources/tasks.txt", "r");
             int length = (int)randomAccessFile.length();
-            for (int i = random.nextInt(3) + 1; i > 0; i--) {
+            for (int i = random.nextInt(maxTasks) + 1; i > 0; i--) {
                 int pos = random.nextInt(length);
                 randomAccessFile.seek(pos);
                 randomAccessFile.readLine();
@@ -588,8 +639,6 @@ public class TestDataGenerator {
                 task.setInterestArea(areas.get(random.nextInt(areas.size() - 1)));
                 tasks.add(task);
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

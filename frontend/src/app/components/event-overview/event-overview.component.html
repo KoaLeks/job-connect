@@ -56,7 +56,7 @@
   </ng-container>
   <ng-container *ngIf="!(events.length === 0) && (loggedInEmployee || notLoggedIn)">
     <ng-container *ngFor="let event of events">
-      <div class="list-group mt-3" [routerLink]="['/events', event.id, 'details']">
+      <div class="list-group mt-3 mb-3" [routerLink]="['/events', event.id, 'details']">
         <a class="list-group-item list-group-item-action flex-column align-items-start event-item">
           <div class="d-flex w-100 justify-content-between">
             <h4 class="mb-1">
