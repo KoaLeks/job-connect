@@ -4,6 +4,7 @@ import antlr.Token;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.*;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.*;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
+import at.ac.tuwien.sepm.groupphase.backend.exception.NotDeletedException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.UniqueConstraintException;
 import at.ac.tuwien.sepm.groupphase.backend.service.*;
 import io.swagger.annotations.ApiOperation;
@@ -152,6 +153,7 @@ public class ProfileEndpoint {
     @PostMapping(value = "/contact")
     @ApiOperation(value = "Contact an employee/r", authorizations = {@Authorization(value = "apiKey")})
     @CrossOrigin(origins = "http://localhost:4200")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void contact(@Valid @RequestBody ContactMessageDto contactMessageDto) {
         LOGGER.info("POST api/v1/profiles/contact body: {}", contactMessageDto.toString().replace("\n", ""));
         this.mailService.sendContactMail(this.contactMessageMapper.contactMessageDtoToContactMessage(contactMessageDto));
@@ -166,7 +168,7 @@ public class ProfileEndpoint {
         String email = tokenService.getEmailFromHeader(authorization);
         LOGGER.info("DELETE api/v1/profiles/employer {}", email);
         if (employerService.hasActiveEvents(email)) {
-            throw new UniqueConstraintException("Profil kann nicht gelöscht werden. Es gibt noch laufende oder zukünftige Events.");
+            throw new NotDeletedException("Profil kann nicht gelöscht werden. Es gibt noch laufende oder zukünftige Events.");
         } else {
             employerService.deleteByEmail(email);
         }

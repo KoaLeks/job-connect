@@ -42,7 +42,7 @@ export class AuthService {
   }
 
   getToken() {
-    if(localStorage.getItem('authToken') == null ){
+    if (localStorage.getItem('authToken') == null) {
       return '';
     }
     return localStorage.getItem('authToken');
@@ -64,6 +64,14 @@ export class AuthService {
       }
     }
     return 'UNDEFINED';
+  }
+
+  userIsEmployer(): boolean {
+    return this.getUserRole() === 'EMPLOYER';
+  }
+
+  userIsEmployee(): boolean {
+    return this.getUserRole() === 'EMPLOYEE';
   }
 
   /**

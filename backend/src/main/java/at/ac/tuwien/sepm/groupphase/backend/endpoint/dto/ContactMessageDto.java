@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Objects;
 
 public class ContactMessageDto {
@@ -9,9 +10,11 @@ public class ContactMessageDto {
     private Long to;
     @NotNull(message = "Betreff darf nicht leer sein")
     @NotBlank(message = "Betreff darf nicht leer sein")
+    @Pattern(regexp = "[a-zA-ZÖöÜüÄä]+([ ]|[a-zA-ZÖöÜüÄä]|[0-9]|[.]|[,]|[(]|[)]|[-]|[/]|[^'\\u0027])*", message = "Pattern muss eingehalten werden")
     private String subject;
     @NotNull(message = "Nachricht darf nicht leer sein")
     @NotBlank(message = "Nachricht darf nicht leer sein")
+    @Pattern(regexp = "[a-zA-ZÖöÜüÄä]+([ ]|[a-zA-ZÖöÜüÄä]|[0-9]|[.]|[,]|[(]|[)]|[-]|[/]|[^'\\u0027])*", message = "Pattern muss eingehalten werden")
     private String message;
 
     public Long getTo() {

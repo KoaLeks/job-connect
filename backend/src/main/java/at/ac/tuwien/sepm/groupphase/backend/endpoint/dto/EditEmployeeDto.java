@@ -21,6 +21,7 @@ public class EditEmployeeDto {
 
     private Set<Task> tasks;
 
+    @Valid
     private Set<InterestDto> interestDtos;
 
     @NotNull(message = "Geschlecht darf nicht NULL sein")

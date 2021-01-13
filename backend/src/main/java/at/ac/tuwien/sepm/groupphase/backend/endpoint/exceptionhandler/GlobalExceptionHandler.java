@@ -1,9 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.exceptionhandler;
 
-import at.ac.tuwien.sepm.groupphase.backend.exception.AlreadyHandledException;
-import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
-import at.ac.tuwien.sepm.groupphase.backend.exception.PasswordsNotMatchingException;
-import at.ac.tuwien.sepm.groupphase.backend.exception.UniqueConstraintException;
+import at.ac.tuwien.sepm.groupphase.backend.exception.*;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,6 +62,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handlePasswordsNotMatching(Exception ex, WebRequest request){
         LOGGER.warn(ex.getMessage());
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
+    }
+
+    @ExceptionHandler(value = {NotDeletedException.class})
+    protected ResponseEntity<Object> handleNotDeletedException(Exception ex, WebRequest request){
+        LOGGER.warn(ex.getMessage());
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 
     @ExceptionHandler(value = {AuthorizationServiceException.class})

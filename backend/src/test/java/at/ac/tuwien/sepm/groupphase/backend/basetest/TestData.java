@@ -77,6 +77,8 @@ public interface TestData {
     Long EVENT_ID = 1L;
     LocalDateTime START = LocalDateTime.of(2022, 11, 13, 12, 0, 0, 0);
     LocalDateTime END = LocalDateTime.of(2022, 11, 13, 18, 0, 0, 0);
+    LocalDateTime START_OVER = LocalDateTime.of(2020, 11, 13, 12, 0, 0, 0);
+    LocalDateTime END_OVER = LocalDateTime.of(2020, 11, 13, 18, 0, 0, 0);
     String TITLE_EVENT = "Flyer verteilen";
     String DESCRIPTION_EVENT = "Flyer verteilen fuer einen Smoothie Konzern am Karlsplatz";
     Employer EMPLOYER = null;
@@ -90,6 +92,8 @@ public interface TestData {
     String EDIT_EMPLOYER_BASE_URI = BASE_URI + "/profiles/employer";
     String GET_INTERESTS_BASE_URI = BASE_URI + "/interests";
     String EDIT_PASSWORD_BASE_URI = BASE_URI + "/profiles/updatePassword";
+    String CONTACT_BASE_URI = BASE_URI + "/profiles/contact";
+    String DELETE_EMPLOYER_BASE_URI = BASE_URI + "/profiles/employer";
 
     Long TIME_ID = 1L;
     LocalDateTime START_TIME = LocalDateTime.of(2022, 11, 13, 12, 0, 0, 0);

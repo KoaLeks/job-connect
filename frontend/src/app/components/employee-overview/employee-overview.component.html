@@ -4,19 +4,24 @@
     <tr>
       <th scope="col">Vorname</th>
       <th scope="col">Nachname</th>
+      <th scope="col">Interessensgebiete</th>
       <th scope="col">Profilbeschreibung</th>
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let employee of pageEmployees" (click)="router.navigate(['employee', employee.simpleProfileDto.id, 'details'])" class="table-data">
-      <td>{{ employee.simpleProfileDto.firstName}}</td>
-      <td>{{ employee.simpleProfileDto.lastName}}</td>
-      <td>{{ employee.simpleProfileDto.publicInfo}}</td>
+    <tr *ngFor="let employee of pageEmployees"
+        (click)="router.navigate(['employee', employee.simpleProfileDto.id, 'details'])" class="table-data">
+      <td class="table_name">{{ employee.simpleProfileDto.firstName}}</td>
+      <td class="table_name">{{ employee.simpleProfileDto.lastName}}</td>
+      <td class="table_interests">{{ getInterestAreas(employee).join(', ')}}</td>
+      <td
+        class="table_public">{{ employee.simpleProfileDto.publicInfo.length > 50 ? employee.simpleProfileDto.publicInfo.substr(0, 50) + '...' : employee.simpleProfileDto.publicInfo}}</td>
     </tr>
     </tbody>
   </table>
   <div class="d-flex justify-content-between p-2">
-    <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshEmployees()">
+    <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize"
+                    (pageChange)="refreshEmployees()">
     </ngb-pagination>
 
     <select class="custom-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="refreshEmployees()">

@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Address;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Employer;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Task;
+import org.springframework.security.core.parameters.P;
 
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
@@ -29,6 +30,7 @@ public class EventInquiryDto {
     @NotNull(message = "Beschreibung darf nicht NULL sein")
     @NotBlank(message = "Beschreibung darf nicht leer sein")
     @Size(max = 1000)
+    @Pattern(regexp = "[a-zA-ZÖöÜüÄä]+([ ]|[a-zA-ZÖöÜüÄä]|[0-9]|[.]|[,]|[(]|[)]|[-]|[/]|[^'\\u0027])*", message = "Pattern muss eingehalten werden")
     private String description;
 
     private EmployerDto employer;

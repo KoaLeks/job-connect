@@ -29,9 +29,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @ExtendWith(SpringExtension.class)
@@ -80,6 +78,12 @@ public class ProfileEndpointTest implements TestData {
 
     @Autowired
     private SecurityProperties securityProperties;
+
+    @Autowired
+    private EventRepository eventRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
 
     private Employee employee = Employee.EmployeeBuilder.aEmployee()
         .withProfile(Profile.ProfileBuilder.aProfile()
@@ -167,6 +171,24 @@ public class ProfileEndpointTest implements TestData {
         .withRef_Id(REF_ID)
         .build();
 
+    private final Address address = Address.AddressBuilder.aAddress()
+        .withCity(CITY)
+        .withState(STATE)
+        .withZip(ZIP)
+        .withAddressLine(ADDRESS_LINE)
+        .withAdditional(ADDITIONAL)
+        .build();
+
+    private Event event = Event.EventBuilder.aEvent()
+        .withStart(START_OVER)
+        .withEnd(END_OVER)
+        .withTitle(TITLE_EVENT)
+        .withDescription(DESCRIPTION_EVENT)
+        .withEmployer(employer)
+        .withAddress(address)
+        .withTask(TASKS_EVENT)
+        .build();
+
     @BeforeEach
     public void beforeEach() {
         timeRepository.deleteAll();
@@ -200,6 +222,15 @@ public class ProfileEndpointTest implements TestData {
             .withDescription(EMPLOYER_COMPANY_DESCRIPTION)
             .build();
         interestDto.setSimpleInterestAreaDto(simpleInterestAreaDto);
+        event = Event.EventBuilder.aEvent()
+            .withStart(START_OVER)
+            .withEnd(END_OVER)
+            .withTitle(TITLE_EVENT)
+            .withDescription(DESCRIPTION_EVENT)
+            .withEmployer(EMPLOYER)
+            .withAddress(address)
+            .withTask(TASKS_EVENT)
+            .build();
     }
 
     @Test
@@ -592,7 +623,6 @@ public class ProfileEndpointTest implements TestData {
         MockHttpServletResponse response = mvcResult.getResponse();
         assertEquals(HttpStatus.NO_CONTENT.value(), response.getStatus());
         assertEquals(timeRepository.count(), 1);
-        ;
     }
 
     @Test
@@ -652,5 +682,52 @@ public class ProfileEndpointTest implements TestData {
         assertEquals(timeRepository.count(), 0);
     }
 
+    @Test
+    public void contactEmployeeWithValidEmail_ShouldReturnNoContent() throws Exception {
+        Profile profile = this.employee.getProfile();
+        profile.setEmail("non@existant.address");
+        this.employee.setProfile(profile);
+        Long id = employeeRepository.save(this.employee).getId();
 
+        ContactMessageDto contactMessageDto = new ContactMessageDto();
+        contactMessageDto.setTo(id);
+        contactMessageDto.setSubject("testsubject");
+        contactMessageDto.setMessage("testmsg");
+
+        String contactBody = objectMapper.writeValueAsString(contactMessageDto);
+
+        MvcResult mvcResult = this.mockMvc.perform(post(CONTACT_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(contactBody))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpStatus.NO_CONTENT.value(), response.getStatus());
+    }
+
+    @Test
+    public void deleteEmployerWithEndedEvent_ShouldReturnNoContent() throws Exception {
+        Profile profile = profileRepository.save(employer.getProfile());
+        employer.setProfile(profile);
+        employer.setId(profile.getId());
+        Employer e = employerRepository.save(employer);
+
+        Address a = addressRepository.save(address);
+
+        event.setAddress(a);
+        event.setEmployer(e);
+
+        eventRepository.save(event);
+
+        MvcResult mvcResult = this.mockMvc.perform(delete(DELETE_EMPLOYER_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpStatus.NO_CONTENT.value(), response.getStatus());
+    }
 }

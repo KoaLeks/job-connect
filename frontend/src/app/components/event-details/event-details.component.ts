@@ -11,6 +11,7 @@ import {EmployeeService} from '../../services/employee.service';
 import {AuthService} from '../../services/auth.service';
 import {EditEmployee} from '../../dtos/edit-employee';
 import {empty} from 'rxjs';
+import {AlertService} from '../../alert';
 
 @Component({
   selector: 'app-event-details',
@@ -30,9 +31,9 @@ export class EventDetailsComponent implements OnInit {
   employee: any;
   applyTaskForm;
 
-  constructor(private authService: AuthService, private route: ActivatedRoute, private employerService: EmployerService,
+  constructor(public authService: AuthService, private route: ActivatedRoute, private employerService: EmployerService,
               private eventService: EventService, private formBuilder: FormBuilder, private applicationService: ApplicationService,
-              private employeeService: EmployeeService) {
+              private employeeService: EmployeeService, private router: Router, private alertService: AlertService) {
     this.route.params.subscribe(params => {
       this.id = params.id;
     });
@@ -121,7 +122,10 @@ export class EventDetailsComponent implements OnInit {
 
   deleteEvent() {
     this.eventService.deleteEvent(this.id).subscribe(
-      () => {},
+      () => {
+        this.router.navigate(['events']);
+        this.alertService.success('Event erfolgreich abgesagt', {autoClose: true});
+      },
       error => {
         this.error = true;
         this.errorMessage = error.error;
