@@ -39,9 +39,6 @@ export class EditEmployerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.authService.getUserRole() !== 'EMPLOYER') {
-      this.router.navigate(['edit-profile']);
-    }
     this.loadEmployerDetails();
   }
 
@@ -49,7 +46,7 @@ export class EditEmployerComponent implements OnInit {
    * Get profile details to edit them
    */
   loadEmployerDetails() {
-    this.employerService.getEmployerByEmail(this.authService.getTokenIdentifier()).subscribe(
+    this.employerService.getEmployerByEmail().subscribe(
       (profile: any) => {
         this.profile = profile;
         this.editForm.controls['email'].setValue(profile.profileDto.email);
@@ -155,6 +152,7 @@ export class EditEmployerComponent implements OnInit {
   }
 
   deletePicture() {
+    this.selectedPicture = null;
     this.hasPicture = false;
     this.picture = null;
   }

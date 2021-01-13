@@ -6,13 +6,6 @@
 
 
 <div class="jumbotron mt-5">
-  <a *ngIf="!authService.isLoggedIn()" class="btn btn-primary btn-lg" data-target="#loginModal" data-toggle="modal"
-     role="button">Login</a>
-  <div *ngIf="authService.isLoggedIn() && authService.getUserRole() === 'EMPLOYER'">
-    <button type="button" class="btn btn-primary btn-lg" routerLink="/create-event">
-      Neues Event
-    </button>
-  </div>
 </div>
 <app-login [isEmployee]="false"></app-login>
 <app-register></app-register>

@@ -23,6 +23,8 @@ public class SimpleNotificationDto {
     @NotNull
     private Long taskId;
 
+    private Boolean favorite = false;
+
     public String getMessage() {
         return message;
     }
@@ -87,6 +89,14 @@ public class SimpleNotificationDto {
         this.id = id;
     }
 
+    public Boolean getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(Boolean favorite) {
+        this.favorite = favorite;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -99,12 +109,13 @@ public class SimpleNotificationDto {
             Objects.equals(recipient, that.recipient) &&
             Objects.equals(sender, that.sender) &&
             Objects.equals(taskId, that.taskId) &&
+            Objects.equals(favorite, that.favorite) &&
             Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(message, type, seen, event, recipient, sender, taskId, id);
+        return Objects.hash(message, type, seen, event, recipient, sender, taskId, id, favorite);
     }
 
     @Override
@@ -118,6 +129,7 @@ public class SimpleNotificationDto {
             ", recipient=" + recipient +
             ", sender=" + sender +
             ", taskId=" + sender +
+            ", favorite=" + favorite +
             '}';
     }
 }

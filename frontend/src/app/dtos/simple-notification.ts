@@ -11,7 +11,8 @@ export class SimpleNotification {
     public event: Event,
     public taskId: number,
     public recipient: ProfileDto,
-    public sender: ProfileDto
+    public sender: ProfileDto,
+    public favorite: boolean
   ) {
   }
 }

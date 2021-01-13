@@ -25,4 +25,9 @@ export class NotificationService {
     console.log('Update notification: {}', notification);
     return this.httpClient.put<SimpleNotification>(this.notificationBaseUri + '/' + notification.id, notification);
   }
+
+  changeFavorite(notification: SimpleNotification) {
+    console.log('change notification.favorite: {}', notification.favorite);
+    return this.httpClient.put<SimpleNotification>(this.notificationBaseUri + '/changeFavorite', notification);
+  }
 }

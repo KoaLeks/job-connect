@@ -31,6 +31,9 @@ public class Notification {
     @OneToOne
     private Task task;
 
+    @Column
+    private Boolean favorite = false;
+
     public Long getId() {
         return id;
     }
@@ -95,6 +98,14 @@ public class Notification {
         this.task = task;
     }
 
+    public Boolean getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(Boolean favorite) {
+        this.favorite = favorite;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -106,12 +117,13 @@ public class Notification {
             Objects.equals(type, that.type) &&
             Objects.equals(event, that.event) &&
             Objects.equals(recipient, that.recipient) &&
+            Objects.equals(favorite, that.favorite) &&
             Objects.equals(sender, that.sender);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, message, type, seen, event, recipient, sender);
+        return Objects.hash(id, message, type, seen, event, recipient, sender, favorite);
     }
 
     @Override
@@ -124,6 +136,7 @@ public class Notification {
             ", event=" + event +
             ", recipient=" + recipient +
             ", sender=" + sender +
+            ", favorite=" + favorite +
             '}';
     }
 

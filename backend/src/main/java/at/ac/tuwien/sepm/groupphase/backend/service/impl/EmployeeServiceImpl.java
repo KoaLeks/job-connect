@@ -6,7 +6,6 @@ import at.ac.tuwien.sepm.groupphase.backend.exception.UniqueConstraintException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.*;
 import at.ac.tuwien.sepm.groupphase.backend.service.EmployeeService;
 import at.ac.tuwien.sepm.groupphase.backend.service.ProfileService;
-import org.apache.tomcat.jni.Local;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.lang.invoke.MethodHandles;
 import java.util.HashSet;
 import java.util.Optional;
-import java.util.LinkedList;
 import java.util.List;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -36,11 +32,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final InterestRepository interestRepository;
     private final TimeRepository timeRepository;
     private final Employee_TasksRepository employee_tasksRepository;
+    private final EventRepository eventRepository;
+    private final TaskRepository taskRepository;
 
     @Autowired
     public EmployeeServiceImpl(EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder,
                                ProfileService profileService, ProfileRepository profileRepository, InterestRepository interestRepository,
-                               TimeRepository timeRepository, Employee_TasksRepository employee_tasksRepository) {
+                               TimeRepository timeRepository, Employee_TasksRepository employee_tasksRepository, EventRepository eventRepository, TaskRepository taskRepository) {
         this.employeeRepository = employeeRepository;
         this.passwordEncoder = passwordEncoder;
         this.profileService = profileService;
@@ -48,6 +46,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.interestRepository = interestRepository;
         this.timeRepository = timeRepository;
         this.employee_tasksRepository = employee_tasksRepository;
+        this.eventRepository = eventRepository;
+        this.taskRepository = taskRepository;
     }
 
     @Override
@@ -81,7 +81,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee findOneById(Long id) {
         LOGGER.info("Find employee with id {}", id);
         Optional<Employee> employee = employeeRepository.findById(id);
-        if (employee == null)
+        if (employee.isEmpty())
             throw new NotFoundException(String.format("Could not find employee with id %s", id));
 
         Set<Interest> interests = interestRepository.findByEmployee_Id(employee.get().getProfile().getId());
@@ -151,26 +151,26 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         employeeRepository.save(employee);
 
-        if(employee.getInterests() != null && employee.getInterests().size() != 0) {
+        if (employee.getInterests() != null && employee.getInterests().size() != 0) {
             Set<Interest> interests = employee.getInterests();
             Set<Interest> savedInterests = interestRepository.findByEmployee_Id(employee.getProfile().getId());
             HashSet<Long> keptIds = new HashSet<>(interests.size());
             for (Interest i : interests) {
-                if(i.getId() == null) {
+                if (i.getId() == null) {
                     i.setEmployee(employee);
                     interestRepository.save(i);
                 } else {
-                 keptIds.add(i.getId());
+                    keptIds.add(i.getId());
                 }
             }
             for (Interest i : savedInterests) {
-                if(!keptIds.contains(i.getId())) {
+                if (!keptIds.contains(i.getId())) {
                     interestRepository.deleteById(i.getId());
                 }
             }
         } else {
             Set<Interest> deletableInterests = interestRepository.findByEmployee_Id(employee.getProfile().getId());
-            if(deletableInterests != null && deletableInterests.size() != 0) {
+            if (deletableInterests != null && deletableInterests.size() != 0) {
                 for (Interest i : deletableInterests) {
                     interestRepository.deleteById(i.getId());
                 }
@@ -185,5 +185,55 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<Employee> findAll() {
         LOGGER.info("Find all employees");
         return employeeRepository.findAllByOrderByProfile_FirstName();
+    }
+
+    @Override
+    public void deleteTime(Long employee_id, Long task_id) {
+        // look for event with task.id and its start and end times
+        Task task = taskRepository.getOne(task_id);
+        Event event = eventRepository.findFirstByTasks(task);
+        LocalDateTime event_start = event.getStart();
+        LocalDateTime event_end = event.getEnd();
+        // look for all times for this employee
+        Set<Time> times = timeRepository.findByEmployee_Profile_Id(employee_id);
+        // delete time and possibly create one or two new ones
+        for (Time time : times) {
+            if ((time.getStart().isEqual(event_start) || time.getStart().isBefore(event_start)) &&
+                (time.getEnd().isEqual(event_end) || time.getEnd().isAfter(event_end))) {
+
+                if (time.getStart().isBefore(event_start)) {
+                    Time newTime = new Time();
+                    newTime.setId(null);
+                    newTime.setStart(time.getStart());
+                    newTime.setEnd(event_start);
+                    newTime.setFinalEndDate(event_start);
+                    newTime.setRef_id(-1L);
+                    newTime.setEmployee(employeeRepository.getOne(employee_id));
+                    newTime.setVisible(true);
+                    timeRepository.save(newTime);
+                }
+
+                if (time.getEnd().isAfter(event_end)) {
+                    Time newTime = new Time();
+                    newTime.setId(null);
+                    newTime.setStart(event_end);
+                    newTime.setEnd(time.getEnd());
+                    newTime.setFinalEndDate(time.getEnd());
+                    newTime.setRef_id(-1L);
+                    newTime.setEmployee(employeeRepository.getOne(employee_id));
+                    newTime.setVisible(true);
+                    timeRepository.save(newTime);
+                }
+
+                if (time.getRef_id() != -1L && time.getVisible()) {
+                    // delete this time and update new one to show in frontend
+                    Time updateTime = timeRepository.findByStart(time.getStart().plusDays(7));
+                    updateTime.setFinalEndDate(time.getFinalEndDate());
+                    updateTime.setVisible(true);
+                    timeRepository.save(updateTime);
+                }
+                timeRepository.delete(time);
+            }
+        }
     }
 }

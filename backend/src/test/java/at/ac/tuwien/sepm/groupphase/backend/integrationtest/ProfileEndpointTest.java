@@ -450,7 +450,6 @@ public class ProfileEndpointTest implements TestData {
         employeeRepository.save(employee);
 
         EditPasswordDto editPasswordDto = new EditPasswordDto();
-        editPasswordDto.setEmail(EMPLOYEE_EMAIL);
         editPasswordDto.setCurrentPassword(EMPLOYEE_PASSWORD + "wrong");
         editPasswordDto.setNewPassword(EMPLOYEE_PASSWORD + "new");
 

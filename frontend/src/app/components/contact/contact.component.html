@@ -1,0 +1,57 @@
+<div class="modal fade" id="contactModal" data-backdrop="static" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" style="width:33%" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 *ngIf="isEmployee" class="modal-title">Nachricht an {{this.receiver.simpleProfileDto.firstName}} {{this.receiver.simpleProfileDto.lastName}}</h5>
+        <h5 *ngIf="!isEmployee" class="modal-title">Nachricht an {{this.receiver.companyName}}</h5>
+        <button type="button" (click)="resetForm()" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form class="form" [formGroup]="contactForm">
+          <div class="form-group">
+            <label for="subject">Betreff</label>
+            <input class="form-control" type="text" name="subject" formControlName="subject"
+                   id="subject" maxlength="100">
+
+            <div *ngIf="submitted && contactForm.controls.subject.errors"
+                 class="error">
+              <small class="form-text text-info" *ngIf="contactForm.controls.subject.errors.required">
+                Betreff darf nicht leer sein
+              </small>
+              <small class="form-text text-info" *ngIf="contactForm.controls.subject.errors.pattern">
+                Betreff muss ein gültiger Text sein
+              </small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="message">Text</label>
+            <textarea name="message" formControlName="message" class="form-control" id="message"
+                      maxlength="10000"></textarea>
+            <div *ngIf="submitted && contactForm.controls.message.errors"
+                 class="error">
+              <small class="form-text text-info" *ngIf="contactForm.controls.message.errors.required">
+                Nachricht darf nicht leer sein
+              </small>
+              <small class="form-text text-info" *ngIf="contactForm.controls.message.errors.pattern">
+                Nachricht muss ein gültiger Text sein
+              </small>
+            </div>
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button (click)="resetForm()" class="btn btn-outline-secondary" data-dismiss="modal">Abbrechen</button>
+        <button class="btn btn-primary float-right"
+                [attr.data-dismiss]="contactForm.valid ? 'modal' : null"
+                (click)="sendMessage()">Senden
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

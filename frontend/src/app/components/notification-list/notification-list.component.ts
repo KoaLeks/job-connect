@@ -5,6 +5,7 @@ import {ApplicationStatus} from '../../dtos/application-status';
 import {ApplicationService} from '../../services/application.service';
 import {NotificationService} from '../../services/notification.service';
 import {UpdateHeaderService} from '../../services/update-header.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-notification-list',
@@ -16,22 +17,10 @@ export class NotificationListComponent implements OnInit {
   @Input() notifications: SimpleNotification[];
 
   constructor(private authService: AuthService, private applicationService: ApplicationService,
-              private notificationService: NotificationService, private updateHeaderService: UpdateHeaderService) { }
+              private notificationService: NotificationService, private updateHeaderService: UpdateHeaderService,
+              public router: Router) { }
 
   ngOnInit(): void {
-  }
-
-  accept(notification: SimpleNotification) {
-    const acceptApplication = new ApplicationStatus(notification.taskId, notification.sender.id, notification.id, true);
-    this.applicationService.changeApplicationStatus(acceptApplication).subscribe();
-    this.removeNotification(notification.id);
-  }
-
-  decline(notification: SimpleNotification) {
-    console.log(JSON.stringify(notification));
-    const declineApplication = new ApplicationStatus(notification.taskId, notification.sender.id, notification.id, false);
-    this.applicationService.changeApplicationStatus(declineApplication).subscribe();
-    this.removeNotification(notification.id);
   }
 
   deleteNotification(id: number) {
@@ -48,7 +37,6 @@ export class NotificationListComponent implements OnInit {
     if (!notification.seen) {
       notification.seen = true;
       this.updateHeaderService.emitUpdatedNotification(notification);
-      console.log('notification');
     }
   }
 
@@ -56,4 +44,9 @@ export class NotificationListComponent implements OnInit {
     return notification.id;
   }
 
+  navigateToNewPage(eventId: number) {
+    this.router.navigateByUrl('', { skipLocationChange: true }).then(() => {
+      this.router.navigate(['/events', eventId, 'details']);
+    });
+  }
 }

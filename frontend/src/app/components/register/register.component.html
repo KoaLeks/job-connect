@@ -23,13 +23,13 @@
             <div class="form-group input-group">
               Ich bin eine/ein:
               <div class="form-check form-check-inline ml-2">
-                <input class="form-check-input" id="radioPerson" type="radio" name="exampleRadios" (click)="setPrivatePerson(true)" checked>
+                <input class="form-check-input" id="radioPerson" type="radio" name="register" (click)="setPrivatePerson(true)" checked>
                 <label class="form-check-label" for="radioPerson">
                   Privatperson
                 </label>
               </div>
               <div class="form-check form-check-inline" >
-                <input class="form-check-input" id="radioCompany" type="radio" name="exampleRadios" (click)="setPrivatePerson(false); resetCompanyName()" >
+                <input class="form-check-input" id="radioCompany" type="radio" name="register" (click)="setPrivatePerson(false); resetCompanyName()" >
                 <label class="form-check-label" for="radioCompany">
                   Unternehmen
                 </label>
@@ -107,10 +107,10 @@
                  </span>
             </div>
             <!--            First Name -->
-            <input class="form-control" type="text" name="firstName" formControlName="firstName" id="firstName"
+            <input class="form-control" type="text" name="firstName" formControlName="firstName"
                    placeholder="Vorname">
             <!--            Last Name -->
-            <input class="form-control" type="text" name="lastName" formControlName="lastName" id="lastName"
+            <input class="form-control" type="text" name="lastName" formControlName="lastName"
                    placeholder="Nachname">
           </div>
 
@@ -184,7 +184,7 @@
                </span>
             </div>
             <!--            Email -->
-            <input type="email" name="username" formControlName="email" class="form-control" id="inputEmail"
+            <input type="email" name="username" formControlName="email" class="form-control"
                    aria-describedby="usernameHelp" placeholder="E-Mail">
           </div>
 
@@ -219,7 +219,7 @@
             </div>
 
             <!--            Password -->
-            <input type="password" name="password" formControlName="password" class="form-control" id="password"
+            <input type="password" name="password" formControlName="password" class="form-control"
                    placeholder="Passwort">
           </div>
 
@@ -255,7 +255,7 @@
             </div>
 
             <!--            Password Confirm -->
-            <input type="password" name="confirmPassword" formControlName="confirmPassword" class="form-control" id="confirmPassword"
+            <input type="password" name="confirmPassword" formControlName="confirmPassword" class="form-control"
                    placeholder="Passwort bestätigen">
           </div>
 
@@ -264,7 +264,7 @@
 
       <div class="modal-footer">
         <p class="text-left text-light mr-auto" style="transform: rotate(0);">
-          <a class="stretched-link" data-target="#loginModal" data-toggle="modal" data-dismiss="modal">
+          <a class="stretched-link" data-target="#loginModal" (click)="clearForm()" data-toggle="modal" data-dismiss="modal">
             Bereits Mitglied? Zur Anmeldung
           </a>
         </p>

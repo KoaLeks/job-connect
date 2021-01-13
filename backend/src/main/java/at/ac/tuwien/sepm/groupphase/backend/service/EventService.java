@@ -34,4 +34,9 @@ public interface EventService {
      * @return event with given task
      */
     Event findByTask(Task task);
+
+    /**
+     * Delete event by id
+     */
+    void deleteEventById(Long id);
 }

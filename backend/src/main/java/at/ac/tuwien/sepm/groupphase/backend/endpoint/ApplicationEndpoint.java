@@ -2,8 +2,11 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.ApplicationDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.ApplicationStatusDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleNotificationDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.ApplicationStatusMapper;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.NotificationMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
+import at.ac.tuwien.sepm.groupphase.backend.exception.AlreadyHandledException;
 import at.ac.tuwien.sepm.groupphase.backend.service.*;
 import at.ac.tuwien.sepm.groupphase.backend.util.NotificationType;
 import io.swagger.annotations.ApiOperation;
@@ -38,11 +41,17 @@ public class ApplicationEndpoint {
     private final NotificationService notificationService;
     private final EmployerService employerService;
     private final EmployeeService employeeService;
+    private final NotificationMapper notificationMapper;
+
 
     private final TokenService tokenService;
 
     @Autowired
-    public ApplicationEndpoint(ApplicationStatusMapper applicationStatusMapper, EventService eventService, Employee_TasksService employee_tasksService, TaskService taskService, NotificationService notificationService, EmployerService employerService, EmployeeService employeeService, TokenService tokenService) {
+    public ApplicationEndpoint(ApplicationStatusMapper applicationStatusMapper, EventService eventService,
+                               Employee_TasksService employee_tasksService, TaskService taskService,
+                               NotificationService notificationService, EmployerService employerService,
+                               EmployeeService employeeService, TokenService tokenService,
+                               NotificationMapper notificationMapper) {
         this.applicationStatusMapper = applicationStatusMapper;
         this.eventService = eventService;
         this.employee_tasksService = employee_tasksService;
@@ -51,6 +60,7 @@ public class ApplicationEndpoint {
         this.employerService = employerService;
         this.employeeService = employeeService;
         this.tokenService = tokenService;
+        this.notificationMapper = notificationMapper;
     }
 
 
@@ -67,15 +77,31 @@ public class ApplicationEndpoint {
         Event event = eventService.findByTask(task);
         Employer employer = employerService.findByEvent(event);
 
+        Notification existingApplication = notificationService.findFirstByEvent_IdAndSender_Id(event.getId(), employee.getId());
+        if(!(existingApplication == null || existingApplication.getType().equalsIgnoreCase(NotificationType.NOTIFICATION.name()))){
+            throw new AlreadyHandledException(String.format("Sie haben sich bereits für den Task \"%s\" für dieses Event beworben.", existingApplication.getTask().getDescription()));
+        }
+
         employee_tasksService.applyForTask(employee, task);
+        Notification application = new Notification();
+        application.setEvent(event);
+        application.setMessage(applicationDto.getMessage());
+        application.setRecipient(employer.getProfile());
+        application.setSender(employee.getProfile());
+        application.setSeen(false);
+        application.setTask(task);
+        application.setType(NotificationType.APPLICATION.name());
+
         Notification notification = new Notification();
         notification.setEvent(event);
-        notification.setMessage(applicationDto.getMessage());
+        notification.setMessage("Es gibt eine neue Bewerbung für das Event: " + event.getTitle());
         notification.setRecipient(employer.getProfile());
-        notification.setSender(employee.getProfile());
+        notification.setSender(null);
         notification.setSeen(false);
         notification.setTask(task);
-        notification.setType(NotificationType.APPLICATION.name());
+        notification.setType(NotificationType.NOTIFICATION.name());
+
+        notificationService.createNotification(application);
         notificationService.createNotification(notification);
     }
 
@@ -106,14 +132,28 @@ public class ApplicationEndpoint {
         notification.setTask(employee_tasks.getTask());
         notification.setSeen(false);
         if(employee_tasks.getAccepted()){
-            notification.setMessage(String.format("Your application to the Event \"%s\" has been accepted", event.getTitle()));
+            notification.setMessage(String.format("Deine Bewerbung für das Event \"%s\" wurde akzeptiert", event.getTitle()));
             notification.setType(NotificationType.EVENT_ACCEPTED.name());
+            employeeService.deleteTime(applicationStatusDto.getEmployee(), applicationStatusDto.getTask());  // delete time
         }else{
-            notification.setMessage(String.format("Your application to the Event \"%s\" has been declined", event.getTitle()));
+            notification.setMessage(String.format("Deine Bewerbung für das Event \"%s\" wurde abgelehnt", event.getTitle()));
             notification.setType(NotificationType.EVENT_DECLINED.name());
         }
         employee_tasksService.updateStatus(employee_tasks);
         notificationService.deleteNotification(applicationStatusDto.getNotification(), authorization);
         notificationService.createNotification(notification);
     }
+
+    @GetMapping(value = "/events/{id}")
+    @ApiOperation(value = "Get all applications for an Event", authorizations = {@Authorization(value = "apiKey")})
+    @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
+    @ResponseStatus(HttpStatus.OK)
+    @CrossOrigin(origins = "http://localhost:4200")
+    public Set<SimpleNotificationDto> getAllApplicationsForEvent(@PathVariable Long id) {
+        LOGGER.info("Get /api/v1/applications/events/{}", id);
+        return notificationMapper.notificationsToSimpleNotificationsDtos(notificationService.findAllApplicationsByEvent_Id(id));
+    }
+
+    // TODO
+    // add PUT method: change favorite boolean of this application
 }

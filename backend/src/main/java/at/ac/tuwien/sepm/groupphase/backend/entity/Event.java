@@ -23,9 +23,9 @@ public class Event {
     private String description;
     @ManyToOne
     private Employer employer;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private Address address;
-    @OneToMany(mappedBy = "event")
+    @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
     private Set<Task> tasks;
 
     public String getTitle() {

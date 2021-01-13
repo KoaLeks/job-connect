@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
-import {Message} from '../dtos/message';
 import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {Globals} from '../global/globals';
 import {Employee} from '../dtos/employee';
 import {Employer} from '../dtos/employer';
 import {EditPassword} from '../dtos/edit-password';
+import {ContactMessage} from '../dtos/contact-message';
 
 @Injectable({
   providedIn: 'root'
@@ -32,9 +32,22 @@ export class ProfileService {
     }
   }
 
+  /**
+   * Updates a users password
+   * @param passwords contains the email address, an old and a new password
+   */
   updatePassword(passwords: EditPassword): Observable<Number> {
     console.log('Update user password');
     console.log(passwords);
     return this.httpClient.put<Number>(this.profileBaseUri + '/updatePassword', passwords);
+  }
+
+  /**
+   * Tells the backend to send a specified email to the employee/r
+   * @param contactMessage containing id of the receiver profile, subject and message of the mail
+   */
+  contact(contactMessage: ContactMessage) {
+    console.log('Send contact message to employee');
+    return this.httpClient.post<ContactMessage>(this.profileBaseUri + '/contact', contactMessage);
   }
 }

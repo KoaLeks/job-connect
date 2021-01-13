@@ -1,4 +1,7 @@
 <ng-container *ngIf="eventDetails">
+
+
+
     <div class="card mt-5">
       <div class="card-header">
         <div class="container">
@@ -7,7 +10,7 @@
               {{eventDetails.title}}
             </div>
             <div class="col-md-3 mt-3 text-right h5">
-              Beginn: {{eventDetails.start.slice(0, 10) |  date:'dd-MM-yyyy'}}<br>{{eventDetails.start.slice(11, 16) }} Uhr
+              Beginn: {{eventDetails.start.slice(0, 10) |  date:'dd.MM.yyyy'}}<br>{{eventDetails.start.slice(11, 16) }} Uhr
             </div>
           </div>
           <div class="row justify-content-between">
@@ -15,7 +18,7 @@
               {{eventDetails.address.addressLine}}, {{eventDetails.address.zip}} {{eventDetails.address.city}}
             </div>
             <div class="col-md-3 text-right h5">
-              Ende: {{eventDetails.end.slice(0, 10) |  date:'dd-MM-yyyy'}}<br>{{eventDetails.end.slice(11, 16)}} Uhr
+              Ende: {{eventDetails.end.slice(0, 10) |  date:'dd.MM.yyyy'}}<br>{{eventDetails.end.slice(11, 16)}} Uhr
             </div>
           </div>
         </div>
@@ -33,16 +36,24 @@
             <table class="table table-sm">
               <thead class="thead-dark">
               <tr class="d-flex">
-                <th class="col-7">Beschreibung</th>
+                <th class="col-5">Beschreibung</th>
                 <th class="col-3 text-center">Teilnehmer</th>
                 <th class="col-2 text-center">€/h</th>
+                <th *ngIf="this.authService.getToken() !== '' && authService.getTokenIdentifier() === eventDetails.employer.simpleProfileDto.email">Arbeitnehmer</th>
               </tr>
               </thead>
               <ng-container *ngFor="let task of eventDetails.tasks">
                 <tr class="d-flex">
-                  <td class="col-7 text-justify">{{task.description}}</td>
+                  <td class="col-5 text-justify">{{task.description}}</td>
                   <td class="col-3 text-center">{{getNumberOfParticipants(task)}}/{{task.employeeCount}}</td>
                   <td class="col-2 text-center">{{task.paymentHourly}}</td>
+                  <td *ngIf="this.authService.getToken() !== '' && authService.getTokenIdentifier() === eventDetails.employer.simpleProfileDto.email" class="col-2 text-right">
+                    <ng-container *ngFor="let acceptedEmployee of task.employees">
+                      <a *ngIf="acceptedEmployee.accepted" [routerLink]="['/employee', acceptedEmployee.employee.simpleProfileDto.id, 'details']">
+                        {{acceptedEmployee.employee.simpleProfileDto.firstName}} {{acceptedEmployee.employee.simpleProfileDto.lastName}}</a>
+                    </ng-container>
+                  </td>
+
                 </tr>
               </ng-container>
             </table>
@@ -64,7 +75,8 @@
       </div>
         <div class="row justify-content-center mt-3" style="border-top: 1px solid #ccc">
           <ng-container *ngFor="let task of eventDetails.tasks">
-            <h5> <span class="badge badge-pill badge-info mt-3 ml-1 mr-1" style="border-radius: 30px">{{task.interestArea.area}}</span></h5>
+            <h5> <span class="badge badge-pill badge-info mt-3 ml-1 mr-1" style="border-radius: 30px"
+                       *ngIf="task.interestArea !== null" >{{task.interestArea.area}}</span></h5>
           </ng-container>
         </div>
       </div>
@@ -73,9 +85,40 @@
                 data-target="#Apply-Task" [disabled]="!loggedInEmployee">
           Bewirb dich jetzt!
         </button>
+        <button type="button" style="float: right" *ngIf="this.authService.getToken() !== '' && eventDetails != undefined && authService.getUserRole() === 'EMPLOYER' &&
+         authService.getTokenIdentifier() === eventDetails.employer.simpleProfileDto.email"
+                class="btn btn-outline-danger" data-toggle="modal" data-target="#Delete-Event">
+          Event absagen!
+        </button>
       </div>
     </div>
 </ng-container>
+
+<!-- Modal Delete Event-->
+<div class="modal fade" id="Delete-Event" tabindex="-1" role="dialog" aria-labelledby="deleteEventLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteEvent">Event absagen</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Wenn Sie das Event absagen, werden das Event und die dazugehörigen Daten gelöscht. Weiters werden alle akzeptierten
+        Bewerber per Mail darüber informiert, dass dieses Event nicht stattfindet.<br><br>
+        <b>Sind Sie sicher, dass Sie dieses Event absagen und entfernen möchten?</b>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" routerLink=""
+                (click)="deleteEvent()">Absagen!</button>
+        <button type="button" class="btn btn-dark" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">Abbrechen</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Modal Apply for Task-->
 <div class="modal fade" id="Apply-Task" tabindex="-1" role="dialog" aria-labelledby="addTaskLabel" aria-hidden="true">
@@ -95,7 +138,9 @@
                    (change)='createApplication()'>
             <option [value]=null>kein Stelle ausgewählt</option>
             <ng-container *ngFor="let task of this.eventDetails.tasks">
-              <option *ngIf="getNumberOfParticipants(task) < task.employeeCount" [value]="task.id">Stelle: {{task.interestArea.area}} -
+              <option *ngIf="getNumberOfParticipants(task) < task.employeeCount && task.interestArea !== null" [value]="task.id">Stelle: {{task.interestArea.area}} -
+                Beschreibung: {{task.description}}</option>
+              <option *ngIf="getNumberOfParticipants(task) < task.employeeCount && task.interestArea === null" [value]="task.id">Stelle: keine Angaben -
                 Beschreibung: {{task.description}}</option>
             </ng-container>
           </select>
@@ -116,3 +161,10 @@
     </div>
   </div>
 </div>
+
+<!-- Application list -->
+<ng-container *ngIf="eventDetails != undefined"> <!-- added this, because it was throwing "TypeError: cannot read property 'employer' of undefined -->
+<app-application-list *ngIf="this.authService.getToken() !== '' && authService.getUserRole() === 'EMPLOYER' &&
+  authService.getTokenIdentifier() === eventDetails.employer.simpleProfileDto.email"
+                      [eventId]="id" [tasks]="eventDetails.tasks"></app-application-list>
+</ng-container>

@@ -45,7 +45,16 @@ export class EventService {
   /**
    * Gets all events from the backend
    */
-  getEvents(): Observable<Event[]> {
-    return this.httpClient.get<Event[]>(this.eventBaseUri);
+  getEvents(): Observable<DetailedEvent[]> {
+    return this.httpClient.get<DetailedEvent[]>(this.eventBaseUri);
+  }
+
+  /**
+   * Deletes Event and related data
+   * @param id of Event to delete
+   */
+  deleteEvent(id: number) {
+   console.log('Delete event with id: ' + id);
+   return this.httpClient.delete(this.eventBaseUri + '/' + id);
   }
 }

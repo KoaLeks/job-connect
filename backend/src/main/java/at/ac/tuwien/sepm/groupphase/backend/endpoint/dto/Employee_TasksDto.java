@@ -2,7 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
 public class Employee_TasksDto {
     Long id;
-    Long employeeId;
+    SimpleEmployeeDto employee;
     Long taskId;
     Boolean accepted;
 
@@ -14,12 +14,12 @@ public class Employee_TasksDto {
         this.id = id;
     }
 
-    public Long getEmployeeId() {
-        return employeeId;
+    public SimpleEmployeeDto getEmployee() {
+        return employee;
     }
 
-    public void setEmployeeId(Long employeeId) {
-        this.employeeId = employeeId;
+    public void setEmployee(SimpleEmployeeDto employee) {
+        this.employee = employee;
     }
 
     public Long getTaskId() {
@@ -40,7 +40,7 @@ public class Employee_TasksDto {
 
     public static final class Employee_TasksDtoBuilder {
         Long id;
-        Long employeeId;
+        SimpleEmployeeDto employee;
         Long taskId;
         Boolean accept;
 
@@ -56,8 +56,8 @@ public class Employee_TasksDto {
             return this;
         }
 
-        public Employee_TasksDtoBuilder withEmployee(Long employee) {
-            this.employeeId = employee;
+        public Employee_TasksDtoBuilder withEmployee(SimpleEmployeeDto employee) {
+            this.employee = employee;
             return this;
         }
 
@@ -74,7 +74,7 @@ public class Employee_TasksDto {
         public Employee_TasksDto build() {
             Employee_TasksDto employee_TasksDto = new Employee_TasksDto();
             employee_TasksDto.setId(id);
-            employee_TasksDto.setEmployeeId(employeeId);
+            employee_TasksDto.setEmployee(employee);
             employee_TasksDto.setTaskId(taskId);
             employee_TasksDto.setAccepted(accept);
             return employee_TasksDto;

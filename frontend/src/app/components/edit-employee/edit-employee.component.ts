@@ -104,17 +104,15 @@ export class EditEmployeeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.authService.getUserRole() !== 'EMPLOYEE') {
-      this.router.navigate(['edit-profile']);
-    }
     this.loadEmployeeDetails(); // loads the employee
+    this.interestForm.reset();
   }
 
   /**
    * Get profile details to edit them
    */
   loadEmployeeDetails() {
-    this.employeeService.getEmployeeByEmail(this.authService.getTokenIdentifier()).subscribe(
+    this.employeeService.getEmployeeByEmail().subscribe(
       (employee: EditEmployee) => {
         this.employee = employee;
         this.editForm.controls['email'].setValue(employee.profileDto.email);

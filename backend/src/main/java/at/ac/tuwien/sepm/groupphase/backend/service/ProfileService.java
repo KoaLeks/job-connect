@@ -30,6 +30,14 @@ public interface ProfileService extends UserDetailsService {
      */
     Profile findProfileByEmail(String email);
 
+    /**
+     * Find a profile by id
+     *
+     * @param id to look for
+     * @return the profile
+     */
+    Profile findOneById(Long id);
+
     Long createProfile(Profile profile);
 
     /**

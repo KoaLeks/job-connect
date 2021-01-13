@@ -32,7 +32,7 @@ export class EditPasswordComponent implements OnInit {
   updatePassword() {
     this.submittedPasswordForm = true;
     if (this.passwordUpdateForm.valid) {
-      const editPassword: EditPassword = new EditPassword(this.authService.getTokenIdentifier(),
+      const editPassword: EditPassword = new EditPassword(
         this.passwordUpdateForm.controls.currentPassword.value, this.passwordUpdateForm.controls.newPassword.value);
       console.log(editPassword);
       this.profileService.updatePassword(editPassword).subscribe(

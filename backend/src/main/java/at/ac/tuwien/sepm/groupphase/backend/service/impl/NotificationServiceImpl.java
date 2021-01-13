@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.groupphase.backend.repository.NotificationRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.NotificationService;
 import at.ac.tuwien.sepm.groupphase.backend.service.ProfileService;
 import at.ac.tuwien.sepm.groupphase.backend.service.TokenService;
+import at.ac.tuwien.sepm.groupphase.backend.util.NotificationType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,13 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public Set<Notification> findAllByRecipient_Id(Long id) {
         LOGGER.debug("Get all notifications from Profile with id: {}", id);
-        return notificationRepository.findAllByRecipient_Id(id);
+        return notificationRepository.findAllByRecipient_IdAndTypeNot(id, NotificationType.APPLICATION.name());
+    }
+
+    @Override
+    public Set<Notification> findAllApplicationsByEvent_Id(Long id) {
+        LOGGER.debug("Get all applications from Profile with id: {}", id);
+        return notificationRepository.findAllByEvent_IdAndType(id, NotificationType.APPLICATION.name());
     }
 
     @Override
@@ -62,5 +69,18 @@ public class NotificationServiceImpl implements NotificationService {
             throw new AuthorizationServiceException(String.format("No Authorization to delete the Notification: %s", id));
         }
         notificationRepository.deleteById(id);
+    }
+
+    @Override
+    public Notification changeFavorite(Notification notification) {
+        LOGGER.debug("Change favorite of notification with id: {} from {} to {}", notification.getId(), notification.getFavorite(), !notification.getFavorite());
+        notification.setFavorite(!notification.getFavorite());
+        return notificationRepository.save(notification);
+    }
+
+    @Override
+    public Notification findFirstByEvent_IdAndSender_Id(Long eventId, Long employeeId) {
+        LOGGER.debug("Find application from Employee {} with Event id {} ", employeeId, eventId);
+        return notificationRepository.findFirstByEvent_IdAndSender_Id(eventId, employeeId);
     }
 }

@@ -1,9 +1,11 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
+import at.ac.tuwien.sepm.groupphase.backend.entity.ContactMessage;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Employee;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 
 import java.util.List;
+import java.util.Set;
 
 public interface MailService {
 
@@ -29,4 +31,19 @@ public interface MailService {
      * @param event event that was created
      */
     void sendNotificationToAvailableEmployees(Event event);
+
+    /**
+     * Sends an e-mail to all the employees informing them, that the event has been canceled
+     *
+     * @param event event that has been canceled
+     * @param employees that need to be informed
+     */
+    void sendMailAboutCanceledEvent(Event event, Set<Employee> employees);
+
+    /**
+     * Sends an e-mail to the specified employee/r
+     *
+     * @param contactMessage contains id of the receiver, subject and message of mail
+     */
+    void sendContactMail(ContactMessage contactMessage);
 }

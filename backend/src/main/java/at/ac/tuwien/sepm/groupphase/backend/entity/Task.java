@@ -17,7 +17,7 @@ public class Task {
     private Double paymentHourly;
     @ManyToOne
     private Event event;
-    @OneToMany(mappedBy = "task")
+    @OneToMany(mappedBy = "task", cascade = CascadeType.REMOVE)
     private Set<Employee_Tasks> employees;
     @ManyToOne
     private InterestArea interestArea;

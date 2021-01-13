@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
+import at.ac.tuwien.sepm.groupphase.backend.entity.Employer;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Profile;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.PasswordsNotMatchingException;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProfileDetailsService implements ProfileService {
@@ -57,6 +59,14 @@ public class ProfileDetailsService implements ProfileService {
         Profile profile = profileRepository.findProfileByEmail(email);
         if (profile != null) return profile;
         throw new NotFoundException(String.format("Could not find the user with the email address %s", email));
+    }
+
+    @Override
+    public Profile findOneById(Long id) {
+        LOGGER.info("Find employer with id {}", id);
+        Optional<Profile> profile = profileRepository.findById(id);
+        if (profile.isPresent()) return profile.get();
+        else throw new NotFoundException(String.format("Could not find profile with id %s", id));
     }
 
     @Override

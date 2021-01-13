@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AuthorizationServiceException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,11 +61,25 @@ public class NotificationEndpoint {
     }
 
     @PutMapping(value = "/{id}")
-    @ApiOperation(value = "Get all Notifications of jwt sub Profile", authorizations = {@Authorization(value = "apiKey")})
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation(value = "Update Notification of jwt sub Profile", authorizations = {@Authorization(value = "apiKey")})
+    @ResponseStatus(HttpStatus.OK)
     @CrossOrigin(origins = "http://localhost:4200")
     public void updateNotification(@RequestBody SimpleNotificationDto simpleNotificationDto, @RequestHeader String authorization){
         LOGGER.info("Update /api/v1/notifications/{}", simpleNotificationDto.getId());
+        Profile profile = tokenService.getProfileFromHeader(authorization);
+        if((simpleNotificationDto.getSender() != null && !profile.getId().equals(simpleNotificationDto.getSender().getId())) && (simpleNotificationDto.getRecipient() != null && !profile.getId().equals(simpleNotificationDto.getRecipient().getId()))){
+            throw new AuthorizationServiceException("Keine Berechtigung um die Nachricht zu verändern!");
+        }
         notificationService.updateNotification(notificationMapper.simpleNotificationDtoToNotification(simpleNotificationDto));
+    }
+
+    @PutMapping(value = "/changeFavorite")
+    @ApiOperation(value = "Change favorite of application", authorizations = {@Authorization(value = "apiKey")})
+    @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
+    @ResponseStatus(HttpStatus.OK)
+    @CrossOrigin(origins = "http://localhost:4200")
+    public SimpleNotificationDto changeFavoriteForApplication(@RequestBody SimpleNotificationDto simpleNotificationDto) {
+        LOGGER.info("Update /api/v1/notifications/changeFavorite/{}", simpleNotificationDto.getId());
+        return notificationMapper.notificationToSimpleNotificationDto(notificationService.changeFavorite(notificationMapper.simpleNotificationDtoToNotification(simpleNotificationDto)));
     }
 }

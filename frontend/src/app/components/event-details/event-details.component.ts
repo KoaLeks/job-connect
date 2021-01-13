@@ -1,11 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EventService} from '../../services/event.service';
-import {Event} from '../../dtos/event';
-import {Employer} from '../../dtos/employer';
-import {Address} from '../../dtos/address';
 import {Task} from '../../dtos/task';
-import {InterestArea} from '../../dtos/interestArea';
 import {EmployerService} from '../../services/employer.service';
 import {DetailedEvent} from '../../dtos/detailed-event';
 import {FormBuilder, Validators} from '@angular/forms';
@@ -13,9 +9,8 @@ import {Application} from '../../dtos/application';
 import {ApplicationService} from '../../services/application.service';
 import {EmployeeService} from '../../services/employee.service';
 import {AuthService} from '../../services/auth.service';
-import {Employee} from '../../dtos/employee';
-import { ProfileDto} from '../../dtos/profile-dto';
 import {EditEmployee} from '../../dtos/edit-employee';
+import {empty} from 'rxjs';
 
 @Component({
   selector: 'app-event-details',
@@ -31,7 +26,7 @@ export class EventDetailsComponent implements OnInit {
   hasPicture = false;
   id: number;
   eventDetails: DetailedEvent;
-  loggedInEmployee: boolean;
+  loggedInEmployee = false;
   employee: any;
   applyTaskForm;
 
@@ -61,7 +56,7 @@ export class EventDetailsComponent implements OnInit {
     this.getEventDetails();
     if (this.authService.isLoggedIn() && this.authService.getUserRole() === 'EMPLOYEE') {
       this.loggedInEmployee = true;
-      this.employeeService.getEmployeeByEmail(this.authService.getTokenIdentifier()).subscribe(
+      this.employeeService.getEmployeeByEmail().subscribe(
         (profile: EditEmployee) => {
           this.employee = profile.profileDto;
         });
@@ -69,7 +64,7 @@ export class EventDetailsComponent implements OnInit {
   }
 
   private getNumberOfParticipants(task: Task) {
-    console.log(JSON.stringify(task.employees));
+    // console.log(JSON.stringify(task.employees));
     let count = 0;
     task.employees.forEach(e => {
       if (e.accepted === true) {
@@ -122,5 +117,15 @@ export class EventDetailsComponent implements OnInit {
       }
     );
     this.applyTaskForm.reset();
+  }
+
+  deleteEvent() {
+    this.eventService.deleteEvent(this.id).subscribe(
+      () => {},
+      error => {
+        this.error = true;
+        this.errorMessage = error.error;
+      }
+    );
   }
 }
