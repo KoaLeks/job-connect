@@ -5,6 +5,7 @@ import {TimeDto} from './TimeDto';
 
 export class EditEmployee {
   constructor(
+    public id: number,
     public profileDto: ProfileDto,
     public interestDtos: Interest[],
     public gender: Gender,

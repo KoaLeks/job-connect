@@ -4,7 +4,6 @@ import {HttpClient} from '@angular/common/http';
 import {EditEmployee} from '../dtos/edit-employee';
 import {Observable} from 'rxjs';
 import {SimpleEmployee} from '../dtos/simple-employee';
-import {ContactMessage} from '../dtos/contact-message';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +19,7 @@ export class EmployeeService {
    * Loads an employee from the backend using the email
    */
   getEmployeeByEmail() {
-    console.log('Get employee by email ');
+    console.log('Get employee by email');
     return this.httpClient.get<EditEmployee>(this.employeeBaseUri);
   }
 

@@ -15,10 +15,9 @@ export class EmployerService {
 
   /**
    * Loads an employer from the backend using the email
-   * @param email to look for
    */
   getEmployerByEmail() {
-    console.log('Get employer by email ');
+    console.log('Get employer by email');
     return this.httpClient.get<any>(this.employerBaseUri);
   }
 

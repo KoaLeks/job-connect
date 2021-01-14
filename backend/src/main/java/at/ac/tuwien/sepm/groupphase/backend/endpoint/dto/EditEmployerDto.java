@@ -108,6 +108,7 @@ public class EditEmployerDto {
             return new EditEmployerDto.EditEmployerDtoBuilder();
         }
         public EditEmployerDto.EditEmployerDtoBuilder withProfileDto(EditProfileDto editProfileDto){
+            this.id = editProfileDto.getId();
             this.editProfileDto = editProfileDto;
             return this;
         }

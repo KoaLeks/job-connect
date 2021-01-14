@@ -1,11 +1,9 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
-import antlr.Token;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.*;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.*;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotDeletedException;
-import at.ac.tuwien.sepm.groupphase.backend.exception.UniqueConstraintException;
 import at.ac.tuwien.sepm.groupphase.backend.service.*;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
@@ -92,8 +89,12 @@ public class ProfileEndpoint {
     @ApiOperation(value = "Update employee details", authorizations = {@Authorization(value = "apiKey")})
     @CrossOrigin(origins = "http://localhost:4200")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateEmployee(@Valid @RequestBody EditEmployeeDto editEmployeeDto) {
+    public void updateEmployee(@Valid @RequestBody EditEmployeeDto editEmployeeDto, @RequestHeader String authorization) {
         LOGGER.info("PUT /api/v1/profiles/employee body: {}", editEmployeeDto);
+        Employee employee = tokenService.getEmployeeFromHeader(authorization);
+        if (!employee.getId().equals(editEmployeeDto.getId())) {
+            throw new AuthorizationServiceException("Keine Berechtigung für die Bearbeitung des gewünschten Accounts");
+        }
         employeeService.updateEmployee(employeeMapper.editEmployeeDtoToEmployee(editEmployeeDto));
     }
 
@@ -153,7 +154,7 @@ public class ProfileEndpoint {
     @PostMapping(value = "/contact")
     @ApiOperation(value = "Contact an employee/r", authorizations = {@Authorization(value = "apiKey")})
     @CrossOrigin(origins = "http://localhost:4200")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     public void contact(@Valid @RequestBody ContactMessageDto contactMessageDto) {
         LOGGER.info("POST api/v1/profiles/contact body: {}", contactMessageDto.toString().replace("\n", ""));
         this.mailService.sendContactMail(this.contactMessageMapper.contactMessageDtoToContactMessage(contactMessageDto));

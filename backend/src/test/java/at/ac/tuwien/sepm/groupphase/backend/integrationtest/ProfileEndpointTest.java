@@ -11,6 +11,7 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.repository.*;
 import at.ac.tuwien.sepm.groupphase.backend.security.JwtTokenizer;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -194,6 +195,7 @@ public class ProfileEndpointTest implements TestData {
         timeRepository.deleteAll();
         interestRepository.deleteAll();
         interestAreaRepository.deleteAll();
+        eventRepository.deleteAll();
         employeeRepository.deleteAll();
         employerRepository.deleteAll();
         profileRepository.deleteAll();
@@ -383,10 +385,11 @@ public class ProfileEndpointTest implements TestData {
 
     @Test
     public void updateValidEmployeeTest() throws Exception {
-        employeeRepository.save(employee);
+        Long id = employeeRepository.save(employee).getId();
 
         EditEmployeeDto editEmployeeDto = EditEmployeeDto.EditEmployeeDtoBuilder.aEmployeeDto()
             .withEditProfileDto(EditProfileDto.EditProfileDtoBuilder.aEditProfileDto()
+                .withId(id)
                 .withEmail(EMPLOYEE_EMAIL)
                 .withFirstName(EDIT_EMPLOYEE_LAST_NAME)
                 .withLastName(EDIT_EMPLOYEE_FIRST_NAME)
@@ -398,7 +401,7 @@ public class ProfileEndpointTest implements TestData {
         String editBody = objectMapper.writeValueAsString(editEmployeeDto);
 
         MvcResult mvcResult = this.mockMvc.perform(put(EDIT_EMPLOYEE_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, ADMIN_ROLES))
             .contentType(MediaType.APPLICATION_JSON)
             .content(editBody))
             .andDo(print())
@@ -410,10 +413,11 @@ public class ProfileEndpointTest implements TestData {
 
     @Test
     public void updateValidEmployerTest() throws Exception {
-        employerRepository.save(employer);
+        Long id = employerRepository.save(employer).getId();
 
         EditEmployerDto editEmployerDto = EditEmployerDto.EditEmployerDtoBuilder.aEmployerDto()
             .withProfileDto(EditProfileDto.EditProfileDtoBuilder.aEditProfileDto()
+                .withId(id)
                 .withEmail(EMPLOYER_EMAIL)
                 .withLastName(EMPLOYER_LAST_NAME)
                 .withFirstName(EMPLOYER_FIRST_NAME)
@@ -425,7 +429,7 @@ public class ProfileEndpointTest implements TestData {
         String editBody = objectMapper.writeValueAsString(editEmployerDto);
 
         MvcResult mvcResult = this.mockMvc.perform(put(EDIT_EMPLOYER_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES))
             .contentType(MediaType.APPLICATION_JSON)
             .content(editBody))
             .andDo(print())
@@ -487,7 +491,7 @@ public class ProfileEndpointTest implements TestData {
         String editPasswordBody = objectMapper.writeValueAsString(editPasswordDto);
 
         MvcResult mvcResult = this.mockMvc.perform(put(EDIT_PASSWORD_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, ADMIN_ROLES))
             .contentType(MediaType.APPLICATION_JSON)
             .content(editPasswordBody))
             .andDo(print())
@@ -500,7 +504,7 @@ public class ProfileEndpointTest implements TestData {
     @Test
     public void updateInterestsOfValidEmployeeTest() throws Exception {
         Long id = interestAreaRepository.save(interestArea).getId();
-        employeeRepository.save(employee);
+        Long employeeId = employeeRepository.save(employee).getId();
 
         Set<InterestDto> interestDtoSet = new HashSet<>();
         simpleInterestAreaDto.setId(id);
@@ -509,6 +513,7 @@ public class ProfileEndpointTest implements TestData {
 
         EditEmployeeDto editEmployeeDto = EditEmployeeDto.EditEmployeeDtoBuilder.aEmployeeDto()
             .withEditProfileDto(EditProfileDto.EditProfileDtoBuilder.aEditProfileDto()
+                .withId(employeeId)
                 .withEmail(EMPLOYEE_EMAIL)
                 .withFirstName(EDIT_EMPLOYEE_LAST_NAME)
                 .withLastName(EDIT_EMPLOYEE_FIRST_NAME)
@@ -521,7 +526,7 @@ public class ProfileEndpointTest implements TestData {
         String editBody = objectMapper.writeValueAsString(editEmployeeDto);
 
         MvcResult mvcResult = this.mockMvc.perform(put(EDIT_EMPLOYEE_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, ADMIN_ROLES))
             .contentType(MediaType.APPLICATION_JSON)
             .content(editBody))
             .andDo(print())
@@ -535,7 +540,7 @@ public class ProfileEndpointTest implements TestData {
     @Test
     public void deleteInterestOfValidEmployeeTest() throws Exception {
         Long id = interestAreaRepository.save(interestArea).getId();
-        employeeRepository.save(employee);
+        Long employeeId = employeeRepository.save(employee).getId();
 
         Set<InterestDto> interestDtoSet = new HashSet<>();
         simpleInterestAreaDto.setId(id);
@@ -544,6 +549,7 @@ public class ProfileEndpointTest implements TestData {
 
         EditEmployeeDto editEmployeeDto = EditEmployeeDto.EditEmployeeDtoBuilder.aEmployeeDto()
             .withEditProfileDto(EditProfileDto.EditProfileDtoBuilder.aEditProfileDto()
+                .withId(employeeId)
                 .withEmail(EMPLOYEE_EMAIL)
                 .withFirstName(EDIT_EMPLOYEE_LAST_NAME)
                 .withLastName(EDIT_EMPLOYEE_FIRST_NAME)
@@ -556,7 +562,7 @@ public class ProfileEndpointTest implements TestData {
         String editBody = objectMapper.writeValueAsString(editEmployeeDto);
 
         MvcResult mvcResult = this.mockMvc.perform(put(EDIT_EMPLOYEE_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, ADMIN_ROLES))
             .contentType(MediaType.APPLICATION_JSON)
             .content(editBody))
             .andDo(print())
@@ -569,6 +575,7 @@ public class ProfileEndpointTest implements TestData {
 
         EditEmployeeDto newEditEmployeeDto = EditEmployeeDto.EditEmployeeDtoBuilder.aEmployeeDto()
             .withEditProfileDto(EditProfileDto.EditProfileDtoBuilder.aEditProfileDto()
+                .withId(employeeId)
                 .withEmail(EMPLOYEE_EMAIL)
                 .withFirstName(EDIT_EMPLOYEE_LAST_NAME)
                 .withLastName(EDIT_EMPLOYEE_FIRST_NAME)
@@ -581,7 +588,7 @@ public class ProfileEndpointTest implements TestData {
         String newEditBody = objectMapper.writeValueAsString(newEditEmployeeDto);
 
         MvcResult newMvcResult = this.mockMvc.perform(put(EDIT_EMPLOYEE_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, ADMIN_ROLES))
             .contentType(MediaType.APPLICATION_JSON)
             .content(newEditBody))
             .andDo(print())
@@ -594,7 +601,7 @@ public class ProfileEndpointTest implements TestData {
 
     @Test
     public void updateTimeOfValidEmployeeTest() throws Exception {
-        employeeRepository.save(employee);
+        Long id = employeeRepository.save(employee).getId();
 
         Set<TimeDto> timeDtoSet = new HashSet<>();
         timeDto.setId(null);
@@ -602,6 +609,7 @@ public class ProfileEndpointTest implements TestData {
 
         EditEmployeeDto editEmployeeDto = EditEmployeeDto.EditEmployeeDtoBuilder.aEmployeeDto()
             .withEditProfileDto(EditProfileDto.EditProfileDtoBuilder.aEditProfileDto()
+                .withId(id)
                 .withEmail(EMPLOYEE_EMAIL)
                 .withFirstName(EDIT_EMPLOYEE_LAST_NAME)
                 .withLastName(EDIT_EMPLOYEE_FIRST_NAME)
@@ -614,7 +622,7 @@ public class ProfileEndpointTest implements TestData {
         String editBody = objectMapper.writeValueAsString(editEmployeeDto);
 
         MvcResult mvcResult = this.mockMvc.perform(put(EDIT_EMPLOYEE_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, ADMIN_ROLES))
             .contentType(MediaType.APPLICATION_JSON)
             .content(editBody))
             .andDo(print())
@@ -627,7 +635,7 @@ public class ProfileEndpointTest implements TestData {
 
     @Test
     public void deleteTimeOfValidEmployeeTest() throws Exception {
-        employeeRepository.save(employee);
+        Long id = employeeRepository.save(employee).getId();
 
         Set<TimeDto> timeDtoSet = new HashSet<>();
         timeDto.setId(null);
@@ -635,6 +643,7 @@ public class ProfileEndpointTest implements TestData {
 
         EditEmployeeDto editEmployeeDto = EditEmployeeDto.EditEmployeeDtoBuilder.aEmployeeDto()
             .withEditProfileDto(EditProfileDto.EditProfileDtoBuilder.aEditProfileDto()
+                .withId(id)
                 .withEmail(EMPLOYEE_EMAIL)
                 .withFirstName(EDIT_EMPLOYEE_LAST_NAME)
                 .withLastName(EDIT_EMPLOYEE_FIRST_NAME)
@@ -647,7 +656,7 @@ public class ProfileEndpointTest implements TestData {
         String editBody = objectMapper.writeValueAsString(editEmployeeDto);
 
         MvcResult mvcResult = this.mockMvc.perform(put(EDIT_EMPLOYEE_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, ADMIN_ROLES))
             .contentType(MediaType.APPLICATION_JSON)
             .content(editBody))
             .andDo(print())
@@ -659,6 +668,7 @@ public class ProfileEndpointTest implements TestData {
 
         EditEmployeeDto newEditEmployeeDto = EditEmployeeDto.EditEmployeeDtoBuilder.aEmployeeDto()
             .withEditProfileDto(EditProfileDto.EditProfileDtoBuilder.aEditProfileDto()
+                .withId(id)
                 .withEmail(EMPLOYEE_EMAIL)
                 .withFirstName(EDIT_EMPLOYEE_LAST_NAME)
                 .withLastName(EDIT_EMPLOYEE_FIRST_NAME)
@@ -671,7 +681,7 @@ public class ProfileEndpointTest implements TestData {
         String newEditBody = objectMapper.writeValueAsString(newEditEmployeeDto);
 
         MvcResult newMvcResult = this.mockMvc.perform(put(EDIT_EMPLOYEE_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, ADMIN_ROLES))
             .contentType(MediaType.APPLICATION_JSON)
             .content(newEditBody))
             .andDo(print())
@@ -683,7 +693,7 @@ public class ProfileEndpointTest implements TestData {
     }
 
     @Test
-    public void contactEmployeeWithValidEmail_ShouldReturnNoContent() throws Exception {
+    public void contactEmployeeWithValidEmail_ShouldReturnOK() throws Exception {
         Profile profile = this.employee.getProfile();
         profile.setEmail("non@existant.address");
         this.employee.setProfile(profile);
@@ -704,7 +714,7 @@ public class ProfileEndpointTest implements TestData {
             .andReturn();
 
         MockHttpServletResponse response = mvcResult.getResponse();
-        assertEquals(HttpStatus.NO_CONTENT.value(), response.getStatus());
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
     }
 
     @Test
@@ -722,7 +732,7 @@ public class ProfileEndpointTest implements TestData {
         eventRepository.save(event);
 
         MvcResult mvcResult = this.mockMvc.perform(delete(DELETE_EMPLOYER_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES))
             .contentType(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andReturn();

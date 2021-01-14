@@ -5,6 +5,7 @@ import {EmployeeService} from '../../services/employee.service';
 import {UpdateHeaderService} from '../../services/update-header.service';
 import {NotificationService} from '../../services/notification.service';
 import {SimpleNotification} from '../../dtos/simple-notification';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -69,7 +70,7 @@ export class HeaderComponent implements OnInit {
   }
 
   private loadPicture() {
-    if (this.authService.getUserRole() === 'EMPLOYER') {
+    if (this.authService.userIsEmployer()) {
       this.employerService.getEmployerByEmail().subscribe(
         (profile: any) => {
           this.profile = profile;
@@ -88,7 +89,7 @@ export class HeaderComponent implements OnInit {
           this.errorMessage = error.error;
         }
       );
-    } else if (this.authService.getUserRole() === 'EMPLOYEE') {
+    } else if (this.authService.userIsEmployee()) {
       this.employeeService.getEmployeeByEmail().subscribe(
         (profile: any) => {
           this.profile = profile;
