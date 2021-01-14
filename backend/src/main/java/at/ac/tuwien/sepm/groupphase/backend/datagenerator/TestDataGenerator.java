@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.lang.invoke.MethodHandles;
@@ -125,6 +126,8 @@ public class TestDataGenerator {
     private static final String TEST_EVENT_DESCRIPTION3 = "Sind auf der Suche nach einem netten Menschen der gerne und gut mit unserer Kleinen umgehen und aufpassen kann!";
     private static final String TEST_EVENT_DESCRIPTION4 = "Unsere Oma hat einen neuen Laptop bekommen und braucht dringend Einstiegshilfe!";
 
+    private static final int NUMBER_OF_PRIVATE_EMPLOYERS = 20;
+
     private final EmployeeRepository employeeRepository;
     private final EmployerRepository employerRepository;
     private final ProfileRepository profileRepository;
@@ -185,6 +188,27 @@ public class TestDataGenerator {
                     .build();
                 LOGGER.debug("saving employer {}", employer);
                 Long id = profileRepository.save(employerProfile).getId();
+                employer.setId(id);
+                employerRepository.save(employer);
+            }
+            for (int i = 0; i < NUMBER_OF_PRIVATE_EMPLOYERS; i++) {
+                String name = names[i];
+                at.ac.tuwien.sepm.groupphase.backend.entity.Profile privateEmployer =
+                    at.ac.tuwien.sepm.groupphase.backend.entity.Profile.ProfileBuilder.aProfile()
+                        .withEmail("test@" + name.replace(" ", "").toLowerCase() + ".at")
+                        .withForename(name.split(" ")[0])
+                        .withName(name.split(" ")[1])
+                        .withPassword(passwordEncoder.encode(TEST_PASSWORD))
+                        .withPublicInfo(TEST_PUBLIC_INFO)
+                        .isEmployer(true)
+                        .build();
+
+                Employer employer = Employer.EmployerBuilder.aEmployer()
+                    .withCompanyName("Privatperson")
+                    .withProfile(privateEmployer)
+                    .build();
+                LOGGER.debug("saving employer {}", employer);
+                Long id = profileRepository.save(privateEmployer).getId();
                 employer.setId(id);
                 employerRepository.save(employer);
             }
@@ -338,53 +362,31 @@ public class TestDataGenerator {
             LOGGER.debug("interests already generated");
         } else {
             LOGGER.debug("generating {} interests entries", 5);
+            Random random = new Random();
+            for (Employee employee : employeeRepository.findAll()) {
+                try {
+                    RandomAccessFile randomAccessFile = new RandomAccessFile("src/main/resources/interests.txt", "r");
+                    int length = (int)randomAccessFile.length();
+                    for (int i = random.nextInt(3) + 1; i > 0; i--) {
+                        int pos = random.nextInt(length);
+                        randomAccessFile.seek(pos);
+                        randomAccessFile.readLine();
+                        String line = randomAccessFile.readLine();
+                        if (line == null) continue;
+                        Interest interest = Interest.InterestBuilder.aInterest()
+                            .withName(line.split(",")[1])
+                            .withDescription("TODO: add description to interests.txt")
+                            .withInterestArea(interestAreaRepository.getOne(random.nextInt(16) + 1L))
+                            .withEmployee(employee)
+                            .build();
 
-            for (Employee employee :
-                employeeRepository.findAll()) {
-
-                Interest interest1 = Interest.InterestBuilder.aInterest()
-                    .withName("IT")
-                    .withDescription("ich programmiere gerne")
-                    .withInterestArea(interestAreaRepository.getOne(15L))
-                    .withEmployee(employee)
-                    .build();
-                Interest interest2 = Interest.InterestBuilder.aInterest()
-                    .withName("Babysitter")
-                    .withDescription("passe gerne auf kleine Kinder und Babys auf")
-                    .withInterestArea(interestAreaRepository.getOne(5L))
-                    .withEmployee(employee)
-                    .build();
-                Interest interest3 = Interest.InterestBuilder.aInterest()
-                    .withName("spazieren gehen")
-                    .withDescription("in meiner Freizeit verbringe ich gerne Zeit im Freien")
-                    .withInterestArea(interestAreaRepository.getOne(6L))
-                    .withEmployee(employee)
-                    .build();
-                Interest interest4 = Interest.InterestBuilder.aInterest()
-                    .withName("Musik produzieren")
-                    .withDescription("ab und zu versuche ich mich als Hobby-DJ")
-                    .withInterestArea(interestAreaRepository.getOne(14L))
-                    .withEmployee(employee)
-                    .build();
-                Interest interest5 = Interest.InterestBuilder.aInterest()
-                    .withName("Bücher lesen")
-                    .withDescription("ich lese gerne")
-                    .withInterestArea(null)
-                    .withEmployee(employee)
-                    .build();
-
-                LOGGER.debug("saving interest {}", interest1);
-                interestRepository.save(interest1);
-                LOGGER.debug("saving interest {}", interest2);
-                interestRepository.save(interest2);
-                LOGGER.debug("saving interest {}", interest3);
-                interestRepository.save(interest3);
-                LOGGER.debug("saving interest {}", interest4);
-                interestRepository.save(interest4);
-                LOGGER.debug("saving interest {}", interest5);
-                interestRepository.save(interest5);
+                        LOGGER.debug("saving interest {}", interest);
+                        interestRepository.save(interest);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-
         }
     }
 
@@ -475,7 +477,7 @@ public class TestDataGenerator {
                 .withEnd(convertToLocalDateTime(end))
                 .withAddress(addressRepository.save(address))
                 .withTask(tasks)
-                .withEmployer(employerRepository.findByProfile_Id(random.nextInt(40) + 1L))
+                .withEmployer(employerRepository.findByProfile_Id(random.nextInt(companyNames.length + NUMBER_OF_PRIVATE_EMPLOYERS) + 1L))
                 .build();
             Event savedEvent = eventRepository.save(event);
             for (Task task : tasks) {
@@ -515,8 +517,11 @@ public class TestDataGenerator {
         Random random = new Random();
         List<Task> tasks = taskRepository.findAll();
         for (int i = 0; i < count; i++) {
-            Optional<Employee> employee = employeeRepository.findById(41L + random.nextInt(30));
+            Optional<Employee> employee = employeeRepository.findById(companyNames.length + NUMBER_OF_PRIVATE_EMPLOYERS + 1L + random.nextInt(30));
             Employee randomEmployee = employee.isPresent() ? employee.get() : null;
+            if (randomEmployee == null) {
+                continue;
+            }
             Task randomTask = tasks.get(random.nextInt(tasks.size() - 1));
             Event event = eventRepository.findFirstByTasks(randomTask);
             Employer employer = employerRepository.findFirstByEvents(event);
