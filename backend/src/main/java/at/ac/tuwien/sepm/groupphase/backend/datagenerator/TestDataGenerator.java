@@ -8,7 +8,9 @@ import at.ac.tuwien.sepm.groupphase.backend.service.EmployeeService;
 import at.ac.tuwien.sepm.groupphase.backend.service.Employee_TasksService;
 import at.ac.tuwien.sepm.groupphase.backend.util.Gender;
 import at.ac.tuwien.sepm.groupphase.backend.util.NotificationType;
+import at.ac.tuwien.sepm.groupphase.backend.util.validator.DateValidator;
 import com.github.javafaker.Faker;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
@@ -16,8 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.lang.invoke.MethodHandles;
@@ -78,7 +78,7 @@ public class TestDataGenerator {
 
     String[] names = {
         "Lucy Bauer",
-        "Lukas Müller",
+        "Lukas Mueller",
         "Ella Schwartz",
         "Konstantin Hofer",
         "Amy Gruber",
@@ -114,8 +114,6 @@ public class TestDataGenerator {
     private static final String TEST_EMPLOYER_LAST_NAME = "LAST NAME";
     private static final String TEST_PUBLIC_INFO = "PUBLIC INFO";
     private static final String TEST_PASSWORD = "123456789";
-    private static final LocalDateTime TEST_BIRTHDATE
-        = LocalDateTime.of(2000, 1, 1, 0, 0, 0, 0);
 
     // Event
     private static final String TEST_EVENT_TITLE1 = "Weihnachtsfeier";
@@ -126,79 +124,6 @@ public class TestDataGenerator {
     private static final String TEST_EVENT_DESCRIPTION2 = "Reinigungsarbeit für das gesamte Haus (Küche, Wohnzimmer, Badezimmer, Schlafzimmer), zirka 60m²";
     private static final String TEST_EVENT_DESCRIPTION3 = "Sind auf der Suche nach einem netten Menschen der gerne und gut mit unserer Kleinen umgehen und aufpassen kann!";
     private static final String TEST_EVENT_DESCRIPTION4 = "Unsere Oma hat einen neuen Laptop bekommen und braucht dringend Einstiegshilfe!";
-
-    private static final LocalDateTime TEST_EVENT_START1
-        = LocalDateTime.of(2020, 12, 24, 12, 0, 0, 0);
-    private static final LocalDateTime TEST_EVENT_END1
-        = LocalDateTime.of(2020, 12, 24, 18, 0, 0, 0);
-
-    private static final LocalDateTime TEST_EVENT_START2
-        = LocalDateTime.of(2020, 12, 20, 13, 0, 0, 0);
-    private static final LocalDateTime TEST_EVENT_END2
-        = LocalDateTime.of(2020, 12, 20, 18, 0, 0, 0);
-
-    private static final LocalDateTime TEST_EVENT_START3
-        = LocalDateTime.of(2020, 12, 25, 8, 0, 0, 0);
-    private static final LocalDateTime TEST_EVENT_END3
-        = LocalDateTime.of(2021, 1, 25, 20, 0, 0, 0);
-
-    private static final LocalDateTime TEST_EVENT_START4
-        = LocalDateTime.of(2021, 3, 13, 7, 15, 0, 0);
-    private static final LocalDateTime TEST_EVENT_END4
-        = LocalDateTime.of(2021, 3, 13, 16, 15, 0, 0);
-
-    // Addresses
-    private static final Address TEST_ADDRESS1 = Address.AddressBuilder.aAddress()
-        .withAddressLine("Mariahilfer Straße 5")
-        .withCity("Wien")
-        .withState("Wien")
-        .withZip(1070)
-        .build();
-    private static final Address TEST_ADDRESS2 = Address.AddressBuilder.aAddress()
-        .withAddressLine("Morzingasse 22")
-        .withCity("Mariazell")
-        .withState("Steiermark")
-        .withZip(8100)
-        .build();
-    private static final Address TEST_ADDRESS3 = Address.AddressBuilder.aAddress()
-        .withAddressLine("Kapfweg 12")
-        .withCity("Feldkirch")
-        .withState("Vorarlberg")
-        .withZip(6800)
-        .build();
-    private static final Address TEST_ADDRESS4 = Address.AddressBuilder.aAddress()
-        .withAddressLine("Heimstraße 4")
-        .withCity("Villach")
-        .withState("Kärnten")
-        .withZip(9500)
-        .build();
-
-    // Tasks
-    private static final Task TEST_TASK1 = Task.TaskBuilder.aTask()
-        .withDescription("KellnerIn für Getränke und Snacks servieren, Tische abräumen und sauber machen.")
-        .withEmployeeCount(3)
-        .withPaymentHourly(9.0)
-        .build();
-    private static final Task TEST_TASK1_1 = Task.TaskBuilder.aTask()
-        .withDescription("jemand mit DJ Erfahrung der für gute Stimmung sorgen kann")
-        .withEmployeeCount(1)
-        .withPaymentHourly(10.0)
-        .build();
-    private static final Task TEST_TASK2 = Task.TaskBuilder.aTask()
-        .withDescription("Putzhilfe")
-        .withEmployeeCount(1)
-        .withPaymentHourly(10.0)
-        .build();
-    private static final Task TEST_TASK3 = Task.TaskBuilder.aTask()
-        .withDescription("BabysitteIn")
-        .withEmployeeCount(1)
-        .withPaymentHourly(8.0)
-        .build();
-    private static final Task TEST_TASK4 = Task.TaskBuilder.aTask()
-        .withDescription("jemand der sich gut mit Computern und IT auskennt und älteren Damen diesen Bereich gut erklären und beibringen kann")
-        .withEmployeeCount(1)
-        .withPaymentHourly(16.0)
-        .build();
 
     private final EmployeeRepository employeeRepository;
     private final EmployerRepository employerRepository;
@@ -272,6 +197,7 @@ public class TestDataGenerator {
         } else {
             LOGGER.debug("generating {} employee entries", names.length);
             int count = 0;
+            Faker faker = new Faker();
             for (String name : names) {
                 at.ac.tuwien.sepm.groupphase.backend.entity.Profile employeeProfile =
                     at.ac.tuwien.sepm.groupphase.backend.entity.Profile.ProfileBuilder.aProfile()
@@ -285,9 +211,10 @@ public class TestDataGenerator {
 
                 Employee employee = Employee.EmployeeBuilder.aEmployee()
                     .withGender(count % 2 == 0 ? Gender.FEMALE : Gender.MALE)
-                    .withBirthDate(TEST_BIRTHDATE)
+                    .withBirthDate(convertToLocalDateTime(faker.date().birthday(18, 35)))
                     .withProfile(employeeProfile)
                     .build();
+
                 LOGGER.debug("saving employee {}", employee);
                 Long id = profileRepository.save(employeeProfile).getId();
                 employee.setId(id);
@@ -461,37 +388,59 @@ public class TestDataGenerator {
         }
     }
 
-    private void generateTimes() {
+    private void generateTimes(Float ratio) {
         if (timeRepository.findAll().size() > 0) {
             LOGGER.debug("times already generated");
         } else {
-            LOGGER.debug("generating {} time entries", 3);
-
-            for (Employee employee :
-                employeeRepository.findAll()) {
-
-                Time time1 = Time.TimeBuilder.aTime()
-                    .withStart(LocalDateTime.of(2020, 12, 28, 12, 0, 0, 0))
-                    .withEnd(LocalDateTime.of(2020, 12, 28, 18, 0, 0, 0))
-                    .withFinalEndDate(LocalDateTime.of(2020, 12, 28, 18, 0, 0, 0))
-                    .withVisible(true)
-                    .withRef_Id(-1L)
-                    .withEmployee(employee)
-                    .build();
-
-                Time time2 = Time.TimeBuilder.aTime()
-                    .withStart(LocalDateTime.of(2021, 1, 7, 17, 0, 0, 0))
-                    .withEnd(LocalDateTime.of(2021, 1, 7, 23, 0, 0, 0))
-                    .withFinalEndDate(LocalDateTime.of(2021, 1, 7, 23, 0, 0, 0))
-                    .withVisible(true)
-                    .withRef_Id(-1L)
-                    .withEmployee(employee)
-                    .build();
-
-                LOGGER.debug("saving time {}", time1);
-                timeRepository.save(time1);
-                LOGGER.debug("saving time {}", time2);
-                timeRepository.save(time2);
+            LOGGER.debug("randomly generating time entries for random employees");
+            Faker faker = new Faker();
+            Random random = new Random();
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(2021, Calendar.FEBRUARY, 28);
+            for (Employee employee : employeeRepository.findAll()) {
+                if (random.nextDouble() <= ratio){
+                    for (int i = 0; i < random.nextInt(5) + 1; i++) {
+                        Date start = DateUtils.round(faker.date().between(new Date(System.currentTimeMillis()), calendar.getTime()), Calendar.HOUR);
+                        Date end = DateUtils.round(DateUtils.addHours(faker.date().future(random.nextInt(12) + 1, TimeUnit.HOURS, start), 1), Calendar.HOUR);
+                        // one semester 30% chance
+                        if (random.nextDouble() <= 0.3) {
+                            Date finalEnd = DateUtils.addWeeks(end, 17);
+                            Time time1 = Time.TimeBuilder.aTime()
+                                .withStart(convertToLocalDateTime(start))
+                                .withEnd(convertToLocalDateTime(end))
+                                .withFinalEndDate(convertToLocalDateTime(finalEnd))
+                                .withVisible(true)
+                                .withRef_Id(-1L)
+                                .withEmployee(employee)
+                                .build();
+                            timeRepository.save(time1);
+                            for (int j = 0; j < 18; j++) {
+                                Time time = Time.TimeBuilder.aTime()
+                                    .withStart(convertToLocalDateTime(DateUtils.addDays(start, j * 7)))
+                                    .withEnd(convertToLocalDateTime(DateUtils.addDays(end, j * 7)))
+                                    .withFinalEndDate(convertToLocalDateTime(DateUtils.addDays(end, j * 7)))
+                                    .withVisible(false)
+                                    .withRef_Id(-1L)
+                                    .withEmployee(employee)
+                                    .build();
+                                LOGGER.debug("saving time (one semester) {}, for employee {}", time, employee);
+                                timeRepository.save(time);
+                            }
+                        // one day 70% chance
+                        } else {
+                            Time time = Time.TimeBuilder.aTime()
+                                .withStart(convertToLocalDateTime(start))
+                                .withEnd(convertToLocalDateTime(end))
+                                .withFinalEndDate(convertToLocalDateTime(end))
+                                .withVisible(true)
+                                .withRef_Id(-1L)
+                                .withEmployee(employee)
+                                .build();
+                            LOGGER.debug("saving time {}, for employee {}", time, employee);
+                            timeRepository.save(time);
+                        }
+                    }
+                }
             }
         }
     }
@@ -503,7 +452,7 @@ public class TestDataGenerator {
         generateEmployees();
         generateInterestAreas();
         generateInterests();
-        generateTimes();
+        generateTimes(0.75f);
 
         Faker faker = new Faker(new Locale("de-AT"));
         Random random = new Random();
@@ -526,7 +475,7 @@ public class TestDataGenerator {
                 .withEnd(convertToLocalDateTime(end))
                 .withAddress(addressRepository.save(address))
                 .withTask(tasks)
-                .withEmployer(employerRepository.findByProfile_Id(Long.valueOf(random.nextInt(40) + 1)))
+                .withEmployer(employerRepository.findByProfile_Id(random.nextInt(40) + 1L))
                 .build();
             Event savedEvent = eventRepository.save(event);
             for (Task task : tasks) {
@@ -652,96 +601,12 @@ public class TestDataGenerator {
         generateEmployees();
         generateInterestAreas();
         generateInterests();
-        generateTimes();
+        generateTimes(0.75f);
         if (eventRepository.findAll().size() > 0) {
             LOGGER.debug("events already generated");
         } else {
 
-            TEST_TASK1.setInterestArea(interestAreaRepository.getOne(4L));
-            TEST_TASK1_1.setInterestArea(interestAreaRepository.getOne(14L));
 
-            TEST_TASK2.setInterestArea(interestAreaRepository.getOne(9L));
-
-            TEST_TASK3.setInterestArea(interestAreaRepository.getOne(5L));
-
-            TEST_TASK4.setInterestArea(interestAreaRepository.getOne(7L));
-
-
-            Set<Task> tasks1 = new HashSet<>();
-            tasks1.add(TEST_TASK1);
-            tasks1.add(TEST_TASK1_1);
-
-            Set<Task> tasks2 = new HashSet<>();
-            tasks2.add(TEST_TASK2);
-
-            Set<Task> tasks3 = new HashSet<>();
-            tasks3.add(TEST_TASK3);
-
-            Set<Task> tasks4 = new HashSet<>();
-            tasks4.add(TEST_TASK4);
-
-            Event event1 = Event.EventBuilder.aEvent()
-                .withTitle(TEST_EVENT_TITLE1)
-                .withDescription(TEST_EVENT_DESCRIPTION1)
-                .withStart(TEST_EVENT_START1)
-                .withEnd(TEST_EVENT_END1)
-                .withAddress(addressRepository.save(TEST_ADDRESS1))
-                .withTask(tasks1)
-                .withEmployer(employerRepository.findByProfile_Email("test@freedommap.at"))
-                .build();
-            Event event2 = Event.EventBuilder.aEvent()
-                .withTitle(TEST_EVENT_TITLE2)
-                .withDescription(TEST_EVENT_DESCRIPTION2)
-                .withStart(TEST_EVENT_START2)
-                .withEnd(TEST_EVENT_END2)
-                .withAddress(addressRepository.save(TEST_ADDRESS2))
-                .withTask(tasks2)
-                .withEmployer(employerRepository.findByProfile_Email("test@galaxyman.at"))
-                .build();
-            Event event3 = Event.EventBuilder.aEvent()
-                .withTitle(TEST_EVENT_TITLE3)
-                .withDescription(TEST_EVENT_DESCRIPTION3)
-                .withStart(TEST_EVENT_START3)
-                .withEnd(TEST_EVENT_END3)
-                .withAddress(addressRepository.save(TEST_ADDRESS3))
-                .withTask(tasks3)
-                .withEmployer(employerRepository.findByProfile_Email("test@futureplan.at"))
-                .build();
-            Event event4 = Event.EventBuilder.aEvent()
-                .withTitle(TEST_EVENT_TITLE4)
-                .withDescription(TEST_EVENT_DESCRIPTION4)
-                .withStart(TEST_EVENT_START4)
-                .withEnd(TEST_EVENT_END4)
-                .withAddress(addressRepository.save(TEST_ADDRESS4))
-                .withTask(tasks4)
-                .withEmployer(employerRepository.findByProfile_Email("test@maxaprofit.at"))
-                .build();
-
-            TEST_TASK1.setEvent(event1);
-            TEST_TASK1_1.setEvent(event1);
-            TEST_TASK2.setEvent(event2);
-            TEST_TASK3.setEvent(event3);
-            TEST_TASK4.setEvent(event4);
-
-            LOGGER.debug("saving event {}", event1);
-            eventRepository.save(event1);
-            LOGGER.debug("saving event {}", event2);
-            eventRepository.save(event2);
-            LOGGER.debug("saving event {}", event3);
-            eventRepository.save(event3);
-            LOGGER.debug("saving event {}", event4);
-            eventRepository.save(event4);
-
-            LOGGER.debug("saving task {}", TEST_TASK1);
-            taskRepository.save(TEST_TASK1);
-            LOGGER.debug("saving task {}", TEST_TASK1_1);
-            taskRepository.save(TEST_TASK1_1);
-            LOGGER.debug("saving task {}", TEST_TASK2);
-            taskRepository.save(TEST_TASK2);
-            LOGGER.debug("saving task {}", TEST_TASK3);
-            taskRepository.save(TEST_TASK3);
-            LOGGER.debug("saving task {}", TEST_TASK4);
-            taskRepository.save(TEST_TASK4);
         }
     }
 }
