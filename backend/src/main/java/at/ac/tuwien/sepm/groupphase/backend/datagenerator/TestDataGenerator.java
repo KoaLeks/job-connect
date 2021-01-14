@@ -8,7 +8,6 @@ import at.ac.tuwien.sepm.groupphase.backend.service.EmployeeService;
 import at.ac.tuwien.sepm.groupphase.backend.service.Employee_TasksService;
 import at.ac.tuwien.sepm.groupphase.backend.util.Gender;
 import at.ac.tuwien.sepm.groupphase.backend.util.NotificationType;
-import at.ac.tuwien.sepm.groupphase.backend.util.validator.DateValidator;
 import com.github.javafaker.Faker;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
@@ -18,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.lang.invoke.MethodHandles;
@@ -458,32 +456,39 @@ public class TestDataGenerator {
 
         Faker faker = new Faker(new Locale("de-AT"));
         Random random = new Random();
-        for (int i = 1; i <= 32; i++) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(2021, Calendar.APRIL, 30);
-            Date start = faker.date().between(new Date(System.currentTimeMillis()), calendar.getTime());
-            Date end = faker.date().future(14, TimeUnit.DAYS, start);
-            Address address = Address.AddressBuilder.aAddress()
-                .withAddressLine(faker.address().streetAddress())
-                .withCity(faker.address().city())
-                .withState(faker.address().state())
-                .withZip(Integer.parseInt(faker.address().zipCode()))
-                .build();
-            Set<Task> tasks = generateRandomTasks(3);
-            Event event = Event.EventBuilder.aEvent()
-                .withTitle("Event " + i)
-                .withDescription("Description " + i)
-                .withStart(convertToLocalDateTime(start))
-                .withEnd(convertToLocalDateTime(end))
-                .withAddress(addressRepository.save(address))
-                .withTask(tasks)
-                .withEmployer(employerRepository.findByProfile_Id(random.nextInt(companyNames.length + NUMBER_OF_PRIVATE_EMPLOYERS) + 1L))
-                .build();
-            Event savedEvent = eventRepository.save(event);
-            for (Task task : tasks) {
-                task.setEvent(savedEvent);
-                taskRepository.save(task);
+        try {
+            RandomAccessFile eventFile = new RandomAccessFile("src/main/resources/events.txt", "r");
+//        for (int i = 1; i <= 32; i++) {
+            String line;
+            while ((line = eventFile.readLine()) != null) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(2021, Calendar.APRIL, 30);
+                Date start = faker.date().between(new Date(System.currentTimeMillis()), calendar.getTime());
+                Date end = faker.date().future(14, TimeUnit.DAYS, start);
+                Address address = Address.AddressBuilder.aAddress()
+                    .withAddressLine(faker.address().streetAddress())
+                    .withCity(faker.address().city())
+                    .withState(faker.address().state())
+                    .withZip(Integer.parseInt(faker.address().zipCode()))
+                    .build();
+                Set<Task> tasks = generateRandomTasks(3);
+                Event event = Event.EventBuilder.aEvent()
+                    .withTitle((line.length() > 3 ? line.split(",")[1] : "add title to events.txt"))
+                    .withDescription("TODO: add descriptions to events.txt")
+                    .withStart(convertToLocalDateTime(start))
+                    .withEnd(convertToLocalDateTime(end))
+                    .withAddress(addressRepository.save(address))
+                    .withTask(tasks)
+                    .withEmployer(employerRepository.findByProfile_Id(random.nextInt(companyNames.length + NUMBER_OF_PRIVATE_EMPLOYERS) + 1L))
+                    .build();
+                Event savedEvent = eventRepository.save(event);
+                for (Task task : tasks) {
+                    task.setEvent(savedEvent);
+                    taskRepository.save(task);
+                }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         generateApplications(350, 1f);
     }
@@ -576,7 +581,6 @@ public class TestDataGenerator {
         Set<Task> tasks = new HashSet<>();
         List<InterestArea> areas = interestAreaRepository.findAll();
         Random random = new Random();
-
         try {
             RandomAccessFile randomAccessFile = new RandomAccessFile("src/main/resources/tasks.txt", "r");
             int length = (int)randomAccessFile.length();
@@ -597,21 +601,5 @@ public class TestDataGenerator {
             e.printStackTrace();
         }
         return tasks;
-    }
-
-
-    //@PostConstruct
-    public void generateEvents() {
-        generateEmployers();
-        generateEmployees();
-        generateInterestAreas();
-        generateInterests();
-        generateTimes(0.75f);
-        if (eventRepository.findAll().size() > 0) {
-            LOGGER.debug("events already generated");
-        } else {
-
-
-        }
     }
 }
