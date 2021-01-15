@@ -49,4 +49,12 @@ export class EmployeeService {
     console.log('Get all employees');
     return this.httpClient.get<SimpleEmployee[]>(this.employeeBaseUri + 's');
   }
+
+  /**
+   * Deletes an employee
+   */
+  deleteEmployee() {
+    console.log('Delete profile');
+    return this.httpClient.delete(this.employeeBaseUri);
+  }
 }

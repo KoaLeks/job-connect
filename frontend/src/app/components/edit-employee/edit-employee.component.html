@@ -517,7 +517,11 @@
       <!-- TIME Management end-->
       <hr/>
       <alert></alert>
-      <div class="form-group form-check">
+      <div class="form-group">
+        <button type="button" data-target="#deleteProfileModal" data-toggle="modal"
+                class="btn btn-outline-danger float-left">Profil löschen
+        </button>
+        <app-delete-profile></app-delete-profile>
         <button type="button" (click)="update()" class="btn btn-primary float-right">Speichern</button>
       </div>
     </form>

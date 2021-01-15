@@ -34,11 +34,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final Employee_TasksRepository employee_tasksRepository;
     private final EventRepository eventRepository;
     private final TaskRepository taskRepository;
+    private final NotificationRepository notificationRepository;
 
     @Autowired
     public EmployeeServiceImpl(EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder,
                                ProfileService profileService, ProfileRepository profileRepository, InterestRepository interestRepository,
-                               TimeRepository timeRepository, Employee_TasksRepository employee_tasksRepository, EventRepository eventRepository, TaskRepository taskRepository) {
+                               TimeRepository timeRepository, Employee_TasksRepository employee_tasksRepository, EventRepository eventRepository, TaskRepository taskRepository, NotificationRepository notificationRepository) {
         this.employeeRepository = employeeRepository;
         this.passwordEncoder = passwordEncoder;
         this.profileService = profileService;
@@ -48,6 +49,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.employee_tasksRepository = employee_tasksRepository;
         this.eventRepository = eventRepository;
         this.taskRepository = taskRepository;
+        this.notificationRepository = notificationRepository;
     }
 
     @Override
@@ -235,5 +237,22 @@ public class EmployeeServiceImpl implements EmployeeService {
                 timeRepository.delete(time);
             }
         }
+    }
+
+    @Override
+    public boolean hasUpcomingTasks(String email) {
+        LOGGER.info("Check if employee has upcoming tasks: {}", email);
+        Employee employee = employeeRepository.findByProfile_Email(email);
+        return employee_tasksRepository.countAllByEmployeeAndAcceptedAndEndAfter(employee.getId(), LocalDateTime.now()) > 0;
+    }
+
+    @Override
+    public void deleteByEmail(String email) {
+        LOGGER.info("Delete employee(+their employee_tasks, interests, notifications): {}", email);
+        employee_tasksRepository.deleteEmployee_TasksByEmployee_Profile_Email(email);
+        notificationRepository.deleteNotificationsByRecipient_EmailEqualsOrSender_EmailEquals(email, email);
+        interestRepository.deleteInterestsByEmployee_Profile_Email(email);
+        employeeRepository.deleteEmployeeByProfile_Email(email);
+        profileRepository.deleteByEmail(email);
     }
 }
