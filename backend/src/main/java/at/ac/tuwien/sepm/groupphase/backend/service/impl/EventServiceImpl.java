@@ -61,7 +61,9 @@ public class EventServiceImpl implements EventService {
                 taskRepository.save(task);
             }
         }
-        mailService.sendNotificationToAvailableEmployees(event);
+        new Thread(() -> {
+            mailService.sendNotificationToAvailableEmployees(event);
+        }).start();
         return savedEvent;
     }
     @Override

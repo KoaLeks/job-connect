@@ -236,4 +236,10 @@ public class EmployeeServiceImpl implements EmployeeService {
             }
         }
     }
+
+    @Override
+    public List<Employee> getAvailableEmployeesByEvent(Long eventId) {
+        LOGGER.info("Find all available employees for event {}", eventId);
+        return employeeRepository.getAvailableEmployeesByEvent(eventId);
+    }
 }

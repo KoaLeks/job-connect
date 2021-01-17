@@ -47,4 +47,6 @@ public interface EmployeeService {
      * @param task_id look for start and end time of event where this task belongs to
      */
     void deleteTime(Long employee_id, Long task_id);
+
+    List<Employee> getAvailableEmployeesByEvent(Long eventId);
 }
