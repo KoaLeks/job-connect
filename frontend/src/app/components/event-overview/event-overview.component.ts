@@ -19,7 +19,6 @@ import {EditEmployee} from '../../dtos/edit-employee';
 })
 export class EventOverviewComponent implements OnInit {
   events: DetailedEvent[] = [];
-  foundEvents: DetailedEvent[] = [];
   eventSearchForm;
 
   interestAreas: InterestArea[];
@@ -84,7 +83,7 @@ export class EventOverviewComponent implements OnInit {
           event.userId = profile.profileDto.id;
           this.eventService.searchEvent(event).subscribe(
             (events: DetailedEvent[]) => {
-              this.foundEvents = events;
+              this.events = events;
               this.search = true;
             }, error => {
               this.error = true;
@@ -98,7 +97,7 @@ export class EventOverviewComponent implements OnInit {
     } else {
       this.eventService.searchEvent(event).subscribe(
         (events: DetailedEvent[]) => {
-          this.foundEvents = events;
+          this.events = events;
           this.search = true;
         }, error => {
           this.defaultServiceErrorHandling(error);
