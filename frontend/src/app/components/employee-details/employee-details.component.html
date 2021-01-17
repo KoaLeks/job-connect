@@ -28,7 +28,8 @@
     <div class="col-lg-6 col-sm-6">
       <div class="desc-interests">Profilbeschreibung</div>
       {{employee.simpleProfileDto.publicInfo}}
-      <p *ngIf="employee.simpleProfileDto.publicInfo === ''" style="font-style: italic">Keine Profilbeschreibung
+      <p *ngIf="employee.simpleProfileDto.publicInfo === null || employee.simpleProfileDto.publicInfo === ''"
+         style="font-style: italic">Keine Profilbeschreibung
         vorhanden</p>
       <hr class="my-3"/>
       <div class="desc-interests">Interessen</div>

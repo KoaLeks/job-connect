@@ -35,7 +35,7 @@
       </div>
 
       <!-- company description -->
-      <div class="form-group">
+      <div class="form-group" *ngIf="employer !== undefined && employer.companyName !== 'Privatperson'">
         <label for="companyDescription_edit_employer">Beschreibung des Unternehmens</label>
         <textarea name="companyDescription" formControlName="companyDescription" class="form-control"
                   id="companyDescription_edit_employer"
