@@ -370,10 +370,13 @@ public class TestDataGenerator {
                         randomAccessFile.seek(pos);
                         randomAccessFile.readLine();
                         String line = randomAccessFile.readLine();
-                        if (line == null) continue;
+                        if (line == null) {
+                            continue;
+                        }
+                        String[] parts = line.split(";");
                         Interest interest = Interest.InterestBuilder.aInterest()
-                            .withName(line.split(",")[1])
-                            .withDescription("TODO: add description to interests.txt")
+                            .withName(parts[1])
+                            .withDescription(parts.length > 2 ? parts[2].replace("\"", "") : "TODO: add description to interests.txt")
                             .withInterestArea(interestAreaRepository.getOne(random.nextInt(16) + 1L))
                             .withEmployee(employee)
                             .build();
@@ -446,7 +449,7 @@ public class TestDataGenerator {
     }
 
     @PostConstruct
-    public void generateActualEvents(){
+    public void generateEvents(){
 
         generateEmployers();
         generateEmployees();
@@ -473,7 +476,7 @@ public class TestDataGenerator {
                     .build();
                 Set<Task> tasks = generateRandomTasks(3);
                 Event event = Event.EventBuilder.aEvent()
-                    .withTitle((line.length() > 3 ? line.split(",")[1] : "add title to events.txt"))
+                    .withTitle((line.length() > 3 ? line.split(";")[1] : "add title to events.txt"))
                     .withDescription("TODO: add descriptions to events.txt")
                     .withStart(convertToLocalDateTime(start))
                     .withEnd(convertToLocalDateTime(end))
@@ -490,7 +493,7 @@ public class TestDataGenerator {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        generateApplications(350, 1f);
+        generateApplications(500, 0.3f);
     }
 
     public LocalDateTime convertToLocalDateTime(Date dateToConvert) {
@@ -512,7 +515,6 @@ public class TestDataGenerator {
             notification.setMessage(String.format("Deine Bewerbung für das Event \"%s\" wurde abgelehnt", event.getTitle()));
             notification.setType(NotificationType.EVENT_DECLINED.name());
         }
-
         employee_tasksService.updateStatus(employee_tasks);
         notificationRepository.deleteById(applicationId);
         notificationRepository.save(notification);
@@ -591,7 +593,7 @@ public class TestDataGenerator {
                 String line = randomAccessFile.readLine();
                 if (line == null) continue;
                 Task task = new Task();
-                task.setDescription(line.substring(line.indexOf(",") + 1));
+                task.setDescription(line.substring(line.indexOf(";") + 1));
                 task.setEmployeeCount(1 + random.nextInt(9));
                 task.setPaymentHourly((double) (5 + random.nextInt(20)));
                 task.setInterestArea(areas.get(random.nextInt(areas.size() - 1)));

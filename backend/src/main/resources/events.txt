@@ -1,32 +1,32 @@
-1,Umzugshelfer gesucht!,
-2,Temporaere Hilfsarbeiter gesucht,
-3,Pianounterricht (Anfaenger),
-4,Physik Nachhilfe (7. Schulstufe),
-5,Kundenbetreung,
-6,Tagesbetreuung einer Seniorin,
-7,Babysitter fuer 2 Kinder (5-8 Jahre) gesucht,
-8,Hundesitter fuer große Rassen gesucht,
-9,Putzhilfe,
-10,Social Media Manger/in gesucht (Teilzeit),
-11,Aushilfskraefte fuer Firmenevent gesucht,
-12,Computer-/Tablet/Smartphone-Unterricht,
-13,Geburtstagsfeier Helfer gesucht,
-14,Nachhilfelehrer fuer Deutsch/Englisch (10. Schulstufe) gesucht,
-15,Promoter fuer Non-Profit-Organisationen,
-16,Servicekraft fuer Messe/Event,
-17,Buerohilfe Buchhaltung,
-18,
-19,
-20,
-21,
-22,
-23,
-24,
-25,
-26,
-27,
-28,
-29,
-30,
-31,
-32,
+1;Umzugshelfer gesucht!;
+2;Temporaere Hilfsarbeiter gesucht;
+3;Pianounterricht (Anfaenger);
+4;Physik Nachhilfe (7. Schulstufe);
+5;Kundenbetreung;
+6;Tagesbetreuung einer Seniorin;
+7;Babysitter fuer 2 Kinder (5-8 Jahre) gesucht;
+8;Hundesitter fuer grosse Rassen gesucht;
+9;Putzhilfe;
+10;Social Media Manger/in gesucht (Teilzeit);
+11;Aushilfskraefte fuer Firmenevent gesucht;
+12;Computer-/Tablet/Smartphone-Unterricht;
+13;Geburtstagsfeier Helfer gesucht;
+14;Nachhilfelehrer fuer Deutsch/Englisch (10. Schulstufe) gesucht;
+15;Promoter fuer Non-Profit-Organisationen;
+16;Servicekraft fuer Messe/Event;
+17;Buerohilfe Buchhaltung;
+18;Messebetreuung Kundenempfang;
+19;KellnerInn gesucht;
+20;Marketing/Kommunikation Nebenjob;
+21;Verkauf/Retail Nebenjob;
+22;Montagemechaniker/in;
+23;Projekt-Assistent/in;
+24;Logistikmitarbeiter;
+25;Verkaufsberater EDV (Mobile/Internet/TV);
+26;Grafik-Designer;
+27;Landschaftsgaertner/in;
+28;Customer Service Mitarbeiter (m/w);
+29;Social Promotion;
+30;Promotion fuer den Umweltschutz;
+31;WebentwicklerIn gesucht (m/w/d);
+32;Pflegeassistentin;
