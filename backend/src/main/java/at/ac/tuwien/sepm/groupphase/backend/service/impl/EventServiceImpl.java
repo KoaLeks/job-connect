@@ -79,7 +79,7 @@ public class EventServiceImpl implements EventService {
         if(id != null) {
             Optional<Event> event = eventRepository.findById(id);
             if (event.isPresent()) return event.get();
-            else throw new NotFoundException(String.format("Could not find event with id %s", id));
+            else throw new NotFoundException(String.format("Event(%s) konnte nicht gefunden werden", id));
         }
         return null;
     }

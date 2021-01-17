@@ -26,6 +26,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -85,6 +86,12 @@ public class ProfileEndpointTest implements TestData {
 
     @Autowired
     private AddressRepository addressRepository;
+
+    @Autowired
+    private Employee_TasksRepository employee_tasksRepository;
+
+    @Autowired
+    private TaskRepository taskRepository;
 
     private Employee employee = Employee.EmployeeBuilder.aEmployee()
         .withProfile(Profile.ProfileBuilder.aProfile()
@@ -190,11 +197,22 @@ public class ProfileEndpointTest implements TestData {
         .withTask(TASKS_EVENT)
         .build();
 
+    private final Task task = Task.TaskBuilder.aTask()
+        .withDescription(DESCRIPTION_TASK)
+        .withEmployeeCount(EMPLOYEE_COUNT)
+        .withPaymentHourly(PAYMENT_HOURLY)
+        .withEvent(EVENT)
+        .withEmployees(EMPLOYEES)
+        .withInterestArea(INTEREST_AREA)
+        .build();
+
     @BeforeEach
     public void beforeEach() {
         timeRepository.deleteAll();
         interestRepository.deleteAll();
         interestAreaRepository.deleteAll();
+        employee_tasksRepository.deleteAll();
+        taskRepository.deleteAll();
         eventRepository.deleteAll();
         employeeRepository.deleteAll();
         employerRepository.deleteAll();
@@ -289,7 +307,6 @@ public class ProfileEndpointTest implements TestData {
             () -> {
                 //Reads the errors from the body
                 String content = response.getContentAsString();
-                content = content.substring(content.indexOf('[') + 1, content.indexOf(']'));
                 String[] errors = content.split(",");
                 assertEquals(8, errors.length);
             }
@@ -318,7 +335,6 @@ public class ProfileEndpointTest implements TestData {
             () -> {
                 //Reads the errors from the body
                 String content = response.getContentAsString();
-                content = content.substring(content.indexOf('[') + 1, content.indexOf(']'));
                 String[] errors = content.split(",");
                 assertEquals(9, errors.length);
             }
@@ -739,5 +755,97 @@ public class ProfileEndpointTest implements TestData {
 
         MockHttpServletResponse response = mvcResult.getResponse();
         assertEquals(HttpStatus.NO_CONTENT.value(), response.getStatus());
+    }
+
+    @Test
+    public void deleteEmployerWithUpcomingEvent_ShouldReturnConflict() throws Exception {
+        Profile profile = profileRepository.save(employer.getProfile());
+        employer.setProfile(profile);
+        employer.setId(profile.getId());
+        Employer e = employerRepository.save(employer);
+
+        Address a = addressRepository.save(address);
+
+        event.setAddress(a);
+        event.setEmployer(e);
+        event.setStart(LocalDateTime.now().plusDays(1));
+        event.setEnd(LocalDateTime.now().plusDays(2));
+
+        eventRepository.save(event);
+
+        MvcResult mvcResult = this.mockMvc.perform(delete(DELETE_EMPLOYER_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpStatus.CONFLICT.value(), response.getStatus());
+    }
+
+    @Test
+    public void deleteEmployeeWithNoUpcomingTasks_ShouldReturnNoContent() throws Exception {
+        Profile profile = profileRepository.save(employee.getProfile());
+        employee.setProfile(profile);
+        employee.setId(profile.getId());
+        Employee employee = employeeRepository.save(this.employee);
+
+        Address a = addressRepository.save(address);
+        event.setAddress(a);
+        Event event = eventRepository.save(this.event);
+
+        this.task.setEvent(event);
+        Task task = taskRepository.save(this.task);
+
+        Employee_Tasks employee_tasks = new Employee_Tasks();
+        employee_tasks.setId(1L);
+        employee_tasks.setAccepted(true);
+        employee_tasks.setEmployee(employee);
+        employee_tasks.setTask(task);
+
+        employee_tasksRepository.save(employee_tasks);
+
+        MvcResult mvcResult = this.mockMvc.perform(delete(DELETE_EMPLOYEE_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpStatus.NO_CONTENT.value(), response.getStatus());
+    }
+
+    @Test
+    public void deleteEmployeeWithUpcomingTasks_ShouldReturnConflict() throws Exception {
+        Profile profile = profileRepository.save(employee.getProfile());
+        employee.setProfile(profile);
+        employee.setId(profile.getId());
+        Employee employee = employeeRepository.save(this.employee);
+
+        Address a = addressRepository.save(address);
+        event.setAddress(a);
+        event.setStart(LocalDateTime.now().plusDays(1));
+        event.setEnd(LocalDateTime.now().plusDays(2));
+        Event event = eventRepository.save(this.event);
+
+        this.task.setEvent(event);
+        Task task = taskRepository.save(this.task);
+
+        Employee_Tasks employee_tasks = new Employee_Tasks();
+        employee_tasks.setId(1L);
+        employee_tasks.setAccepted(true);
+        employee_tasks.setEmployee(employee);
+        employee_tasks.setTask(task);
+
+        employee_tasksRepository.save(employee_tasks);
+
+        MvcResult mvcResult = this.mockMvc.perform(delete(DELETE_EMPLOYEE_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpStatus.CONFLICT.value(), response.getStatus());
     }
 }

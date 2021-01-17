@@ -94,6 +94,7 @@ public interface TestData {
     String EDIT_PASSWORD_BASE_URI = BASE_URI + "/profiles/updatePassword";
     String CONTACT_BASE_URI = BASE_URI + "/profiles/contact";
     String DELETE_EMPLOYER_BASE_URI = BASE_URI + "/profiles/employer";
+    String DELETE_EMPLOYEE_BASE_URI = BASE_URI + "/profiles/employee";
 
     Long TIME_ID = 1L;
     LocalDateTime START_TIME = LocalDateTime.of(2022, 11, 13, 12, 0, 0, 0);

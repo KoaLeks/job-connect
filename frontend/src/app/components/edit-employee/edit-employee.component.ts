@@ -25,6 +25,7 @@ export class EditEmployeeComponent implements OnInit {
   profile: any;
   employee: EditEmployee;
   genderOptions = Object.values(Gender);
+  pattern = '[a-zA-ZÖöÜüÄä]+([ ]|[a-zA-ZÖöÜüÄä])*';
   selectedPicture = null;
   picture;
   hasPicture = false;
@@ -55,8 +56,8 @@ export class EditEmployeeComponent implements OnInit {
               private alertService: AlertService) {
     this.editForm = this.formBuilder.group({
       email: ['', [Validators.required]],
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
+      firstName: ['', [Validators.required, Validators.pattern(this.pattern)]],
+      lastName: ['', [Validators.required, Validators.pattern(this.pattern)]],
       publicInfo: [''],
       gender: ['', [Validators.required]],
       picture: null,
