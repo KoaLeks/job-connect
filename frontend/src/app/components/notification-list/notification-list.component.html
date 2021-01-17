@@ -2,7 +2,7 @@
 <ng-container *ngFor="let notification of notifications; trackBy: trackId">
   <li class="list-group-item mb-2" (mouseover)="updateSeenStatus(notification)">
     <div class="row">
-      <span *ngIf="!notification.seen" class="badge badge-danger float-left">new</span>
+      <span *ngIf="!notification.seen" class="badge badge-danger float-left">neu</span>
     </div>
     <div class="justify-content-end">
       <a (click)="deleteNotification(notification.id)" type="button" class="close">

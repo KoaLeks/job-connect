@@ -169,9 +169,24 @@ public class ProfileEndpoint {
         String email = tokenService.getEmailFromHeader(authorization);
         LOGGER.info("DELETE api/v1/profiles/employer {}", email);
         if (employerService.hasActiveEvents(email)) {
-            throw new NotDeletedException("Profil kann nicht gelöscht werden. Es gibt noch laufende oder zukünftige Events.");
+            throw new NotDeletedException("Profil kann nicht gelöscht werden. Es gibt noch laufende oder zukünftige Events. Sagen Sie die Events zuerst ab.");
         } else {
             employerService.deleteByEmail(email);
+        }
+    }
+
+    @DeleteMapping("/employee")
+    @ApiOperation(value = "Delete an employee", authorizations = {@Authorization(value = "apiKey")})
+    @PreAuthorize("hasAuthority('ROLE_EMPLOYEE')")
+    @CrossOrigin(origins = "http://localhost:4200")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteEmployee(@RequestHeader String authorization) {
+        String email = tokenService.getEmailFromHeader(authorization);
+        LOGGER.info("DELETE api/v1/profiles/employee {}", email);
+        if (employeeService.hasUpcomingTasks(email)) {
+            throw new NotDeletedException("Profil kann nicht gelöscht werden. Es gibt noch laufende oder zukünftige Events. Melden Sie sich zuerst ab.");
+        } else {
+            employeeService.deleteByEmail(email);
         }
     }
 }

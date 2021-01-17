@@ -22,14 +22,15 @@ export class EditEmployerComponent implements OnInit {
   hasPicture = false;
   @ViewChild('pictureUpload') // needed for resetting fileUpload button
   inputImage: ElementRef; // needed for resetting fileUpload button
+  pattern = '[a-zA-ZÖöÜüÄä]+([ ]|[a-zA-ZÖöÜüÄä])*';
 
   constructor(public authService: AuthService, private router: Router, private formBuilder: FormBuilder,
               private employerService: EmployerService, private updateHeaderService: UpdateHeaderService,
               private alertService: AlertService) {
     this.editForm = this.formBuilder.group({
       email: ['', [Validators.required]],
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
+      firstName: ['', [Validators.required, Validators.pattern(this.pattern)]],
+      lastName: ['', [Validators.required, Validators.pattern(this.pattern)]],
       companyName: ['', [Validators.required]],
       companyDescription: [''],
       publicInfo: [''],

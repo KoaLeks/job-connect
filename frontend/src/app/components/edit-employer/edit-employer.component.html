@@ -58,6 +58,9 @@
               <small class="form-text text-info" *ngIf="editForm.controls.firstName.errors.required">Vorname muss
                 eingegeben werden
               </small>
+              <small class="form-text text-info" *ngIf="editForm.controls.firstName.errors.pattern">
+                Vorname muss mit einem Buchstaben beginnen und darf keine Sonderzeichen enthalten
+              </small>
             </div>
           </div>
         </div>
@@ -73,6 +76,9 @@
                  class="error">
               <small class="form-text text-info" *ngIf="editForm.controls.lastName.errors.required">Nachname muss
                 eingegeben werden
+              </small>
+              <small class="form-text text-info" *ngIf="editForm.controls.lastName.errors.pattern">
+                Nachname muss mit einem Buchstaben beginnen und darf keine Sonderzeichen enthalten
               </small>
             </div>
           </div>

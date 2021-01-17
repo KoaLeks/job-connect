@@ -54,7 +54,7 @@ public class EmployerServiceImpl implements EmployerService {
         LOGGER.info("Find employer with id {}", id);
         Optional<Employer> employer = employerRepository.findById(id);
         if (employer.isPresent()) return employer.get();
-        else throw new NotFoundException(String.format("Could not find employer with id %s", id));
+        else throw new NotFoundException(String.format("ArbeitgeberIn(%s) konnte nicht gefunden werden", id));
     }
 
     @Override
