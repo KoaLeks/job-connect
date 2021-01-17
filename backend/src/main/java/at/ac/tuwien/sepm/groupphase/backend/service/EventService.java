@@ -39,4 +39,7 @@ public interface EventService {
      * Delete event by id
      */
     void deleteEventById(Long id);
+
+
+    List<Event> findAllAppliedEvents(Long id);
 }

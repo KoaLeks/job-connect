@@ -17,6 +17,11 @@
                 !authService.isLoggedIn()">Events</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link nav-class" routerLink="/applied-events" routerLinkActive="active"
+               *ngIf="(authService.isLoggedIn() && authService.userIsEmployee())">
+              Aktuelle Bewerbungen</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link nav-class" routerLink="/events" routerLinkActive="active"
                *ngIf="authService.isLoggedIn() && authService.userIsEmployer()">Meine Events</a>
           </li>

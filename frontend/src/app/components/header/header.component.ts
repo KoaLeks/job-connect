@@ -82,7 +82,6 @@ export class HeaderComponent implements OnInit {
           } else {
             this.hasPicture = false;
           }
-          console.log(profile);
         },
         error => {
           this.error = true;
@@ -101,7 +100,6 @@ export class HeaderComponent implements OnInit {
           } else {
             this.hasPicture = false;
           }
-          console.log(profile);
         },
         error => {
           this.error = true;
