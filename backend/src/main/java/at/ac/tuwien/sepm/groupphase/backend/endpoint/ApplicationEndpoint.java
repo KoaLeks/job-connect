@@ -1,9 +1,8 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.ApplicationDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.ApplicationStatusDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleNotificationDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.*;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.ApplicationStatusMapper;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.NotificationMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.exception.AlreadyHandledException;
@@ -11,20 +10,19 @@ import at.ac.tuwien.sepm.groupphase.backend.service.*;
 import at.ac.tuwien.sepm.groupphase.backend.util.NotificationType;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AuthorizationServiceException;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.lang.invoke.MethodHandles;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -42,6 +40,7 @@ public class ApplicationEndpoint {
     private final EmployerService employerService;
     private final EmployeeService employeeService;
     private final NotificationMapper notificationMapper;
+    private final EventMapper eventMapper;
 
 
     private final TokenService tokenService;
@@ -51,7 +50,7 @@ public class ApplicationEndpoint {
                                Employee_TasksService employee_tasksService, TaskService taskService,
                                NotificationService notificationService, EmployerService employerService,
                                EmployeeService employeeService, TokenService tokenService,
-                               NotificationMapper notificationMapper) {
+                               NotificationMapper notificationMapper, EventMapper eventMapper) {
         this.applicationStatusMapper = applicationStatusMapper;
         this.eventService = eventService;
         this.employee_tasksService = employee_tasksService;
@@ -61,6 +60,7 @@ public class ApplicationEndpoint {
         this.employeeService = employeeService;
         this.tokenService = tokenService;
         this.notificationMapper = notificationMapper;
+        this.eventMapper = eventMapper;
     }
 
 
@@ -154,6 +154,14 @@ public class ApplicationEndpoint {
         return notificationMapper.notificationsToSimpleNotificationsDtos(notificationService.findAllApplicationsByEvent_Id(id));
     }
 
-    // TODO
-    // add PUT method: change favorite boolean of this application
+    @GetMapping(value = "/applied")
+    @ApiOperation(value = "Get all applications for an Event", authorizations = {@Authorization(value = "apiKey")})
+    @ResponseStatus(HttpStatus.OK)
+    @CrossOrigin(origins = "http://localhost:4200")
+    @Transactional
+    public List<DetailedEventDto> getAppliedEvents(@RequestHeader String authorization){
+        LOGGER.info("Get /api/v1/applications/applied");
+        Employee emp = tokenService.getEmployeeFromHeader(authorization);
+        return eventMapper.eventsToDetailedEventDtos(eventService.findAllAppliedEvents(emp.getId()));
+    }
 }
