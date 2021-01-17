@@ -86,7 +86,7 @@
           Bewirb dich jetzt!
         </button>
         <button type="button" style="float: right" *ngIf="this.authService.getToken() !== '' && eventDetails != undefined && authService.getUserRole() === 'EMPLOYER' &&
-         authService.getTokenIdentifier() === eventDetails.employer.simpleProfileDto.email"
+         authService.getTokenIdentifier() === eventDetails.employer.simpleProfileDto.email && checkDateInFuture(eventDetails.end)"
                 class="btn btn-outline-danger" data-toggle="modal" data-target="#Delete-Event">
           Event absagen!
         </button>

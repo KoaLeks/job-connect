@@ -17,6 +17,8 @@ export class EventOverviewComponent implements OnInit {
   loggedInEmployer: boolean;
   notLoggedIn: boolean;
   employerEvents: DetailedEvent[] = [];
+  uniqueDateArray: string[] = [];
+  uniqueDateArrayEmployer: string[] = [];
 
   constructor(public authService: AuthService, private eventService: EventService) {
   }
@@ -83,12 +85,37 @@ export class EventOverviewComponent implements OnInit {
     }
   }
 
-
   // sorts Events by Date by calculating the number of milliseconds between January 1, 1970 and 'event.start'
   private sortEventsByDate() {
+    const dateArray: string[] = [];
+    const dateArrayEmployer: string[] = [];
+
     for (const event of this.events) {
       event.sortHelper = Date.parse(event.start); // returns the number of milliseconds between January 1, 1970 and 'event.start'
+      dateArray.push(event.start.split('T')[0]);
     }
+
+    for (const event of this.employerEvents) {
+      dateArrayEmployer.push(event.start.split('T')[0]);
+    }
+
+
+    for (const date of dateArray) {
+      if (this.uniqueDateArray.indexOf(date) === -1) {
+        if (new Date() <= new Date(date)) { // only show future events
+          this.uniqueDateArray.push(date);
+        }
+      }
+    }
+
+    for (const date of dateArrayEmployer) {
+      if (this.uniqueDateArrayEmployer.indexOf(date) === -1) {
+          this.uniqueDateArrayEmployer.push(date);
+      }
+    }
+
     this.events.sort((a, b) => (a.sortHelper > b.sortHelper ? 1 : -1));
+    this.uniqueDateArray.sort((a, b) => (a > b ? 1 : -1));
+    this.uniqueDateArrayEmployer.sort((a, b) => (a > b ? 1 : -1));
   }
 }

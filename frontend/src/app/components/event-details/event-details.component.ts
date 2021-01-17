@@ -132,4 +132,14 @@ export class EventDetailsComponent implements OnInit {
       }
     );
   }
+
+  checkDateInFuture(date: any) {
+    return new Date(date) >= new Date();
+  }
+
+  // TODO bei event bewerben als employer möglich?
+  // TODO bei event von past bewerben möglich?
+  // TODO tobi sagen dass ich delete event button geändert habe mit future check
+  // TODO past events als abgelaufen markieren (nach end date checken)
+
 }
