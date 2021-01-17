@@ -99,7 +99,6 @@ export class EventOverviewComponent implements OnInit {
       dateArrayEmployer.push(event.start.split('T')[0]);
     }
 
-
     for (const date of dateArray) {
       if (this.uniqueDateArray.indexOf(date) === -1) {
         if (new Date() <= new Date(date)) { // only show future events
@@ -117,5 +116,9 @@ export class EventOverviewComponent implements OnInit {
     this.events.sort((a, b) => (a.sortHelper > b.sortHelper ? 1 : -1));
     this.uniqueDateArray.sort((a, b) => (a > b ? 1 : -1));
     this.uniqueDateArrayEmployer.sort((a, b) => (a > b ? 1 : -1));
+  }
+
+  checkDateInFuture(date) {
+    return new Date(date) >= new Date();
   }
 }
