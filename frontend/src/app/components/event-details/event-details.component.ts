@@ -29,6 +29,9 @@ export class EventDetailsComponent implements OnInit {
   eventDetails: DetailedEvent;
   loggedInEmployee = false;
   employee: any;
+  applied = false;
+  appliedTask;
+  appliedStatus;
   applyTaskForm;
 
   constructor(public authService: AuthService, private route: ActivatedRoute, private employerService: EmployerService,
@@ -64,6 +67,20 @@ export class EventDetailsComponent implements OnInit {
     }
   }
 
+  private setApplied() {
+    if (this.loggedInEmployee) {
+      for (const task of this.eventDetails.tasks) {
+        for (const emp of task.employees) {
+          if (emp.employee.simpleProfileDto.email === this.authService.getEmail()) {
+            this.applied = true;
+            this.appliedStatus = emp.accepted;
+            this.appliedTask = task.description;
+          }
+        }
+      }
+    }
+  }
+
   private getNumberOfParticipants(task: Task) {
     // console.log(JSON.stringify(task.employees));
     let count = 0;
@@ -89,6 +106,7 @@ export class EventDetailsComponent implements OnInit {
           this.picture = null;
           this.hasPicture = false;
         }
+        this.setApplied();
       },
       error => {
         this.error = true;

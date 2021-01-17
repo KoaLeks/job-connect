@@ -29,6 +29,7 @@ import { EmployeeDetailsComponent } from './components/employee-details/employee
 import { ContactComponent } from './components/contact/contact.component';
 import { DeleteProfileComponent } from './components/delete-profile/delete-profile.component';
 import { EmployerDetailsComponent } from './components/employer-details/employer-details.component';
+import { EventAppliedComponent } from './components/event-applied/event-applied.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { EmployerDetailsComponent } from './components/employer-details/employer
     ContactComponent,
     DeleteProfileComponent,
     EmployerDetailsComponent,
+    EventAppliedComponent,
   ],
   imports: [
     BrowserModule,

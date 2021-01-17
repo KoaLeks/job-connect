@@ -39,6 +39,7 @@ export class EventOverviewComponent implements OnInit {
       (events: DetailedEvent[]) => {
         this.events = events;
         this.getEmployerEvents();
+        this.sortEventsByDate();
       },
       error => {
         this.defaultServiceErrorHandling(error);
@@ -80,5 +81,14 @@ export class EventOverviewComponent implements OnInit {
     } else {
       this.errorMessage = error.error;
     }
+  }
+
+
+  // sorts Events by Date by calculating the number of milliseconds between January 1, 1970 and 'event.start'
+  private sortEventsByDate() {
+    for (const event of this.events) {
+      event.sortHelper = Date.parse(event.start); // returns the number of milliseconds between January 1, 1970 and 'event.start'
+    }
+    this.events.sort((a, b) => (a.sortHelper > b.sortHelper ? 1 : -1));
   }
 }

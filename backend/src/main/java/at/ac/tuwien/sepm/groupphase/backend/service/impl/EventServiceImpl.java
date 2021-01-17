@@ -113,4 +113,11 @@ public class EventServiceImpl implements EventService {
         }).start();
     }
 
+    @Override
+    @Transactional
+    public List<Event> findAllAppliedEvents(Long id) {
+        LOGGER.debug("Find all events where Employee with id %s applied" + id);
+        return eventRepository.findAllAppliedEvents(id);
+    }
+
 }
