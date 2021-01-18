@@ -86,6 +86,7 @@ export class AuthService {
    * Returns the users email address based on the current token
    */
   getTokenIdentifier(): String {
+    if (this.getToken() === '') { return null; }
     const decoded: any = jwt_decode(this.getToken());
     if (decoded.sub === undefined) {
       return null;

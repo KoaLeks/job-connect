@@ -13,11 +13,13 @@ import {PageNotFoundComponent} from './components/page-not-found/page-not-found.
 import {EmployeeDetailsComponent} from './components/employee-details/employee-details.component';
 import {EmployerGuard} from './guards/employer.guard';
 import {EmployeeGuard} from './guards/employee.guard';
+import {EmployerDetailsComponent} from './components/employer-details/employer-details.component';
 import {EventAppliedComponent} from './components/event-applied/event-applied.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'events', component: EventOverviewComponent},
+  {path: 'employer/:id/details', component: EmployerDetailsComponent},
   {path: 'message', canActivate: [AuthGuard], component: MessageComponent},
   {path: 'create-event', canActivate: [AuthGuard, EmployerGuard], component: CreateEventComponent},
   {path: 'message', canActivate: [AuthGuard], component: MessageComponent},

@@ -107,6 +107,14 @@ public class ProfileEndpoint {
         return employerService.createEmployer(employer);
     }
 
+    @GetMapping(value = "/employer/{id}/details")
+    @ApiOperation(value = "Get an employers profile details by id")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public SimpleEmployerDto getEmployerById(@PathVariable @NotNull Long id) {
+        LOGGER.info("GET /api/v1/profiles/employer/{}", id);
+        return employerMapper.employerToSimpleEmployerDto(employerService.findOneById(id));
+    }
+
     @GetMapping(value = "/employer")
     @ApiOperation(value = "Get an employers profile details", authorizations = {@Authorization(value = "apiKey")})
     @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")

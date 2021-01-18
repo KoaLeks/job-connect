@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Globals} from '../global/globals';
 import {EditEmployer} from '../dtos/edit-employer';
+import {SimpleEmployer} from '../dtos/simple-employer';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,15 @@ export class EmployerService {
   getEmployerByEmail() {
     console.log('Get employer by email');
     return this.httpClient.get<any>(this.employerBaseUri);
+  }
+
+  /**
+   * Loads an employer from the backend using the id
+   * @param id to look for
+   */
+  getEmployerById(id: number) {
+    console.log('Get employer by id ' + id);
+    return this.httpClient.get<SimpleEmployer>(this.employerBaseUri + '/' + id + '/details');
   }
 
   /**

@@ -74,13 +74,30 @@
             <path fill-rule="evenodd" d="M8 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
             <path fill-rule="evenodd" d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8z"/>
           </svg>
-          <h3>
-            {{eventDetails.employer.companyName}}
-          </h3>
-          <p class="text-justify" style="border-top: 1px solid #ccc;"
-             *ngIf="eventDetails.employer.simpleProfileDto.publicInfo !== null && eventDetails.employer.simpleProfileDto.publicInfo !== ''">
-            {{eventDetails.employer.simpleProfileDto.publicInfo}}
-          </p>
+          <div *ngIf="eventDetails.employer.companyName === 'Privatperson'">
+            <h3>
+              <a [routerLink]="['/employer', eventDetails.employer.simpleProfileDto.id, 'details']">
+                {{eventDetails.employer.simpleProfileDto.firstName}} {{eventDetails.employer.simpleProfileDto.lastName}}
+              </a>
+            </h3>
+            <p class="text-justify" style="border-top: 1px solid #ccc;"
+               *ngIf="eventDetails.employer.simpleProfileDto.publicInfo !== null &&
+               eventDetails.employer.simpleProfileDto.publicInfo !== ''">
+              {{eventDetails.employer.simpleProfileDto.publicInfo}}
+            </p>
+          </div>
+          <div *ngIf="eventDetails.employer.companyName !== 'Privatperson'">
+            <h3>
+              <a [routerLink]="['/employer', eventDetails.employer.simpleProfileDto.id, 'details']">
+                {{eventDetails.employer.companyName}}
+              </a>
+            </h3>
+            <p class="text-justify" style="border-top: 1px solid #ccc;"
+               *ngIf="eventDetails.employer.simpleProfileDto.publicInfo !== null &&
+               eventDetails.employer.simpleProfileDto.publicInfo !== ''">
+              {{eventDetails.employer.simpleProfileDto.publicInfo}}
+            </p>
+          </div>
         </div>
       </div>
       <div class="row justify-content-center mt-3" style="border-top: 1px solid #ccc">

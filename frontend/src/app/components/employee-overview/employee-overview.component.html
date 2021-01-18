@@ -15,7 +15,8 @@
       <td class="table_name">{{ employee.simpleProfileDto.lastName}}</td>
       <td class="table_interests">{{ getInterestAreas(employee).join(', ')}}</td>
       <td
-        class="table_public">{{ employee.simpleProfileDto.publicInfo.length > 50 ? employee.simpleProfileDto.publicInfo.substr(0, 50) + '...' : employee.simpleProfileDto.publicInfo}}</td>
+        class="table_public">{{ employee.simpleProfileDto.publicInfo != null &&
+      employee.simpleProfileDto.publicInfo.length > 50 ? employee.simpleProfileDto.publicInfo.substr(0, 50) + '...' : employee.simpleProfileDto.publicInfo}}</td>
     </tr>
     </tbody>
   </table>
