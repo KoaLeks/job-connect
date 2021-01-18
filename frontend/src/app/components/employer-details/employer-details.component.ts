@@ -15,6 +15,8 @@ export class EmployerDetailsComponent implements OnInit {
   hasPicture: boolean;
   picture;
   loggedInEmployer = false;
+  loggedInEmployee = false;
+  loggedIn = false;
 
   constructor(private route: ActivatedRoute, private employerService: EmployerService, public authService: AuthService) {
     this.route.params.subscribe(params => {
@@ -25,6 +27,11 @@ export class EmployerDetailsComponent implements OnInit {
   ngOnInit(): void {
     if (this.authService.isLoggedIn() && this.authService.getUserRole() === 'EMPLOYER') {
       this.loggedInEmployer = true;
+      this.loggedIn = true;
+    }
+    if (this.authService.isLoggedIn() && this.authService.getUserRole() === 'EMPLOYEE') {
+      this.loggedInEmployee = true;
+      this.loggedIn = true;
     }
     this.getEmployerDetails();
   }
@@ -32,6 +39,7 @@ export class EmployerDetailsComponent implements OnInit {
   private getEmployerDetails() {
     this.employerService.getEmployerById(this.id).subscribe(
       (simpleEmployer: SimpleEmployer) => {
+        console.log('test');
         this.employer = simpleEmployer;
         // profile picture
         this.arrayBufferToBase64(this.employer.simpleProfileDto.picture);

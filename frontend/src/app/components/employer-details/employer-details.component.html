@@ -10,9 +10,13 @@
       <div class="name text-center" style="border-bottom: 1px solid #ccc; margin-bottom: 10px">
         {{employer.simpleProfileDto.firstName}} {{employer.simpleProfileDto.lastName}}
       </div>
-      <div class="position-relative" style="text-align: center">
+      <div class="position-relative" style="text-align: center" *ngIf="loggedInEmployer || loggedInEmployee">
         <button class="btn btn-outline-secondary mt-2" data-target="#contactModalEmployer" data-toggle="modal"
                 [disabled]="loggedInEmployer">Kontaktieren Sie mich</button>
+      </div>
+      <div class="position-relative" style="text-align: center" *ngIf="!loggedIn">
+        <button class="btn btn-outline-secondary mt-2" data-target="#contactModalAlert" data-toggle="modal"
+                >Kontaktieren Sie mich</button>
       </div>
     </div>
 
@@ -60,12 +64,39 @@
          style="font-style: italic; margin-top: 16px">Keine Profilbeschreibung
         vorhanden</p>
 
-      <div class="position-relative" style="text-align: center">
+      <div class="position-relative" style="text-align: center" *ngIf="loggedInEmployer || loggedInEmployee">
         <button class="btn btn-outline-secondary mt-2" data-target="#contactModalEmployer" data-toggle="modal"
                 [disabled]="loggedInEmployer">Kontaktieren Sie mich</button>
+      </div>
+      <div class="position-relative" style="text-align: center" *ngIf="!loggedIn">
+        <button class="btn btn-outline-secondary mt-2" data-target="#contactModalAlert" data-toggle="modal"
+                >Kontaktieren Sie mich</button>
       </div>
     </div>
   </div>
 </div>
 
 <app-contact *ngIf="employer" [receiver]="employer"></app-contact>
+
+<!--modal when a user isn't logged in and tries to contact an employer-->
+<div class="modal fade" id="contactModalAlert" data-backdrop="static" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" style="width:50%" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <div style="font-size: 20px">Achtung, Sie sind nicht eingeloggt.</div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        Bitte loggen Sie sich ein, um einen Veranstalter eines Events zu kontaktieren.
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary" data-dismiss="modal">Verstanden</button>
+      </div>
+    </div>
+  </div>
+</div>
+
