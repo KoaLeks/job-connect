@@ -39,7 +39,6 @@ export class EmployerDetailsComponent implements OnInit {
   private getEmployerDetails() {
     this.employerService.getEmployerById(this.id).subscribe(
       (simpleEmployer: SimpleEmployer) => {
-        console.log('test');
         this.employer = simpleEmployer;
         // profile picture
         this.arrayBufferToBase64(this.employer.simpleProfileDto.picture);
