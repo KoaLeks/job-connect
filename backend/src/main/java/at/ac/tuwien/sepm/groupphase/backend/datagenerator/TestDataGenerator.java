@@ -461,20 +461,23 @@ public class TestDataGenerator {
         Random random = new Random();
         try {
             RandomAccessFile eventFile = new RandomAccessFile("src/main/resources/events.txt", "r");
-//        for (int i = 1; i <= 32; i++) {
             String line;
             while ((line = eventFile.readLine()) != null) {
+
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(2021, Calendar.APRIL, 30);
-                Date start = faker.date().between(new Date(System.currentTimeMillis()), calendar.getTime());
-                Date end = faker.date().future(14, TimeUnit.DAYS, start);
+                Date start = roundTimeToQuarter(faker.date().between(new Date(System.currentTimeMillis()), calendar.getTime()));
+                Date end = roundTimeToQuarter(faker.date().future(14, TimeUnit.DAYS, start));
+
                 Address address = Address.AddressBuilder.aAddress()
                     .withAddressLine(faker.address().streetAddress())
                     .withCity(faker.address().city())
                     .withState(faker.address().state())
                     .withZip(Integer.parseInt(faker.address().zipCode()))
                     .build();
+
                 Set<Task> tasks = generateRandomTasks(3);
+
                 Event event = Event.EventBuilder.aEvent()
                     .withTitle((line.length() > 3 ? line.split(";")[1] : "add title to events.txt"))
                     .withDescription("TODO: add descriptions to events.txt")
@@ -494,6 +497,15 @@ public class TestDataGenerator {
             e.printStackTrace();
         }
         generateApplications(500, 0.3f);
+    }
+
+    public Date roundTimeToQuarter(Date dateToRound) {
+        Calendar round = Calendar.getInstance();
+        round.setTime(dateToRound);
+        int unrounded = round.get(Calendar.MINUTE);
+        int mod = unrounded % 15;
+        round.add(Calendar.MINUTE, mod < 8 ? -mod : (15-mod));
+        return round.getTime();
     }
 
     public LocalDateTime convertToLocalDateTime(Date dateToConvert) {
