@@ -25,15 +25,6 @@ export class EventService {
   }
 
   /**
-   * Updates event in the backend
-   * @param event to update
-   */
-  updateEvent(event: Event): Observable<Event> {
-    console.log('Update event: ' + JSON.stringify(event));
-    return this.httpClient.put<Event>(this.eventBaseUri, event);
-  }
-
-  /**
    * Get event details by ID
    * @param id of the event to find
    */

@@ -75,22 +75,6 @@ public class EventEndpoint {
         return eventMapper.eventsToDetailedEventDtos(eventService.findAll());
     }
 
-    @PutMapping
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ApiOperation(value = "Update an event", authorizations = {@Authorization(value = "apiKey")})
-    @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
-    public void update(@Valid @RequestBody EventInquiryDto eventInquiryDto, @RequestHeader String authorization) {
-        LOGGER.info("PUT /api/v1/events/{}", eventInquiryDto);
-        Employer owner = eventService.findById(eventInquiryDto.getId()).getEmployer();
-        Employer employer = tokenService.getEmployerFromHeader(authorization);
-        if(owner != employer){
-            throw new AuthorizationServiceException(String.format("Keine Berchtigung um das Event \"%s\" zu editieren", eventInquiryDto.getTitle()));
-        }
-        eventMapper.eventToEventInquiryDto(
-            eventService.saveEvent(eventMapper.eventInquiryDtoToEvent(eventInquiryDto)));
-
-    }
-
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Delete event and related data")
