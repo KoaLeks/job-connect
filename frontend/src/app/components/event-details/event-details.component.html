@@ -96,7 +96,7 @@
         <div *ngIf="applied">
           Du hast dich bereits für die Aufgabe "{{appliedTask}}" beworben. <span *ngIf="appliedStatus">Deine Bewerbung wurde schon akzeptiert! Bitte warte auf weitere Anweisungen vom Arbeitgeber.</span>
           <span *ngIf="appliedStatus === false">Deine Bewerbung wurde leider abgelehnt. Schau dich in der Eventübersicht nach weiteren Möglichkeiten um!</span>
-          <span *ngIf="appliedStatus === null">Bitte habe noch etwas Geduld, deine Bewerbun ist noch in Arbeit.</span>
+          <span *ngIf="appliedStatus === null">Bitte habe noch etwas Geduld, deine Bewerbung ist noch in Arbeit.</span>
         </div>
       </div>
       <div class="card-footer text-muted">
@@ -105,7 +105,7 @@
           Bewirb dich jetzt!
         </button>
         <button type="button" style="float: right" *ngIf="this.authService.getToken() !== '' && eventDetails != undefined && authService.getUserRole() === 'EMPLOYER' &&
-         authService.getTokenIdentifier() === eventDetails.employer.simpleProfileDto.email"
+         authService.getTokenIdentifier() === eventDetails.employer.simpleProfileDto.email && checkDateInFuture(eventDetails.end)"
                 class="btn btn-outline-danger" data-toggle="modal" data-target="#Delete-Event">
           Event absagen!
         </button>

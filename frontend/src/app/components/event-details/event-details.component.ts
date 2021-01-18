@@ -150,4 +150,8 @@ export class EventDetailsComponent implements OnInit {
       }
     );
   }
+
+  checkDateInFuture(date) {
+    return new Date(date) >= new Date();
+  }
 }
