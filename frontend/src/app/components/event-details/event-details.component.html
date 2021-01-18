@@ -78,7 +78,7 @@
             {{eventDetails.employer.companyName}}
           </h3>
           <p class="text-justify" style="border-top: 1px solid #ccc;"
-             *ngIf="eventDetails.employer.simpleProfileDto.publicInfo !== '' && eventDetails.employer.simpleProfileDto.publicInfo !== null">
+             *ngIf="eventDetails.employer.simpleProfileDto.publicInfo !== null && eventDetails.employer.simpleProfileDto.publicInfo !== ''">
             {{eventDetails.employer.simpleProfileDto.publicInfo}}
           </p>
         </div>
