@@ -50,9 +50,9 @@ public interface EventRepository extends JpaRepository<Event, Long>, JpaSpecific
      */
     @Query(value =
         "SELECT DISTINCT e.id,e.description, e.end, e.start, e.title, e.address_id, e.employer_profile_id FROM event e " +
-        "INNER JOIN task t ON e.id=t.event_id " +
-        "INNER JOIN interest_area a ON t.interest_area_id=a.id " +
-            "INNER JOIN address ad on e.address_id=ad.id " +
+        "LEFT JOIN task t ON e.id=t.event_id " +
+        "LEFT JOIN interest_area a ON t.interest_area_id=a.id " +
+            "LEFT JOIN address ad ON e.address_id=ad.id " +
         "WHERE (?1 IS NULL OR e.title LIKE ?1) AND " +
         "(?2 IS NULL OR e.employer_profile_id=?2) AND " +
             "(FORMATDATETIME(e.start, 'yyyy-MM-dd') between ?3 and ?4) AND " +

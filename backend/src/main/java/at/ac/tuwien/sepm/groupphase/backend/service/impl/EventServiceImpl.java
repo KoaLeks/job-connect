@@ -73,6 +73,7 @@ public class EventServiceImpl implements EventService {
         List<Event> eventsAtUserTime = new ArrayList<>();
         List<Event> foundEvents;
 
+
         if(searchEventDto.getTitle() == null && searchEventDto.getInterestAreaId() == null &&
             searchEventDto.getEmployerId() == null && searchEventDto.getStart() == null &&
             searchEventDto.getEnd() == null && searchEventDto.getPayment() == null &&
@@ -94,9 +95,14 @@ public class EventServiceImpl implements EventService {
         if(searchEventDto.getState() != null && searchEventDto.getState().isBlank()){
             searchEventDto.setState(null);
         }
-
+        if(searchEventDto.getStart() == null) {
+            searchEventDto.setStart("2000-01-01");
+        }
+        if(searchEventDto.getEnd() == null) {
+            searchEventDto.setEnd("3099-31-12");
+        }
         foundEvents = eventRepository.searchEventsBySearchEventDto(
-            searchEventDto.getTitle() == null ? searchEventDto.getTitle() : "%"+searchEventDto.getTitle()+"%",
+            searchEventDto.getTitle() == null ? null : "%"+searchEventDto.getTitle()+"%",
             searchEventDto.getEmployerId(), searchEventDto.getStart(), searchEventDto.getEnd(),
             searchEventDto.getInterestAreaId(), searchEventDto.getPayment(), searchEventDto.getState());
 
