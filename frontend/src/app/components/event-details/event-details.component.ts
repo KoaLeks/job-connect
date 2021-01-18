@@ -151,7 +151,13 @@ export class EventDetailsComponent implements OnInit {
     );
   }
 
-  checkDateInFuture(date) {
-    return new Date(date) >= new Date();
+  checkDateInFuture(endDate) {
+    return new Date(endDate) >= new Date();
+  }
+
+  checkDateIn24h(startDate) {
+    const nowPlus24Hours = new Date();
+    nowPlus24Hours.setDate(nowPlus24Hours.getDate() + 1);
+    return new Date(startDate) <= nowPlus24Hours;
   }
 }

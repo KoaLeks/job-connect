@@ -23,7 +23,7 @@
                   {{event.title}}
                 </h4>
                 <h4 class="mb-1" *ngIf="!checkDateInFuture(event.end)">
-                  {{event.title}} <i style="color:red">bereits vorbei</i>
+                  {{event.title}} <i style="color:red; font-size: 0.75em">(bereits vorbei)</i>
                 </h4>
                 <small class="text-muted">
                   <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
