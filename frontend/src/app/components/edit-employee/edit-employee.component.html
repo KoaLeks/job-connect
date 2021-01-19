@@ -189,15 +189,15 @@
           <div *ngIf="employeeInterests.length !== 0">
             <ul>
               <ng-container *ngFor="let interest of employeeInterests">
-                <div>
+                <li>
                   {{interest.name}}: {{interest.description}}
                   <button type="button" class="btn btn-xs btn-danger delete-interest-button btn-xs text-center"
                           (click)="deleteInterest(interest)">
-                    <div class="deletebutton">
+                    <a class="deletebutton">
                       &#10060;
-                    </div>
+                    </a>
                   </button>
-                </div>
+                </li>
               </ng-container>
             </ul>
           </div>

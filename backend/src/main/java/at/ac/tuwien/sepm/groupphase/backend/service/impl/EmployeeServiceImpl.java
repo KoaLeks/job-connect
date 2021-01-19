@@ -137,7 +137,9 @@ public class EmployeeServiceImpl implements EmployeeService {
             for (Time time : newExistingTimes) {
                 for (Long id : IdsToDelete) {
                     if (id != -1 && time.getRef_id().equals(id)) {
-                        timeRepository.deleteById(time.getId());
+                        if (timeRepository.existsById(time.getId())) {
+                            timeRepository.deleteById(time.getId());
+                        }
                     }
                 }
             }
@@ -146,7 +148,9 @@ public class EmployeeServiceImpl implements EmployeeService {
             Set<Time> deletableTimes = timeRepository.findByEmployee_Profile_Id(employee.getProfile().getId());
             if (deletableTimes != null && deletableTimes.size() != 0) {
                 for (Time time : deletableTimes) {
-                    timeRepository.deleteById(time.getId());
+                    if (timeRepository.existsById(time.getId())) {
+                        timeRepository.deleteById(time.getId());
+                    }
                 }
             }
         }
