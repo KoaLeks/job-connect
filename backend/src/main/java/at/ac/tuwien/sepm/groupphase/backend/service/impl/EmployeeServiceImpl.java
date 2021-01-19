@@ -155,6 +155,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             }
         }
 
+        employee.setTimes(timeRepository.findByEmployee_Profile_Id(employee.getId()));
         employeeRepository.save(employee);
 
         if (employee.getInterests() != null && employee.getInterests().size() != 0) {
