@@ -40,7 +40,12 @@ export class EventOverviewComponent implements OnInit {
     this.eventService.getEvents().subscribe(
       (events: DetailedEvent[]) => {
         this.events = events;
-        this.getEmployerEvents();
+        for (const event of events) {
+          if (this.loggedInEmployer && this.authService.getTokenIdentifier() === event.employer.simpleProfileDto.email
+            && this.checkDateInFuture(event.end)) {
+            this.employerEvents.push(event);
+          }
+        }
         this.sortEventsByDate();
       },
       error => {
@@ -48,6 +53,7 @@ export class EventOverviewComponent implements OnInit {
       }
     );
   }
+
   private getAmountOfFreeJobs(tasks: Task[]) {
     let sum = 0;
     for (const task of tasks) {
@@ -55,6 +61,7 @@ export class EventOverviewComponent implements OnInit {
     }
     return sum;
   }
+
   private getAmountOfTakenJobs(tasks: Task[]) {
     let sum = 0;
     for (const task of tasks) {
@@ -66,15 +73,7 @@ export class EventOverviewComponent implements OnInit {
     }
     return sum;
   }
-  private getEmployerEvents() {
-    if (this.events !== null && this.events.length !== 0) {
-      for (const event of this.events) {
-        if (this.loggedInEmployer && this.authService.getTokenIdentifier() === event.employer.simpleProfileDto.email) {
-          this.employerEvents.push(event);
-        }
-      }
-    }
-  }
+
   private defaultServiceErrorHandling(error: any) {
     console.log(error);
     this.error = true;
@@ -92,7 +91,7 @@ export class EventOverviewComponent implements OnInit {
 
     for (const event of this.events) {
       event.sortHelper = Date.parse(event.start); // returns the number of milliseconds between January 1, 1970 and 'event.start'
-      dateArray.push(event.start.split('T')[0]);
+      dateArray.push(event.start);
     }
 
     for (const event of this.employerEvents) {
@@ -100,9 +99,9 @@ export class EventOverviewComponent implements OnInit {
     }
 
     for (const date of dateArray) {
-      if (this.uniqueDateArray.indexOf(date) === -1) {
+      if (this.uniqueDateArray.indexOf(date.split('T')[0]) === -1) {
         if (new Date() <= new Date(date)) { // only show future events
-          this.uniqueDateArray.push(date);
+          this.uniqueDateArray.push(date.split('T')[0]);
         }
       }
     }
@@ -114,6 +113,7 @@ export class EventOverviewComponent implements OnInit {
     }
 
     this.events.sort((a, b) => (a.sortHelper > b.sortHelper ? 1 : -1));
+    this.employerEvents.sort((a, b) => (a.sortHelper > b.sortHelper ? 1 : -1));
     this.uniqueDateArray.sort((a, b) => (a > b ? 1 : -1));
     this.uniqueDateArrayEmployer.sort((a, b) => (a > b ? 1 : -1));
   }

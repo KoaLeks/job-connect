@@ -3,11 +3,14 @@
     <div class="card-header">
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col-md-9 h1" *ngIf="checkDateInFuture(eventDetails.end)">
+          <div class="col-md-9 h1" >
             {{eventDetails.title}}
-          </div>
-          <div class="col-md-9 h1" *ngIf="!checkDateInFuture(eventDetails.end)">
-            {{eventDetails.title}} <i style="color: red; font-size: 0.5em">(bereits vorbei)</i>
+            <i style="color: red" *ngIf="!checkDateInFuture(eventDetails.end)">
+              <small>(bereits vorbei)</small>
+            </i>
+            <i style="color:green;" *ngIf="!checkDateInFuture(eventDetails.start) && checkDateInFuture(eventDetails.end)">
+              <small>(läuft gerade)</small>
+            </i>
           </div>
           <div class="col-md-3 mt-3 text-right h5">
             Beginn: {{eventDetails.start.slice(0, 10) |  date:'dd.MM.yyyy'}}<br>{{eventDetails.start.slice(11, 16) }}

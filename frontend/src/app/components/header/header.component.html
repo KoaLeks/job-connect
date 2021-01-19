@@ -14,7 +14,7 @@
           <li class="nav-item">
             <a class="nav-link nav-class" routerLink="/events" routerLinkActive="active"
                *ngIf="(authService.isLoggedIn() && authService.userIsEmployee()) ||
-                !authService.isLoggedIn()">Events</a>
+                !authService.isLoggedIn()">Eventübersicht</a>
           </li>
           <li class="nav-item">
             <a class="nav-link nav-class" routerLink="/applied-events" routerLinkActive="active"
@@ -23,7 +23,12 @@
           </li>
           <li class="nav-item">
             <a class="nav-link nav-class" routerLink="/events" routerLinkActive="active"
-               *ngIf="authService.isLoggedIn() && authService.userIsEmployer()">Meine Events</a>
+               *ngIf="authService.isLoggedIn() && authService.userIsEmployer()">Meine aktuellen Events</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-class" routerLink="/expired-events" routerLinkActive="active"
+               *ngIf="(authService.isLoggedIn() && authService.userIsEmployer())">
+              vergangene Events</a>
           </li>
           <li class="nav-item">
             <a class="nav-link nav-class" routerLink="/employee-overview"
