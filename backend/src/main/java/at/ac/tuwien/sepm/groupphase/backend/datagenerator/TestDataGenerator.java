@@ -364,7 +364,7 @@ public class TestDataGenerator {
             for (Employee employee : employeeRepository.findAll()) {
                 try {
                     RandomAccessFile randomAccessFile = new RandomAccessFile("src/main/resources/interests.txt", "r");
-                    int length = (int)randomAccessFile.length();
+                    int length = (int) randomAccessFile.length();
                     for (int i = random.nextInt(3) + 1; i > 0; i--) {
                         int pos = random.nextInt(length);
                         randomAccessFile.seek(pos);
@@ -401,7 +401,7 @@ public class TestDataGenerator {
             Calendar calendar = Calendar.getInstance();
             calendar.set(2021, Calendar.FEBRUARY, 28);
             for (Employee employee : employeeRepository.findAll()) {
-                if (random.nextDouble() <= ratio){
+                if (random.nextDouble() <= ratio) {
                     for (int i = 0; i < random.nextInt(5) + 1; i++) {
                         Date start = DateUtils.round(faker.date().between(new Date(System.currentTimeMillis()), calendar.getTime()), Calendar.HOUR);
                         Date end = DateUtils.round(DateUtils.addHours(faker.date().future(random.nextInt(12) + 1, TimeUnit.HOURS, start), 1), Calendar.HOUR);
@@ -429,7 +429,7 @@ public class TestDataGenerator {
                                 LOGGER.debug("saving time (one semester) {}, for employee {}", time, employee);
                                 timeRepository.save(time);
                             }
-                        // one day 70% chance
+                            // one day 70% chance
                         } else {
                             Time time = Time.TimeBuilder.aTime()
                                 .withStart(convertToLocalDateTime(start))
@@ -449,7 +449,7 @@ public class TestDataGenerator {
     }
 
     @PostConstruct
-    public void generateEvents(){
+    public void generateEvents() {
 
         generateEmployers();
         generateEmployees();
@@ -476,11 +476,19 @@ public class TestDataGenerator {
                     .withZip(Integer.parseInt(faker.address().zipCode()))
                     .build();
 
-                Set<Task> tasks = generateRandomTasks(3);
+                //Set<Task> tasks = generateRandomTasks(3);
+
+                //get list of task ids
+                String[] taskIdStrings = line.split(";")[2].split(",");
+                List<Integer> taskIds = new LinkedList<>();
+                for (String s : taskIdStrings) {
+                    taskIds.add(Integer.valueOf(s));
+                }
+                Set<Task> tasks = generateTasksByIds(taskIds);
 
                 Event event = Event.EventBuilder.aEvent()
                     .withTitle((line.length() > 3 ? line.split(";")[1] : "add title to events.txt"))
-                    .withDescription("TODO: add descriptions to events.txt")
+                    .withDescription(line.split(";")[3])
                     .withStart(convertToLocalDateTime(start))
                     .withEnd(convertToLocalDateTime(end))
                     .withAddress(addressRepository.save(address))
@@ -504,7 +512,7 @@ public class TestDataGenerator {
         round.setTime(dateToRound);
         int unrounded = round.get(Calendar.MINUTE);
         int mod = unrounded % 15;
-        round.add(Calendar.MINUTE, mod < 8 ? -mod : (15-mod));
+        round.add(Calendar.MINUTE, mod < 8 ? -mod : (15 - mod));
         return round.getTime();
     }
 
@@ -519,11 +527,11 @@ public class TestDataGenerator {
         notification.setSender(employer.getProfile());
         notification.setTask(employee_tasks.getTask());
         notification.setSeen(false);
-        if(employee_tasks.getAccepted()){
+        if (employee_tasks.getAccepted()) {
             notification.setMessage(String.format("Deine Bewerbung für das Event \"%s\" wurde akzeptiert", event.getTitle()));
             notification.setType(NotificationType.EVENT_ACCEPTED.name());
             employeeService.deleteTime(employee_tasks.getEmployee().getId(), employee_tasks.getTask().getId());
-        }else{
+        } else {
             notification.setMessage(String.format("Deine Bewerbung für das Event \"%s\" wurde abgelehnt", event.getTitle()));
             notification.setType(NotificationType.EVENT_DECLINED.name());
         }
@@ -544,13 +552,13 @@ public class TestDataGenerator {
             Task randomTask = tasks.get(random.nextInt(tasks.size() - 1));
             Event event = eventRepository.findFirstByTasks(randomTask);
             Employer employer = employerRepository.findFirstByEvents(event);
-            String message = "Sehr geehrte Damen und Herren,\r\n"+
-                "hiermit bewerbe ich mich für die Stelle \"" + randomTask.getDescription() +"\" für das Event " + event.getTitle() + "\r\n" +
+            String message = "Sehr geehrte Damen und Herren,\r\n" +
+                "hiermit bewerbe ich mich für die Stelle \"" + randomTask.getDescription() + "\" für das Event " + event.getTitle() + "\r\n" +
                 "Mit freundlichen Grüßen\r\n" +
                 randomEmployee.getProfile().getFirstName() + " " + randomEmployee.getProfile().getLastName();
 
             Notification existingApplication = notificationRepository.findFirstByEvent_IdAndSender_Id(event.getId(), randomEmployee.getId());
-            if(!(existingApplication == null || existingApplication.getType().equalsIgnoreCase(NotificationType.NOTIFICATION.name()))){
+            if (!(existingApplication == null || existingApplication.getType().equalsIgnoreCase(NotificationType.NOTIFICATION.name()))) {
                 i--;
                 continue;
             }
@@ -597,7 +605,7 @@ public class TestDataGenerator {
         Random random = new Random();
         try {
             RandomAccessFile randomAccessFile = new RandomAccessFile("src/main/resources/tasks.txt", "r");
-            int length = (int)randomAccessFile.length();
+            int length = (int) randomAccessFile.length();
             for (int i = random.nextInt(maxTasks) + 1; i > 0; i--) {
                 int pos = random.nextInt(length);
                 randomAccessFile.seek(pos);
@@ -607,6 +615,34 @@ public class TestDataGenerator {
                 Task task = new Task();
                 task.setDescription(line.substring(line.indexOf(";") + 1));
                 task.setEmployeeCount(1 + random.nextInt(9));
+                task.setPaymentHourly((double) (5 + random.nextInt(20)));
+                task.setInterestArea(areas.get(random.nextInt(areas.size() - 1)));
+                tasks.add(task);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return tasks;
+    }
+
+    public Set<Task> generateTasksByIds(List<Integer> ids) {
+        Set<Task> tasks = new HashSet<>();
+        List<InterestArea> areas = interestAreaRepository.findAll();
+        Random random = new Random();
+        try {
+            RandomAccessFile randomAccessFile = new RandomAccessFile("src/main/resources/tasks.txt", "r");
+            List<String> taskStrings = new LinkedList<>();
+            String taskLine;
+            while ((taskLine = randomAccessFile.readLine()) != null) {
+                taskStrings.add(taskLine);
+            }
+
+            for (Integer id : ids) {
+                String line = taskStrings.get(id-1);
+                if (line == null) continue;
+                Task task = new Task();
+                task.setDescription(line.substring(line.indexOf(";") + 1));
+                task.setEmployeeCount(1 + random.nextInt(4));
                 task.setPaymentHourly((double) (5 + random.nextInt(20)));
                 task.setInterestArea(areas.get(random.nextInt(areas.size() - 1)));
                 tasks.add(task);

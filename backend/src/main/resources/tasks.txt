@@ -38,12 +38,12 @@
 38;Servicekraft fuer Messe/Event (m/w/d)
 39;Betreuung Senior/in
 40;Tierbetreuung Hund
-41;Promoter fuer Non-Profit-Organisationen (Fussgaengerzone/Draussen) (m/w/d)
+41;Promoter fuer Non-Profit-Organisationen (Drinnen) (m/w/d)
 42;Gesangsunterricht Anfaenger/in (Klassik)
 43;Geigenunterricht Fortgeschrittene/r (Klassik)
 44;Computer/Laptop, Tablet, Smartphone/Handyunterricht
 45;Messehostess (m/w/d)
-46;Servicekraft fuer Messe/Event (m/w/d)
+46;Servicekraft (m/w/d)
 47;Promoter fuer Non-Profit-Organisationen (Fussgaengerzone/Draussen) (m/w/d)
 48;Babysitter 2 Kinder (4 Jahre, 9 Jahre)
 49;Gitarrenunterricht Anfaenger/in (Jazz, Rock/Pop, Folk/Chanson)
@@ -98,3 +98,15 @@
 98;Klavierunterricht Anfaenger/in (Klassik, Folk/Chanson)
 99;Babysitter 1 Kind (0-1 Jahr)
 100;Buerohilfe Geschaeftsfuehrung, Verkauf/Vertrieb, Marketing, Kundenbetreuung (m/w/d)
+101;Nachhilfe fuer Physik (und eventuell Chemie)
+102;Manager/in fuer Social Media Bereich
+103;Nachhilfe Englisch Hauptschule/Realschule 10. Klasse
+104;Nachhilfe Deutsch Hauptschule/Realschule 10. Klasse
+105;Kundenempfang am Messeeingang
+106;KellnerInnen
+107;VerkaeuferIn
+108;MechanikerIn
+109;Studentische Aushilfskraft (m/w/d)
+110;Logistische Fachkraft (m/w/d)
+111;Berater im EDV Bereich
+112;PromoterIn fuer Umwelt-, Tier- und Klimaschutz (m/w/d)
