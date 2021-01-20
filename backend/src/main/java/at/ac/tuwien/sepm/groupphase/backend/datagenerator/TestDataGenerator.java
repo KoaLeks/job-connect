@@ -250,108 +250,22 @@ public class TestDataGenerator {
         if (interestAreaRepository.findAll().size() > 0) {
             LOGGER.debug("interestAreas already generated");
         } else {
-            LOGGER.debug("generating {} interestAreas entries", 16);
-            InterestArea interestArea1 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("Service")
-                .withDescription("Promo (z.B. Flyer verteilen)")
-                .build();
-            InterestArea interestArea1_1 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("Service")
-                .withDescription("Verkaufshilfe")
-                .build();
-            InterestArea interestArea1_2 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("Service")
-                .withDescription("Messebetreuung")
-                .build();
-            InterestArea interestArea1_3 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("Service")
-                .withDescription("KellnerIn")
-                .build();
-            InterestArea interestArea2 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("Haushalt")
-                .withDescription("Babysitter")
-                .build();
-            InterestArea interestArea2_1 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("Haushalt")
-                .withDescription("Tiersitter")
-                .build();
-            InterestArea interestArea2_2 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("IT")
-                .withDescription("Computerhilfe")
-                .build();
-            InterestArea interestArea2_3 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("Haushalt")
-                .withDescription("Gartenhilfe")
-                .build();
-            InterestArea interestArea2_4 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("Haushalt")
-                .withDescription("Putzhilfe")
-                .build();
-            InterestArea interestArea3 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("Handwerk")
-                .withDescription("Umzugshelfer (vor allem schwere Lasten tragen)")
-                .build();
-            InterestArea interestArea3_1 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("Handwerk")
-                .withDescription("Autofahrer")
-                .build();
-            InterestArea interestArea3_2 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("Handwerk")
-                .withDescription("Aufbauhilfe (z.B. Bühnen)")
-                .build();
-            InterestArea interestArea3_3 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("Handwerk")
-                .withDescription("Aufbauhilfe (z.B. Möbel)")
-                .build();
-            InterestArea interestArea4 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("Musik")
-                .withDescription("DJ")
-                .build();
-            InterestArea interestArea4_1 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("IT")
-                .withDescription("Backend Dev")
-                .build();
-            InterestArea interestArea4_2 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("IT")
-                .withDescription("Frontend Dev")
-                .build();
-
-            LOGGER.debug("saving interestArea {}", interestArea1);
-            interestAreaRepository.save(interestArea1);
-            LOGGER.debug("saving interestArea {}", interestArea1_1);
-            interestAreaRepository.save(interestArea1_1);
-            LOGGER.debug("saving interestArea {}", interestArea1_2);
-            interestAreaRepository.save(interestArea1_2);
-            LOGGER.debug("saving interestArea {}", interestArea1_3);
-            interestAreaRepository.save(interestArea1_3);
-
-            LOGGER.debug("saving interestArea {}", interestArea2);
-            interestAreaRepository.save(interestArea2);
-            LOGGER.debug("saving interestArea {}", interestArea2_1);
-            interestAreaRepository.save(interestArea2_1);
-            LOGGER.debug("saving interestArea {}", interestArea2_2);
-            interestAreaRepository.save(interestArea2_2);
-            LOGGER.debug("saving interestArea {}", interestArea2_3);
-            interestAreaRepository.save(interestArea2_3);
-            LOGGER.debug("saving interestArea {}", interestArea2_4);
-            interestAreaRepository.save(interestArea2_4);
-
-            LOGGER.debug("saving interestArea {}", interestArea3);
-            interestAreaRepository.save(interestArea3);
-            LOGGER.debug("saving interestArea {}", interestArea3_1);
-            interestAreaRepository.save(interestArea3_1);
-            LOGGER.debug("saving interestArea {}", interestArea3_2);
-            interestAreaRepository.save(interestArea3_2);
-            LOGGER.debug("saving interestArea {}", interestArea3_3);
-            interestAreaRepository.save(interestArea3_3);
-
-            LOGGER.debug("saving interestArea {}", interestArea4);
-            interestAreaRepository.save(interestArea4);
-            LOGGER.debug("saving interestArea {}", interestArea4_1);
-            interestAreaRepository.save(interestArea4_1);
-            LOGGER.debug("saving interestArea {}", interestArea4_2);
-            interestAreaRepository.save(interestArea4_2);
-
+            LOGGER.debug("generating interestAreas entries");
+            List<InterestArea> areas = new LinkedList<>();
+            try {
+                RandomAccessFile areasFile = new RandomAccessFile("src/main/resources/interestAreas.txt", "r");
+                String line;
+                while ((line = areasFile.readLine()) != null) {
+                    String[] split = line.split(";");
+                    areas.add(InterestArea.InterestAreaBuilder.aInterest()
+                        .withArea(split[1])
+                        .withDescription(split[2])
+                        .build());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            interestAreaRepository.saveAll(areas);
         }
     }
 
@@ -545,7 +459,7 @@ public class TestDataGenerator {
         List<Task> tasks = taskRepository.findAll();
         for (int i = 0; i < count; i++) {
             Optional<Employee> employee = employeeRepository.findById(companyNames.length + NUMBER_OF_PRIVATE_EMPLOYERS + 1L + random.nextInt(30));
-            Employee randomEmployee = employee.isPresent() ? employee.get() : null;
+            Employee randomEmployee = employee.orElse(null);
             if (randomEmployee == null) {
                 continue;
             }
@@ -627,7 +541,6 @@ public class TestDataGenerator {
 
     public Set<Task> generateTasksByIds(List<Integer> ids) {
         Set<Task> tasks = new HashSet<>();
-        List<InterestArea> areas = interestAreaRepository.findAll();
         Random random = new Random();
         try {
             RandomAccessFile randomAccessFile = new RandomAccessFile("src/main/resources/tasks.txt", "r");
@@ -638,13 +551,16 @@ public class TestDataGenerator {
             }
 
             for (Integer id : ids) {
-                String line = taskStrings.get(id-1);
+                String line = taskStrings.get(id - 1);
                 if (line == null) continue;
                 Task task = new Task();
-                task.setDescription(line.substring(line.indexOf(";") + 1));
+                task.setDescription(line.split(";")[1]);
                 task.setEmployeeCount(1 + random.nextInt(4));
                 task.setPaymentHourly((double) (5 + random.nextInt(20)));
-                task.setInterestArea(areas.get(random.nextInt(areas.size() - 1)));
+                if (line.split(";").length > 2) {
+                    Optional<InterestArea> area = interestAreaRepository.findById(Long.parseLong(line.split(";")[2]));
+                    area.ifPresent(task::setInterestArea);
+                }
                 tasks.add(task);
             }
         } catch (IOException e) {
