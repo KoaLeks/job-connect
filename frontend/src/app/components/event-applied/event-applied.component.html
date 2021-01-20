@@ -67,6 +67,12 @@
               </svg>
               ausstehend
             </small>
+            <br>
+            <br>
+            <button class="btn btn-outline-warning btn-sm" *ngIf="getStatus(event.tasks) === null" style="float: right;"
+                    (click)="deleteApplication(event.id)">
+              Bewerbung zurückziehen
+            </button>
           </p>
         </a>
       </div>

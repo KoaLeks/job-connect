@@ -34,4 +34,11 @@ export class ApplicationService {
     return this.httpClient.get<DetailedEvent[]>(this.applicationBaseUri + '/applied');
   }
 
+  deleteApplication(id: number) {
+    console.log('DELETE awaiting application');
+    return this.httpClient.delete(this.applicationBaseUri + '/' + id);
+  }
+
+
+
 }
