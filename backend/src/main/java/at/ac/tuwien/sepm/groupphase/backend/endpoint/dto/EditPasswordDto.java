@@ -6,10 +6,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class EditPasswordDto {
-    @NotNull(message = "E-Mail darf nicht NULL sein")
-    @Size(max = 100)
-    @Email(message = "E-Mail muss gültig sein")
-    private String email;
 
     @NotNull(message = "Passwort darf nicht NULL sein")
     @NotBlank(message = "Passwort darf nicht leer sein")
@@ -20,14 +16,6 @@ public class EditPasswordDto {
     @NotBlank(message = "Neues Passwort darf nicht leer sein")
     @Size(max = 255)
     private String newPassword;
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public String getCurrentPassword() {
         return currentPassword;
@@ -48,9 +36,36 @@ public class EditPasswordDto {
     @Override
     public String toString() {
         return "EditPasswordDto{" +
-            "email='" + email + '\'' +
-            ", password='" + currentPassword + '\'' +
+            "password='" + currentPassword + '\'' +
             ", newPassword='" + newPassword + '\'' +
             '}';
+    }
+
+    public static final class EditPasswordDtoBuilder{
+        private String currentPassword;
+        private String newPassword;
+
+        private EditPasswordDtoBuilder(){}
+
+        public static EditPasswordDtoBuilder aEditPasswordDto(){
+            return new EditPasswordDtoBuilder();
+        }
+
+        public EditPasswordDtoBuilder withCurrentPassword(String currentPassword){
+            this.currentPassword = currentPassword;
+            return this;
+        }
+
+        public EditPasswordDtoBuilder withNewPassword(String newPassword){
+            this.newPassword = newPassword;
+            return this;
+        }
+
+        public EditPasswordDto build(){
+            EditPasswordDto editPasswordDto = new EditPasswordDto();
+            editPasswordDto.setNewPassword(this.newPassword);
+            editPasswordDto.setCurrentPassword(this.currentPassword);
+            return editPasswordDto;
+        }
     }
 }

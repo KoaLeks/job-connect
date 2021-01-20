@@ -67,7 +67,7 @@ public class EmployerMapper {
             emp_builder
                 .withProfile(profile)
                 .withCompanyName(simpleEmployerDto.getCompanyName())
-                .withDescription(simpleEmployerDto.getDescription());
+                .withDescription(simpleEmployerDto.getCompanyDescription());
             return emp_builder.build();
         } else {
             return null;
@@ -80,7 +80,7 @@ public class EmployerMapper {
             empDto_builder
                 .withProfileDto(profile)
                 .withCompanyName(employer.getCompanyName())
-                .withDescription(employer.getDescription());
+                .withCompanyDescription(employer.getDescription());
             return empDto_builder.build();
         } else {
             return null;

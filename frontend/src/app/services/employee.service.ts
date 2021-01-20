@@ -17,11 +17,10 @@ export class EmployeeService {
 
   /**
    * Loads an employee from the backend using the email
-   * @param email to look for
    */
-  getEmployeeByEmail(email: String) {
-    console.log('Get employee by email ' + email);
-    return this.httpClient.get<EditEmployee>(this.employeeBaseUri + '/' + email);
+  getEmployeeByEmail() {
+    // console.log('Get employee by email');
+    return this.httpClient.get<EditEmployee>(this.employeeBaseUri);
   }
 
   /**
@@ -48,6 +47,14 @@ export class EmployeeService {
    */
   findAll(): Observable<SimpleEmployee[]> {
     console.log('Get all employees');
-    return this.httpClient.get<SimpleEmployee[]>(this.employeeBaseUri);
+    return this.httpClient.get<SimpleEmployee[]>(this.employeeBaseUri + 's');
+  }
+
+  /**
+   * Deletes an employee
+   */
+  deleteEmployee() {
+    console.log('Delete profile');
+    return this.httpClient.delete(this.employeeBaseUri);
   }
 }

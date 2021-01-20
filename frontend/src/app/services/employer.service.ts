@@ -17,11 +17,19 @@ export class EmployerService {
 
   /**
    * Loads an employer from the backend using the email
-   * @param email to look for
    */
-  getEmployerByEmail(email: String) {
-    console.log('Get employer by email ' + email);
-    return this.httpClient.get<any>(this.employerBaseUri + '/' + email);
+  getEmployerByEmail() {
+    console.log('Get employer by email');
+    return this.httpClient.get<any>(this.employerBaseUri);
+  }
+
+  /**
+   * Loads an employer from the backend using the id
+   * @param id to look for
+   */
+  getEmployerById(id: number) {
+    console.log('Get employer by id ' + id);
+    return this.httpClient.get<SimpleEmployer>(this.employerBaseUri + '/' + id + '/details');
   }
 
   /**
@@ -39,5 +47,13 @@ export class EmployerService {
   updateEmployer(employer: EditEmployer) {
     console.log('Update employer profile');
     return this.httpClient.put(this.employerBaseUri, JSON.parse(JSON.stringify(employer).replace('profileDto', 'editProfileDto')));
+  }
+
+  /**
+   * Deletes an employer
+   */
+  deleteEmployer() {
+    console.log('Delete profile');
+    return this.httpClient.delete(this.employerBaseUri);
   }
 }

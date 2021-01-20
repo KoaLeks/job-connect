@@ -1,9 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -14,11 +11,13 @@ public class EditProfileDto {
     @NotNull(message = "Nachname darf nicht NULL sein")
     @NotBlank(message = "Nachname darf nicht leer sein")
     @Size(max = 100)
+    @Pattern(regexp = "[a-zA-ZÖöÜüÄä]+([ ]|[a-zA-ZÖöÜüÄä])*", message = "Nachname muss mit einem Buchstaben beginnen und darf keine Sonderzeichen enthalten")
     private String lastName;
 
     @NotNull(message = "Vorname darf nicht NULL sein")
     @NotBlank(message = "Vorname darf nicht leer sein")
     @Size(max = 100)
+    @Pattern(regexp = "[a-zA-ZÖöÜüÄä]+([ ]|[a-zA-ZÖöÜüÄä])*", message = "Vorname muss mit einem Buchstaben beginnen und darf keine Sonderzeichen enthalten")
     private String firstName;
 
     @NotNull(message = "E-Mail darf nicht NULL sein")

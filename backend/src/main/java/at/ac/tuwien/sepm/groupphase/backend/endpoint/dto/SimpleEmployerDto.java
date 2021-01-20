@@ -5,7 +5,7 @@ public class SimpleEmployerDto {
     private Long id;
     private SimpleProfileDto simpleProfileDto;
     private String companyName;
-    private String description;
+    private String companyDescription;
 
     @Override
     public String toString() {
@@ -13,7 +13,7 @@ public class SimpleEmployerDto {
             "id=" + id +
             ", profileDto=" + simpleProfileDto +
             ", companyName='" + companyName + '\'' +
-            ", description='" + description + '\'' +
+            ", companyDescription='" + companyDescription + '\'' +
             '}';
     }
 
@@ -41,19 +41,19 @@ public class SimpleEmployerDto {
         this.companyName = companyName;
     }
 
-    public String getDescription() {
-        return description;
+    public String getCompanyDescription() {
+        return companyDescription;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setCompanyDescription(String description) {
+        this.companyDescription = description;
     }
 
     public static final class SimpleEmployerDtoBuilder {
         private Long id;
         private SimpleProfileDto simpleProfileDto;
         private String companyName;
-        private String description;
+        private String companyDescription;
 
         private SimpleEmployerDtoBuilder() {
         }
@@ -73,8 +73,8 @@ public class SimpleEmployerDto {
             return this;
         }
 
-        public SimpleEmployerDtoBuilder withDescription(String description) {
-            this.description = description;
+        public SimpleEmployerDtoBuilder withCompanyDescription(String description) {
+            this.companyDescription = description;
             return this;
         }
 
@@ -83,7 +83,7 @@ public class SimpleEmployerDto {
             simpleEmployerDto.setId(id);
             simpleEmployerDto.setSimpleProfileDto(simpleProfileDto);
             simpleEmployerDto.setCompanyName(companyName);
-            simpleEmployerDto.setDescription(description);
+            simpleEmployerDto.setCompanyDescription(companyDescription);
             return simpleEmployerDto;
         }
     }

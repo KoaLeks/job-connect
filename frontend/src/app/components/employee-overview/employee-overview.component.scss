@@ -3,6 +3,19 @@
   cursor: pointer;
 }
 
-table {
-  table-layout: fixed;
+.table_name {
+  width: 15%;
+}
+
+.table_interests {
+  width: 25%;
+}
+
+.table_public {
+  width: 45%;
+}
+
+table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

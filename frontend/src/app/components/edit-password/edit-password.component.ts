@@ -11,8 +11,6 @@ import {AlertService} from '../../alert';
   styleUrls: ['./edit-password.component.scss']
 })
 export class EditPasswordComponent implements OnInit {
-
-  @Input() changePassword: boolean;
   @ViewChild('close') close: ElementRef;
   passwordUpdateForm: FormGroup;
   submittedPasswordForm: boolean = false;
@@ -32,7 +30,7 @@ export class EditPasswordComponent implements OnInit {
   updatePassword() {
     this.submittedPasswordForm = true;
     if (this.passwordUpdateForm.valid) {
-      const editPassword: EditPassword = new EditPassword(this.authService.getTokenIdentifier(),
+      const editPassword: EditPassword = new EditPassword(
         this.passwordUpdateForm.controls.currentPassword.value, this.passwordUpdateForm.controls.newPassword.value);
       console.log(editPassword);
       this.profileService.updatePassword(editPassword).subscribe(

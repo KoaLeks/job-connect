@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {EventService} from '../../services/event.service';
 import {AuthService} from '../../services/auth.service';
 import {DetailedEvent} from '../../dtos/detailed-event';
@@ -30,6 +30,12 @@ export class EventOverviewComponent implements OnInit {
   search: boolean = false;
   error: boolean = false;
   errorMessage: string = '';
+  loggedInEmployee: boolean;
+  loggedInEmployer: boolean;
+  notLoggedIn: boolean;
+  employerEvents: DetailedEvent[] = [];
+  uniqueDateArray: string[] = [];
+  uniqueDateArrayEmployer: string[] = [];
 
   currProfile: EditEmployee;
 
@@ -52,12 +58,29 @@ export class EventOverviewComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadResources();
+    if (this.authService.isLoggedIn() && this.authService.getUserRole() === 'EMPLOYEE') {
+      this.loggedInEmployee = true;
+    }
+    if (this.authService.isLoggedIn() && this.authService.getUserRole() === 'EMPLOYER') {
+      this.loggedInEmployer = true;
+    }
+    if (!this.authService.isLoggedIn()) {
+      this.notLoggedIn = true;
+    }
   }
   private loadResources() {
     this.eventService.getEvents().subscribe(
       (events: DetailedEvent[]) => {
         this.events = events;
-      }, error => {
+        for (const event of events) {
+          if (this.loggedInEmployer && this.authService.getTokenIdentifier() === event.employer.simpleProfileDto.email
+            && this.checkDateInFuture(event.end)) {
+            this.employerEvents.push(event);
+          }
+        }
+        this.sortEventsByDate();
+      },
+      error => {
         this.defaultServiceErrorHandling(error);
       }
     );
@@ -105,6 +128,7 @@ export class EventOverviewComponent implements OnInit {
       );
     }
   }
+
   private getAmountOfFreeJobs(tasks: Task[]) {
     let sum = 0;
     for (const task of tasks) {
@@ -112,13 +136,19 @@ export class EventOverviewComponent implements OnInit {
     }
     return sum;
   }
+
   private getAmountOfTakenJobs(tasks: Task[]) {
     let sum = 0;
     for (const task of tasks) {
-      sum += task.employees.length;
+      for (const employee of task.employees) {
+        if (employee.accepted === true) {
+          sum += 1;
+        }
+      }
     }
     return sum;
   }
+
   private defaultServiceErrorHandling(error: any) {
     console.log(error);
     this.error = true;
@@ -130,5 +160,43 @@ export class EventOverviewComponent implements OnInit {
   }
   getSliderValue(event) {
     this.paymentValue = event.target.value;
+  }
+
+  // sorts Events by Date by calculating the number of milliseconds between January 1, 1970 and 'event.start'
+  private sortEventsByDate() {
+    const dateArray: string[] = [];
+    const dateArrayEmployer: string[] = [];
+
+    for (const event of this.events) {
+      event.sortHelper = Date.parse(event.start); // returns the number of milliseconds between January 1, 1970 and 'event.start'
+      dateArray.push(event.start);
+    }
+
+    for (const event of this.employerEvents) {
+      dateArrayEmployer.push(event.start.split('T')[0]);
+    }
+
+    for (const date of dateArray) {
+      if (this.uniqueDateArray.indexOf(date.split('T')[0]) === -1) {
+        if (new Date() <= new Date(date)) { // only show future events
+          this.uniqueDateArray.push(date.split('T')[0]);
+        }
+      }
+    }
+
+    for (const date of dateArrayEmployer) {
+      if (this.uniqueDateArrayEmployer.indexOf(date) === -1) {
+          this.uniqueDateArrayEmployer.push(date);
+      }
+    }
+
+    this.events.sort((a, b) => (a.sortHelper > b.sortHelper ? 1 : -1));
+    this.employerEvents.sort((a, b) => (a.sortHelper > b.sortHelper ? 1 : -1));
+    this.uniqueDateArray.sort((a, b) => (a > b ? 1 : -1));
+    this.uniqueDateArrayEmployer.sort((a, b) => (a > b ? 1 : -1));
+  }
+
+  checkDateInFuture(date) {
+    return new Date(date) >= new Date();
   }
 }

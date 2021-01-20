@@ -1,34 +1,45 @@
 <div class="jumbotron mt-5" *ngIf="employee">
-  <div class="container mb-2">
-    <img *ngIf="hasPicture" id="img" src="{{picture}}" alt="profile_picture"
-         class="image">
-    <img *ngIf="!hasPicture" id="img_default" src="assets/user_default.svg" alt="default_profile_picture">
-  </div>
-  <div class="name text-center">
-    {{employee.simpleProfileDto.firstName + ' ' + employee.simpleProfileDto.lastName}}
-  </div>
-  <div class="age-gender text-center">
-    {{age}} Jahre | {{employee.gender === 'MALE' ? 'Männlich' : employee.gender == 'FEMALE' ? 'Weiblich' : 'Sonstiges'}}
-  </div>
-  <div class="row justify-content-center" *ngIf="interestAreasDist">
-    <ng-container *ngFor="let area of interestAreasDist">
-      <h5><span class="badge badge-pill badge-info mt-3 ml-1 mr-1"
-                style="border-radius: 30px">{{area}}</span></h5>
-    </ng-container>
-  </div>
-
-  <hr class="my-3"/>
   <div class="row">
+    <div class="col-lg-6 col-sm-6" style="border-right: 2px solid #ccc">
+      <div class="container mb-2">
+        <img *ngIf="hasPicture" id="img" src="{{picture}}" alt="profile_picture"
+             class="image">
+        <img *ngIf="!hasPicture" id="img_default" src="assets/user_default.svg" alt="default_profile_picture">
+      </div>
+      <div class="name text-center">
+        {{employee.simpleProfileDto.firstName + ' ' + employee.simpleProfileDto.lastName}}
+      </div>
+      <div class="age-gender text-center">
+        {{age}} Jahre
+        | {{employee.gender === 'MALE' ? 'Männlich' : employee.gender == 'FEMALE' ? 'Weiblich' : 'Sonstiges'}}
+      </div>
+      <div class="row justify-content-center" *ngIf="interestAreasDist">
+        <ng-container *ngFor="let area of interestAreasDist">
+          <h5><span class="badge badge-pill badge-info mt-3 ml-1 mr-1"
+                    style="border-radius: 30px">{{area}}</span></h5>
+        </ng-container>
+      </div>
+      <div class="position-relative" style="text-align: center">
+        <a class="btn btn-outline-secondary mt-2" data-target="#contactModal" data-toggle="modal">Kontaktieren Sie
+          mich</a>
+      </div>
+    </div>
+
     <div class="col-lg-6 col-sm-6">
       <div class="desc-interests">Profilbeschreibung</div>
       {{employee.simpleProfileDto.publicInfo}}
-    </div>
-    <div class="col-lg-6 col-sm-6" style="border-left: 2px solid #ccc">
+      <p *ngIf="employee.simpleProfileDto.publicInfo === null || employee.simpleProfileDto.publicInfo === ''"
+         style="font-style: italic">Keine Profilbeschreibung
+        vorhanden</p>
+      <hr class="my-3"/>
       <div class="desc-interests">Interessen</div>
       <div *ngFor="let interest of employee.interestDtos">
         <div style="font-weight: bold">- {{interest.name}}</div>
         <div class="pl-2">{{interest.description}}</div>
       </div>
+      <p *ngIf="employee.interestDtos === null" style="font-style: italic">Keine Interessen eingetragen</p>
     </div>
   </div>
 </div>
+
+<app-contact *ngIf="employee" [receiver]="employee"></app-contact>

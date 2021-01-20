@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -65,6 +66,10 @@ public class NotificationEndpoint {
     @CrossOrigin(origins = "http://localhost:4200")
     public void updateNotification(@RequestBody SimpleNotificationDto simpleNotificationDto, @RequestHeader String authorization){
         LOGGER.info("Update /api/v1/notifications/{}", simpleNotificationDto.getId());
+        Profile profile = tokenService.getProfileFromHeader(authorization);
+        if((simpleNotificationDto.getSender() != null && !profile.getId().equals(simpleNotificationDto.getSender().getId())) && (simpleNotificationDto.getRecipient() != null && !profile.getId().equals(simpleNotificationDto.getRecipient().getId()))){
+            throw new AuthorizationServiceException("Keine Berechtigung um die Nachricht zu verändern!");
+        }
         notificationService.updateNotification(notificationMapper.simpleNotificationDtoToNotification(simpleNotificationDto));
     }
 

@@ -1,15 +1,14 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.exceptionhandler;
 
-import at.ac.tuwien.sepm.groupphase.backend.exception.AlreadyHandledException;
-import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
-import at.ac.tuwien.sepm.groupphase.backend.exception.PasswordsNotMatchingException;
-import at.ac.tuwien.sepm.groupphase.backend.exception.UniqueConstraintException;
+import at.ac.tuwien.sepm.groupphase.backend.exception.*;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -49,19 +48,31 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 
     @ExceptionHandler(value = {UniqueConstraintException.class})
-    protected ResponseEntity<Object> handleUniqueConstraint(Exception ex, WebRequest request){
+    protected ResponseEntity<Object> handleUniqueConstraint(Exception ex, WebRequest request) {
         LOGGER.warn(ex.getMessage());
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler(value = {AlreadyHandledException.class})
-    protected ResponseEntity<Object> handleAlreadyHandled(Exception ex, WebRequest request){
+    protected ResponseEntity<Object> handleAlreadyHandled(Exception ex, WebRequest request) {
         LOGGER.warn(ex.getMessage());
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler(value = {PasswordsNotMatchingException.class})
-    protected ResponseEntity<Object> handlePasswordsNotMatching(Exception ex, WebRequest request){
+    protected ResponseEntity<Object> handlePasswordsNotMatching(Exception ex, WebRequest request) {
+        LOGGER.warn(ex.getMessage());
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
+    }
+
+    @ExceptionHandler(value = {NotDeletedException.class})
+    protected ResponseEntity<Object> handleNotDeletedException(Exception ex, WebRequest request) {
+        LOGGER.warn(ex.getMessage());
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
+    }
+
+    @ExceptionHandler(value = {AuthorizationServiceException.class})
+    protected ResponseEntity<Object> unauthorized(Exception ex, WebRequest request) {
         LOGGER.warn(ex.getMessage());
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
     }
@@ -74,16 +85,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers,
                                                                   HttpStatus status, WebRequest request) {
-        Map<String, Object> body = new LinkedHashMap<>();
+        LOGGER.warn(ex.getMessage());
+
         //Get all errors
         List<String> errors = ex.getBindingResult()
             .getFieldErrors()
             .stream()
-            .map(err -> err.getField() + " " + err.getDefaultMessage())
+            .map(DefaultMessageSourceResolvable::getDefaultMessage)
             .collect(Collectors.toList());
-        body.put("Validation errors", errors);
 
-        return new ResponseEntity<>(body.toString(), headers, status);
-
+        return handleExceptionInternal(ex, String.join(", ", errors), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 }

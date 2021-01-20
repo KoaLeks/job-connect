@@ -25,6 +25,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
      */
     List<Employee> findAllByOrderByProfile_FirstName();
 
+    void deleteEmployeeByProfile_Email(String email);
+
 
     /**
      * Find employees that are available at and interested in the event given by Id

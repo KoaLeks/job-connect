@@ -60,6 +60,8 @@ security:
       - /api/v1/profiles/employer
       #Event details
       - /api/v1/events/*/details
+      #Employer details
+      - /api/v1/profiles/employer/*/details
 
   jwt:
     # Use http://www.allkeysgenerator.com/ to generate secrets

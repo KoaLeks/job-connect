@@ -53,4 +53,16 @@ export class EmployeeOverviewComponent implements OnInit {
       this.errorMessage = error.error;
     }
   }
+
+  public getInterestAreas(employee: SimpleEmployee): String[] {
+    const interestAreasDist: Set<String> = new Set<String>();
+    if (employee.interestDtos !== null) {
+      for (let i = 0; i < employee.interestDtos.length; i++) {
+        if (employee.interestDtos[i].simpleInterestAreaDto !== null) {
+          interestAreasDist.add(employee.interestDtos[i].simpleInterestAreaDto.area);
+        }
+      }
+    }
+    return Array.from(interestAreasDist);
+  }
 }

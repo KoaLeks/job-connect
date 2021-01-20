@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Employee;
+import at.ac.tuwien.sepm.groupphase.backend.exception.UniqueConstraintException;
 
 import java.util.List;
 
@@ -47,6 +48,21 @@ public interface EmployeeService {
      * @param task_id look for start and end time of event where this task belongs to
      */
     void deleteTime(Long employee_id, Long task_id);
+
+    /**
+     * Checks if the employee still has upcoming or current tasks which they have been accepted for
+     *
+     * @param email of the employee
+     * @return true if there are still upcoming tasks
+     */
+    boolean hasUpcomingTasks(String email);
+
+    /**
+     * Delete given employee (including their employee_tasks, interests, notifications)
+     *
+     * @param email of the employer
+     */
+    void deleteByEmail(String email);
 
 
     /**

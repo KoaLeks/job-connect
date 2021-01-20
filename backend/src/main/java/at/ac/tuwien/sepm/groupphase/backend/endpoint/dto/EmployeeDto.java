@@ -131,6 +131,7 @@ public class EmployeeDto {
             return new EmployeeDto.EmployeeDtoBuilder();
         }
         public EmployeeDto.EmployeeDtoBuilder withProfileDto(ProfileDto profileDto){
+            this.id = profileDto.getId();
             this.profileDto = profileDto;
             return this;
         }

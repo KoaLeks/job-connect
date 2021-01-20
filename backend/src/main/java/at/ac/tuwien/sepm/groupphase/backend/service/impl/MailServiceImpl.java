@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.service.EmployeeService;
 import at.ac.tuwien.sepm.groupphase.backend.service.MailService;
+import at.ac.tuwien.sepm.groupphase.backend.service.ProfileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +27,12 @@ public class MailServiceImpl implements MailService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final EmployeeService employeeService;
+    private final ProfileService profileService;
 
     @Autowired
-    public MailServiceImpl(EmployeeService employeeService) {
+    public MailServiceImpl(EmployeeService employeeService, ProfileService profileService) {
         this.employeeService = employeeService;
+        this.profileService = profileService;
     }
 
     @Override
@@ -86,5 +89,16 @@ public class MailServiceImpl implements MailService {
                     , true);
             });
         }
+    }
+
+    @Override
+    public void sendContactMail(ContactMessage contactMessage) {
+        mailSender.send(mimeMessage -> {
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            mimeMessageHelper.setFrom("from@mail.com");
+            mimeMessageHelper.setTo(this.profileService.findOneById(contactMessage.getTo()).getEmail());
+            mimeMessageHelper.setSubject(contactMessage.getSubject());
+            mimeMessageHelper.setText(contactMessage.getMessage());
+        });
     }
 }

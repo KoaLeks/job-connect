@@ -21,6 +21,7 @@ public class EditEmployeeDto {
 
     private Set<Task> tasks;
 
+    @Valid
     private Set<InterestDto> interestDtos;
 
     @NotNull(message = "Geschlecht darf nicht NULL sein")
@@ -136,6 +137,7 @@ public class EditEmployeeDto {
             return new EditEmployeeDto.EditEmployeeDtoBuilder();
         }
         public EditEmployeeDto.EditEmployeeDtoBuilder withEditProfileDto(EditProfileDto editProfileDto){
+            this.id = editProfileDto.getId();
             this.editProfileDto = editProfileDto;
             return this;
         }

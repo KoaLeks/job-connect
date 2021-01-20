@@ -51,4 +51,6 @@ public interface NotificationService {
      * @param notification to change Boolean favorite
      */
     Notification changeFavorite(Notification notification);
+
+    Notification findFirstByEvent_IdAndSender_Id(Long eventId, Long employeeId);
 }

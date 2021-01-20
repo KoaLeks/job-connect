@@ -1,0 +1,102 @@
+<div class="jumbotron mt-5" *ngIf="employer">
+  <!-- if the employer is a private person-->
+  <div class="row" *ngIf="employer.companyName === 'Privatperson'">
+    <div class="col-lg-6 col-sm-6" style="border-right: 2px solid #ccc">
+      <div class="container mb-2">
+        <img *ngIf="hasPicture" id="imgPrivate" src="{{picture}}" alt="profile_picture"
+             class="image">
+        <img *ngIf="!hasPicture" id="img_default_private" src="assets/user_default.svg" alt="default_profile_picture">
+      </div>
+      <div class="name text-center" style="border-bottom: 1px solid #ccc; margin-bottom: 10px">
+        {{employer.simpleProfileDto.firstName}} {{employer.simpleProfileDto.lastName}}
+      </div>
+      <div class="position-relative" style="text-align: center" *ngIf="loggedInEmployer || loggedInEmployee">
+        <button class="btn btn-outline-secondary mt-2" data-target="#contactModalEmployer" data-toggle="modal"
+                [disabled]="loggedInEmployer">Kontaktieren Sie mich</button>
+      </div>
+      <div class="position-relative" style="text-align: center" *ngIf="!loggedIn">
+        <button class="btn btn-outline-secondary mt-2" data-target="#contactModalAlert" data-toggle="modal"
+                >Kontaktieren Sie mich</button>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-sm-6">
+      <div>Profilbeschreibung</div>
+      <div *ngIf="employer.simpleProfileDto.publicInfo !== null && employer.simpleProfileDto.publicInfo !== ''">
+        {{employer.simpleProfileDto.publicInfo}}
+      </div>
+      <p *ngIf="employer.simpleProfileDto.publicInfo === null || employer.simpleProfileDto.publicInfo === ''"
+         style="font-style: italic; margin-top: 16px">Keine Profilbeschreibung
+        vorhanden</p>
+    </div>
+  </div>
+  <!-- if the employer is a company-->
+  <div class="row" *ngIf="!(employer.companyName === 'Privatperson')">
+    <div class="col-lg-6 col-sm-6" style="border-right: 2px solid #ccc">
+      <div class="container mb-2">
+        <img *ngIf="hasPicture" id="img" src="{{picture}}" alt="profile_picture"
+             class="image">
+        <img *ngIf="!hasPicture" id="img_default" src="assets/user_default.svg" alt="default_profile_picture">
+      </div>
+      <div class="companyName name text-center">
+        {{employer.companyName}}
+      </div>
+      <div class="companyDesc text-center" style="border-top: 1px solid #ccc"
+           *ngIf="employer.companyDescription !== null && employer.companyDescription !== ''">
+        {{employer.companyDescription}}
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-sm-6">
+      <h5>Kontaktperson von {{employer.companyName}}:</h5>
+
+      <br>
+
+      <div class="name text-center" style="border-bottom: 1px solid #ccc;">
+        {{employer.simpleProfileDto.firstName}} {{employer.simpleProfileDto.lastName}}
+      </div>
+
+      <div *ngIf="employer.simpleProfileDto.publicInfo !== null && employer.simpleProfileDto.publicInfo !== ''"
+      style=" margin-top: 16px; margin-bottom: 16px">
+        {{employer.simpleProfileDto.publicInfo}}
+      </div>
+      <p *ngIf="employer.simpleProfileDto.publicInfo === null || employer.simpleProfileDto.publicInfo === ''"
+         style="font-style: italic; margin-top: 16px">Keine Profilbeschreibung
+        vorhanden</p>
+
+      <div class="position-relative" style="text-align: center" *ngIf="loggedInEmployer || loggedInEmployee">
+        <button class="btn btn-outline-secondary mt-2" data-target="#contactModalEmployer" data-toggle="modal"
+                [disabled]="loggedInEmployer">Kontaktieren Sie mich</button>
+      </div>
+      <div class="position-relative" style="text-align: center" *ngIf="!loggedIn">
+        <button class="btn btn-outline-secondary mt-2" data-target="#contactModalAlert" data-toggle="modal"
+                >Kontaktieren Sie mich</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-contact *ngIf="employer" [receiver]="employer"></app-contact>
+
+<!--modal when a user isn't logged in and tries to contact an employer-->
+<div class="modal fade" id="contactModalAlert" data-backdrop="static" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" style="width:50%" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <div style="font-size: 20px">Achtung, Sie sind nicht eingeloggt.</div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        Bitte loggen Sie sich ein, um einen Veranstalter eines Events zu kontaktieren.
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary" data-dismiss="modal">Verstanden</button>
+      </div>
+    </div>
+  </div>
+</div>
+

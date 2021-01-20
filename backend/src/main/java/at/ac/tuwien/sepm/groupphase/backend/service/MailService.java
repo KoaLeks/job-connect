@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
+import at.ac.tuwien.sepm.groupphase.backend.entity.ContactMessage;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Employee;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 
@@ -38,4 +39,11 @@ public interface MailService {
      * @param employees that need to be informed
      */
     void sendMailAboutCanceledEvent(Event event, Set<Employee> employees);
+
+    /**
+     * Sends an e-mail to the specified employee/r
+     *
+     * @param contactMessage contains id of the receiver, subject and message of mail
+     */
+    void sendContactMail(ContactMessage contactMessage);
 }
