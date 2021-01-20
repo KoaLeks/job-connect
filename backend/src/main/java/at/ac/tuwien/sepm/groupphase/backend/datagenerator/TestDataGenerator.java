@@ -109,21 +109,8 @@ public class TestDataGenerator {
     };
 
     // Employer
-    private static final String TEST_EMPLOYER_FIRST_NAME = "FIRST NAME";
-    private static final String TEST_EMPLOYER_LAST_NAME = "LAST NAME";
     private static final String TEST_PUBLIC_INFO = "PUBLIC INFO";
     private static final String TEST_PASSWORD = "123456789";
-
-    // Event
-    private static final String TEST_EVENT_TITLE1 = "Weihnachtsfeier";
-    private static final String TEST_EVENT_TITLE2 = "Putzhilfe";
-    private static final String TEST_EVENT_TITLE3 = "BabysitterIn gesucht für 3 jähriges Mädchen";
-    private static final String TEST_EVENT_TITLE4 = "Computerunterricht";
-    private static final String TEST_EVENT_DESCRIPTION1 = "Unsere Firma plant für den 24.12 Nachmittag eine kleine Feier und wir benötigen KellnerInnen und eine(n) DJ.";
-    private static final String TEST_EVENT_DESCRIPTION2 = "Reinigungsarbeit für das gesamte Haus (Küche, Wohnzimmer, Badezimmer, Schlafzimmer), zirka 60m²";
-    private static final String TEST_EVENT_DESCRIPTION3 = "Sind auf der Suche nach einem netten Menschen der gerne und gut mit unserer Kleinen umgehen und aufpassen kann!";
-    private static final String TEST_EVENT_DESCRIPTION4 = "Unsere Oma hat einen neuen Laptop bekommen und braucht dringend Einstiegshilfe!";
-
     private static final int NUMBER_OF_PRIVATE_EMPLOYERS = 20;
 
     private final EmployeeRepository employeeRepository;
@@ -168,20 +155,35 @@ public class TestDataGenerator {
             LOGGER.debug("employers already generated");
         } else {
             LOGGER.debug("generating {} employer entries", companyNames.length);
-            for (String name : companyNames) {
+            Random random = new Random();
+            for (String companyName : companyNames) {
+                String name = names[random.nextInt(names.length - 1)];
                 at.ac.tuwien.sepm.groupphase.backend.entity.Profile employerProfile =
                     at.ac.tuwien.sepm.groupphase.backend.entity.Profile.ProfileBuilder.aProfile()
-                        .withEmail("test@" + name.replace(" ", "").toLowerCase() + ".at")
-                        .withForename(TEST_EMPLOYER_FIRST_NAME)
-                        .withName(TEST_EMPLOYER_LAST_NAME)
+                        .withEmail("test@" + companyName.replace(" ", "").toLowerCase() + ".at")
+                        .withForename(name.split(" ")[0])
+                        .withName(name.split(" ")[1])
                         .withPassword(passwordEncoder.encode(TEST_PASSWORD))
                         .withPublicInfo(TEST_PUBLIC_INFO)
                         .isEmployer(true)
                         .build();
 
                 Employer employer = Employer.EmployerBuilder.aEmployer()
-                    .withCompanyName(name)
-                    .withDescription("generated employer")
+                    .withCompanyName(companyName)
+                    .withDescription(
+                        random.nextBoolean() ?
+                            "Wir sind " + companyName + ", welches " + (1950 + random.nextInt(70)) + " von " + name + " gegruendet wurde. " +
+                                (random.nextBoolean() ?
+                                    "Das Ziel von " + companyName + " hat sich seit der Gruendung nicht veraendert, wir versorgen unsere Kunden mit den besten Produkten zu einem fairen Preis."
+                                :
+                                   companyName + " setzt die neusten state of the art Technologien direkt bei Ihnen zu Hause ein, um alle moeglichen Probleme zu loesen.")
+                            :
+                            companyName + " ist ein neues Startup, welches sich aus " + (5 + random.nextInt(10)) + " engagierte MitarbeiterInnen zusammensetzt. " +
+                                (random.nextBoolean() ?
+                                    "Unser Ziel ist es all ihre Beduerfnisse zu erfuellen."
+                                :
+                                    "Als neues Startup versuchen wir staendig neue innovative Ideen an den Markt und direkt zu Ihnen zu bringen.")
+                    )
                     .withProfile(employerProfile)
                     .build();
                 LOGGER.debug("saving employer {}", employer);
