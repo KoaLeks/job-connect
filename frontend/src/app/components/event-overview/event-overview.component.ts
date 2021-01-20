@@ -101,12 +101,14 @@ export class EventOverviewComponent implements OnInit {
   }
   searchEvent(event: SearchEvent) {
     if (event.userId) {
-      this.employeeService.getEmployeeByEmail(this.authService.getTokenIdentifier()).subscribe(
+      this.employeeService.getEmployeeByEmail().subscribe(
         (profile: EditEmployee) => {
           event.userId = profile.profileDto.id;
           this.eventService.searchEvent(event).subscribe(
             (events: DetailedEvent[]) => {
               this.events = events;
+              this.events = this.events.filter(currEvent => this.checkDateInFuture(currEvent.start));
+              this.sortEventsByDate();
               this.search = true;
             }, error => {
               this.error = true;
@@ -121,6 +123,8 @@ export class EventOverviewComponent implements OnInit {
       this.eventService.searchEvent(event).subscribe(
         (events: DetailedEvent[]) => {
           this.events = events;
+          this.events = this.events.filter(currEvent => this.checkDateInFuture(currEvent.start));
+          this.sortEventsByDate();
           this.search = true;
         }, error => {
           this.defaultServiceErrorHandling(error);
@@ -164,6 +168,7 @@ export class EventOverviewComponent implements OnInit {
 
   // sorts Events by Date by calculating the number of milliseconds between January 1, 1970 and 'event.start'
   private sortEventsByDate() {
+    this.uniqueDateArray = [];
     const dateArray: string[] = [];
     const dateArrayEmployer: string[] = [];
 

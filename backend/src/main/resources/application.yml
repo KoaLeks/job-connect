@@ -57,7 +57,7 @@ security:
       - /h2-console/**
       #Registration
       - /api/v1/profiles/employee
-      - /api/v1/profiles/employer
+      - /api/v1/profiles/employers
       #Event details
       - /api/v1/events/*/details
       #Employer details

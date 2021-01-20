@@ -137,7 +137,7 @@ public class ProfileEndpoint {
         }
         employerService.updateEmployer(employerMapper.editEmployerDtoToEmployer(editEmployerDto));
     }
-    @GetMapping(value = "/employer")
+    @GetMapping(value = "/employers")
     @ApiOperation(value = "Get list of all employers", authorizations = {@Authorization(value = "apiKey")})
     @CrossOrigin(origins = "http://localhost:4200")
     public List<SimpleEmployerDto> getAllEmployers() {

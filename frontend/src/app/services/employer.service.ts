@@ -37,7 +37,7 @@ export class EmployerService {
    */
   getEmployers(): Observable<SimpleEmployer[]> {
     console.log('Get all employers');
-    return this.httpClient.get<SimpleEmployer[]>(this.employerBaseUri);
+    return this.httpClient.get<SimpleEmployer[]>(this.employerBaseUri + 's');
   }
 
   /**
