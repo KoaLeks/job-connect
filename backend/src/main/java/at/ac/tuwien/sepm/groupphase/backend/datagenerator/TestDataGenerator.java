@@ -407,7 +407,7 @@ public class TestDataGenerator {
                     .withEnd(convertToLocalDateTime(end))
                     .withAddress(addressRepository.save(address))
                     .withTask(tasks)
-                    .withEmployer(employerRepository.findByProfile_Id(random.nextInt(companyNames.length + NUMBER_OF_PRIVATE_EMPLOYERS) + 1L))
+                    .withEmployer(line.split(";")[4].equalsIgnoreCase("firma") ? employerRepository.findByProfile_Id(random.nextInt(companyNames.length) + 1L) : employerRepository.findByProfile_Id(random.nextInt(NUMBER_OF_PRIVATE_EMPLOYERS) + companyNames.length + 1L))
                     .build();
                 Event savedEvent = eventRepository.save(event);
                 for (Task task : tasks) {
