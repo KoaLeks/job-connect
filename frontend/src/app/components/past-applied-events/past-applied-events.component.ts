@@ -13,6 +13,7 @@ export class PastAppliedEventsComponent implements OnInit {
   events: DetailedEvent[] = [];
   error: boolean = false;
   errorMessage: string = '';
+  pastAppliedEvents: number;
 
   constructor(public authService: AuthService, private applicationService: ApplicationService) {
   }
@@ -71,4 +72,7 @@ export class PastAppliedEventsComponent implements OnInit {
     return new Date(date) >= new Date();
   }
 
+  countPastAppliedEvents() {
+    this.pastAppliedEvents++;
+  }
 }
