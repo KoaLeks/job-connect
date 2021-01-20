@@ -16,6 +16,7 @@ import {EmployeeGuard} from './guards/employee.guard';
 import {EmployerDetailsComponent} from './components/employer-details/employer-details.component';
 import {EventAppliedComponent} from './components/event-applied/event-applied.component';
 import {ExpiredEventsComponent} from './components/expired-events/expired-events.component';
+import {PastAppliedEventsComponent} from './components/past-applied-events/past-applied-events.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -31,6 +32,7 @@ const routes: Routes = [
   {path: 'expired-events', canActivate: [AuthGuard, EmployerGuard], component: ExpiredEventsComponent},
   {path: 'employee/:id/details', canActivate: [AuthGuard, EmployerGuard], component: EmployeeDetailsComponent},
   {path: 'applied-events', canActivate: [AuthGuard, EmployeeGuard], component: EventAppliedComponent},
+  {path: 'past-applied-events', canActivate: [AuthGuard, EmployeeGuard], component: PastAppliedEventsComponent},
   {path: '**', component: PageNotFoundComponent},
 ];
 

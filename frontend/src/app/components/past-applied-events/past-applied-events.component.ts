@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import {DetailedEvent} from '../../dtos/detailed-event';
 import {AuthService} from '../../services/auth.service';
-import {EventService} from '../../services/event.service';
-import {Task} from '../../dtos/task';
 import {ApplicationService} from '../../services/application.service';
+import {Task} from '../../dtos/task';
 
 @Component({
-  selector: 'app-event-applied',
-  templateUrl: './event-applied.component.html',
-  styleUrls: ['./event-applied.component.scss']
+  selector: 'app-past-applied-events',
+  templateUrl: './past-applied-events.component.html',
+  styleUrls: ['./past-applied-events.component.scss']
 })
-export class EventAppliedComponent implements OnInit {
+export class PastAppliedEventsComponent implements OnInit {
   events: DetailedEvent[] = [];
   error: boolean = false;
   errorMessage: string = '';
@@ -47,6 +46,7 @@ export class EventAppliedComponent implements OnInit {
     }
     return sum;
   }
+
   private getAmountOfTakenJobs(tasks: Task[]) {
     let sum = 0;
     for (const task of tasks) {

@@ -31,6 +31,7 @@ import { DeleteProfileComponent } from './components/delete-profile/delete-profi
 import { EmployerDetailsComponent } from './components/employer-details/employer-details.component';
 import { EventAppliedComponent } from './components/event-applied/event-applied.component';
 import { ExpiredEventsComponent } from './components/expired-events/expired-events.component';
+import { PastAppliedEventsComponent } from './components/past-applied-events/past-applied-events.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { ExpiredEventsComponent } from './components/expired-events/expired-even
     EmployerDetailsComponent,
     EventAppliedComponent,
     ExpiredEventsComponent,
+    PastAppliedEventsComponent,
   ],
   imports: [
     BrowserModule,

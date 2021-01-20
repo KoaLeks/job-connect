@@ -128,7 +128,7 @@
       <button type="button" style="float: right" *ngIf="this.authService.getToken() !== '' && eventDetails != undefined && authService.getUserRole() === 'EMPLOYER' &&
          authService.getTokenIdentifier() === eventDetails.employer.simpleProfileDto.email && checkDateInFuture(eventDetails.end) && checkDateIn24h(eventDetails.start)"
               class="btn btn-outline-danger" data-toggle="modal" data-target="#Delete-Event" disabled
-              title="Event kann 24h vor Beginn nicht mehr abgesagt werden!">
+              title="Event kann 24h vor Beginn nicht mehr abgesagt werden&#10;oder Event hat schon begonnen!">
         Event absagen!
       </button>
       <button type="button" style="float: right" *ngIf="this.authService.getToken() !== '' && eventDetails != undefined && authService.getUserRole() === 'EMPLOYER' &&

@@ -33,7 +33,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
         "INNER JOIN task t ON t.event_id=e.id " +
         "INNER JOIN employee_tasks et ON et.task_id=t.id " +
         "WHERE et.employee_profile_id=?1 "+
-        "AND e.start > CURRENT_TIMESTAMP() " +
+     //   "AND e.start > CURRENT_TIMESTAMP() " +
         "ORDER BY e.start", nativeQuery = true)
     List<Event> findAllAppliedEvents(Long id);
 }
