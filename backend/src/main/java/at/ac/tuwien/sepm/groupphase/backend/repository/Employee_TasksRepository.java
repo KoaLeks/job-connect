@@ -12,5 +12,5 @@ import java.util.Set;
 public interface Employee_TasksRepository extends JpaRepository<Employee_Tasks, Long> {
     Employee_Tasks findFirstByEmployeeAndTask(Employee employee, Task task);
     Employee_Tasks findFirstByEmployee_Profile_IdAndTask_Id(Long employee, Long task);
-    Set<Employee_Tasks> findAllByTask_Id(Long task);
+    Set<Employee_Tasks> findAllByTask_IdAndAcceptedIsTrue(Long task);
 }

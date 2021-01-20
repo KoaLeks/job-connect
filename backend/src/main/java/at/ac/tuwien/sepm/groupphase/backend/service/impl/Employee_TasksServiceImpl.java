@@ -32,7 +32,7 @@ public class Employee_TasksServiceImpl implements Employee_TasksService {
         Employee_Tasks employee_tasks = new Employee_Tasks();
         employee_tasks.setEmployee(employee);
         employee_tasks.setTask(task);
-        if (task.getEmployeeCount() == employee_tasksRepository.findAllByTask_Id(task.getId()).size()) {
+        if (task.getEmployeeCount() == employee_tasksRepository.findAllByTask_IdAndAcceptedIsTrue(task.getId()).size()) {
             throw new NoAvailableSpacesException(String.format("Für die Aufgabe \"%s\" sind keine freien Plätze mehr verfügbar.", task.getDescription()));
         }
         if (employee_tasksRepository.findFirstByEmployeeAndTask(employee, task) == null) {

@@ -401,7 +401,7 @@ public class TestDataGenerator {
                 Set<Task> tasks = generateTasksByIds(taskIds);
 
                 Event event = Event.EventBuilder.aEvent()
-                    .withTitle((line.length() > 3 ? line.split(";")[1] : "add title to events.txt"))
+                    .withTitle(line.split(";")[1])
                     .withDescription(line.split(";")[3])
                     .withStart(convertToLocalDateTime(start))
                     .withEnd(convertToLocalDateTime(end))
@@ -418,7 +418,7 @@ public class TestDataGenerator {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        generateApplications(500, 0.3f);
+        generateApplications(300, 0.5f);
     }
 
     public Date roundTimeToQuarter(Date dateToRound) {
@@ -478,8 +478,10 @@ public class TestDataGenerator {
             }
             try {
                 employee_tasksService.applyForTask(randomEmployee, randomTask);
-            } catch (AlreadyHandledException | NoAvailableSpacesException e) {
-                //i--;
+            } catch (AlreadyHandledException e) {
+                i--;
+                continue;
+            } catch (NoAvailableSpacesException e) {
                 continue;
             }
 
