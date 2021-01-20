@@ -53,7 +53,7 @@ public interface EventRepository extends JpaRepository<Event, Long>, JpaSpecific
         "LEFT JOIN task t ON e.id=t.event_id " +
         "LEFT JOIN interest_area a ON t.interest_area_id=a.id " +
             "LEFT JOIN address ad ON e.address_id=ad.id " +
-        "WHERE (?1 IS NULL OR e.title LIKE ?1) AND " +
+        "WHERE (?1 IS NULL OR lower(e.title) LIKE lower(?1)) AND " +
         "(?2 IS NULL OR e.employer_profile_id=?2) AND " +
             "(FORMATDATETIME(e.start, 'yyyy-MM-dd') between ?3 and ?4) AND " +
             "(?5 IS NULL OR a.id=?5) AND " +
