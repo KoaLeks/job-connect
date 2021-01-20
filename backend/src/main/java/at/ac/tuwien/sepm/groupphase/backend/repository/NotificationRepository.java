@@ -13,4 +13,6 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     Set<Notification> findAllByEvent_IdAndType(Long id, String type);
     Set<Notification> findAllByRecipient_IdAndTypeNot(Long id, String type);
     Notification findFirstByEvent_IdAndSender_Id(Long eventId, Long senderId);
+    void deleteNotificationsByEvent_Employer_Profile_Email(String email);
+    void deleteNotificationsByRecipient_EmailEqualsOrSender_EmailEquals(String email, String sameEmail);
 }

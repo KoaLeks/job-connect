@@ -6,7 +6,7 @@ import {EmployerService} from '../../services/employer.service';
 import {ProfileDto} from '../../dtos/profile-dto';
 import {EditEmployer} from '../../dtos/edit-employer';
 import {UpdateHeaderService} from '../../services/update-header.service';
-import {Alert, AlertService} from '../../alert';
+import {AlertService} from '../../alert';
 
 @Component({
   selector: 'app-edit-employer',
@@ -16,21 +16,21 @@ import {Alert, AlertService} from '../../alert';
 export class EditEmployerComponent implements OnInit {
   editForm: FormGroup;
   submitted: boolean;
-  profile: any;
+  employer: EditEmployer;
   selectedPicture = null;
   picture;
   hasPicture = false;
   @ViewChild('pictureUpload') // needed for resetting fileUpload button
   inputImage: ElementRef; // needed for resetting fileUpload button
-  changePassword: boolean = false;
+  pattern = '[a-zA-ZÖöÜüÄä]+([ ]|[a-zA-ZÖöÜüÄä])*';
 
   constructor(public authService: AuthService, private router: Router, private formBuilder: FormBuilder,
               private employerService: EmployerService, private updateHeaderService: UpdateHeaderService,
               private alertService: AlertService) {
     this.editForm = this.formBuilder.group({
       email: ['', [Validators.required]],
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
+      firstName: ['', [Validators.required, Validators.pattern(this.pattern)]],
+      lastName: ['', [Validators.required, Validators.pattern(this.pattern)]],
       companyName: ['', [Validators.required]],
       companyDescription: [''],
       publicInfo: [''],
@@ -47,21 +47,20 @@ export class EditEmployerComponent implements OnInit {
    */
   loadEmployerDetails() {
     this.employerService.getEmployerByEmail().subscribe(
-      (profile: any) => {
-        this.profile = profile;
-        this.editForm.controls['email'].setValue(profile.profileDto.email);
-        this.editForm.controls['firstName'].setValue(profile.profileDto.firstName);
-        this.editForm.controls['lastName'].setValue(profile.profileDto.lastName);
-        this.editForm.controls['companyName'].setValue(profile.companyName);
-        this.editForm.controls['companyDescription'].setValue(profile.description);
-        this.editForm.controls['publicInfo'].setValue(profile.profileDto.publicInfo);
+      (employer: EditEmployer) => {
+        this.employer = employer;
+        this.editForm.controls['email'].setValue(employer.profileDto.email);
+        this.editForm.controls['firstName'].setValue(employer.profileDto.firstName);
+        this.editForm.controls['lastName'].setValue(employer.profileDto.lastName);
+        this.editForm.controls['companyName'].setValue(employer.companyName);
+        this.editForm.controls['companyDescription'].setValue(employer.description);
+        this.editForm.controls['publicInfo'].setValue(employer.profileDto.publicInfo);
         // converts bytesArray to Base64
-        this.arrayBufferToBase64(profile.profileDto.picture);
-        if (profile.profileDto.picture != null) {
+        this.arrayBufferToBase64(employer.profileDto.picture);
+        if (employer.profileDto.picture != null) {
           this.picture = 'data:image/png;base64,' + this.picture;
           this.hasPicture = true;
         }
-        // console.log(profile);
       }
     );
   }
@@ -73,50 +72,52 @@ export class EditEmployerComponent implements OnInit {
     this.alertService.clear();
     this.submitted = true;
     if (this.editForm.valid) {
-      let employer;
+      const employer = this.createEmployer();
       if (this.selectedPicture != null && typeof this.selectedPicture !== 'object') {
         // image has valid format (png or jpg)
         if (this.selectedPicture.startsWith('data:image/png;base64') || this.selectedPicture.startsWith('data:image/jpeg;base64')) {
           this.selectedPicture = this.selectedPicture.split(',');
-
-          employer = new EditEmployer(new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
-            this.editForm.controls.email.value, null, this.editForm.controls.publicInfo.value,
-            this.selectedPicture[1]),
-            this.editForm.controls.companyName.value, this.editForm.controls.companyDescription.value);
+          employer.profileDto.picture = this.selectedPicture[1];
           this.hasPicture = true;
-// image has invalid format
+          // image has invalid format
         } else {
-          employer = new EditEmployer(new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
-            this.editForm.controls.email.value, null, this.editForm.controls.publicInfo.value,
-            null),
-            this.editForm.controls.companyName.value, this.editForm.controls.companyDescription.value);
           this.hasPicture = false;
         }
       } else {
         if (this.picture != null) {
           const samePic = this.picture.split(',');
-          employer = new EditEmployer(new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
-            this.editForm.controls.email.value, null, this.editForm.controls.publicInfo.value,
-            samePic[1]),
-            this.editForm.controls.companyName.value, this.editForm.controls.companyDescription.value);
+          employer.profileDto.picture = samePic[1];
         } else {
-          employer = new EditEmployer(new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
-            this.editForm.controls.email.value, null, this.editForm.controls.publicInfo.value,
-            null),
-            this.editForm.controls.companyName.value, this.editForm.controls.companyDescription.value);
           this.hasPicture = false;
         }
       }
 
       this.employerService.updateEmployer(employer).subscribe(
         () => {
-          // console.log('User profile updated successfully');
-          // this.router.navigate(['/']);
+          console.log('User profile updated successfully');
           this.inputImage.nativeElement.value = ''; // resets fileUpload button
           this.loadEmployerDetails();
           this.updateHeaderService.updateProfile.next(true);
         });
     }
+  }
+
+  /**
+   * Creates the employer from the inputs. Picture is set to null and set later depending on format and if it is valid
+   */
+  createEmployer(): EditEmployer {
+    return new EditEmployer(
+      this.employer.id,
+      new ProfileDto(
+        this.employer.id,
+        this.editForm.controls.firstName.value,
+        this.editForm.controls.lastName.value,
+        this.editForm.controls.email.value,
+        null,
+        this.editForm.controls.publicInfo.value,
+        null),
+      this.editForm.controls.companyName.value,
+      this.editForm.controls.companyDescription.value);
   }
 
   onFileSelected(event) {
@@ -156,6 +157,4 @@ export class EditEmployerComponent implements OnInit {
     this.hasPicture = false;
     this.picture = null;
   }
-
-
 }

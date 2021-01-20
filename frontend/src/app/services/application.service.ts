@@ -4,6 +4,8 @@ import {HttpClient} from '@angular/common/http';
 import {Application} from '../dtos/application';
 import {ApplicationStatus} from '../dtos/application-status';
 import {SimpleNotification} from '../dtos/simple-notification';
+import {Observable} from 'rxjs';
+import {DetailedEvent} from '../dtos/detailed-event';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +27,11 @@ export class ApplicationService {
   getApplicationsForEvent(id: number) {
     console.log('GET applications for event with id=' + id);
     return this.httpClient.get<SimpleNotification[]>(this.applicationBaseUri + '/events/' + id);
+  }
+
+  getAppliedEvents(): Observable<DetailedEvent[]> {
+    console.log('GET events where employee applied for');
+    return this.httpClient.get<DetailedEvent[]>(this.applicationBaseUri + '/applied');
   }
 
 }

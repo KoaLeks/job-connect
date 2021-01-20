@@ -15,7 +15,7 @@
         <ng-container *ngIf="task.id == application.taskId">
           <ngb-panel id="favpanel-{{application.id}}">
             <ng-template ngbPanelHeader let-opened="opened">
-              <span *ngIf="!application.seen" class="badge badge-notify">NEW</span>
+              <span *ngIf="!application.seen" class="badge badge-notify">neu</span>
 
               <div class="row">
                 <div class="mt-auto mb-auto ml-3" (click)="likeApplicant(application)">
@@ -78,7 +78,7 @@
         <ng-container *ngIf="task.id == application.taskId">
           <ngb-panel id="nonfavpanel-{{application.id}}">
             <ng-template ngbPanelHeader let-opened="opened">
-              <span *ngIf="!application.seen" class="badge badge-notify">NEW</span>
+              <span *ngIf="!application.seen" class="badge badge-notify">neu</span>
               <div class="row">
                 <div class="mt-auto mb-auto ml-3" (click)="likeApplicant(application)">
 

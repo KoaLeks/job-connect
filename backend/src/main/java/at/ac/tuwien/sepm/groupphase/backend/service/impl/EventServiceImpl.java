@@ -79,7 +79,7 @@ public class EventServiceImpl implements EventService {
         if(id != null) {
             Optional<Event> event = eventRepository.findById(id);
             if (event.isPresent()) return event.get();
-            else throw new NotFoundException(String.format("Could not find event with id %s", id));
+            else throw new NotFoundException(String.format("Event(%s) konnte nicht gefunden werden", id));
         }
         return null;
     }
@@ -111,6 +111,13 @@ public class EventServiceImpl implements EventService {
         new Thread(() -> {
             mailService.sendMailAboutCanceledEvent(event, employeeSet);
         }).start();
+    }
+
+    @Override
+    @Transactional
+    public List<Event> findAllAppliedEvents(Long id) {
+        LOGGER.debug("Find all events where Employee with id %s applied" + id);
+        return eventRepository.findAllAppliedEvents(id);
     }
 
 }

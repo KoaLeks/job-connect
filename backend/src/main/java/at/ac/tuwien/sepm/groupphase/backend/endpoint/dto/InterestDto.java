@@ -1,12 +1,18 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 
 public class InterestDto {
     private Long id;
 
+    @Size(max = 100)
+    @Pattern(regexp = "[a-zA-ZÖöÜüÄä]+([ ]|[a-zA-ZÖöÜüÄä]|[0-9]|[.]|[,]|[(]|[)]|[-]|[/]|[^'\\u0027])*", message = "Pattern muss eingehalten werden")
     private String name;
 
+    @Size(max = 1000)
+    @Pattern(regexp = "[a-zA-ZÖöÜüÄä]+([ ]|[a-zA-ZÖöÜüÄä]|[0-9]|[.]|[,]|[(]|[)]|[-]|[/]|[^'\\u0027])*", message = "Pattern muss eingehalten werden")
     private String description;
 
     private SimpleInterestAreaDto simpleInterestAreaDto;

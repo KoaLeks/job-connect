@@ -27,6 +27,11 @@ import {Alert, AlertModule} from './alert';
 import { ApplicationListComponent } from './components/application-list/application-list.component';
 import { EmployeeDetailsComponent } from './components/employee-details/employee-details.component';
 import { ContactComponent } from './components/contact/contact.component';
+import { DeleteProfileComponent } from './components/delete-profile/delete-profile.component';
+import { EmployerDetailsComponent } from './components/employer-details/employer-details.component';
+import { EventAppliedComponent } from './components/event-applied/event-applied.component';
+import { ExpiredEventsComponent } from './components/expired-events/expired-events.component';
+import { PastAppliedEventsComponent } from './components/past-applied-events/past-applied-events.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +54,11 @@ import { ContactComponent } from './components/contact/contact.component';
     ApplicationListComponent,
     EmployeeDetailsComponent,
     ContactComponent,
+    DeleteProfileComponent,
+    EmployerDetailsComponent,
+    EventAppliedComponent,
+    ExpiredEventsComponent,
+    PastAppliedEventsComponent,
   ],
   imports: [
     BrowserModule,

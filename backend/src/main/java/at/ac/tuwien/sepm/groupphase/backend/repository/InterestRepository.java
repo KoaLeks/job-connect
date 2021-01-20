@@ -11,4 +11,5 @@ public interface InterestRepository extends JpaRepository<Interest, Long> {
 
     Set<Interest> findByEmployee_Id(Long id);
 
+    void deleteInterestsByEmployee_Profile_Email(String email);
 }

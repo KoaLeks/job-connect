@@ -35,4 +35,19 @@ public interface EmployerService {
     Long updateEmployer(Employer employer);
 
     Employer findByEvent(Event event);
+
+    /**
+     * Checks if the employer still has events which did not start or are not over yet
+     *
+     * @param email of the employer
+     * @return true if there are still active events
+     */
+    boolean hasActiveEvents(String email);
+
+    /**
+     * Delete given employer (including their events, tasks, notifications)
+     *
+     * @param email of the employer
+     */
+    void deleteByEmail(String email);
 }

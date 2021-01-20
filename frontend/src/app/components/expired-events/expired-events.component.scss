@@ -1,0 +1,20 @@
+.eventoverviewcontainer {
+  font-family: 'Century Gothic', sans-serif;
+}
+.event-item {
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.event-item:hover{
+  cursor: pointer;
+  background-color: rgba(255, 165, 69, 0.15);
+}
+.add-event-button {
+  background-color: white;
+  color: #465c69;
+  border-color: #465c69;
+  font-weight: bold;
+}
+.add-event-button:hover {
+  background-color: #465c69;
+  color: white;
+}

@@ -25,12 +25,12 @@ export class EditEmployeeComponent implements OnInit {
   profile: any;
   employee: EditEmployee;
   genderOptions = Object.values(Gender);
+  pattern = '[a-zA-ZÖöÜüÄä]+([ ]|[a-zA-ZÖöÜüÄä])*';
   selectedPicture = null;
   picture;
   hasPicture = false;
   @ViewChild('pictureUpload') // needed for resetting fileUpload button
   inputImage: ElementRef; // needed for resetting fileUpload button
-  changePassword: boolean = false;
   timeCreationForm;
   times: TimeDto[] = []; // for database entries
   newTimes: TimeDto[] = []; // for newly added entries
@@ -56,8 +56,8 @@ export class EditEmployeeComponent implements OnInit {
               private alertService: AlertService) {
     this.editForm = this.formBuilder.group({
       email: ['', [Validators.required]],
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
+      firstName: ['', [Validators.required, Validators.pattern(this.pattern)]],
+      lastName: ['', [Validators.required, Validators.pattern(this.pattern)]],
       publicInfo: [''],
       gender: ['', [Validators.required]],
       picture: null,
@@ -129,7 +129,6 @@ export class EditEmployeeComponent implements OnInit {
           this.picture = 'data:image/png;base64,' + this.picture;
           this.hasPicture = true;
         }
-        console.log(this.employee);
 
         if (this.employee.interestDtos !== undefined && this.employee.interestDtos.length > 0) {
           this.employeeInterests = this.employee.interestDtos;
@@ -145,6 +144,7 @@ export class EditEmployeeComponent implements OnInit {
     this.alertService.clear();
     this.submitted = true;
     if (this.editForm.valid) {
+      this.employee = this.createEmployee();
       for (const time of this.times) {
         this.newTimes.push(time);
       }
@@ -152,48 +152,27 @@ export class EditEmployeeComponent implements OnInit {
         // image has valid format (png or jpg)
         if (this.selectedPicture.startsWith('data:image/png;base64') || this.selectedPicture.startsWith('data:image/jpeg;base64')) {
           this.selectedPicture = this.selectedPicture.split(',');
-
-          this.employee = new EditEmployee(
-            new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
-              this.editForm.controls.email.value, null, this.editForm.controls.publicInfo.value,
-              this.selectedPicture[1]), this.employee.interestDtos, this.editForm.controls.gender.value,
-            new Date(this.editForm.controls.birthDate.value), this.newTimes);
+          this.employee.profileDto.picture = this.selectedPicture[1];
           this.hasPicture = true;
           // image has invalid format
         } else {
-          this.employee = new EditEmployee(
-            new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
-              this.editForm.controls.email.value, null, this.editForm.controls.publicInfo.value,
-              null), this.employee.interestDtos, this.editForm.controls.gender.value,
-            new Date(this.editForm.controls.birthDate.value), this.newTimes);
           this.hasPicture = false;
         }
       } else {
         if (this.picture != null) {
           const samePic = this.picture.split(',');
-          this.employee = new EditEmployee(
-            new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
-              this.editForm.controls.email.value, null, this.editForm.controls.publicInfo.value,
-              samePic[1]), this.employee.interestDtos, this.editForm.controls.gender.value,
-            new Date(this.editForm.controls.birthDate.value), this.newTimes);
+          this.employee.profileDto.picture = samePic[1];
         } else {
-          this.employee = new EditEmployee(
-            new ProfileDto(null, this.editForm.controls.firstName.value, this.editForm.controls.lastName.value,
-              this.editForm.controls.email.value, null, this.editForm.controls.publicInfo.value,
-              null), this.employee.interestDtos, this.editForm.controls.gender.value,
-            new Date(this.editForm.controls.birthDate.value), this.newTimes);
           this.hasPicture = false;
         }
       }
 
-      console.log('employee before sending:');
-      console.log(this.employee);
       this.newTimes1 = [];
       this.employee.interestDtos = this.employeeInterests;
       this.employeeService.updateEmployee(this.employee).subscribe(
         (id) => {
           this.newTimes = [];
-          console.log('User profile updated successfully id: ' + id);
+          // console.log('User profile updated successfully id: ' + id);
           // this.router.navigate(['/']);
           this.inputImage.nativeElement.value = ''; // resets fileUpload button
           this.loadEmployeeDetails();
@@ -206,6 +185,26 @@ export class EditEmployeeComponent implements OnInit {
     } else {
       console.log('Invalid input');
     }
+  }
+
+  /**
+   * Creates the employee from the inputs. Picture is set to null and set later depending on format and if it is valid
+   */
+  createEmployee(): EditEmployee {
+    return new EditEmployee(
+      this.employee.id,
+      new ProfileDto(
+        this.employee.id,
+        this.editForm.controls.firstName.value,
+        this.editForm.controls.lastName.value,
+        this.editForm.controls.email.value,
+        null,
+        this.editForm.controls.publicInfo.value,
+        null),
+      this.employee.interestDtos,
+      this.editForm.controls.gender.value,
+      new Date(this.editForm.controls.birthDate.value),
+      this.newTimes);
   }
 
   onFileSelected(event) {

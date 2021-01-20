@@ -35,7 +35,7 @@
       </div>
 
       <!-- company description -->
-      <div class="form-group">
+      <div class="form-group" *ngIf="employer !== undefined && employer.companyName !== 'Privatperson'">
         <label for="companyDescription_edit_employer">Beschreibung des Unternehmens</label>
         <textarea name="companyDescription" formControlName="companyDescription" class="form-control"
                   id="companyDescription_edit_employer"
@@ -58,6 +58,9 @@
               <small class="form-text text-info" *ngIf="editForm.controls.firstName.errors.required">Vorname muss
                 eingegeben werden
               </small>
+              <small class="form-text text-info" *ngIf="editForm.controls.firstName.errors.pattern">
+                Vorname muss mit einem Buchstaben beginnen und darf keine Sonderzeichen enthalten
+              </small>
             </div>
           </div>
         </div>
@@ -74,6 +77,9 @@
               <small class="form-text text-info" *ngIf="editForm.controls.lastName.errors.required">Nachname muss
                 eingegeben werden
               </small>
+              <small class="form-text text-info" *ngIf="editForm.controls.lastName.errors.pattern">
+                Nachname muss mit einem Buchstaben beginnen und darf keine Sonderzeichen enthalten
+              </small>
             </div>
           </div>
         </div>
@@ -83,7 +89,7 @@
       <div class="form-group">
         <label for="publicInfo_edit_employer">Öffentliche Profilbeschreibung</label>
         <textarea name="publicInfo" formControlName="publicInfo" class="form-control" id="publicInfo_edit_employer"
-                  placeholder="Beschreibung ..." maxlength="10000"></textarea>
+                  placeholder="Beschreibung, Telefonnummer, ..." maxlength="10000"></textarea>
       </div>
 
       <hr/>
@@ -107,18 +113,22 @@
         <div class="col-md-6 col-sm-6">
           <label>Passwort</label>
           <br>
-          <button class="btn btn-outline-secondary" (click)="changePassword=true" data-target="#passwordUpdateModal"
+          <button class="btn btn-outline-secondary" data-target="#passwordUpdateModal"
                   data-toggle="modal">Passwort ändern
           </button>
-          <app-edit-password [changePassword]="changePassword"></app-edit-password>
+          <app-edit-password></app-edit-password>
         </div>
 
       </div>
 
       <hr/>
       <alert></alert>
-      <div class="form-group form-check">
-        <button type="button" (click)="update()" class="btn btn-outline-primary float-right">Speichern</button>
+      <div class="form-group">
+        <button type="button" data-target="#deleteProfileModal" data-toggle="modal"
+                class="btn btn-outline-danger float-left">Profil löschen
+        </button>
+        <app-delete-profile></app-delete-profile>
+        <button type="button" (click)="update()" class="btn btn-primary float-right">Speichern</button>
       </div>
     </form>
   </div>

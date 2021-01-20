@@ -17,6 +17,8 @@ export class EventOverviewComponent implements OnInit {
   loggedInEmployer: boolean;
   notLoggedIn: boolean;
   employerEvents: DetailedEvent[] = [];
+  uniqueDateArray: string[] = [];
+  uniqueDateArrayEmployer: string[] = [];
 
   constructor(public authService: AuthService, private eventService: EventService) {
   }
@@ -38,13 +40,20 @@ export class EventOverviewComponent implements OnInit {
     this.eventService.getEvents().subscribe(
       (events: DetailedEvent[]) => {
         this.events = events;
-        this.getEmployerEvents();
+        for (const event of events) {
+          if (this.loggedInEmployer && this.authService.getTokenIdentifier() === event.employer.simpleProfileDto.email
+            && this.checkDateInFuture(event.end)) {
+            this.employerEvents.push(event);
+          }
+        }
+        this.sortEventsByDate();
       },
       error => {
         this.defaultServiceErrorHandling(error);
       }
     );
   }
+
   private getAmountOfFreeJobs(tasks: Task[]) {
     let sum = 0;
     for (const task of tasks) {
@@ -52,6 +61,7 @@ export class EventOverviewComponent implements OnInit {
     }
     return sum;
   }
+
   private getAmountOfTakenJobs(tasks: Task[]) {
     let sum = 0;
     for (const task of tasks) {
@@ -63,15 +73,7 @@ export class EventOverviewComponent implements OnInit {
     }
     return sum;
   }
-  private getEmployerEvents() {
-    if (this.events !== null && this.events.length !== 0) {
-      for (const event of this.events) {
-        if (this.loggedInEmployer && this.authService.getTokenIdentifier() === event.employer.simpleProfileDto.email) {
-          this.employerEvents.push(event);
-        }
-      }
-    }
-  }
+
   private defaultServiceErrorHandling(error: any) {
     console.log(error);
     this.error = true;
@@ -80,5 +82,43 @@ export class EventOverviewComponent implements OnInit {
     } else {
       this.errorMessage = error.error;
     }
+  }
+
+  // sorts Events by Date by calculating the number of milliseconds between January 1, 1970 and 'event.start'
+  private sortEventsByDate() {
+    const dateArray: string[] = [];
+    const dateArrayEmployer: string[] = [];
+
+    for (const event of this.events) {
+      event.sortHelper = Date.parse(event.start); // returns the number of milliseconds between January 1, 1970 and 'event.start'
+      dateArray.push(event.start);
+    }
+
+    for (const event of this.employerEvents) {
+      dateArrayEmployer.push(event.start.split('T')[0]);
+    }
+
+    for (const date of dateArray) {
+      if (this.uniqueDateArray.indexOf(date.split('T')[0]) === -1) {
+        if (new Date() <= new Date(date)) { // only show future events
+          this.uniqueDateArray.push(date.split('T')[0]);
+        }
+      }
+    }
+
+    for (const date of dateArrayEmployer) {
+      if (this.uniqueDateArrayEmployer.indexOf(date) === -1) {
+          this.uniqueDateArrayEmployer.push(date);
+      }
+    }
+
+    this.events.sort((a, b) => (a.sortHelper > b.sortHelper ? 1 : -1));
+    this.employerEvents.sort((a, b) => (a.sortHelper > b.sortHelper ? 1 : -1));
+    this.uniqueDateArray.sort((a, b) => (a > b ? 1 : -1));
+    this.uniqueDateArrayEmployer.sort((a, b) => (a > b ? 1 : -1));
+  }
+
+  checkDateInFuture(date) {
+    return new Date(date) >= new Date();
   }
 }

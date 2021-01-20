@@ -1,9 +1,9 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
-import antlr.Token;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.*;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.*;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
+import at.ac.tuwien.sepm.groupphase.backend.exception.NotDeletedException;
 import at.ac.tuwien.sepm.groupphase.backend.service.*;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
@@ -90,8 +89,12 @@ public class ProfileEndpoint {
     @ApiOperation(value = "Update employee details", authorizations = {@Authorization(value = "apiKey")})
     @CrossOrigin(origins = "http://localhost:4200")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateEmployee(@Valid @RequestBody EditEmployeeDto editEmployeeDto) {
+    public void updateEmployee(@Valid @RequestBody EditEmployeeDto editEmployeeDto, @RequestHeader String authorization) {
         LOGGER.info("PUT /api/v1/profiles/employee body: {}", editEmployeeDto);
+        Employee employee = tokenService.getEmployeeFromHeader(authorization);
+        if (!employee.getId().equals(editEmployeeDto.getId())) {
+            throw new AuthorizationServiceException("Keine Berechtigung für die Bearbeitung des gewünschten Accounts");
+        }
         employeeService.updateEmployee(employeeMapper.editEmployeeDtoToEmployee(editEmployeeDto));
     }
 
@@ -104,13 +107,21 @@ public class ProfileEndpoint {
         return employerService.createEmployer(employer);
     }
 
+    @GetMapping(value = "/employer/{id}/details")
+    @ApiOperation(value = "Get an employers profile details by id")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public SimpleEmployerDto getEmployerById(@PathVariable @NotNull Long id) {
+        LOGGER.info("GET /api/v1/profiles/employer/{}", id);
+        return employerMapper.employerToSimpleEmployerDto(employerService.findOneById(id));
+    }
+
     @GetMapping(value = "/employer")
     @ApiOperation(value = "Get an employers profile details", authorizations = {@Authorization(value = "apiKey")})
     @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
     @CrossOrigin(origins = "http://localhost:4200")
     public EmployerDto getEmployer(@RequestHeader String authorization) {
         Employer employer = tokenService.getEmployerFromHeader(authorization);
-        LOGGER.info("GET /api/v1/profiles/employer/{}", employer.getProfile().getEmail() );
+        LOGGER.info("GET /api/v1/profiles/employer/{}", employer.getProfile().getEmail());
         return employerMapper.employerToEmployerDto(employer);
     }
 
@@ -121,7 +132,7 @@ public class ProfileEndpoint {
     public void updateEmployer(@Valid @RequestBody EditEmployerDto editEmployerDto, @RequestHeader String authorization) {
         LOGGER.info("PUT /api/v1/profiles/employer body: {}", editEmployerDto);
         Employer employer = tokenService.getEmployerFromHeader(authorization);
-        if(!employer.getId().equals(editEmployerDto.getId())) {
+        if (!employer.getId().equals(editEmployerDto.getId())) {
             throw new AuthorizationServiceException("Keine Berechtigung für die Bearbeitung des gewünschten Accounts");
         }
         employerService.updateEmployer(employerMapper.editEmployerDtoToEmployer(editEmployerDto));
@@ -151,8 +162,39 @@ public class ProfileEndpoint {
     @PostMapping(value = "/contact")
     @ApiOperation(value = "Contact an employee/r", authorizations = {@Authorization(value = "apiKey")})
     @CrossOrigin(origins = "http://localhost:4200")
+    @ResponseStatus(HttpStatus.OK)
     public void contact(@Valid @RequestBody ContactMessageDto contactMessageDto) {
         LOGGER.info("POST api/v1/profiles/contact body: {}", contactMessageDto.toString().replace("\n", ""));
         this.mailService.sendContactMail(this.contactMessageMapper.contactMessageDtoToContactMessage(contactMessageDto));
+    }
+
+    @DeleteMapping("/employer")
+    @ApiOperation(value = "Delete an employer", authorizations = {@Authorization(value = "apiKey")})
+    @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
+    @CrossOrigin(origins = "http://localhost:4200")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteEmployer(@RequestHeader String authorization) {
+        String email = tokenService.getEmailFromHeader(authorization);
+        LOGGER.info("DELETE api/v1/profiles/employer {}", email);
+        if (employerService.hasActiveEvents(email)) {
+            throw new NotDeletedException("Profil kann nicht gelöscht werden. Es gibt noch laufende oder zukünftige Events. Sagen Sie die Events zuerst ab.");
+        } else {
+            employerService.deleteByEmail(email);
+        }
+    }
+
+    @DeleteMapping("/employee")
+    @ApiOperation(value = "Delete an employee", authorizations = {@Authorization(value = "apiKey")})
+    @PreAuthorize("hasAuthority('ROLE_EMPLOYEE')")
+    @CrossOrigin(origins = "http://localhost:4200")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteEmployee(@RequestHeader String authorization) {
+        String email = tokenService.getEmailFromHeader(authorization);
+        LOGGER.info("DELETE api/v1/profiles/employee {}", email);
+        if (employeeService.hasUpcomingTasks(email)) {
+            throw new NotDeletedException("Profil kann nicht gelöscht werden. Es gibt noch laufende oder zukünftige Events. Melden Sie sich zuerst ab.");
+        } else {
+            employeeService.deleteByEmail(email);
+        }
     }
 }

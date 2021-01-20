@@ -11,8 +11,6 @@ import {AlertService} from '../../alert';
   styleUrls: ['./edit-password.component.scss']
 })
 export class EditPasswordComponent implements OnInit {
-
-  @Input() changePassword: boolean;
   @ViewChild('close') close: ElementRef;
   passwordUpdateForm: FormGroup;
   submittedPasswordForm: boolean = false;

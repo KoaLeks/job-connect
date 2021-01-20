@@ -32,4 +32,6 @@ public interface EmployerRepository extends JpaRepository<Employer, Long> {
      * @return the employer
      */
     Employer findFirstByEvents(Event event);
+
+    void deleteByProfile_Email(String email);
 }
