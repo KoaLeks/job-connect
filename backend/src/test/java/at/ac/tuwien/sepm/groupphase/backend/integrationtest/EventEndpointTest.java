@@ -133,6 +133,7 @@ public class EventEndpointTest implements TestData {
         .withInterestArea(INTEREST_AREA)
         .build();
 
+
     @BeforeEach
     public void beforeEach() {
         eventRepository.deleteAll();
@@ -415,6 +416,37 @@ public class EventEndpointTest implements TestData {
 
         MvcResult mvcResult = this.mockMvc.perform(get(EVENTS_BASE_URI)
             .queryParam("state", "Upper Austria"))
+            .andDo(print()).andReturn();
+        MockHttpServletResponse response = mvcResult.getResponse();
+
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(MediaType.APPLICATION_JSON_VALUE, response.getContentType());
+
+        List<Event> foundEvents = Arrays.asList(objectMapper.readValue(response.getContentAsString(),
+            Event[].class));
+
+        assertEquals(foundEvents.size(), 1);
+        assert(foundEvents.contains(event));
+        assert(!foundEvents.contains(event2));
+
+    }
+
+    @Test
+    public void searchForEventWithValidStateAndValidTitle() throws Exception {
+        addressRepository.save(address);
+        addressRepository.save(address2);
+
+        eventRepository.save(event);
+
+        event2.setAddress(address2);
+        eventRepository.save(event2);
+
+        assertEquals(addressRepository.count(), 2);
+        assertEquals(eventRepository.count(), 2);
+
+        MvcResult mvcResult = this.mockMvc.perform(get(EVENTS_BASE_URI)
+            .queryParam("state", "Upper Austria")
+            .queryParam("title", "Flyer"))
             .andDo(print()).andReturn();
         MockHttpServletResponse response = mvcResult.getResponse();
 
