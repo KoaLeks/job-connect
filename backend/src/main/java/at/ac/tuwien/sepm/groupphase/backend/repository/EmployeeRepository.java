@@ -26,6 +26,11 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     List<Employee> findAllByOrderByProfile_FirstName();
 
 
+    /**
+     * Find employees that are available at and interested in the event given by Id
+     * @param eventId event Id of event to find employees for
+     * @return list of available employees for that event
+     */
     @Query("select employee from Employee employee " +
         "inner join Interest interest on interest.employee.id=employee.id " +
         "inner join Event event on event.id=?1 " +
