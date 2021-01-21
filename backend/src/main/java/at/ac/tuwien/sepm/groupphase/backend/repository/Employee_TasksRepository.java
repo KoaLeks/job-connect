@@ -28,4 +28,6 @@ public interface Employee_TasksRepository extends JpaRepository<Employee_Tasks, 
     void deleteEmployee_TasksByEmployee_Profile_Email(String email);
 
     void deleteEmployee_TaskByEmployee_Profile_Email_AndTask_Id(String email, Long id);
+
+    long countAllByTask_IdAndAccepted(Long taskId, Boolean accepted);
 }
