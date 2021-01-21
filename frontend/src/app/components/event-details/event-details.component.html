@@ -225,7 +225,7 @@
 </div>
 
 <!-- Application list -->
-<ng-container *ngIf="eventDetails != undefined">
+<ng-container *ngIf="eventDetails != undefined && checkDateInFuture(eventDetails.end)">
   <!-- added this, because it was throwing "TypeError: cannot read property 'employer' of undefined -->
   <app-application-list *ngIf="this.authService.getToken() !== '' && authService.getUserRole() === 'EMPLOYER' &&
   authService.getTokenIdentifier() === eventDetails.employer.simpleProfileDto.email"
