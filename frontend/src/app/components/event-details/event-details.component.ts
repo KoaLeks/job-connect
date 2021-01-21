@@ -160,4 +160,32 @@ export class EventDetailsComponent implements OnInit {
     nowPlus24Hours.setDate(nowPlus24Hours.getDate() + 1);
     return new Date(startDate) <= nowPlus24Hours;
   }
+
+  deleteApplication(id: number) {
+    this.applicationService.getApplicationsForEvent(id).subscribe(
+      (applications) => {
+            for (const application of applications) {
+              if (application.sender.email === this.authService.getEmail()) {
+                this.applicationService.deleteApplication(application.id).subscribe(
+                  () => {
+                    this.alertService.success('Bewerbung erfolgreich gelöscht', {autoClose: true});
+                    this.router.navigate(['events']);
+                  }
+                );
+              }
+            }
+      }
+    );
+  }
+
+  getStatus(tasks: Task[]) {
+    for (const task of tasks) {
+      for (const emp of task.employees) {
+        if (emp.employee.simpleProfileDto.email === this.authService.getEmail()) {
+          return emp.accepted;
+        }
+      }
+    }
+  }
+
 }

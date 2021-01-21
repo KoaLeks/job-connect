@@ -78,19 +78,16 @@ export class EventAppliedComponent implements OnInit {
   deleteApplication(id: number) {
     this.applicationService.getApplicationsForEvent(id).subscribe(
       (applications) => {
-        this.employeeService.getEmployeeByEmail().subscribe(
-          (emp) => {
-            for (const application of applications) {
-              if (application.sender.id === emp.id) {
-                this.applicationService.deleteApplication(application.id).subscribe(
-                  () => {
-                    this.alertService.success('Bewerbung erfolgreich gelöscht', {autoClose: true});
-                    this.router.navigate(['events']);
-                  }
-                );
+        for (const application of applications) {
+          if (application.sender.email === this.authService.getEmail()) {
+            this.applicationService.deleteApplication(application.id).subscribe(
+              () => {
+                this.alertService.success('Bewerbung erfolgreich gelöscht', {autoClose: true});
+                this.router.navigate(['events']);
               }
-            }
-          });
+            );
+          }
+        }
       }
     );
   }
