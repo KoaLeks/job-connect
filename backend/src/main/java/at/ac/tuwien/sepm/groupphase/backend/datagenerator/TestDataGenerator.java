@@ -20,6 +20,7 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.lang.invoke.MethodHandles;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -172,17 +173,17 @@ public class TestDataGenerator {
                     .withCompanyName(companyName)
                     .withDescription(
                         random.nextBoolean() ?
-                            "Wir sind " + companyName + ", welches " + (1950 + random.nextInt(70)) + " von " + name + " gegruendet wurde. " +
+                            "Wir sind " + companyName + ", welches " + (1950 + random.nextInt(70)) + " von " + name + " gegründet wurde. " +
                                 (random.nextBoolean() ?
-                                    "Das Ziel von " + companyName + " hat sich seit der Gruendung nicht veraendert, wir versorgen unsere Kunden mit den besten Produkten zu einem fairen Preis."
+                                    "Das Ziel von " + companyName + " hat sich seit der Gründung nicht verändert, wir versorgen unsere Kunden mit den besten Produkten zu einem fairen Preis."
                                 :
-                                   companyName + " setzt die neusten state of the art Technologien direkt bei Ihnen zu Hause ein, um alle moeglichen Probleme zu loesen.")
+                                   companyName + " setzt die neusten state of the art Technologien direkt bei Ihnen zu Hause ein, um alle möglichen Probleme zu loesen.")
                             :
                             companyName + " ist ein neues Startup, welches sich aus " + (5 + random.nextInt(10)) + " engagierte MitarbeiterInnen zusammensetzt. " +
                                 (random.nextBoolean() ?
-                                    "Unser Ziel ist es all ihre Beduerfnisse zu erfuellen."
+                                    "Unser Ziel ist es all ihre Bedürfnisse zu erfuellen."
                                 :
-                                    "Als neues Startup versuchen wir staendig neue innovative Ideen an den Markt und direkt zu Ihnen zu bringen.")
+                                    "Als neues Startup versuchen wir ständig neue innovative Ideen an den Markt und direkt zu Ihnen zu bringen.")
                     )
                     .withProfile(employerProfile)
                     .build();
@@ -258,6 +259,7 @@ public class TestDataGenerator {
                 RandomAccessFile areasFile = new RandomAccessFile("src/main/resources/interestAreas.txt", "r");
                 String line;
                 while ((line = areasFile.readLine()) != null) {
+                    line = new String(line.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
                     String[] split = line.split(";");
                     areas.add(InterestArea.InterestAreaBuilder.aInterest()
                         .withArea(split[1])
@@ -285,8 +287,8 @@ public class TestDataGenerator {
                         int pos = random.nextInt(length);
                         randomAccessFile.seek(pos);
                         randomAccessFile.readLine();
-                        String line = randomAccessFile.readLine();
-                        if (line == null) {
+                        String line = new String(randomAccessFile.readLine().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                        if (line.length() == 0) {
                             continue;
                         }
                         String[] parts = line.split(";");
@@ -379,7 +381,7 @@ public class TestDataGenerator {
             RandomAccessFile eventFile = new RandomAccessFile("src/main/resources/events.txt", "r");
             String line;
             while ((line = eventFile.readLine()) != null) {
-
+                line = new String(line.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(2021, Calendar.APRIL, 30);
                 Date start = roundTimeToQuarter(faker.date().between(new Date(System.currentTimeMillis()), calendar.getTime()));
@@ -528,8 +530,8 @@ public class TestDataGenerator {
                 int pos = random.nextInt(length);
                 randomAccessFile.seek(pos);
                 randomAccessFile.readLine();
-                String line = randomAccessFile.readLine();
-                if (line == null) continue;
+                String line = new String(randomAccessFile.readLine().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                if (line.length() == 0) continue;
                 Task task = new Task();
                 task.setDescription(line.substring(line.indexOf(";") + 1));
                 task.setEmployeeCount(1 + random.nextInt(9));
@@ -551,6 +553,7 @@ public class TestDataGenerator {
             List<String> taskStrings = new LinkedList<>();
             String taskLine;
             while ((taskLine = randomAccessFile.readLine()) != null) {
+                taskLine = new String(taskLine.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
                 taskStrings.add(taskLine);
             }
 
