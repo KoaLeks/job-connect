@@ -1,3 +1,10 @@
+<div class="eventoverviewcontainer" style="text-align: center;">
+  <button *ngIf="loggedInEmployer !== undefined && loggedInEmployer" type="button"
+          class="btn btn-primary btn-lg mt-2 add-event-button btn-block" routerLink="/create-event">
+    Neues Event
+  </button>
+</div>
+
 <form [formGroup]="eventSearchForm" class="event-search-form mb-5" (ngSubmit)="searchEvent(eventSearchForm.value)">
   <div class="form-row align-items-end">
     <div class="form-group mb-0 col-md-8">
@@ -100,12 +107,6 @@
 </div>
 
 <div class="eventoverviewcontainer">
-  <div>
-    <button *ngIf="loggedInEmployer !== undefined && loggedInEmployer" type="button"
-            class="btn btn-primary btn-lg mt-2 add-event-button btn-block" routerLink="/create-event">
-      Neues Event
-    </button>
-  </div>
 
   <!-- Employer Events -->
   <ng-container *ngIf="!search && employerEvents.length !== 0 && loggedInEmployer !== undefined && loggedInEmployer">

@@ -28,6 +28,7 @@ export class EventDetailsComponent implements OnInit {
   id: number;
   eventDetails: DetailedEvent;
   loggedInEmployee = false;
+  loggedInEmployer = false;
   employee: any;
   applied = false;
   appliedTask;
@@ -64,6 +65,9 @@ export class EventDetailsComponent implements OnInit {
         (profile: EditEmployee) => {
           this.employee = profile.profileDto;
         });
+    }
+    if (this.authService.isLoggedIn() && this.authService.getUserRole() === 'EMPLOYER') {
+      this.loggedInEmployer = true;
     }
   }
 

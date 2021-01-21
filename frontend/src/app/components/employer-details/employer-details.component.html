@@ -18,9 +18,9 @@
         <button class="btn btn-outline-secondary mt-2" data-target="#contactModalAlert" data-toggle="modal"
                 >Kontaktieren Sie mich</button>
       </div>
-      <div style="text-align: center">
-        <button class="btn btn-outline-info mt-2">
-          <!--[routerLink]="['/events?employer=', employer.simpleProfileDto.id]"-->
+      <div style="text-align: center" *ngIf="authService.getTokenIdentifier() !== employer.simpleProfileDto.email">
+        <button class="btn btn-outline-info mt-2"
+                [routerLink]="['/employer/', id, 'events']">
           Sehen Sie sich meine weiteren Events an!
         </button>
       </div>
@@ -78,9 +78,9 @@
         <button class="btn btn-outline-secondary mt-2" data-target="#contactModalAlert" data-toggle="modal"
                 >Kontaktieren Sie mich</button>
       </div>
-      <div style="text-align: center">
-        <button class="btn btn-outline-info mt-2" (click)="showEmployerEvents(employer.simpleProfileDto.id)">
-                <!--[routerLink]="['/events?employer=', employer.simpleProfileDto.id]"-->
+      <div style="text-align: center" *ngIf="authService.getTokenIdentifier() !== employer.simpleProfileDto.email">
+        <button class="btn btn-outline-info mt-2"
+                [routerLink]="['/employer/', id, 'events']">
           Sehen Sie sich meine weiteren Events an!
         </button>
       </div>
