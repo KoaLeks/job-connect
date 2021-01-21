@@ -165,7 +165,7 @@ public class TestDataGenerator {
                         .withForename(name.split(" ")[0])
                         .withName(name.split(" ")[1])
                         .withPassword(passwordEncoder.encode(TEST_PASSWORD))
-                        .withPublicInfo(TEST_PUBLIC_INFO)
+                        .withPublicInfo("Ich, " + name + ", bin der Gruender und Geschaeftsleiter von " + companyName + " falls Sie Fragen zu unseren Unternehmen oder zu einzelnen Veranstaltungen haben, koennen Sie mich gerne kontaktieren.")
                         .isEmployer(true)
                         .build();
 
