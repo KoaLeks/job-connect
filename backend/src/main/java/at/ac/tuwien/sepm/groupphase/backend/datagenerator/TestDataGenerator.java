@@ -288,11 +288,12 @@ public class TestDataGenerator {
                         int pos = random.nextInt(length);
                         randomAccessFile.seek(pos);
                         randomAccessFile.readLine();
-                        String line = new String(randomAccessFile.readLine().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-                        if (line.length() == 0) {
+                        String randomLine = randomAccessFile.readLine();
+                        if (randomLine == null) {
                             i--;
                             continue;
                         }
+                        String line = new String(randomLine.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
                         String[] parts = line.split(";");
                         Interest interest = Interest.InterestBuilder.aInterest()
                             .withName(parts[1])
@@ -531,12 +532,12 @@ public class TestDataGenerator {
             for (int i = random.nextInt(maxTasks) + 1; i > 0; i--) {
                 int pos = random.nextInt(length);
                 randomAccessFile.seek(pos);
-                randomAccessFile.readLine();
-                String line = new String(randomAccessFile.readLine().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-                if (line.length() == 0) {
+                String randomLine = randomAccessFile.readLine();
+                if (randomLine == null) {
                     i--;
                     continue;
                 }
+                String line = new String(randomLine.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
                 Task task = new Task();
                 task.setDescription(line.substring(line.indexOf(";") + 1));
                 task.setEmployeeCount(1 + random.nextInt(9));
