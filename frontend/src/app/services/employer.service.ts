@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Globals} from '../global/globals';
 import {EditEmployer} from '../dtos/edit-employer';
+import {Observable} from 'rxjs';
 import {SimpleEmployer} from '../dtos/simple-employer';
 
 @Injectable({
@@ -29,6 +30,14 @@ export class EmployerService {
   getEmployerById(id: number) {
     console.log('Get employer by id ' + id);
     return this.httpClient.get<SimpleEmployer>(this.employerBaseUri + '/' + id + '/details');
+  }
+
+  /**
+   * Get all employers from backend
+   */
+  getEmployers(): Observable<SimpleEmployer[]> {
+    console.log('Get all employers');
+    return this.httpClient.get<SimpleEmployer[]>(this.employerBaseUri + 's');
   }
 
   /**

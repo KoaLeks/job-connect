@@ -3,6 +3,14 @@ import {EventService} from '../../services/event.service';
 import {AuthService} from '../../services/auth.service';
 import {DetailedEvent} from '../../dtos/detailed-event';
 import {Task} from '../../dtos/task';
+import {FormBuilder} from '@angular/forms';
+import {SearchEvent} from '../../dtos/search-event';
+import {InterestAreaService} from '../../services/interestArea.service';
+import {InterestArea} from '../../dtos/interestArea';
+import {EmployerService} from '../../services/employer.service';
+import {SimpleEmployer} from '../../dtos/simple-employer';
+import {EmployeeService} from '../../services/employee.service';
+import {EditEmployee} from '../../dtos/edit-employee';
 
 @Component({
   selector: 'app-event-overview',
@@ -11,6 +19,15 @@ import {Task} from '../../dtos/task';
 })
 export class EventOverviewComponent implements OnInit {
   events: DetailedEvent[] = [];
+  eventSearchForm;
+
+  interestAreas: InterestArea[];
+  employers: SimpleEmployer[];
+
+  states: string[] = ['Burgenland', 'Kärnten', 'Niederösterreich', 'Oberösterreich', 'Salzburg', 'Steiermark', 'Tirol', 'Vorarlberg',
+                      'Wien'];
+  paymentValue: number = 0;
+  search: boolean = false;
   error: boolean = false;
   errorMessage: string = '';
   loggedInEmployee: boolean;
@@ -20,11 +37,27 @@ export class EventOverviewComponent implements OnInit {
   uniqueDateArray: string[] = [];
   uniqueDateArrayEmployer: string[] = [];
 
-  constructor(public authService: AuthService, private eventService: EventService) {
+  currProfile: EditEmployee;
+
+  constructor(public authService: AuthService, private eventService: EventService, private interestAreaService: InterestAreaService,
+              private employerService: EmployerService, private employeeService: EmployeeService, private formBuilder: FormBuilder) {
+    this.eventSearchForm = this.formBuilder.group(
+      {
+        title: '',
+        interestAreaId: '',
+        employerId: '',
+        payment: '',
+        start: '',
+        end: '',
+        state: '',
+        onlyAvailableTasks: false,
+        userId: ''
+      }
+    );
   }
 
   ngOnInit(): void {
-    this.loadEvents();
+    this.loadResources();
     if (this.authService.isLoggedIn() && this.authService.getUserRole() === 'EMPLOYEE') {
       this.loggedInEmployee = true;
     }
@@ -35,8 +68,7 @@ export class EventOverviewComponent implements OnInit {
       this.notLoggedIn = true;
     }
   }
-
-  private loadEvents() {
+  private loadResources() {
     this.eventService.getEvents().subscribe(
       (events: DetailedEvent[]) => {
         this.events = events;
@@ -52,6 +84,68 @@ export class EventOverviewComponent implements OnInit {
         this.defaultServiceErrorHandling(error);
       }
     );
+    this.interestAreaService.getInterestAreas().subscribe(
+      (areas: InterestArea[]) => {
+        this.interestAreas = areas;
+      }, error => {
+        this.defaultServiceErrorHandling(error);
+      }
+    );
+    this.employerService.getEmployers().subscribe(
+      (employers: SimpleEmployer[]) => {
+        this.employers = employers;
+      }, error => {
+        this.defaultServiceErrorHandling(error);
+      }
+    );
+  }
+  searchEvent(event: SearchEvent) {
+    if (event.userId) {
+      this.employeeService.getEmployeeByEmail().subscribe(
+        (profile: EditEmployee) => {
+          event.userId = profile.profileDto.id;
+          this.eventService.searchEvent(event).subscribe(
+            (events: DetailedEvent[]) => {
+              this.events = events;
+              this.events = this.events.filter(currEvent => this.checkDateInFuture(currEvent.start));
+              this.search = true;
+              this.employerEvents = [];
+              for (const e of this.events) {
+                if (this.loggedInEmployer && this.authService.getTokenIdentifier() === e.employer.simpleProfileDto.email
+                  && this.checkDateInFuture(e.end)) {
+                  this.employerEvents.push(e);
+                }
+              }
+              this.sortEventsByDate();
+            }, error => {
+              this.error = true;
+              this.errorMessage = error.error;
+            }
+          );
+        }, (error) => {
+          this.defaultServiceErrorHandling(error);
+        }
+      );
+    } else {
+      this.eventService.searchEvent(event).subscribe(
+        (events: DetailedEvent[]) => {
+          this.events = events;
+          this.events = this.events.filter(currEvent => this.checkDateInFuture(currEvent.start));
+          this.sortEventsByDate();
+          this.search = true;
+          this.employerEvents = [];
+          for (const e of this.events) {
+            if (this.loggedInEmployer && this.authService.getTokenIdentifier() === e.employer.simpleProfileDto.email
+              && this.checkDateInFuture(e.end)) {
+              this.employerEvents.push(e);
+            }
+          }
+          this.sortEventsByDate();
+        }, error => {
+          this.defaultServiceErrorHandling(error);
+        }
+      );
+    }
   }
 
   private getAmountOfFreeJobs(tasks: Task[]) {
@@ -83,9 +177,14 @@ export class EventOverviewComponent implements OnInit {
       this.errorMessage = error.error;
     }
   }
+  getSliderValue(event) {
+    this.paymentValue = event.target.value;
+  }
 
   // sorts Events by Date by calculating the number of milliseconds between January 1, 1970 and 'event.start'
   private sortEventsByDate() {
+    this.uniqueDateArray = [];
+    this.uniqueDateArrayEmployer = [];
     const dateArray: string[] = [];
     const dateArrayEmployer: string[] = [];
 

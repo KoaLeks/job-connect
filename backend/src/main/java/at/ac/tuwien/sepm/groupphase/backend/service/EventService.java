@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SearchEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Task;
 
@@ -17,11 +18,12 @@ public interface EventService {
 
 
     /**
-     * Find all event entries.
-     *
-     * @return  list of all event entries
+     * Finds events with given search criteria.
+     * @param searchEventDto given search criteria dto
+     * @return  list of found events or if given criteria is empty all events
      */
-    List<Event> findAll();
+    List<Event> findAll(SearchEventDto searchEventDto);
+
 
     /**
      * Find event by ID

@@ -137,6 +137,13 @@ public class ProfileEndpoint {
         }
         employerService.updateEmployer(employerMapper.editEmployerDtoToEmployer(editEmployerDto));
     }
+    @GetMapping(value = "/employers")
+    @ApiOperation(value = "Get list of all employers", authorizations = {@Authorization(value = "apiKey")})
+    @CrossOrigin(origins = "http://localhost:4200")
+    public List<SimpleEmployerDto> getAllEmployers() {
+        LOGGER.info("GET api/v1/profiles/employers");
+        return this.employerMapper.employersToSimpleEmployerDtos(employerService.findAll());
+    }
 
     @PutMapping(value = "/updatePassword")
     @ApiOperation(value = "Update profile password", authorizations = {@Authorization(value = "apiKey")})

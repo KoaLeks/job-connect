@@ -47,6 +47,7 @@ security:
       - /favicon.ico
       - /csrf
       - /api/v1/events
+      - /api/v1/interestareas
       # Swagger
       - /v2/api-docs
       - /swagger-resources/**
@@ -56,7 +57,7 @@ security:
       - /h2-console/**
       #Registration
       - /api/v1/profiles/employee
-      - /api/v1/profiles/employer
+      - /api/v1/profiles/employers
       #Event details
       - /api/v1/events/*/details
       #Employer details
