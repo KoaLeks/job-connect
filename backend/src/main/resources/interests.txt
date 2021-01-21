@@ -23,28 +23,18 @@
 23;Elektronik;"In meiner Freizeit arbeite ich gerne an kleinere DIY Projekte, wie z.B. Smartmirror."
 24;Fussball;"War von klein auf Fussball-Fan, versuche mit alten Teamkollegen in Kontakt zu bleiben. Ab und zu treffen wir uns und spielen zusammen."
 25;Gartenbau;"Bin ein Pflanzenfreund, hab auf meiner Terasse einen mini Garten."
-26;Geocaching;
-27;Gitarre;
-28;Hausinstandhaltung;
-29;Kalligrafie;
-30;Kochen;
-31;Kreatives Schreiben;
-32;Lockpicking;
-33;Meditation;
-34;Metallverarbeitung;
-35;Photography;
-36;Piano;
-37;Poker;
-38;Robotics;
-39;Singen;
-40;Schach;
-41;Skifahren;
-42;Snowboarding;
-43;Songwriting;
-44;Strassenfussball;
-45;Tennis;
-46;Tanzen;
-47;Video Games;
-48;Violine;
-49;Volleyball;
-50;Photography;
+26;Geocaching;"Geh gern wandern und mittels Geocaching findet man selbst in der Heimat immer neue spannende Orte."
+27;Gitarre;"In meiner Freizeit spiele ich an meiner Gitarre, um mich vom Alltag zu entspannen."
+28;Kochen;"Versuche immer neue Rezepte aus allen moeglichen Kulturen zu finden."
+29;Kreatives Schreiben;"Arbeite zurzeit an der Veroeffentlichung meines Buches."
+30;Lockpicking;"Hab vor kurzem mit dem Hobby angefangen, bin ein Fan vom LockPickingLawyer auf YouTube."
+31;Meditation;"Meditation hilft mir meine Emotionen besser zu verstehen und meinen Stress besser zu managen."
+32;Metallverarbeitung;"In meiner Freizeit schmiede ich experimentier gern mit Neuen bzw. ungewoehnlichen Materialien."
+33;Photography;"Reise viel und gern, bei meinen Reisen mache ich besonderns viele Fotos von der Natur."
+34;Piano;"Bin ein grosser Fan der klassischen Musik, deshalb habe ich mit dem Klavier spielen angefangen."
+35;Poker;"Spiel mit Freunden/Verwandeten immer gern eine Runde Poker."
+36;Robotics;"Finde das Themengebiet sehr interessant, habe selbst ein paar kleinere Robotor gebaut."
+37;Schach;"Habe Schach von meinen Grosseltern gelernt und spiele heutzutage Online Schach."
+38;Skifahren;"Jedes Jahr fahren wir nach Ischgl Skifahren."
+39;Snowboarding;"Jedes Jahr fahren wir nach Ischgl Snowboarding."
+40;Tennis;"Gehe ca. drei Mal die Woche zum Tennsiplatz, hilft mir dabei mich gesund zu halten."

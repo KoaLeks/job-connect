@@ -277,6 +277,7 @@ public class TestDataGenerator {
         } else {
             LOGGER.debug("generating {} interests entries", 5);
             Random random = new Random();
+            int areasCount = interestAreaRepository.findAll().size() - 1;
             for (Employee employee : employeeRepository.findAll()) {
                 try {
                     RandomAccessFile randomAccessFile = new RandomAccessFile("src/main/resources/interests.txt", "r");
@@ -287,13 +288,14 @@ public class TestDataGenerator {
                         randomAccessFile.readLine();
                         String line = randomAccessFile.readLine();
                         if (line == null) {
+                            i--;
                             continue;
                         }
                         String[] parts = line.split(";");
                         Interest interest = Interest.InterestBuilder.aInterest()
                             .withName(parts[1])
                             .withDescription(parts.length > 2 ? parts[2].replace("\"", "") : "TODO: add description to interests.txt")
-                            .withInterestArea(interestAreaRepository.getOne(random.nextInt(16) + 1L))
+                            .withInterestArea(interestAreaRepository.getOne(1L + random.nextInt(areasCount)))
                             .withEmployee(employee)
                             .build();
 
@@ -529,7 +531,10 @@ public class TestDataGenerator {
                 randomAccessFile.seek(pos);
                 randomAccessFile.readLine();
                 String line = randomAccessFile.readLine();
-                if (line == null) continue;
+                if (line == null) {
+                    i--;
+                    continue;
+                }
                 Task task = new Task();
                 task.setDescription(line.substring(line.indexOf(";") + 1));
                 task.setEmployeeCount(1 + random.nextInt(9));
