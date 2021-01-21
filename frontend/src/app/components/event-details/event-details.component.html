@@ -137,6 +137,12 @@
               title="Event ist schon vorbei!">
         Event absagen!
       </button>
+      <button type=button class="btn btn-outline-info" style="float: right"
+              *ngIf="this.authService.getToken() !== '' && getStatus(eventDetails.tasks) === null && loggedInEmployee
+               && checkDateInFuture(eventDetails.start)"
+              (click)="deleteApplication(eventDetails.id)">
+        Bewerbung zurückziehen
+      </button>
     </div>
   </div>
 </ng-container>
