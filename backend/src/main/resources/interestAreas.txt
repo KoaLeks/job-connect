@@ -9,14 +9,14 @@
 9;Haushalt;Putzhilfe;
 10;Handwerk;Umzugshelfer (vor allem schwere Lasten tragen);
 11;Handwerk;Autofahrer;
-12;Handwerk;Aufbauhilfe (z.B. Buehnen);
-13;Handwerk;Aufbauhilfe (z.B. Moebel);
+12;Handwerk;Aufbauhilfe (z.B. Bühnen);
+13;Handwerk;Aufbauhilfe (z.B. Möbel);
 14;Musik;DJ;
 15;IT;Backend Dev;
 16;IT;Frontend Dev;
 17;Unterricht;Sprachen;
 18;Unterricht;Musik;
-19;Unterricht;Technische Faecher;
+19;Unterricht;Technische Fächer;
 20;Unterricht;Naturwissenschaften;
 21;Service;Fahrer;
 22;Unterricht;Wirtschaft;
