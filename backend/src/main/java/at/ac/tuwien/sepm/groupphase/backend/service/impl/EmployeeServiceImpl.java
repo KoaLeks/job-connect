@@ -260,4 +260,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeRepository.deleteEmployeeByProfile_Email(email);
         profileRepository.deleteByEmail(email);
     }
+
+    @Override
+    public List<Employee> getAvailableEmployeesByEvent(Long eventId) {
+        LOGGER.info("Find all available employees for event {}", eventId);
+        return employeeRepository.getAvailableEmployeesByEvent(eventId);
+    }
 }

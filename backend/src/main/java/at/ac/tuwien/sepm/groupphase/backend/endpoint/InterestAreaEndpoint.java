@@ -31,6 +31,7 @@ public class InterestAreaEndpoint {
     }
 
     @GetMapping
+    @CrossOrigin(origins = "http://localhost:4200")
     @ApiOperation(value = "Get list of InterestAreas", authorizations = {@Authorization(value = "apiKey")})
     public List<SimpleInterestAreaDto> findAll() {
         LOGGER.info("GET /api/v1/interestareas");

@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SearchEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.AddressRepository;
@@ -13,14 +14,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import javax.persistence.EntityManagerFactory;
 import javax.transaction.Transactional;
 import javax.validation.ValidationException;
 import java.lang.invoke.MethodHandles;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -32,6 +30,9 @@ public class EventServiceImpl implements EventService {
     private final TaskRepository taskRepository;
     private final MailService mailService;
     private final NotificationRepository notificationRepository;
+
+    @Autowired
+    private EntityManagerFactory emf;
 
     @Autowired
     public EventServiceImpl(TaskService taskService, EventRepository eventRepository,
@@ -63,14 +64,59 @@ public class EventServiceImpl implements EventService {
                 taskRepository.save(task);
             }
         }
-        mailService.sendNotificationToAvailableEmployees(event);
+        new Thread(() -> {
+            mailService.sendNotificationToAvailableEmployees(event);
+        }).start();
         return savedEvent;
     }
-
     @Override
-    public List<Event> findAll() {
-        LOGGER.debug("Find all events");
-        return eventRepository.findAll();
+    public List<Event> findAll(SearchEventDto searchEventDto) {
+        LOGGER.debug("Find events");
+        List<Event> eventListAvailableTasks = new ArrayList<>();
+        List<Event> eventsAtUserTime = new ArrayList<>();
+        List<Event> foundEvents;
+
+
+        if(searchEventDto.getTitle() == null && searchEventDto.getInterestAreaId() == null &&
+            searchEventDto.getEmployerId() == null && searchEventDto.getStart() == null &&
+            searchEventDto.getEnd() == null && searchEventDto.getPayment() == null &&
+            !searchEventDto.isOnlyAvailableTasks() && searchEventDto.getUserId() == null &&
+            searchEventDto.getState() == null){
+            return eventRepository.findAll();
+        }
+
+        if(searchEventDto.isOnlyAvailableTasks()){
+            eventListAvailableTasks = eventRepository.findEventsWithFreeAvailableSlots();
+        }
+        if(searchEventDto.getUserId() != null) {
+            eventsAtUserTime = eventRepository.findEventsByUsersTime(searchEventDto.getUserId());
+        }
+
+        if(searchEventDto.getTitle() != null && searchEventDto.getTitle().isBlank()){
+            searchEventDto.setTitle(null);
+        }
+        if(searchEventDto.getState() != null && searchEventDto.getState().isBlank()){
+            searchEventDto.setState(null);
+        }
+        if(searchEventDto.getStart() == null) {
+            searchEventDto.setStart("2000-01-01");
+        }
+        if(searchEventDto.getEnd() == null) {
+            searchEventDto.setEnd("3099-31-12");
+        }
+        foundEvents = eventRepository.searchEventsBySearchEventDto(
+            searchEventDto.getTitle() == null ? null : "%"+searchEventDto.getTitle()+"%",
+            searchEventDto.getEmployerId(), searchEventDto.getStart(), searchEventDto.getEnd(),
+            searchEventDto.getInterestAreaId(), searchEventDto.getPayment(), searchEventDto.getState());
+
+        if(!eventListAvailableTasks.isEmpty())
+            foundEvents.retainAll(eventListAvailableTasks);
+
+        if(!eventsAtUserTime.isEmpty())
+            foundEvents.retainAll(eventsAtUserTime);
+
+        return foundEvents;
+
     }
 
     @Override

@@ -48,29 +48,7 @@ public class MailServiceImpl implements MailService {
     @Override
     @Transactional
     public List<Employee> getAvailableEmployees(Event event) {
-        LOGGER.debug("get available employees for event({})", event);
-        List<Employee> employeeList = employeeService.findAll();
-        List<Employee> availableEmployees = new ArrayList<>();
-
-        for (Employee e: employeeList) {
-            for (Interest i: e.getInterests()) {
-                for (Task t: event.getTasks()) {
-                    if(t.getInterestArea() != null && t.getInterestArea().getId() != null) {
-                        if(i.getInterestArea() != null && i.getInterestArea().getId().equals(t.getInterestArea().getId())){
-                            for (Time time: e.getTimes()){
-                                if((event.getStart().isAfter(time.getStart()) || event.getStart().isEqual(time.getStart())) &&
-                                    event.getStart().isBefore(time.getEnd())){
-                                    availableEmployees.add(e);
-
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return availableEmployees;
+        return employeeService.getAvailableEmployeesByEvent(event.getId());
     }
 
 
