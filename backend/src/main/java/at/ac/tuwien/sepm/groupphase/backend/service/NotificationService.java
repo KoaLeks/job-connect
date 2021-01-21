@@ -53,4 +53,11 @@ public interface NotificationService {
     Notification changeFavorite(Notification notification);
 
     Notification findFirstByEvent_IdAndSender_Id(Long eventId, Long employeeId);
+
+    /**
+     * Delete an application and its notification
+     *
+     * @param id to delete
+     */
+    void deleteApplication(Long id, String authorization);
 }
