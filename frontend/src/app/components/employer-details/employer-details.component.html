@@ -18,6 +18,12 @@
         <button class="btn btn-outline-secondary mt-2" data-target="#contactModalAlert" data-toggle="modal"
                 >Kontaktieren Sie mich</button>
       </div>
+      <div style="text-align: center">
+        <button class="btn btn-outline-info mt-2">
+          <!--[routerLink]="['/events?employer=', employer.simpleProfileDto.id]"-->
+          Sehen Sie sich meine weiteren Events an!
+        </button>
+      </div>
     </div>
 
     <div class="col-lg-6 col-sm-6">
@@ -71,6 +77,12 @@
       <div class="position-relative" style="text-align: center" *ngIf="!loggedIn">
         <button class="btn btn-outline-secondary mt-2" data-target="#contactModalAlert" data-toggle="modal"
                 >Kontaktieren Sie mich</button>
+      </div>
+      <div style="text-align: center">
+        <button class="btn btn-outline-info mt-2" (click)="showEmployerEvents(employer.simpleProfileDto.id)">
+                <!--[routerLink]="['/events?employer=', employer.simpleProfileDto.id]"-->
+          Sehen Sie sich meine weiteren Events an!
+        </button>
       </div>
     </div>
   </div>

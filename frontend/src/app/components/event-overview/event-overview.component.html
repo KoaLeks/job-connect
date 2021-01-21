@@ -1,4 +1,5 @@
-<form [formGroup]="eventSearchForm" class="event-search-form mb-5" (ngSubmit)="searchEvent(eventSearchForm.value)">
+<form [formGroup]="eventSearchForm" class="event-search-form mb-5" (ngSubmit)="searchEvent(eventSearchForm.value)"
+      *ngIf="loggedInEmployee || notLoggedIn">
   <div class="form-row align-items-end">
     <div class="form-group mb-0 col-md-8">
       <label></label>

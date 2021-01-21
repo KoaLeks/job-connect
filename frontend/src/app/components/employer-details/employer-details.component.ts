@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {SimpleEmployer} from '../../dtos/simple-employer';
 import {EmployerService} from '../../services/employer.service';
 import {AuthService} from '../../services/auth.service';
@@ -18,7 +18,8 @@ export class EmployerDetailsComponent implements OnInit {
   loggedInEmployee = false;
   loggedIn = false;
 
-  constructor(private route: ActivatedRoute, private employerService: EmployerService, public authService: AuthService) {
+  constructor(private route: ActivatedRoute, private employerService: EmployerService, public authService: AuthService,
+              public router: Router) {
     this.route.params.subscribe(params => {
       this.id = params.id;
     });
@@ -58,5 +59,9 @@ export class EmployerDetailsComponent implements OnInit {
       binary += String.fromCharCode(bytes[i]);
     }
     this.picture = window.btoa(binary);
+  }
+
+  showEmployerEvents(id: number) {
+    this.router.navigate(['employerEvents']);
   }
 }
