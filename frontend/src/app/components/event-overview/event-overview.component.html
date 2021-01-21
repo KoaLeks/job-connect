@@ -30,7 +30,10 @@
         <select class="form-control" id="exampleFormControlSelect2" formControlName="employerId">
           <option value="" class="select-option-none">ArbeitgeberIn auswählen</option>
           <option *ngFor="let employer of employers"
-                  [ngValue]="employer.simpleProfileDto.id">{{employer.companyName}}</option>
+                  [ngValue]="employer.simpleProfileDto.id">
+            <ng-container *ngIf="employer.companyName != 'Privatperson'">{{employer.companyName}}</ng-container>
+            <ng-container *ngIf="employer.companyName == 'Privatperson'">{{employer.simpleProfileDto.firstName}} {{employer.simpleProfileDto.lastName}}</ng-container>
+          </option>
         </select>
       </div>
       <div class="col">
