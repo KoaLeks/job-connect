@@ -63,7 +63,7 @@ public class NotificationServiceImpl implements NotificationService {
         LOGGER.debug("Update Notification {}", notification);
         Long id = notification.getId();
         if(!notificationRepository.existsById(id)) {
-            throw new NotFoundException("Die Bewerbung wurde leider bereits zurückgezogen.");
+            throw new NotFoundException("Diese Bewerbung wurde leider bereits zurückgezogen.");
         }
         return notificationRepository.save(notification);
     }
@@ -87,6 +87,10 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public Notification changeFavorite(Notification notification) {
         LOGGER.debug("Change favorite of notification with id: {} from {} to {}", notification.getId(), notification.getFavorite(), !notification.getFavorite());
+        Long id = notification.getId();
+        if(!notificationRepository.existsById(id)) {
+            throw new NotFoundException("Diese Bewerbung wurde leider bereits zurückgezogen.");
+        }
         notification.setFavorite(!notification.getFavorite());
         return notificationRepository.save(notification);
     }
