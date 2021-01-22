@@ -161,9 +161,9 @@ public class ProfileEndpoint {
     @ApiOperation(value = "Get list of all employees", authorizations = {@Authorization(value = "apiKey")})
     @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
     @CrossOrigin(origins = "http://localhost:4200")
-    public List<SimpleEmployeeDto> getAllEmployees() {
+    public List<SuperSimpleEmployeeDto> getAllEmployees() {
         LOGGER.info("GET api/v1/profiles/employees");
-        return this.employeeMapper.employeesToSimpleEmployeeDtos(employeeService.findAll());
+        return this.employeeMapper.employeesToSuperSimpleEmployeeDtos(employeeService.findAll());
     }
 
     @PostMapping(value = "/contact")
