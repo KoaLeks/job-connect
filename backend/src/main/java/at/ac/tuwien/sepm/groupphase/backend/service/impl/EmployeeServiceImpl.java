@@ -255,4 +255,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeRepository.deleteEmployeeByProfile_Email(email);
         profileRepository.deleteByEmail(email);
     }
+
+    @Override
+    public List<Employee> findEmployeeByInterestArea(Set<String> interestAreas) {
+        return employeeRepository.findEmployeesByInterestArea(interestAreas);
+    }
 }

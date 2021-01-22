@@ -20,7 +20,9 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.lang.invoke.MethodHandles;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/api/v1/profiles")
@@ -188,5 +190,15 @@ public class ProfileEndpoint {
         } else {
             employeeService.deleteByEmail(email);
         }
+    }
+
+    @PostMapping(value = "/filterEmployee")
+    @ApiOperation(value = "Filter Employees with given args", authorizations = {@Authorization(value = "apiKey")})
+    @CrossOrigin(origins = "http://localhost:4200")
+    @ResponseStatus(HttpStatus.OK)
+    public void filterEmployees() {
+        Set<String> interests = new HashSet<>();
+        interests.add("");
+        this.employeeService.findEmployeeByInterestArea(interests);
     }
 }

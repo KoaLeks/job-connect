@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Employee;
 import at.ac.tuwien.sepm.groupphase.backend.exception.UniqueConstraintException;
 
 import java.util.List;
+import java.util.Set;
 
 public interface EmployeeService {
 
@@ -63,4 +64,6 @@ public interface EmployeeService {
      * @param email of the employer
      */
     void deleteByEmail(String email);
+
+    List<Employee> findEmployeeByInterestArea(Set<String> interestAreas);
 }
