@@ -122,8 +122,8 @@
               *ngIf="loggedInEmployee && !applied" data-target="#Apply-Task">
         Bewirb dich jetzt!
       </button>
-      <button type="button" class="btn btn-primary" data-toggle="modal" (click)="createApplication()"
-              *ngIf="loggedInEmployer || !authService.isLoggedIn()" data-target="#Apply-Task-Alert">
+      <button [disabled]="loggedInEmployer" type="button" class="btn btn-primary" data-toggle="modal" (click)="createApplication()"
+              *ngIf="!authService.isLoggedIn() || loggedInEmployer" data-target="#Apply-Task-Alert">
         Bewirb dich jetzt!
       </button>
       <button type="button" class="btn btn-primary" data-toggle="modal" (click)="createApplication()"
