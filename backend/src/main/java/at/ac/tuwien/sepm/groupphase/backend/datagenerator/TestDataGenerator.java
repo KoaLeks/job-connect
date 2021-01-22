@@ -135,7 +135,6 @@ public class TestDataGenerator {
     };
 
     // Employer
-    private static final String TEST_PUBLIC_INFO = "PUBLIC INFO";
     private static final String TEST_PASSWORD = "123456789";
     private static final int NUMBER_OF_PRIVATE_EMPLOYERS = 20;
 
@@ -241,7 +240,7 @@ public class TestDataGenerator {
                         .withForename(name.split(" ")[0])
                         .withName(name.split(" ")[1])
                         .withPassword(passwordEncoder.encode(TEST_PASSWORD))
-                        .withPublicInfo(TEST_PUBLIC_INFO)
+                        .withPublicInfo("Hallo, ich bin " + name + ", falls Ihr irgendwelche Fragen zu euren Aufgaben habt, koennt Ihr mich einfach per E-Mail kontaktieren.")
                         .withPicture(picture)
                         .isEmployer(true)
                         .build();
