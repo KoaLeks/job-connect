@@ -268,7 +268,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> findEmployeeByInterestArea(Set<String> interestAreas) {
+    public List<Employee> findEmployeeByInterestArea(Set<Integer> interestAreas) {
         return employeeRepository.findEmployeesByInterestArea(interestAreas);
     }
 }

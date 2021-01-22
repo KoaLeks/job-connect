@@ -73,5 +73,5 @@ public interface EmployeeService {
      */
     List<Employee> getAvailableEmployeesByEvent(Long eventId);
 
-    List<Employee> findEmployeeByInterestArea(Set<String> interestAreas);
+    List<Employee> findEmployeeByInterestArea(Set<Integer> interestAreas);
 }

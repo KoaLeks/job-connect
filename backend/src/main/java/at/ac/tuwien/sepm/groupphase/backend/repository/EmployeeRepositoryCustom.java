@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.Set;
 
 public interface EmployeeRepositoryCustom {
-    List<Employee> findEmployeesByInterestArea(Set<String> interestAreas);
+    List<Employee> findEmployeesByInterestArea(Set<Integer> interestAreas);
 }

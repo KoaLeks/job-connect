@@ -18,7 +18,7 @@ public class EmployeeRepositoryCustomImpl implements EmployeeRepositoryCustom {
     private EntityManager em;
 
     @Override
-    public List<Employee> findEmployeesByInterestArea(Set<String> interestAreas) {
+    public List<Employee> findEmployeesByInterestArea(Set<Integer> interestAreas) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Employee> query = cb.createQuery(Employee.class);
         Root<Employee> employee = query.from(Employee.class);
@@ -26,8 +26,8 @@ public class EmployeeRepositoryCustomImpl implements EmployeeRepositoryCustom {
         Join<Employee, Interest> interests =  employee.join(Employee_.interests, JoinType.INNER);
         Join<Interest, InterestArea> areas = interests.join(Interest_.INTEREST_AREA, JoinType.INNER);
 
-        for(String interest : interestAreas){
-            query.where(cb.like(areas.get(InterestArea_.DESCRIPTION), interest));
+        for(Integer interest : interestAreas){
+            query.where(cb.equal(areas.get(InterestArea_.id), interest));
         }
 
         query.select(employee);

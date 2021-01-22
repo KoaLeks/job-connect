@@ -212,8 +212,8 @@ public class ProfileEndpoint {
     @CrossOrigin(origins = "http://localhost:4200")
     @ResponseStatus(HttpStatus.OK)
     public void filterEmployees() {
-        Set<String> interests = new HashSet<>();
-        interests.add("");
+        Set<Integer> interests = new HashSet<>();
+        interests.add(1);
         this.employeeService.findEmployeeByInterestArea(interests);
     }
 }
