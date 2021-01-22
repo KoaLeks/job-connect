@@ -1,40 +1,40 @@
-1;3D Druck;"In meiner Freizeit arbeite ich gern mit meinem 3D-Drucker und erstelle diverse Modelle bzw. Ersatzteile."
-2;Aerobic;"Treffe mich regelmäßig mit meiner Aerobic Gruppe, um mich fit und gesund zu halten."
-3;Airbrushing;"War von klein auf schon immer in Malerei/Kunst interessiert. Zurzeit versuche ich mich mit Airbrushing vertraut zu machen."
-4;Amateur Astronomie;"Als Hobby beobachte ich gern den Sternenhimmel, besonders interessant finde ich Mond- und Sonnenfinsternissen und Meteorströme. Mache auch manchmal Fotos von meinen Beobachtungen."
-5;Amateurfunkdienst;"Seit der HTL bin ich begeisterter Funkamateur, experentiere regelmäßig an meiner Funkstation."
-6;Amateur Wrestling;"Hab vor ca. 12 Jahren mit Wrestling angefangen und bin immer noch in der Amateur Szene aktiv dabei."
-7;American Football;"Folge den Sport seit Jahren, finde es im Vergleich zum normalen Fußball wesentlich spannender."
-8;Aquarium;"Baue gern realistische Umgebungen für aquatische Lebewesen."
-9;Autorennen;"Bin vor allem Fan von den Sportwagenrennen."
-10;BMX;"Schaue mir zurzeit nur die Wettbewerbe an, habe früher selber an ein paar teilgenommen."
-11;Badminton;"Spiele vor allem im Sommer gern ein bissl Badminton."
-12;Basketball;"Spiele regelmäßig mit meinen Freunden Street-Basketball."
-13;Beach Volleyball;"Im Sommer mit Freunden ists besonders lustig."
-14;Beatboxing;"Kann lustige Geräusche mit meinem Mund machen."
-15;Bodybuilding;"Habe mit 15 angefangen Gewichte zu heben, zurzeit trainiere ich für einen Wettkampf im Sommer."
-16;Brazilian Jiu-Jitsu;"Als Kind habe ich Jiu-Jitsu zur Selbstverteidigung gelernt, seit kurzem habe ich mit Brazilian Jiu-Jitsu angefangen, um mich fit zu halten."
-17;Bungee Jumping;"Hab mit Bungee Jumping ursprünglich angefangen, um meine Höhenangst zu überwinden."
-18;Computer Programmierung;"Beschäftige mich hauptsächlich mit Frontend Design."
-19;Crosslauf;"War schon immer ein Fan des Laufsports und habe vor kurzem mit der Crosslauf Variante angefangen."
-20;Digital Art;"Bevorzuge Digital Art über der klassischen Variante, da einfach viel mehr Tools zur Verfügung stehen und Fehler schneller und einfacher ausgebessert werden können."
-21;Downhill Mountain Biking;"Finds im Vergleich zu anderen Radsportarten interessanter, schau mir ab und zu ein paar Videos auf Youtube an."
-22;Eislaufen;"Im Winter gehe ich normalerweise regelmäßig Eislaufen, ist zurzeit wegen Corona leider nicht möglich."
-23;Elektronik;"In meiner Freizeit arbeite ich gerne an kleinere DIY Projekte, wie z.B. Smartmirror."
-24;Fußball;"War von klein auf Fußball-Fan, versuche mit alten Teamkollegen in Kontakt zu bleiben. Ab und zu treffen wir uns und spielen zusammen."
-25;Gartenbau;"Bin ein Pflanzenfreund, hab auf meiner Terasse einen mini Garten."
-26;Geocaching;"Geh gern wandern und mittels Geocaching findet man selbst in der Heimat immer neue spannende Orte."
-27;Gitarre;"In meiner Freizeit spiele ich an meiner Gitarre, um mich vom Alltag zu entspannen."
-28;Kochen;"Versuche immer neue Rezepte aus allen moeglichen Kulturen zu finden."
-29;Kreatives Schreiben;"Arbeite zurzeit an der Veroeffentlichung meines Buches."
-30;Lockpicking;"Hab vor kurzem mit dem Hobby angefangen, bin ein Fan vom LockPickingLawyer auf YouTube."
-31;Meditation;"Meditation hilft mir meine Emotionen besser zu verstehen und meinen Stress besser zu managen."
-32;Metallverarbeitung;"In meiner Freizeit schmiede ich experimentier gern mit Neuen bzw. ungewoehnlichen Materialien."
-33;Photography;"Reise viel und gern, bei meinen Reisen mache ich besonderns viele Fotos von der Natur."
-34;Piano;"Bin ein grosser Fan der klassischen Musik, deshalb habe ich mit dem Klavier spielen angefangen."
-35;Poker;"Spiel mit Freunden/Verwandeten immer gern eine Runde Poker."
-36;Robotics;"Finde das Themengebiet sehr interessant, habe selbst ein paar kleinere Robotor gebaut."
-37;Schach;"Habe Schach von meinen Grosseltern gelernt und spiele heutzutage Online Schach."
-38;Skifahren;"Jedes Jahr fahren wir nach Ischgl Skifahren."
-39;Snowboarding;"Jedes Jahr fahren wir nach Ischgl Snowboarding."
-40;Tennis;"Gehe ca. drei Mal die Woche zum Tennsiplatz, hilft mir dabei mich gesund zu halten."
+1;3D Druck;"In meiner Freizeit arbeite ich gern mit meinem 3D-Drucker und erstelle diverse Modelle bzw. Ersatzteile.";13
+2;Aerobic;"Treffe mich regelmäßig mit meiner Aerobic Gruppe, um mich fit und gesund zu halten.";null
+3;Airbrushing;"War von klein auf schon immer in Malerei/Kunst interessiert. Zurzeit versuche ich mich mit Airbrushing vertraut zu machen.";null
+4;Amateur Astronomie;"Als Hobby beobachte ich gern den Sternenhimmel, besonders interessant finde ich Mond- und Sonnenfinsternissen und Meteorströme. Mache auch manchmal Fotos von meinen Beobachtungen.";null
+5;Amateurfunkdienst;"Seit der HTL bin ich begeisterter Funkamateur, experentiere regelmäßig an meiner Funkstation.";7
+6;Amateur Wrestling;"Hab vor ca. 12 Jahren mit Wrestling angefangen und bin immer noch in der Amateur Szene aktiv dabei.";10
+7;American Football;"Folge den Sport seit Jahren, finde es im Vergleich zum normalen Fußball wesentlich spannender.";10
+8;Aquarium;"Baue gern realistische Umgebungen für aquatische Lebewesen.";6
+9;Autorennen;"Bin vor allem Fan von den Sportwagenrennen.";11
+10;BMX;"Schaue mir zurzeit nur die Wettbewerbe an, habe früher selber an ein paar teilgenommen.";null
+11;Badminton;"Spiele vor allem im Sommer gern ein bissl Badminton.";null
+12;Basketball;"Spiele regelmäßig mit meinen Freunden Street-Basketball.";null
+13;Beach Volleyball;"Im Sommer mit Freunden ists besonders lustig.";null
+14;Beatboxing;"Kann lustige Geräusche mit meinem Mund machen.";18
+15;Bodybuilding;"Habe mit 15 angefangen Gewichte zu heben, zurzeit trainiere ich für einen Wettkampf im Sommer.";10
+16;Brazilian Jiu-Jitsu;"Als Kind habe ich Jiu-Jitsu zur Selbstverteidigung gelernt, seit kurzem habe ich mit Brazilian Jiu-Jitsu angefangen, um mich fit zu halten.";null
+17;Bungee Jumping;"Hab mit Bungee Jumping ursprünglich angefangen, um meine Höhenangst zu überwinden.";null
+18;Computer Programmierung;"Beschäftige mich hauptsächlich mit Frontend Design.";16
+19;Crosslauf;"War schon immer ein Fan des Laufsports und habe vor kurzem mit der Crosslauf Variante angefangen.";null
+20;Digital Art;"Bevorzuge Digital Art über der klassischen Variante, da einfach viel mehr Tools zur Verfügung stehen und Fehler schneller und einfacher ausgebessert werden können.";null
+21;Downhill Mountain Biking;"Finds im Vergleich zu anderen Radsportarten interessanter, schau mir ab und zu ein paar Videos auf Youtube an.";21
+22;Eislaufen;"Im Winter gehe ich normalerweise regelmäßig Eislaufen, ist zurzeit wegen Corona leider nicht möglich.";null
+23;Elektronik;"In meiner Freizeit arbeite ich gerne an kleinere DIY Projekte, wie z.B. Smartmirror.";7
+24;Fußball;"War von klein auf Fußball-Fan, versuche mit alten Teamkollegen in Kontakt zu bleiben. Ab und zu treffen wir uns und spielen zusammen.";null
+25;Gartenbau;"Bin ein Pflanzenfreund, hab auf meiner Terasse einen mini Garten.";8
+26;Geocaching;"Geh gern wandern und mittels Geocaching findet man selbst in der Heimat immer neue spannende Orte.";null
+27;Gitarre;"In meiner Freizeit spiele ich an meiner Gitarre, um mich vom Alltag zu entspannen.";null
+28;Kochen;"Versuche immer neue Rezepte aus allen moeglichen Kulturen zu finden.";4
+29;Kreatives Schreiben;"Arbeite zurzeit an der Veroeffentlichung meines Buches.";null
+30;Lockpicking;"Hab vor kurzem mit dem Hobby angefangen, bin ein Fan vom LockPickingLawyer auf YouTube.";13
+31;Meditation;"Meditation hilft mir meine Emotionen besser zu verstehen und meinen Stress besser zu managen.";null
+32;Metallverarbeitung;"In meiner Freizeit schmiede ich experimentier gern mit Neuen bzw. ungewoehnlichen Materialien.";12
+33;Photography;"Reise viel und gern, bei meinen Reisen mache ich besonderns viele Fotos von der Natur.";null
+34;Piano;"Bin ein grosser Fan der klassischen Musik, deshalb habe ich mit dem Klavier spielen angefangen.";18
+35;Poker;"Spiel mit Freunden/Verwandeten immer gern eine Runde Poker.";3
+36;Robotics;"Finde das Themengebiet sehr interessant, habe selbst ein paar kleinere Robotor gebaut.";15
+37;Schach;"Habe Schach von meinen Grosseltern gelernt und spiele heutzutage Online Schach.";null
+38;Skifahren;"Jedes Jahr fahren wir nach Ischgl Skifahren.";null
+39;Snowboarding;"Jedes Jahr fahren wir nach Ischgl Snowboarding.";null
+40;Tennis;"Gehe ca. drei Mal die Woche zum Tennsiplatz, hilft mir dabei mich gesund zu halten.";null

@@ -9,6 +9,7 @@ import at.ac.tuwien.sepm.groupphase.backend.service.Employee_TasksService;
 import at.ac.tuwien.sepm.groupphase.backend.util.Gender;
 import at.ac.tuwien.sepm.groupphase.backend.util.NotificationType;
 import com.github.javafaker.Faker;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,10 +18,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.lang.invoke.MethodHandles;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -109,6 +112,28 @@ public class TestDataGenerator {
         "Felix Maier"
     };
 
+    String[] studium = {
+        "Architektur",
+        "Wirtschaftinformatik",
+        "Medien Informatik und Visual Computing",
+        "Software Engineering",
+        "Embedded Systems",
+        "Elektrotechnik und Informationstechnik",
+        "Umweltingenieurwesen",
+        "Maschinenbau",
+        "Technische Chemie",
+        "Technische Mathematik",
+        "Zahnmedizin",
+        "Medizinische Informatik",
+        "Agrarwissenschaften",
+        "Biotechnologie",
+        "Landschaftsplanung und Landschaftsarchitektur",
+        "Finanzwirtschaft und Rechnungswesen",
+        "Business and Economics",
+        "Marketing",
+        "Bildtechnik und Kamera"
+    };
+
     // Employer
     private static final String TEST_PUBLIC_INFO = "PUBLIC INFO";
     private static final String TEST_PASSWORD = "123456789";
@@ -157,8 +182,16 @@ public class TestDataGenerator {
         } else {
             LOGGER.debug("generating {} employer entries", companyNames.length);
             Random random = new Random();
+            int count = 0;
+            Byte[] picture;
             for (String companyName : companyNames) {
                 String name = names[random.nextInt(names.length - 1)];
+                try {
+                    File pic = new File("src/main/resources/employerPictures/company/" + count + ".png");
+                    picture = ArrayUtils.toObject(Files.readAllBytes(pic.toPath()));
+                } catch (IOException e) {
+                    picture = null;
+                }
                 at.ac.tuwien.sepm.groupphase.backend.entity.Profile employerProfile =
                     at.ac.tuwien.sepm.groupphase.backend.entity.Profile.ProfileBuilder.aProfile()
                         .withEmail("test@" + companyName.replace(" ", "").toLowerCase() + ".at")
@@ -166,6 +199,7 @@ public class TestDataGenerator {
                         .withName(name.split(" ")[1])
                         .withPassword(passwordEncoder.encode(TEST_PASSWORD))
                         .withPublicInfo("Ich, " + name + ", bin der Gruender und Geschaeftsleiter von " + companyName + " falls Sie Fragen zu unseren Unternehmen oder zu einzelnen Veranstaltungen haben, koennen Sie mich gerne kontaktieren.")
+                        .withPicture(picture)
                         .isEmployer(true)
                         .build();
 
@@ -191,9 +225,16 @@ public class TestDataGenerator {
                 Long id = profileRepository.save(employerProfile).getId();
                 employer.setId(id);
                 employerRepository.save(employer);
+                count++;
             }
             for (int i = 0; i < NUMBER_OF_PRIVATE_EMPLOYERS; i++) {
                 String name = names[i];
+                try {
+                    File pic = new File("src/main/resources/employerPictures/private/" + i + ".jpg");
+                    picture = ArrayUtils.toObject(Files.readAllBytes(pic.toPath()));
+                } catch (IOException e) {
+                    picture = null;
+                }
                 at.ac.tuwien.sepm.groupphase.backend.entity.Profile privateEmployer =
                     at.ac.tuwien.sepm.groupphase.backend.entity.Profile.ProfileBuilder.aProfile()
                         .withEmail("test@" + name.replace(" ", "").toLowerCase() + ".at")
@@ -201,6 +242,7 @@ public class TestDataGenerator {
                         .withName(name.split(" ")[1])
                         .withPassword(passwordEncoder.encode(TEST_PASSWORD))
                         .withPublicInfo(TEST_PUBLIC_INFO)
+                        .withPicture(picture)
                         .isEmployer(true)
                         .build();
 
@@ -222,18 +264,34 @@ public class TestDataGenerator {
         } else {
             LOGGER.debug("generating {} employee entries", names.length);
             int count = 0;
-            Faker faker = new Faker();
+            Byte[] picture;
+            Faker faker = new Faker(new Locale("de-AT"));
             for (String name : names) {
+                String publicInfo = "Hallo mein Name ist " + name + " und ich studiere zurzeit \""
+                    + studium[faker.random().nextInt(studium.length - 1)] + "\" an der Universitaet \""
+                    + faker.university().name() + "\" und plane meine " +
+                    (faker.random().nextBoolean() ? "Masterarbeit" : "Bachelorarbeit") +
+                    (faker.random().nextBoolean() ?
+                        " in den naechsten " + (faker.random().nextInt(3) + 2) + " Jahren abzuschließen."
+                    :
+                        " dieses Jahr noch zu schreiben.");
+
+                try {
+                    File pic = new File("src/main/resources/employeePictures/" + count + ".jpg");
+                    picture = ArrayUtils.toObject(Files.readAllBytes(pic.toPath()));
+                } catch (IOException e) {
+                    picture = null;
+                }
                 at.ac.tuwien.sepm.groupphase.backend.entity.Profile employeeProfile =
                     at.ac.tuwien.sepm.groupphase.backend.entity.Profile.ProfileBuilder.aProfile()
                         .withEmail(name.replace(" ", ".").toLowerCase() + "@jobconnect.test")
                         .withForename(name.split(" ")[0])
                         .withName(name.split(" ")[1])
                         .withPassword(passwordEncoder.encode(TEST_PASSWORD))
-                        .withPublicInfo(TEST_PUBLIC_INFO)
+                        .withPublicInfo(publicInfo)
+                        .withPicture(picture)
                         .isEmployer(false)
                         .build();
-
                 Employee employee = Employee.EmployeeBuilder.aEmployee()
                     .withGender(count % 2 == 0 ? Gender.FEMALE : Gender.MALE)
                     .withBirthDate(convertToLocalDateTime(faker.date().birthday(18, 35)))
@@ -279,7 +337,6 @@ public class TestDataGenerator {
         } else {
             LOGGER.debug("generating {} interests entries", 5);
             Random random = new Random();
-            int areasCount = interestAreaRepository.findAll().size() - 1;
             for (Employee employee : employeeRepository.findAll()) {
                 try {
                     RandomAccessFile randomAccessFile = new RandomAccessFile("src/main/resources/interests.txt", "r");
@@ -298,7 +355,7 @@ public class TestDataGenerator {
                         Interest interest = Interest.InterestBuilder.aInterest()
                             .withName(parts[1])
                             .withDescription(parts.length > 2 ? parts[2].replace("\"", "") : "TODO: add description to interests.txt")
-                            .withInterestArea(interestAreaRepository.getOne(1L + random.nextInt(areasCount)))
+                            .withInterestArea(parts[3].equals("null") ? null : interestAreaRepository.getOne(Long.valueOf(parts[3])))
                             .withEmployee(employee)
                             .build();
 
@@ -385,10 +442,12 @@ public class TestDataGenerator {
             String line;
             while ((line = eventFile.readLine()) != null) {
                 line = new String(line.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(2021, Calendar.APRIL, 30);
-                Date start = roundTimeToQuarter(faker.date().between(new Date(System.currentTimeMillis()), calendar.getTime()));
-                Date end = roundTimeToQuarter(faker.date().future(14, TimeUnit.DAYS, start));
+                Calendar earliestStartDateForEvents = Calendar.getInstance();
+                earliestStartDateForEvents.set(2021, Calendar.JANUARY, 1);
+                Calendar latestStartDateForEvents = Calendar.getInstance();
+                latestStartDateForEvents.set(2021, Calendar.APRIL, 30);
+                Date start = roundTimeToQuarter(faker.date().between(earliestStartDateForEvents.getTime(), latestStartDateForEvents.getTime()));
+                Date end = roundTimeToQuarter(faker.date().future(4, TimeUnit.DAYS, start));
 
                 Address address = Address.AddressBuilder.aAddress()
                     .withAddressLine(faker.address().streetAddress())
