@@ -109,6 +109,14 @@ export class EventOverviewComponent implements OnInit {
               this.events = events;
               this.sortEventsByDate();
               this.search = true;
+              this.employerEvents = [];
+              for (const e of this.events) {
+                if (this.loggedInEmployer && this.authService.getTokenIdentifier() === e.employer.simpleProfileDto.email
+                  && this.checkDateInFuture(e.end)) {
+                  this.employerEvents.push(e);
+                }
+              }
+              this.sortEventsByDate();
             }, error => {
               this.error = true;
               this.errorMessage = error.error;
@@ -124,6 +132,14 @@ export class EventOverviewComponent implements OnInit {
           this.events = events;
           this.sortEventsByDate();
           this.search = true;
+          this.employerEvents = [];
+          for (const e of this.events) {
+            if (this.loggedInEmployer && this.authService.getTokenIdentifier() === e.employer.simpleProfileDto.email
+              && this.checkDateInFuture(e.end)) {
+              this.employerEvents.push(e);
+            }
+          }
+          this.sortEventsByDate();
         }, error => {
           this.defaultServiceErrorHandling(error);
         }
@@ -167,6 +183,7 @@ export class EventOverviewComponent implements OnInit {
   // sorts Events by Date by calculating the number of milliseconds between January 1, 1970 and 'event.start'
   private sortEventsByDate() {
     this.uniqueDateArray = [];
+    this.uniqueDateArrayEmployer = [];
     const dateArray: string[] = [];
     const dateArrayEmployer: string[] = [];
 

@@ -32,6 +32,7 @@ import { EmployerDetailsComponent } from './components/employer-details/employer
 import { EventAppliedComponent } from './components/event-applied/event-applied.component';
 import { ExpiredEventsComponent } from './components/expired-events/expired-events.component';
 import { PastAppliedEventsComponent } from './components/past-applied-events/past-applied-events.component';
+import { EmployerEventsComponent } from './components/employer-events/employer-events.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { PastAppliedEventsComponent } from './components/past-applied-events/pas
     EventAppliedComponent,
     ExpiredEventsComponent,
     PastAppliedEventsComponent,
+    EmployerEventsComponent,
   ],
   imports: [
     BrowserModule,
