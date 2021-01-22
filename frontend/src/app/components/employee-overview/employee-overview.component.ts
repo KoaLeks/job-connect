@@ -43,7 +43,6 @@ export class EmployeeOverviewComponent implements OnInit {
     this.pageEmployees = this.employees
       .map((employee, i) => ({id: i + 1, ...employee}))
       .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
-    console.log(this.pageEmployees);
   }
 
   private defaultServiceErrorHandling(error: any) {

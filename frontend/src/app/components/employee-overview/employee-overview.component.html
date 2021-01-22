@@ -10,7 +10,6 @@
     </thead>
     <tbody>
     <tr *ngFor="let employee of pageEmployees"
-
         (click)="router.navigate(['employee', employee.superSimpleProfileDto.id, 'details'])" class="table-data">
       <td class="table_name">{{ employee.superSimpleProfileDto.firstName}}</td>
       <td class="table_name">{{ employee.superSimpleProfileDto.lastName}}</td>
@@ -18,7 +17,6 @@
       <td
         class="table_public">{{ employee.superSimpleProfileDto.publicInfo != null &&
       employee.superSimpleProfileDto.publicInfo.length > 50 ? employee.superSimpleProfileDto.publicInfo.substr(0, 50) + '...' : employee.superSimpleProfileDto.publicInfo}}</td>
-
       </tr>
     </tbody>
   </table>
