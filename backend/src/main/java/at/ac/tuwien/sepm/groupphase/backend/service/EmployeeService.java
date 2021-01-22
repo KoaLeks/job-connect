@@ -9,20 +9,23 @@ public interface EmployeeService {
 
     /**
      * Creates an employee with the given details
+     *
      * @param employee to create
-     * @return the ID of the created employee
+     * @return the id of the created employee
      */
     Long createEmployee(Employee employee);
 
     /**
-     * Find an employee by email
+     * Finds an employee by email
+     *
      * @param email to look for
      * @return the employee
      */
     Employee findOneByEmail(String email);
 
     /**
-     * Find an employee by id
+     * Finds an employee by id
+     *
      * @param id to look for
      * @return the employee
      */
@@ -30,8 +33,9 @@ public interface EmployeeService {
 
     /**
      * Update an employee
+     *
      * @param employee to update
-     * @return the ID of the updated employee
+     * @return the id of the updated employee
      */
     Long updateEmployee(Employee employee);
 
@@ -43,7 +47,8 @@ public interface EmployeeService {
     List<Employee> findAll();
 
     /**
-     * Delete available time when employee gets accepted for an event
+     * Deletes available time when employee gets accepted for an event
+     *
      * @param employee_id look for times of this employee
      * @param task_id look for start and end time of event where this task belongs to
      */
@@ -58,7 +63,7 @@ public interface EmployeeService {
     boolean hasUpcomingTasks(String email);
 
     /**
-     * Delete given employee (including their employee_tasks, interests, notifications)
+     * Deletes given employee (including their employee_tasks, interests, notifications)
      *
      * @param email of the employer
      */
@@ -66,8 +71,9 @@ public interface EmployeeService {
 
 
     /**
-     * Find employees that are available at and interested in the event given by Id
-     * @param eventId event Id of event to find employees for
+     * Finds employees that are available at and interested in the event given by id
+     *
+     * @param eventId event id of event to find employees for
      * @return list of available employees for that event
      */
     List<Employee> getAvailableEmployeesByEvent(Long eventId);
