@@ -314,13 +314,14 @@
       <h5><b>{{date | date: 'dd.MM.yyyy'}}</b></h5>
       <hr>
       <ng-container *ngFor="let event of events">
-        <ng-container *ngIf="event.start.split('T')[0] === date && checkDateInFuture(event.start)
+        <ng-container *ngIf="event.start.split('T')[0] === date
               && authService.getTokenIdentifier() === event.employer.simpleProfileDto.email">
           <div class="list-group mt-3" [routerLink]="['/events', event.id, 'details']">
             <a class="list-group-item list-group-item-action flex-column align-items-start event-item">
               <div class="d-flex w-100 justify-content-between">
                 <h4 class="mb-1">
-                  {{event.title}}
+                  {{event.title}} <i style="color:green;" *ngIf="!checkDateInFuture(event.start) && checkDateInFuture(event.end)">
+                  <small>(läuft gerade)</small></i>
                 </h4>
                 <small class="text-muted">
                   <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"

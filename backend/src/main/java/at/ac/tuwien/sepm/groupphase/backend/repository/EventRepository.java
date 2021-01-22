@@ -83,7 +83,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "(FORMATDATETIME(e.start, 'yyyy-MM-dd') between ?3 and ?4) AND " +
             "(?5 IS NULL OR a.id=?5) AND " +
             "(?6 IS NULL OR t.payment_hourly>=?6) AND " +
-            "(?7 IS NULL OR ad.state=?7) AND e.start > CURRENT_TIMESTAMP()",
+            "(?7 IS NULL OR ad.state=?7) AND e.end > CURRENT_TIMESTAMP()",
         nativeQuery = true)
     List<Event> searchEventsBySearchEventDto(String title, Long employerId, String start, String end,
                                              Long interestAreaId, Long payment, String state);
