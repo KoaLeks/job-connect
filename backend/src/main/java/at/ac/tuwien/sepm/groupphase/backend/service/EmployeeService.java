@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.groupphase.backend.service;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Employee;
 import at.ac.tuwien.sepm.groupphase.backend.exception.UniqueConstraintException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -73,5 +74,18 @@ public interface EmployeeService {
      */
     List<Employee> getAvailableEmployeesByEvent(Long eventId);
 
-    List<Employee> findEmployeeByInterestArea(Set<Integer> interestAreas);
+    /**
+     * Find all Employees matching with the intrests and times from the given events
+     * @param eventIds the events to match
+     * @return list of matching Employees
+     */
+    List<Employee> findEmployeeByInterestAreasAndStartTimesSmart(Set<Long> eventIds);
+
+    /**
+     * Find all Employees matching with the given intrests and times
+     * @param interestAreas which intrest areas to match
+     * @param startTimes which starting times to match
+     * @return list of matching Employees
+     */
+    List<Employee> findEmployeeByInterestAreasAndStartTimes(Set<Long> interestAreas, Set<LocalDateTime> startTimes);
 }

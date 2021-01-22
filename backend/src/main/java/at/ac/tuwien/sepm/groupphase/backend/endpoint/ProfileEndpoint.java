@@ -22,7 +22,6 @@ import javax.validation.constraints.NotNull;
 import java.lang.invoke.MethodHandles;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/api/v1/profiles")
@@ -207,13 +206,27 @@ public class ProfileEndpoint {
         }
     }
 
-    @PostMapping(value = "/filterEmployee")
+    @GetMapping(value = "/filterEmployees/smart")
     @ApiOperation(value = "Filter Employees with given args", authorizations = {@Authorization(value = "apiKey")})
     @CrossOrigin(origins = "http://localhost:4200")
+    @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
     @ResponseStatus(HttpStatus.OK)
-    public void filterEmployees() {
-        Set<Integer> interests = new HashSet<>();
-        interests.add(1);
-        this.employeeService.findEmployeeByInterestArea(interests);
+    public List<SimpleEmployeeDto> filterEmployeesSmart(FilterEmployeesSmartDto employeesDto) {
+        LOGGER.info("GET api/v1/profiles/filterEmployees/smart");
+        List<Employee> employees = this.employeeService.findEmployeeByInterestAreasAndStartTimesSmart(employeesDto.getEventIds());
+        return this.employeeMapper.employeesToSimpleEmployeeDtos(employees);
+    }
+
+    @GetMapping(value = "/filterEmployees")
+    @ApiOperation(value = "Filter Employees with given args", authorizations = {@Authorization(value = "apiKey")})
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
+    @ResponseStatus(HttpStatus.OK)
+    public List<SimpleEmployeeDto> filterEmployees(FilterEmployeesDto employeesDto) {
+        LOGGER.info("GET api/v1/profiles/filterEmployees/smart");
+        if(employeesDto.getStartTimes() == null ) employeesDto.setStartTimes(new HashSet<>());
+        if(employeesDto.getInterestAreas() == null ) employeesDto.setInterestAreas(new HashSet<>());
+        List<Employee> employees = this.employeeService.findEmployeeByInterestAreasAndStartTimes(employeesDto.getInterestAreas(), employeesDto.getStartTimes());
+        return this.employeeMapper.employeesToSimpleEmployeeDtos(employees);
     }
 }
