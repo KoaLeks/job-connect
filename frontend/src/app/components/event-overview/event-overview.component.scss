@@ -57,5 +57,12 @@
 .col-state {
   margin-top: 0.9em;
 }
-
-
+.reset-button {
+  color: #465c69;
+  border-color: #465c69;
+}
+.reset-button:hover {
+  background: #465c69;
+  color: white;
+  border-color: #465c69;
+}

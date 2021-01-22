@@ -107,7 +107,6 @@ export class EventOverviewComponent implements OnInit {
           this.eventService.searchEvent(event).subscribe(
             (events: DetailedEvent[]) => {
               this.events = events;
-              this.events = this.events.filter(currEvent => this.checkDateInFuture(currEvent.start));
               this.sortEventsByDate();
               this.search = true;
             }, error => {
@@ -123,7 +122,6 @@ export class EventOverviewComponent implements OnInit {
       this.eventService.searchEvent(event).subscribe(
         (events: DetailedEvent[]) => {
           this.events = events;
-          this.events = this.events.filter(currEvent => this.checkDateInFuture(currEvent.start));
           this.sortEventsByDate();
           this.search = true;
         }, error => {
@@ -203,5 +201,21 @@ export class EventOverviewComponent implements OnInit {
 
   checkDateInFuture(date) {
     return new Date(date) >= new Date();
+  }
+  resetForm() {
+    this.eventSearchForm = this.formBuilder.group(
+      {
+        title: '',
+        interestAreaId: '',
+        employerId: '',
+        payment: 0,
+        start: '',
+        end: '',
+        state: '',
+        onlyAvailableTasks: false,
+        userId: ''
+      }
+    );
+    this.paymentValue = 0;
   }
 }
