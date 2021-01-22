@@ -17,11 +17,13 @@ import {EmployerDetailsComponent} from './components/employer-details/employer-d
 import {EventAppliedComponent} from './components/event-applied/event-applied.component';
 import {ExpiredEventsComponent} from './components/expired-events/expired-events.component';
 import {PastAppliedEventsComponent} from './components/past-applied-events/past-applied-events.component';
+import {EmployerEventsComponent} from './components/employer-events/employer-events.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'events', component: EventOverviewComponent},
   {path: 'employer/:id/details', component: EmployerDetailsComponent},
+  {path: 'employer/:id/events', component: EmployerEventsComponent},
   {path: 'message', canActivate: [AuthGuard], component: MessageComponent},
   {path: 'create-event', canActivate: [AuthGuard, EmployerGuard], component: CreateEventComponent},
   {path: 'message', canActivate: [AuthGuard], component: MessageComponent},

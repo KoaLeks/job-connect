@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {DetailedEvent} from '../../dtos/detailed-event';
 import {AuthService} from '../../services/auth.service';
-import {EventService} from '../../services/event.service';
 import {Task} from '../../dtos/task';
 import {ApplicationService} from '../../services/application.service';
+import {Router} from '@angular/router';
+import {AlertService} from '../../alert';
+import {EmployeeService} from '../../services/employee.service';
 
 @Component({
   selector: 'app-event-applied',
@@ -15,7 +17,8 @@ export class EventAppliedComponent implements OnInit {
   error: boolean = false;
   errorMessage: string = '';
 
-  constructor(public authService: AuthService, private applicationService: ApplicationService) {
+  constructor(public authService: AuthService, private applicationService: ApplicationService,
+              private router: Router, private alertService: AlertService, private employeeService: EmployeeService) {
   }
 
   private getStatus(tasks: Task[]) {
@@ -47,6 +50,7 @@ export class EventAppliedComponent implements OnInit {
     }
     return sum;
   }
+
   private getAmountOfTakenJobs(tasks: Task[]) {
     let sum = 0;
     for (const task of tasks) {
@@ -69,6 +73,23 @@ export class EventAppliedComponent implements OnInit {
 
   checkDateInFuture(date) {
     return new Date(date) >= new Date();
+  }
+
+  deleteApplication(id: number) {
+    this.applicationService.getApplicationsForEvent(id).subscribe(
+      (applications) => {
+        for (const application of applications) {
+          if (application.sender.email === this.authService.getEmail()) {
+            this.applicationService.deleteApplication(application.id).subscribe(
+              () => {
+                this.alertService.success('Bewerbung erfolgreich gelöscht', {autoClose: true});
+                this.router.navigate(['events']);
+              }
+            );
+          }
+        }
+      }
+    );
   }
 
 }

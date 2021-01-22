@@ -164,4 +164,15 @@ public class ApplicationEndpoint {
         Employee emp = tokenService.getEmployeeFromHeader(authorization);
         return eventMapper.eventsToDetailedEventDtos(eventService.findAllAppliedEvents(emp.getId()));
     }
+
+    @DeleteMapping(value = "/{id}")
+    @ApiOperation(value = "Delete application with id", authorizations = {@Authorization(value = "apiKey")})
+    @PreAuthorize("hasAuthority('ROLE_EMPLOYEE')")
+    @ResponseStatus(HttpStatus.OK)
+    @CrossOrigin(origins = "http://localhost:4200")
+    public void deleteApplication(@PathVariable Long id, @RequestHeader String authorization) {
+        LOGGER.info("DELETE /api/v1/applications/{}", id);
+        notificationService.deleteApplication(id, authorization);
+    }
+
 }
