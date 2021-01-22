@@ -1,11 +1,15 @@
 <div class="eventoverviewcontainer">
   <ng-container *ngIf="!(events.length === 0)">
     <ng-container *ngFor="let event of events">
-      <div class="list-group mt-3" [routerLink]="['/events', event.id, 'details']" *ngIf="checkDateInFuture(event.start)">
+      <div class="list-group mt-3" [routerLink]="['/events', event.id, 'details']"
+           *ngIf="!checkDateInFuture(event.start)">
+        {{countPastAppliedEvents()}}
         <a class="list-group-item list-group-item-action flex-column align-items-start event-item">
           <div class="d-flex w-100 justify-content-between">
             <h4 class="mb-1">
               {{event.title}}
+              <i style="color:red; font-size: 0.75em" *ngIf="!checkDateInFuture(event.end)">(bereits vorbei)</i>
+              <i style="color:green; font-size: 0.75em" *ngIf="!checkDateInFuture(event.start) && checkDateInFuture(event.end)">(läuft gerade)</i>
             </h4>
             <small class="text-muted">
               <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-geo-alt"
@@ -72,9 +76,10 @@
       </div>
     </ng-container>
   </ng-container>
-  <ng-container *ngIf="events.length === 0">
+
+  <ng-container *ngIf="pastAppliedEvents === 0">
     <div class="text-black-50 text-center mt-2">
-      Keine Bewerbungen vorhanden
+      Keine vergangenen Bewerbungen vorhanden
       <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-emoji-frown" fill="currentColor"
            xmlns="http://www.w3.org/2000/svg">
         <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>

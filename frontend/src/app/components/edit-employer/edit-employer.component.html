@@ -35,7 +35,7 @@
       </div>
 
       <!-- company description -->
-      <div class="form-group">
+      <div class="form-group" *ngIf="employer !== undefined && employer.companyName !== 'Privatperson'">
         <label for="companyDescription_edit_employer">Beschreibung des Unternehmens</label>
         <textarea name="companyDescription" formControlName="companyDescription" class="form-control"
                   id="companyDescription_edit_employer"
@@ -89,7 +89,7 @@
       <div class="form-group">
         <label for="publicInfo_edit_employer">Öffentliche Profilbeschreibung</label>
         <textarea name="publicInfo" formControlName="publicInfo" class="form-control" id="publicInfo_edit_employer"
-                  placeholder="Beschreibung ..." maxlength="10000"></textarea>
+                  placeholder="Beschreibung, Telefonnummer, ..." maxlength="10000"></textarea>
       </div>
 
       <hr/>

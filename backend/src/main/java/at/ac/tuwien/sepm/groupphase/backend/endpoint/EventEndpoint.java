@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EmployerDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventInquiryDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.ProfileDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SearchEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Employer;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
@@ -70,25 +71,10 @@ public class EventEndpoint {
     @ApiOperation(value = "Get list of events")
     @CrossOrigin(origins = "http://localhost:4200")
     @Transactional
-    public List<DetailedEventDto> findAll() {
+    @ResponseBody
+    public List<DetailedEventDto> search(SearchEventDto searchEventDto) {
         LOGGER.info("GET /api/v1/events");
-        return eventMapper.eventsToDetailedEventDtos(eventService.findAll());
-    }
-
-    @PutMapping
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ApiOperation(value = "Update an event", authorizations = {@Authorization(value = "apiKey")})
-    @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
-    public void update(@Valid @RequestBody EventInquiryDto eventInquiryDto, @RequestHeader String authorization) {
-        LOGGER.info("PUT /api/v1/events/{}", eventInquiryDto);
-        Employer owner = eventService.findById(eventInquiryDto.getId()).getEmployer();
-        Employer employer = tokenService.getEmployerFromHeader(authorization);
-        if(owner != employer){
-            throw new AuthorizationServiceException(String.format("Keine Berchtigung um das Event \"%s\" zu editieren", eventInquiryDto.getTitle()));
-        }
-        eventMapper.eventToEventInquiryDto(
-            eventService.saveEvent(eventMapper.eventInquiryDtoToEvent(eventInquiryDto)));
-
+        return eventMapper.eventsToDetailedEventDtos(eventService.findAll(searchEventDto));
     }
 
     @DeleteMapping(value = "/{id}")

@@ -137,7 +137,9 @@ public class EmployeeServiceImpl implements EmployeeService {
             for (Time time : newExistingTimes) {
                 for (Long id : IdsToDelete) {
                     if (id != -1 && time.getRef_id().equals(id)) {
-                        timeRepository.deleteById(time.getId());
+                        if (timeRepository.existsById(time.getId())) {
+                            timeRepository.deleteById(time.getId());
+                        }
                     }
                 }
             }
@@ -146,11 +148,14 @@ public class EmployeeServiceImpl implements EmployeeService {
             Set<Time> deletableTimes = timeRepository.findByEmployee_Profile_Id(employee.getProfile().getId());
             if (deletableTimes != null && deletableTimes.size() != 0) {
                 for (Time time : deletableTimes) {
-                    timeRepository.deleteById(time.getId());
+                    if (timeRepository.existsById(time.getId())) {
+                        timeRepository.deleteById(time.getId());
+                    }
                 }
             }
         }
 
+        employee.setTimes(timeRepository.findByEmployee_Profile_Id(employee.getId()));
         employeeRepository.save(employee);
 
         if (employee.getInterests() != null && employee.getInterests().size() != 0) {
@@ -254,6 +259,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         interestRepository.deleteInterestsByEmployee_Profile_Email(email);
         employeeRepository.deleteEmployeeByProfile_Email(email);
         profileRepository.deleteByEmail(email);
+    }
+
+    @Override
+    public List<Employee> getAvailableEmployeesByEvent(Long eventId) {
+        LOGGER.info("Find all available employees for event {}", eventId);
+        return employeeRepository.getAvailableEmployeesByEvent(eventId);
     }
 
     @Override

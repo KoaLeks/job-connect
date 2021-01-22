@@ -25,6 +25,7 @@ export class CreateEventComponent implements OnInit {
   taskCreationForm;
   tasks: Task[] = [];
   interestAreas: InterestArea[];
+  employeePrice: number = 0;
 
   constructor(public authService: AuthService, private formBuilder: FormBuilder, private addressService: AddressService,
               private eventService: EventService, private taskService: TaskService,
@@ -106,6 +107,14 @@ export class CreateEventComponent implements OnInit {
     if (index !== -1) {
       this.tasks.splice(index, 1);
     }
+  }
+
+  calculatePrice() {
+    let countEmployees = 0;
+    for (const task of this.tasks) {
+      countEmployees += task.employeeCount;
+    }
+    this.employeePrice = (countEmployees * 5 ) + 10; // employee count * 5 euros + 10 euro pauschale
   }
 
 }

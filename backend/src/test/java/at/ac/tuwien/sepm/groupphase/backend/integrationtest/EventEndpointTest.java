@@ -2,10 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.integrationtest;
 
 import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
 import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedEventDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleEventDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedMessageDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventInquiryDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.*;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.RegisterEmployerMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
@@ -19,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -29,10 +27,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.time.LocalDateTime;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -89,10 +84,28 @@ public class EventEndpointTest implements TestData {
         .withAdditional(ADDITIONAL)
         .build();
 
+    private final Address address2 = Address.AddressBuilder.aAddress()
+        .withCity(CITY)
+        .withState("Vienna")
+        .withZip(ZIP)
+        .withAddressLine(ADDRESS_LINE)
+        .withAdditional(ADDITIONAL)
+        .build();
+
     private Event event = Event.EventBuilder.aEvent()
         .withStart(START)
         .withEnd(END)
         .withTitle(TITLE_EVENT)
+        .withDescription(DESCRIPTION_EVENT)
+        .withEmployer(EMPLOYER)
+        .withAddress(address)
+        .withTask(TASKS_EVENT)
+        .build();
+
+    private Event event2 = Event.EventBuilder.aEvent()
+        .withStart(START)
+        .withEnd(END)
+        .withTitle("Eventtitle2")
         .withDescription(DESCRIPTION_EVENT)
         .withEmployer(EMPLOYER)
         .withAddress(address)
@@ -119,6 +132,7 @@ public class EventEndpointTest implements TestData {
         .withEmployees(EMPLOYEES)
         .withInterestArea(INTEREST_AREA)
         .build();
+
 
     @BeforeEach
     public void beforeEach() {
@@ -192,91 +206,6 @@ public class EventEndpointTest implements TestData {
             }
         );
     }
-
-    @Test
-    public void updateEventAddressToNull_ThenBadRequest() throws Exception {
-        Profile profile = profileRepository.save(employer.getProfile());
-        employer.setProfile(profile);
-        employer.setId(profile.getId());
-        Employer employer1 = employerRepository.save(employer);
-
-        event.setEmployer(employer1);
-        String body = objectMapper.writeValueAsString(eventMapper.eventToEventInquiryDto(event));
-
-        MvcResult mvcResult = this.mockMvc.perform(post(EVENTS_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(body))
-            .andDo(print())
-            .andReturn();
-        MockHttpServletResponse response = mvcResult.getResponse();
-
-        assertEquals(HttpStatus.CREATED.value(), response.getStatus());
-        assertEquals(eventRepository.count(), 1);
-
-        EventInquiryDto eventResponse = objectMapper.readValue(response.getContentAsString(),
-            EventInquiryDto.class);
-
-        event.setId(1L);
-        event.setAddress(null);
-        String updateBody = objectMapper.writeValueAsString(eventMapper.eventToEventInquiryDto(event));
-
-        MvcResult mvcUpdateResult = this.mockMvc.perform(put(EVENTS_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(updateBody))
-            .andDo(print())
-            .andReturn();
-        MockHttpServletResponse updateResponse = mvcUpdateResult.getResponse();
-        assertEquals(HttpStatus.BAD_REQUEST.value(), updateResponse.getStatus());
-        assertEquals(eventRepository.count(), 1);
-    }
-
-    //Update of event is currently not properly done
-   /* @Test
-    public void updateEventStartAndEndValidTest() throws Exception {
-        Profile profile = profileRepository.save(employer.getProfile());
-        employer.setProfile(profile);
-        employer.setId(profile.getId());
-        Employer employer1 = employerRepository.save(employer);
-
-        event.setEmployer(employer1);
-        String body = objectMapper.writeValueAsString(eventMapper.eventToEventInquiryDto(event));
-
-        MvcResult mvcResult = this.mockMvc.perform(post(EVENTS_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(body))
-            .andDo(print())
-            .andReturn();
-        MockHttpServletResponse response = mvcResult.getResponse();
-
-        assertEquals(HttpStatus.CREATED.value(), response.getStatus());
-        assertEquals(eventRepository.count(), 1);
-
-        event.setId(1L);
-        event.setStart(LocalDateTime.of(2021, 12, 24, 17, 0, 0, 0));
-        event.setEnd(LocalDateTime.of(2021, 12, 24, 23, 45, 0, 0));
-
-        String updateBody = objectMapper.writeValueAsString(eventMapper.eventToEventInquiryDto(event));
-
-        MvcResult mvcUpdateResult = this.mockMvc.perform(put(EVENTS_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(updateBody))
-            .andDo(print())
-            .andReturn();
-        MockHttpServletResponse updateResponse = mvcUpdateResult.getResponse();
-        assertEquals(HttpStatus.NO_CONTENT.value(), updateResponse.getStatus());
-        assertEquals(eventRepository.count(), 1);
-
-        Event eventResponse = eventRepository.findAll().stream().findFirst().get();
-        assertEquals(LocalDateTime.of(2021, 12, 24, 17, 0, 0, 0),
-            eventResponse.getStart());
-        assertEquals(LocalDateTime.of(2021, 12, 24, 23, 45, 0, 0),
-            eventResponse.getEnd());
-
-    }*/
 
     @Test
     public void givenNothing_whenFindAll_thenEmptyEventList() throws Exception {
@@ -360,6 +289,93 @@ public class EventEndpointTest implements TestData {
         assertEquals(taskRepository.count(), 0);
     }
 
+    @Test
+    public void searchForEventWithValidTitle() throws Exception {
+        addressRepository.save(address);
+
+        eventRepository.save(event);
+        eventRepository.save(event2);
+
+        assertEquals(addressRepository.count(), 1);
+        assertEquals(eventRepository.count(), 2);
+
+        MvcResult mvcResult = this.mockMvc.perform(get(EVENTS_BASE_URI)
+            .queryParam("title", "Flyer"))
+            .andDo(print()).andReturn();
+        MockHttpServletResponse response = mvcResult.getResponse();
+
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(MediaType.APPLICATION_JSON_VALUE, response.getContentType());
+
+        List<Event> foundEvents = Arrays.asList(objectMapper.readValue(response.getContentAsString(),
+            Event[].class));
+
+        assertEquals(foundEvents.size(), 1);
+        assert(foundEvents.contains(event));
+        assert(!foundEvents.contains(event2));
+
+    }
+
+    @Test
+    public void searchForEventWithValidState() throws Exception {
+        addressRepository.save(address);
+        addressRepository.save(address2);
+
+        eventRepository.save(event);
+
+        event2.setAddress(address2);
+        eventRepository.save(event2);
+
+        assertEquals(addressRepository.count(), 2);
+        assertEquals(eventRepository.count(), 2);
+
+        MvcResult mvcResult = this.mockMvc.perform(get(EVENTS_BASE_URI)
+            .queryParam("state", "Upper Austria"))
+            .andDo(print()).andReturn();
+        MockHttpServletResponse response = mvcResult.getResponse();
+
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(MediaType.APPLICATION_JSON_VALUE, response.getContentType());
+
+        List<Event> foundEvents = Arrays.asList(objectMapper.readValue(response.getContentAsString(),
+            Event[].class));
+
+        assertEquals(foundEvents.size(), 1);
+        assert(foundEvents.contains(event));
+        assert(!foundEvents.contains(event2));
+
+    }
+
+    @Test
+    public void searchForEventWithValidStateAndValidTitle() throws Exception {
+        addressRepository.save(address);
+        addressRepository.save(address2);
+
+        eventRepository.save(event);
+
+        event2.setAddress(address2);
+        eventRepository.save(event2);
+
+        assertEquals(addressRepository.count(), 2);
+        assertEquals(eventRepository.count(), 2);
+
+        MvcResult mvcResult = this.mockMvc.perform(get(EVENTS_BASE_URI)
+            .queryParam("state", "Upper Austria")
+            .queryParam("title", "Flyer"))
+            .andDo(print()).andReturn();
+        MockHttpServletResponse response = mvcResult.getResponse();
+
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(MediaType.APPLICATION_JSON_VALUE, response.getContentType());
+
+        List<Event> foundEvents = Arrays.asList(objectMapper.readValue(response.getContentAsString(),
+            Event[].class));
+
+        assertEquals(foundEvents.size(), 1);
+        assert(foundEvents.contains(event));
+        assert(!foundEvents.contains(event2));
+
+    }
 }
 
 

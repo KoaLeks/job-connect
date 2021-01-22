@@ -172,7 +172,7 @@ export class EditEmployeeComponent implements OnInit {
       this.employeeService.updateEmployee(this.employee).subscribe(
         (id) => {
           this.newTimes = [];
-          console.log('User profile updated successfully id: ' + id);
+          // console.log('User profile updated successfully id: ' + id);
           // this.router.navigate(['/']);
           this.inputImage.nativeElement.value = ''; // resets fileUpload button
           this.loadEmployeeDetails();

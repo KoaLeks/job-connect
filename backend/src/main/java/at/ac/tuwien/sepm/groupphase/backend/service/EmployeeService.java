@@ -65,5 +65,13 @@ public interface EmployeeService {
      */
     void deleteByEmail(String email);
 
+
+    /**
+     * Find employees that are available at and interested in the event given by Id
+     * @param eventId event Id of event to find employees for
+     * @return list of available employees for that event
+     */
+    List<Employee> getAvailableEmployeesByEvent(Long eventId);
+
     List<Employee> findEmployeeByInterestArea(Set<String> interestAreas);
 }

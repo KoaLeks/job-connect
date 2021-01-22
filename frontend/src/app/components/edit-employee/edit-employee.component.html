@@ -149,7 +149,7 @@
       <div class="form-group">
         <label for="publicInfo_edit_employee">Öffentliche Profilbeschreibung</label>
         <textarea name="publicInfo" formControlName="publicInfo" class="form-control" id="publicInfo_edit_employee"
-                  placeholder="Beschreibung ..." maxlength="10000"></textarea>
+                  placeholder="Beschreibung, Telefonnummer, ..." maxlength="10000"></textarea>
       </div>
 
       <hr/>
@@ -189,15 +189,15 @@
           <div *ngIf="employeeInterests.length !== 0">
             <ul>
               <ng-container *ngFor="let interest of employeeInterests">
-                <div>
+                <li>
                   {{interest.name}}: {{interest.description}}
                   <button type="button" class="btn btn-xs btn-danger delete-interest-button btn-xs text-center"
                           (click)="deleteInterest(interest)">
-                    <div class="deletebutton">
+                    <a class="deletebutton">
                       &#10060;
-                    </div>
+                    </a>
                   </button>
-                </div>
+                </li>
               </ng-container>
             </ul>
           </div>
@@ -217,7 +217,7 @@
         <div data-toggle="tooltip" data-placement="top"
              title="Somit kannst du Jobs ganz leicht nach deiner verfügbaren Zeit filtern und bekommst auch nur Mails für neue Jobs, bei denen du auch Zeit hast!">
           Hier siehst du, wann du Zeit zum Arbeiten hast
-          <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-info-circle" fill="currentColor"
+          <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-info-circle" fill="blue"
                xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
             <path
@@ -577,7 +577,7 @@
               <div data-toggle="tooltip" data-placement="top"
                    title="falls Jobs bis in die Morgenstunden dauern und du sie trotzdem vorgeschlagen bekommen möchtest">
                 bis zum Folgetag um 3:00 Uhr in der Früh?
-                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-info-circle" fill="currentColor"
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-info-circle" fill="#33658a"
                      xmlns="http://www.w3.org/2000/svg">
                   <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                   <path

@@ -13,11 +13,15 @@ import {PageNotFoundComponent} from './components/page-not-found/page-not-found.
 import {EmployeeDetailsComponent} from './components/employee-details/employee-details.component';
 import {EmployerGuard} from './guards/employer.guard';
 import {EmployeeGuard} from './guards/employee.guard';
+import {EmployerDetailsComponent} from './components/employer-details/employer-details.component';
 import {EventAppliedComponent} from './components/event-applied/event-applied.component';
+import {ExpiredEventsComponent} from './components/expired-events/expired-events.component';
+import {PastAppliedEventsComponent} from './components/past-applied-events/past-applied-events.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'events', component: EventOverviewComponent},
+  {path: 'employer/:id/details', component: EmployerDetailsComponent},
   {path: 'message', canActivate: [AuthGuard], component: MessageComponent},
   {path: 'create-event', canActivate: [AuthGuard, EmployerGuard], component: CreateEventComponent},
   {path: 'message', canActivate: [AuthGuard], component: MessageComponent},
@@ -25,8 +29,10 @@ const routes: Routes = [
   {path: 'edit-employer', canActivate: [AuthGuard, EmployerGuard], component: EditEmployerComponent},
   {path: 'events/:id/details', component: EventDetailsComponent},
   {path: 'employee-overview', canActivate: [AuthGuard, EmployerGuard], component: EmployeeOverviewComponent},
+  {path: 'expired-events', canActivate: [AuthGuard, EmployerGuard], component: ExpiredEventsComponent},
   {path: 'employee/:id/details', canActivate: [AuthGuard, EmployerGuard], component: EmployeeDetailsComponent},
   {path: 'applied-events', canActivate: [AuthGuard, EmployeeGuard], component: EventAppliedComponent},
+  {path: 'past-applied-events', canActivate: [AuthGuard, EmployeeGuard], component: PastAppliedEventsComponent},
   {path: '**', component: PageNotFoundComponent},
 ];
 

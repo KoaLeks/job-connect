@@ -1,106 +1,149 @@
 <ng-container *ngIf="eventDetails">
-
-
-
-    <div class="card mt-5">
-      <div class="card-header">
-        <div class="container">
-          <div class="row justify-content-between">
-            <div class="col-md-9 h1">
-              {{eventDetails.title}}
-            </div>
-            <div class="col-md-3 mt-3 text-right h5">
-              Beginn: {{eventDetails.start.slice(0, 10) |  date:'dd.MM.yyyy'}}<br>{{eventDetails.start.slice(11, 16) }} Uhr
-            </div>
+  <div class="card mt-5">
+    <div class="card-header">
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col-md-9 h1" >
+            {{eventDetails.title}}
+            <i style="color: red" *ngIf="!checkDateInFuture(eventDetails.end)">
+              <small>(bereits vorbei)</small>
+            </i>
+            <i style="color:green;" *ngIf="!checkDateInFuture(eventDetails.start) && checkDateInFuture(eventDetails.end)">
+              <small>(läuft gerade)</small>
+            </i>
           </div>
-          <div class="row justify-content-between">
-            <div class="col-md-9 h3">
-              {{eventDetails.address.addressLine}}, {{eventDetails.address.zip}} {{eventDetails.address.city}}
-            </div>
-            <div class="col-md-3 text-right h5">
-              Ende: {{eventDetails.end.slice(0, 10) |  date:'dd.MM.yyyy'}}<br>{{eventDetails.end.slice(11, 16)}} Uhr
-            </div>
+          <div class="col-md-3 mt-3 text-right h5">
+            Beginn: {{eventDetails.start.slice(0, 10) |  date:'dd.MM.yyyy'}}<br>{{eventDetails.start.slice(11, 16) }}
+            Uhr
+          </div>
+        </div>
+        <div class="row justify-content-between">
+          <div class="col-md-9 h3">
+            {{eventDetails.address.addressLine}}, {{eventDetails.address.zip}} {{eventDetails.address.city}}
+          </div>
+          <div class="col-md-3 text-right h5">
+            Ende: {{eventDetails.end.slice(0, 10) |  date:'dd.MM.yyyy'}}<br>{{eventDetails.end.slice(11, 16)}} Uhr
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="card-body">
-        <div class="row justify-content-between">
-          <div class="col-md-8 text-justify" style="border-right: 2px solid #ccc;">
-            <p style="border-bottom: 1px solid #ccc;">
-              {{eventDetails.description}}
-            </p>
-  <!--          <h3 style="border-bottom: 1px solid #ccc;">-->
-  <!--            Aufgaben-->
-  <!--          </h3>-->
-            <table class="table table-sm">
-              <thead class="thead-dark">
+    <div class="card-body">
+      <div class="row justify-content-between">
+        <div class="col-md-8 text-justify" style="border-right: 2px solid #ccc;">
+          <p style="border-bottom: 1px solid #ccc;">
+            {{eventDetails.description}}
+          </p>
+          <!--          <h3 style="border-bottom: 1px solid #ccc;">-->
+          <!--            Aufgaben-->
+          <!--          </h3>-->
+          <table class="table table-sm">
+            <thead class="thead-dark">
+            <tr class="d-flex">
+              <th class="col-5">Beschreibung</th>
+              <th class="col-3 text-center">Teilnehmer</th>
+              <th class="col-2 text-center">€/h</th>
+              <th
+                *ngIf="this.authService.getToken() !== '' && authService.getTokenIdentifier() === eventDetails.employer.simpleProfileDto.email">
+                Arbeitnehmer
+              </th>
+            </tr>
+            </thead>
+            <ng-container *ngFor="let task of eventDetails.tasks">
               <tr class="d-flex">
-                <th class="col-5">Beschreibung</th>
-                <th class="col-3 text-center">Teilnehmer</th>
-                <th class="col-2 text-center">€/h</th>
-                <th *ngIf="this.authService.getToken() !== '' && authService.getTokenIdentifier() === eventDetails.employer.simpleProfileDto.email">Arbeitnehmer</th>
-              </tr>
-              </thead>
-              <ng-container *ngFor="let task of eventDetails.tasks">
-                <tr class="d-flex">
-                  <td class="col-5 text-justify">{{task.description}}</td>
-                  <td class="col-3 text-center">{{getNumberOfParticipants(task)}}/{{task.employeeCount}}</td>
-                  <td class="col-2 text-center">{{task.paymentHourly}}</td>
-                  <td *ngIf="this.authService.getToken() !== '' && authService.getTokenIdentifier() === eventDetails.employer.simpleProfileDto.email" class="col-2 text-right">
-                    <ng-container *ngFor="let acceptedEmployee of task.employees">
-                      <a *ngIf="acceptedEmployee.accepted" [routerLink]="['/employee', acceptedEmployee.employee.simpleProfileDto.id, 'details']">
-                        {{acceptedEmployee.employee.simpleProfileDto.firstName}} {{acceptedEmployee.employee.simpleProfileDto.lastName}}</a>
-                    </ng-container>
-                  </td>
+                <td class="col-5 text-justify">{{task.description}}</td>
+                <td class="col-3 text-center">{{getNumberOfParticipants(task)}}/{{task.employeeCount}}</td>
+                <td class="col-2 text-center">{{task.paymentHourly}}</td>
+                <td
+                  *ngIf="this.authService.getToken() !== '' && authService.getTokenIdentifier() === eventDetails.employer.simpleProfileDto.email"
+                  class="col-2 text-right">
+                  <ng-container *ngFor="let acceptedEmployee of task.employees">
+                    <a *ngIf="acceptedEmployee.accepted"
+                       [routerLink]="['/employee', acceptedEmployee.employee.simpleProfileDto.id, 'details']">
+                      {{acceptedEmployee.employee.simpleProfileDto.firstName}} {{acceptedEmployee.employee.simpleProfileDto.lastName}}</a>
+                  </ng-container>
+                </td>
 
-                </tr>
-              </ng-container>
-            </table>
-          </div>
+              </tr>
+            </ng-container>
+          </table>
+        </div>
         <div class="col-md-4 justify-content-end text-md-center">
-          <img *ngIf="hasPicture" class="rounded-circle" src="{{picture}}" width="100em" height="100em"  >
-          <svg *ngIf="!hasPicture" width="6em" height="6em" viewBox="0 0 16 16" style="color: #465c69;" class="bi bi-person-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path d="M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987 0 0 0 8 15a6.987 6.987 0 0 0 5.468-2.63z"/>
+          <img *ngIf="hasPicture" class="rounded-circle" src="{{picture}}" width="100em" height="100em">
+          <svg *ngIf="!hasPicture" width="6em" height="6em" viewBox="0 0 16 16" style="color: #465c69;"
+               class="bi bi-person-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987 0 0 0 8 15a6.987 6.987 0 0 0 5.468-2.63z"/>
             <path fill-rule="evenodd" d="M8 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
             <path fill-rule="evenodd" d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8z"/>
           </svg>
-          <h3  style="border-bottom: 1px solid #ccc;">
-            {{eventDetails.employer.companyName}}
-          </h3>
-          <p class="text-justify">
-            {{eventDetails.employer.simpleProfileDto.publicInfo}}
-          </p>
+          <div *ngIf="eventDetails.employer.companyName === 'Privatperson'">
+            <h3>
+              <a [routerLink]="['/employer', eventDetails.employer.simpleProfileDto.id, 'details']">
+                {{eventDetails.employer.simpleProfileDto.firstName}} {{eventDetails.employer.simpleProfileDto.lastName}}
+              </a>
+            </h3>
+            <p class="text-justify" style="border-top: 1px solid #ccc;"
+               *ngIf="eventDetails.employer.simpleProfileDto.publicInfo !== null &&
+               eventDetails.employer.simpleProfileDto.publicInfo !== ''">
+              {{eventDetails.employer.simpleProfileDto.publicInfo}}
+            </p>
+          </div>
+          <div *ngIf="eventDetails.employer.companyName !== 'Privatperson'">
+            <h3>
+              <a [routerLink]="['/employer', eventDetails.employer.simpleProfileDto.id, 'details']">
+                {{eventDetails.employer.companyName}}
+              </a>
+            </h3>
+            <p class="text-justify" style="border-top: 1px solid #ccc;"
+               *ngIf="eventDetails.employer.simpleProfileDto.publicInfo !== null &&
+               eventDetails.employer.simpleProfileDto.publicInfo !== ''">
+              {{eventDetails.employer.simpleProfileDto.publicInfo}}
+            </p>
+          </div>
         </div>
       </div>
-        <div class="row justify-content-center mt-3" style="border-top: 1px solid #ccc">
-          <ng-container *ngFor="let task of eventDetails.tasks">
-            <h5> <span class="badge badge-pill badge-info mt-3 ml-1 mr-1" style="border-radius: 30px"
-                       *ngIf="task.interestArea !== null" >{{task.interestArea.area}}</span></h5>
-          </ng-container>
-        </div>
-        <div *ngIf="applied">
-          Du hast dich bereits für die Aufgabe "{{appliedTask}}" beworben. <span *ngIf="appliedStatus">Deine Bewerbung wurde schon akzeptiert! Bitte warte auf weitere Anweisungen vom Arbeitgeber.</span>
-          <span *ngIf="appliedStatus === false">Deine Bewerbung wurde leider abgelehnt. Schau dich in der Eventübersicht nach weiteren Möglichkeiten um!</span>
-          <span *ngIf="appliedStatus === null">Bitte habe noch etwas Geduld, deine Bewerbun ist noch in Arbeit.</span>
-        </div>
+      <div class="row justify-content-center mt-3" style="border-top: 1px solid #ccc">
+        <ng-container *ngFor="let task of eventDetails.tasks">
+          <h5> <span class="badge badge-pill badge-info mt-3 ml-1 mr-1" style="border-radius: 30px"
+                     *ngIf="task.interestArea !== null">{{task.interestArea.area}}</span></h5>
+        </ng-container>
       </div>
-      <div class="card-footer text-muted">
-        <button type="button" class="btn btn-primary" data-toggle="modal" (click)="createApplication()"
-                data-target="#Apply-Task" [disabled]="!loggedInEmployee || applied">
-          Bewirb dich jetzt!
-        </button>
-        <button type="button" style="float: right" *ngIf="this.authService.getToken() !== '' && eventDetails != undefined && authService.getUserRole() === 'EMPLOYER' &&
-         authService.getTokenIdentifier() === eventDetails.employer.simpleProfileDto.email"
-                class="btn btn-outline-danger" data-toggle="modal" data-target="#Delete-Event">
-          Event absagen!
-        </button>
+      <div *ngIf="applied">
+        Du hast dich bereits für die Aufgabe "{{appliedTask}}" beworben. <span *ngIf="appliedStatus">Deine Bewerbung wurde schon akzeptiert! Bitte warte auf weitere Anweisungen vom Arbeitgeber.</span>
+        <span *ngIf="appliedStatus === false">Deine Bewerbung wurde leider abgelehnt. Schau dich in der Eventübersicht nach weiteren Möglichkeiten um!</span>
+        <span *ngIf="appliedStatus === null">Bitte habe noch etwas Geduld, deine Bewerbung ist noch in Arbeit.</span>
       </div>
     </div>
+    <div class="card-footer text-muted">
+      <button type="button" class="btn btn-primary" data-toggle="modal" (click)="createApplication()"
+              data-target="#Apply-Task" [disabled]="!loggedInEmployee || applied">
+        Bewirb dich jetzt!
+      </button>
+      <button type="button" style="float: right" *ngIf="this.authService.getToken() !== '' && eventDetails != undefined && authService.getUserRole() === 'EMPLOYER' &&
+         authService.getTokenIdentifier() === eventDetails.employer.simpleProfileDto.email && checkDateInFuture(eventDetails.end) && !checkDateIn24h(eventDetails.start)"
+              class="btn btn-outline-danger" data-toggle="modal" data-target="#Delete-Event">
+        Event absagen!
+      </button>
+      <button type="button" style="float: right" *ngIf="this.authService.getToken() !== '' && eventDetails != undefined && authService.getUserRole() === 'EMPLOYER' &&
+         authService.getTokenIdentifier() === eventDetails.employer.simpleProfileDto.email && checkDateInFuture(eventDetails.end) && checkDateIn24h(eventDetails.start)"
+              class="btn btn-outline-danger" data-toggle="modal" data-target="#Delete-Event" disabled
+              title="Event kann 24h vor Beginn nicht mehr abgesagt werden&#10;oder Event hat schon begonnen!">
+        Event absagen!
+      </button>
+      <button type="button" style="float: right" *ngIf="this.authService.getToken() !== '' && eventDetails != undefined && authService.getUserRole() === 'EMPLOYER' &&
+         authService.getTokenIdentifier() === eventDetails.employer.simpleProfileDto.email && !checkDateInFuture(eventDetails.end)"
+              class="btn btn-outline-danger" data-toggle="modal" data-target="#Delete-Event" disabled
+              title="Event ist schon vorbei!">
+        Event absagen!
+      </button>
+    </div>
+  </div>
 </ng-container>
 
 <!-- Modal Delete Event-->
-<div class="modal fade" id="Delete-Event" tabindex="-1" role="dialog" aria-labelledby="deleteEventLabel" aria-hidden="true">
+<div class="modal fade" id="Delete-Event" tabindex="-1" role="dialog" aria-labelledby="deleteEventLabel"
+     aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -110,13 +153,15 @@
         </button>
       </div>
       <div class="modal-body">
-        Wenn Sie das Event absagen, werden das Event und die dazugehörigen Daten gelöscht. Weiters werden alle akzeptierten
+        Wenn Sie das Event absagen, werden das Event und die dazugehörigen Daten gelöscht. Weiters werden alle
+        akzeptierten
         Bewerber per Mail darüber informiert, dass dieses Event nicht stattfindet.<br><br>
         <b>Sind Sie sicher, dass Sie dieses Event absagen und entfernen möchten?</b>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal" routerLink=""
-                (click)="deleteEvent()">Absagen!</button>
+                (click)="deleteEvent()">Absagen!
+        </button>
         <button type="button" class="btn btn-dark" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">Abbrechen</span>
         </button>
@@ -130,22 +175,28 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addTaskLabel">Bewerbung</h5>
+        <h5 class="modal-title" id="addTaskLabel">Bewerbung
+          <span
+            style="font-size: 0.75em; color: lightcoral"> <i>(Achtung: Du kannst dich pro Event nur für eine Stelle bewerben)</i></span>
+        </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <!-- TASK FORM -->
       <form [formGroup]="applyTaskForm" (ngSubmit)="apply(applyTaskForm.value)">
-        <div class="form-group" *ngIf="this.eventDetails !== undefined && this.eventDetails.tasks !== undefined && this.eventDetails.tasks.length !== 0">
+        <div class="form-group"
+             *ngIf="this.eventDetails !== undefined && this.eventDetails.tasks !== undefined && this.eventDetails.tasks.length !== 0">
           <label for="inputTask">Für welche Stelle möchtest du dich bewerben</label>
-          <select  class="form-control" id="inputTask" formControlName="inputTask"
-                   (change)='createApplication()'>
+          <select class="form-control" id="inputTask" formControlName="inputTask"
+                  (change)='createApplication()'>
             <option [value]=null>kein Stelle ausgewählt</option>
             <ng-container *ngFor="let task of this.eventDetails.tasks">
-              <option *ngIf="getNumberOfParticipants(task) < task.employeeCount && task.interestArea !== null" [value]="task.id">Stelle: {{task.interestArea.area}} -
+              <option *ngIf="getNumberOfParticipants(task) < task.employeeCount && task.interestArea !== null"
+                      [value]="task.id">Stelle: {{task.interestArea.area}} -
                 Beschreibung: {{task.description}}</option>
-              <option *ngIf="getNumberOfParticipants(task) < task.employeeCount && task.interestArea === null" [value]="task.id">Stelle: keine Angaben -
+              <option *ngIf="getNumberOfParticipants(task) < task.employeeCount && task.interestArea === null"
+                      [value]="task.id">Stelle: keine Angaben -
                 Beschreibung: {{task.description}}</option>
             </ng-container>
           </select>
@@ -153,7 +204,7 @@
         <div class="form-group">
           <label for="applicationText">Schreibe deine eigene Bewerbung:</label>
           <textarea name="applicationText" formControlName="applicationText" class="form-control" id="applicationText"
-                    maxlength="10000" > </textarea>
+                    maxlength="10000"> </textarea>
         </div>
         <!-- TASK FORM -->
         <div class="modal-footer">
@@ -168,8 +219,9 @@
 </div>
 
 <!-- Application list -->
-<ng-container *ngIf="eventDetails != undefined"> <!-- added this, because it was throwing "TypeError: cannot read property 'employer' of undefined -->
-<app-application-list *ngIf="this.authService.getToken() !== '' && authService.getUserRole() === 'EMPLOYER' &&
+<ng-container *ngIf="eventDetails != undefined">
+  <!-- added this, because it was throwing "TypeError: cannot read property 'employer' of undefined -->
+  <app-application-list *ngIf="this.authService.getToken() !== '' && authService.getUserRole() === 'EMPLOYER' &&
   authService.getTokenIdentifier() === eventDetails.employer.simpleProfileDto.email"
-                      [eventId]="id" [tasks]="eventDetails.tasks"></app-application-list>
+                        [eventId]="id" [tasks]="eventDetails.tasks"></app-application-list>
 </ng-container>

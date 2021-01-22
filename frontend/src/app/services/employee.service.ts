@@ -19,7 +19,7 @@ export class EmployeeService {
    * Loads an employee from the backend using the email
    */
   getEmployeeByEmail() {
-    console.log('Get employee by email');
+    // console.log('Get employee by email');
     return this.httpClient.get<EditEmployee>(this.employeeBaseUri);
   }
 
