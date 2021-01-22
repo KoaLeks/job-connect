@@ -3,6 +3,7 @@ import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
 import {EmployeeService} from '../../services/employee.service';
 import {SimpleEmployee} from '../../dtos/simple-employee';
+import {SuperSimpleEmployee} from '../../dtos/SuperSimpleEmployee';
 
 @Component({
   selector: 'app-employee-overview',
@@ -10,7 +11,7 @@ import {SimpleEmployee} from '../../dtos/simple-employee';
   styleUrls: ['./employee-overview.component.scss']
 })
 export class EmployeeOverviewComponent implements OnInit {
-  employees: SimpleEmployee[] = [];
+  employees: SuperSimpleEmployee[] = [];
   error: boolean = false;
   errorMessage: string = '';
 
@@ -18,7 +19,7 @@ export class EmployeeOverviewComponent implements OnInit {
   page = 1;
   pageSize = 10;
   collectionSize;
-  pageEmployees: SimpleEmployee[];
+  pageEmployees: SuperSimpleEmployee[];
 
   constructor(private authService: AuthService, public router: Router, private employeeService: EmployeeService) {
   }
@@ -29,7 +30,7 @@ export class EmployeeOverviewComponent implements OnInit {
 
   private loadEmployees() {
     this.employeeService.findAll().subscribe(
-      (employees: SimpleEmployee[]) => {
+      (employees: SuperSimpleEmployee[]) => {
         this.employees = employees;
         this.collectionSize = this.employees.length;
         this.refreshEmployees();
@@ -42,6 +43,7 @@ export class EmployeeOverviewComponent implements OnInit {
     this.pageEmployees = this.employees
       .map((employee, i) => ({id: i + 1, ...employee}))
       .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
+    console.log(this.pageEmployees);
   }
 
   private defaultServiceErrorHandling(error: any) {
@@ -54,7 +56,7 @@ export class EmployeeOverviewComponent implements OnInit {
     }
   }
 
-  public getInterestAreas(employee: SimpleEmployee): String[] {
+  public getInterestAreas(employee: SuperSimpleEmployee): String[] {
     const interestAreasDist: Set<String> = new Set<String>();
     if (employee.interestDtos !== null) {
       for (let i = 0; i < employee.interestDtos.length; i++) {
