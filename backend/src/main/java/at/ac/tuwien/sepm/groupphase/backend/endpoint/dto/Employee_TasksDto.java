@@ -2,7 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
 public class Employee_TasksDto {
     Long id;
-    SimpleEmployeeDto employee;
+    SuperSimpleEmployeeDto employee;
     Long taskId;
     Boolean accepted;
 
@@ -14,11 +14,11 @@ public class Employee_TasksDto {
         this.id = id;
     }
 
-    public SimpleEmployeeDto getEmployee() {
+    public SuperSimpleEmployeeDto getEmployee() {
         return employee;
     }
 
-    public void setEmployee(SimpleEmployeeDto employee) {
+    public void setEmployee(SuperSimpleEmployeeDto employee) {
         this.employee = employee;
     }
 
@@ -40,7 +40,7 @@ public class Employee_TasksDto {
 
     public static final class Employee_TasksDtoBuilder {
         Long id;
-        SimpleEmployeeDto employee;
+        SuperSimpleEmployeeDto employee;
         Long taskId;
         Boolean accept;
 
@@ -56,7 +56,7 @@ public class Employee_TasksDto {
             return this;
         }
 
-        public Employee_TasksDtoBuilder withEmployee(SimpleEmployeeDto employee) {
+        public Employee_TasksDtoBuilder withEmployee(SuperSimpleEmployeeDto employee) {
             this.employee = employee;
             return this;
         }

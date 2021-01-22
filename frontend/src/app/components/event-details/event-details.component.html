@@ -60,8 +60,8 @@
                   class="col-2 text-right">
                   <ng-container *ngFor="let acceptedEmployee of task.employees">
                     <a *ngIf="acceptedEmployee.accepted"
-                       [routerLink]="['/employee', acceptedEmployee.employee.simpleProfileDto.id, 'details']">
-                      {{acceptedEmployee.employee.simpleProfileDto.firstName}} {{acceptedEmployee.employee.simpleProfileDto.lastName}}
+                       [routerLink]="['/employee', acceptedEmployee.employee.superSimpleProfileDto.id, 'details']">
+                      {{acceptedEmployee.employee.superSimpleProfileDto.firstName}} {{acceptedEmployee.employee.superSimpleProfileDto.lastName}}
                       <br></a>
                   </ng-container>
                 </td>

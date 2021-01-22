@@ -75,7 +75,7 @@ export class EventDetailsComponent implements OnInit {
     if (this.loggedInEmployee) {
       for (const task of this.eventDetails.tasks) {
         for (const emp of task.employees) {
-          if (emp.employee.simpleProfileDto.email === this.authService.getEmail()) {
+          if (emp.employee.superSimpleProfileDto.email === this.authService.getEmail()) {
             this.applied = true;
             this.appliedStatus = emp.accepted;
             this.appliedTask = task.description;
@@ -185,7 +185,7 @@ export class EventDetailsComponent implements OnInit {
   getStatus(tasks: Task[]) {
     for (const task of tasks) {
       for (const emp of task.employees) {
-        if (emp.employee.simpleProfileDto.email === this.authService.getEmail()) {
+        if (emp.employee.superSimpleProfileDto.email === this.authService.getEmail()) {
           return emp.accepted;
         }
       }
