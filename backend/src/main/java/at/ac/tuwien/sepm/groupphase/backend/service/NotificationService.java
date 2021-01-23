@@ -60,4 +60,6 @@ public interface NotificationService {
      * @param id to delete
      */
     void deleteApplication(Long id, String authorization);
+
+    void deleteEmployeeFromTask(Long taskid, String authorization);
 }

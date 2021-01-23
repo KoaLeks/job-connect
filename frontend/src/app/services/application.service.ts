@@ -38,7 +38,7 @@ export class ApplicationService {
     console.log('DELETE awaiting application');
     return this.httpClient.delete(this.applicationBaseUri + '/' + id);
   }
-
-
-
+  deleteJob(id: number) {
+    return this.httpClient.delete(this.applicationBaseUri + '/task/' + id);
+  }
 }

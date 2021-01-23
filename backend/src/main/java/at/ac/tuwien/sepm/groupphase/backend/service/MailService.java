@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.groupphase.backend.service;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ContactMessage;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Employee;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Task;
 
 import java.util.List;
 import java.util.Set;
@@ -46,4 +47,6 @@ public interface MailService {
      * @param contactMessage contains id of the receiver, subject and message of mail
      */
     void sendContactMail(ContactMessage contactMessage);
+
+    void sendJobTerminationMail(Task task);
 }

@@ -5,9 +5,7 @@ import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.Employee_TasksRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.NotificationRepository;
-import at.ac.tuwien.sepm.groupphase.backend.service.NotificationService;
-import at.ac.tuwien.sepm.groupphase.backend.service.ProfileService;
-import at.ac.tuwien.sepm.groupphase.backend.service.TokenService;
+import at.ac.tuwien.sepm.groupphase.backend.service.*;
 import at.ac.tuwien.sepm.groupphase.backend.util.NotificationType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,14 +28,19 @@ public class NotificationServiceImpl implements NotificationService {
     private final Employee_TasksRepository employee_tasksRepository;
     private final TokenService tokenService;
     private final ProfileService profileService;
+    private final MailService mailService;
+    private final TaskService taskService;
 
     @Autowired
     public NotificationServiceImpl(NotificationRepository notificationRepository, TokenService tokenService,
-                                   ProfileService profileService, Employee_TasksRepository employee_tasksRepository) {
+                                   ProfileService profileService, MailService mailService, TaskService taskService,
+                                   Employee_TasksRepository employee_tasksRepository) {
         this.notificationRepository = notificationRepository;
         this.tokenService = tokenService;
         this.profileService = profileService;
         this.employee_tasksRepository = employee_tasksRepository;
+        this.mailService = mailService;
+        this.taskService = taskService;
     }
 
     @Override
@@ -126,4 +129,16 @@ public class NotificationServiceImpl implements NotificationService {
             employee_tasksRepository.deleteEmployee_TaskByEmployee_Profile_Email_AndTask_Id(mail, taskId);
         }
     }
+    @Override
+    @Transactional
+    public void deleteEmployeeFromTask(Long taskid, String authorization) {
+        LOGGER.debug("Delete job with id: {}", taskid);
+        String mail = tokenService.getEmailFromHeader(authorization);
+        employee_tasksRepository.deleteEmployee_TaskByEmployee_Profile_Email_AndTask_Id(mail, taskid);
+        notificationRepository.deleteNotificationByTask_IdAndTypeAndRecipient_Email(taskid, NotificationType.EVENT_ACCEPTED.name(), mail);
+
+        Task task = this.taskService.findOneById(taskid);
+        this.mailService.sendJobTerminationMail(task);
+    }
 }
+

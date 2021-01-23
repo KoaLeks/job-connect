@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.repository;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Notification;
+import at.ac.tuwien.sepm.groupphase.backend.util.NotificationType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +16,5 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     Notification findFirstByEvent_IdAndSender_Id(Long eventId, Long senderId);
     void deleteNotificationsByEvent_Employer_Profile_Email(String email);
     void deleteNotificationsByRecipient_EmailEqualsOrSender_EmailEquals(String email, String sameEmail);
+    void deleteNotificationByTask_IdAndTypeAndRecipient_Email(Long taskId, String notificationType, String recipientMail);
 }
