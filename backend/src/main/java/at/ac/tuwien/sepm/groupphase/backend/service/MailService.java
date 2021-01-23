@@ -48,5 +48,10 @@ public interface MailService {
      */
     void sendContactMail(ContactMessage contactMessage);
 
+    /**
+     * Sends an e-mail to employer from given task informing them that assigned employee quit
+     *
+     * @param task task which employee quit and is now available again
+     */
     void sendJobTerminationMail(Task task);
 }

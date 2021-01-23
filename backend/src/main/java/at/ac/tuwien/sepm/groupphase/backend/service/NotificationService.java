@@ -61,5 +61,11 @@ public interface NotificationService {
      */
     void deleteApplication(Long id, String authorization);
 
-    void deleteEmployeeFromTask(Long taskid, String authorization);
+    /**
+     * Delete an employee from assigned task
+     *
+     * @param taskId task that employee quit
+     * @param authorization token to identify logged in user (employee)
+     */
+    void deleteEmployeeFromTask(Long taskId, String authorization);
 }

@@ -2,8 +2,8 @@ package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
+import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.Employee_TasksRepository;
-import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.NotificationRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.*;
 import at.ac.tuwien.sepm.groupphase.backend.util.NotificationType;
@@ -15,7 +15,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.lang.invoke.MethodHandles;
-import java.util.HashSet;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 
@@ -131,14 +132,23 @@ public class NotificationServiceImpl implements NotificationService {
     }
     @Override
     @Transactional
-    public void deleteEmployeeFromTask(Long taskid, String authorization) {
-        LOGGER.debug("Delete job with id: {}", taskid);
-        String mail = tokenService.getEmailFromHeader(authorization);
-        employee_tasksRepository.deleteEmployee_TaskByEmployee_Profile_Email_AndTask_Id(mail, taskid);
-        notificationRepository.deleteNotificationByTask_IdAndTypeAndRecipient_Email(taskid, NotificationType.EVENT_ACCEPTED.name(), mail);
+    public void deleteEmployeeFromTask(Long taskId, String authorization) {
+        LOGGER.debug("Delete employee_task entry with task id{}", taskId);
+        Task task = this.taskService.findOneById(taskId);
+        Event event = task.getEvent();
+        LocalDateTime latestDateTime = event.getStart().minus(Duration.ofDays(3));
+        LocalDateTime currDate = LocalDateTime.now();
+        if (currDate.isAfter(latestDateTime)) {
+            throw new ValidationException("Kündigung ist nur bis zu drei Tage vor Eventbeginn möglich.");
+        }
+        else {
+            String mail = tokenService.getEmailFromHeader(authorization);
+            employee_tasksRepository.deleteEmployee_TaskByEmployee_Profile_Email_AndTask_Id(mail, taskId);
+            notificationRepository.deleteNotificationByTask_IdAndTypeAndRecipient_Email(taskId, NotificationType.EVENT_ACCEPTED.name(), mail);
 
-        Task task = this.taskService.findOneById(taskid);
-        this.mailService.sendJobTerminationMail(task);
+            this.mailService.sendJobTerminationMail(task);
+        }
+
     }
 }
 
