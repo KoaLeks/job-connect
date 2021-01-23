@@ -20,6 +20,7 @@ import {EditEmployee} from '../../dtos/edit-employee';
 export class EventOverviewComponent implements OnInit {
   events: DetailedEvent[] = [];
   eventSearchForm;
+  countEvents: DetailedEvent[] = [];
 
   interestAreas: InterestArea[];
   employers: SimpleEmployer[];
@@ -107,6 +108,12 @@ export class EventOverviewComponent implements OnInit {
           this.eventService.searchEvent(event).subscribe(
             (events: DetailedEvent[]) => {
               this.events = events;
+              this.countEvents = [];
+              for (const e of events) {
+                if (this.checkDateInFuture(e.start)) {
+                  this.countEvents.push(e);
+                }
+              }
               this.sortEventsByDate();
               this.search = true;
               this.employerEvents = [];
@@ -130,6 +137,12 @@ export class EventOverviewComponent implements OnInit {
       this.eventService.searchEvent(event).subscribe(
         (events: DetailedEvent[]) => {
           this.events = events;
+          this.countEvents = [];
+          for (const e of events) {
+            if (this.checkDateInFuture(e.start)) {
+              this.countEvents.push(e);
+            }
+          }
           this.sortEventsByDate();
           this.search = true;
           this.employerEvents = [];
