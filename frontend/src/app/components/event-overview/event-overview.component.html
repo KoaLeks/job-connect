@@ -4,7 +4,6 @@
     Neues Event
   </button>
 </div>
-
 <form [formGroup]="eventSearchForm" class="event-search-form mb-5" (ngSubmit)="searchEvent(eventSearchForm.value)">
   <div class="form-row align-items-end">
     <div class="form-group mb-0 col-md-8">
@@ -98,9 +97,9 @@
     </div>
   </div>
 </form>
-<div class="search-result-feedback" role="alert" *ngIf="search && !(this.events.length === 0) &&
+<div class="search-result-feedback" role="alert" *ngIf="search && !(countEvents.length === 0) &&
 (loggedInEmployee || notLoggedIn)">
-  {{this.events.length}} Event(s) gefunden!
+  {{countEvents.length}} Event(s) gefunden!
 </div>
 <div class="search-result-feedback" role="alert" *ngIf="search && !(this.employerEvents.length === 0) &&
 (loggedInEmployer)">

@@ -14,6 +14,7 @@ import {EmployeeService} from '../../services/employee.service';
 })
 export class EventAppliedComponent implements OnInit {
   events: DetailedEvent[] = [];
+  futureEvents: DetailedEvent[] = [];
   error: boolean = false;
   errorMessage: string = '';
 
@@ -67,6 +68,11 @@ export class EventAppliedComponent implements OnInit {
     this.applicationService.getAppliedEvents().subscribe(
       (events: DetailedEvent[]) => {
         this.events = events;
+        for (const event of events) {
+          if (this.checkDateInFuture(event.start)) {
+            this.futureEvents.push(event);
+          }
+        }
       }
     );
   }
