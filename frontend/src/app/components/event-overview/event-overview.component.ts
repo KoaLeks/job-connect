@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {EventService} from '../../services/event.service';
 import {AuthService} from '../../services/auth.service';
 import {DetailedEvent} from '../../dtos/detailed-event';
@@ -19,13 +19,25 @@ import {EditEmployee} from '../../dtos/edit-employee';
 })
 export class EventOverviewComponent implements OnInit {
   events: DetailedEvent[] = [];
+
+  // pagination
+  currentPage = 1;
+  pageSize = 5;
+  uniqueDateArrayPage: String[] = [];
+  // for non employer
+  collectionSize;
+  pageEvents: DetailedEvent[];
+  // for employer
+  collectionSizeEmployer;
+  pageEventsEmployer: DetailedEvent[];
+
   eventSearchForm;
 
   interestAreas: InterestArea[];
   employers: SimpleEmployer[];
 
   states: string[] = ['Burgenland', 'Kärnten', 'Niederösterreich', 'Oberösterreich', 'Salzburg', 'Steiermark', 'Tirol', 'Vorarlberg',
-                      'Wien'];
+    'Wien'];
   paymentValue: number = 0;
   search: boolean = false;
   error: boolean = false;
@@ -68,6 +80,7 @@ export class EventOverviewComponent implements OnInit {
       this.notLoggedIn = true;
     }
   }
+
   private loadResources() {
     this.eventService.getEvents().subscribe(
       (events: DetailedEvent[]) => {
@@ -99,7 +112,9 @@ export class EventOverviewComponent implements OnInit {
       }
     );
   }
+
   searchEvent(event: SearchEvent) {
+    this.currentPage = 1;
     if (event.userId) {
       this.employeeService.getEmployeeByEmail().subscribe(
         (profile: EditEmployee) => {
@@ -176,6 +191,7 @@ export class EventOverviewComponent implements OnInit {
       this.errorMessage = error.error;
     }
   }
+
   getSliderValue(event) {
     this.paymentValue = event.target.value;
   }
@@ -206,7 +222,7 @@ export class EventOverviewComponent implements OnInit {
 
     for (const date of dateArrayEmployer) {
       if (this.uniqueDateArrayEmployer.indexOf(date) === -1) {
-          this.uniqueDateArrayEmployer.push(date);
+        this.uniqueDateArrayEmployer.push(date);
       }
     }
 
@@ -214,11 +230,13 @@ export class EventOverviewComponent implements OnInit {
     this.employerEvents.sort((a, b) => (a.sortHelper > b.sortHelper ? 1 : -1));
     this.uniqueDateArray.sort((a, b) => (a > b ? 1 : -1));
     this.uniqueDateArrayEmployer.sort((a, b) => (a > b ? 1 : -1));
+    this.refreshEvents();
   }
 
   checkDateInFuture(date) {
     return new Date(date) >= new Date();
   }
+
   resetForm() {
     this.eventSearchForm = this.formBuilder.group(
       {
@@ -234,5 +252,38 @@ export class EventOverviewComponent implements OnInit {
       }
     );
     this.paymentValue = 0;
+  }
+
+  /**
+   * Changes the currently shown events and dates (pagination)
+   */
+  refreshEvents() {
+    const uniqueDateSet = new Set<String>();
+
+    this.collectionSize = this.events.length;
+    this.collectionSizeEmployer = this.employerEvents.length;
+    this.uniqueDateArrayPage = [];
+    if (this.loggedInEmployer) {
+      this.pageEventsEmployer = this.employerEvents
+        .map((event, i) => ({id: i + 1, ...event}))
+        .slice((this.currentPage - 1) * this.pageSize, (this.currentPage - 1) * this.pageSize + this.pageSize);
+
+      for (const event of this.pageEventsEmployer) {
+        if (new Date(event.start) > new Date()) {
+          uniqueDateSet.add(event.start.split('T')[0]);
+        }
+      }
+    } else {
+      this.pageEvents = this.events
+        .map((event, i) => ({id: i + 1, ...event}))
+        .slice((this.currentPage - 1) * this.pageSize, (this.currentPage - 1) * this.pageSize + this.pageSize);
+
+      for (const event of this.pageEvents) {
+        if (new Date(event.start) > new Date()) {
+          uniqueDateSet.add(event.start.split('T')[0]);
+        }
+      }
+    }
+    this.uniqueDateArrayPage = Array.from(uniqueDateSet);
   }
 }
