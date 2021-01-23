@@ -12,10 +12,16 @@ public interface EmployerService {
      * Creates an employer with the given details
      *
      * @param employer to create
-     * @return the ID of the created employer
+     * @return the id of the created employer
      */
     Long createEmployer(Employer employer);
 
+    /**
+     * Finds an employer by his id
+     *
+     * @param id of the employer to find
+     * @return the employer
+     */
     Employer findOneById(Long id);
 
     /**
@@ -30,10 +36,16 @@ public interface EmployerService {
      * Update an employer
      *
      * @param employer to update
-     * @return the ID of the updated employer
+     * @return the id of the updated employer
      */
     Long updateEmployer(Employer employer);
 
+    /**
+     * Finds the employer/creator of a given event
+     *
+     * @param event used to find the employer
+     * @return the employer
+     */
     Employer findByEvent(Event event);
 
     /**

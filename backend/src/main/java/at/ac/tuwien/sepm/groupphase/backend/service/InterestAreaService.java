@@ -15,15 +15,16 @@ public interface InterestAreaService {
     InterestArea saveInterestArea(InterestArea interestArea);
 
     /**
-     * Find all InterestAreas.
+     * Finds all InterestAreas.
      *
      * @return list of all InterestAreas.
      */
     List<InterestArea> findAll();
 
     /**
-     * Find a InterestArea by id.
+     * Finds an InterestArea by id.
      *
+     * @param id of the InterestArea to find
      * @return InterestArea with id.
      */
     InterestArea findById(Long id);

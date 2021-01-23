@@ -19,29 +19,41 @@ public interface EventService {
 
     /**
      * Finds events with given search criteria.
+     *
      * @param searchEventDto given search criteria dto
-     * @return  list of found events or if given criteria is empty all events
+     * @return list of found events or if given criteria is empty all events
      */
     List<Event> findAll(SearchEventDto searchEventDto);
 
 
     /**
-     * Find event by ID
+     * Finds event by id
+     *
+     * @param id of event to find
      * @return event with given id
      */
     Event findById(Long id);
 
     /**
-     * Find event by task
+     * Finds event by task
+     *
+     * @param task specific to event
      * @return event with given task
      */
     Event findByTask(Task task);
 
     /**
      * Delete event by id
+     *
+     * @param id of event to delete
      */
     void deleteEventById(Long id);
 
-
+    /**
+     * Finds all events the employee with given id has applied to
+     *
+     * @param id of the employee profile
+     * @return List of all events the employee applied to
+     */
     List<Event> findAllAppliedEvents(Long id);
 }

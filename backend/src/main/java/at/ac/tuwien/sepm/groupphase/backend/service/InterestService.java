@@ -7,7 +7,7 @@ import java.util.List;
 public interface InterestService {
 
     /**
-     * Find all Interests.
+     * Finds all Interests.
      *
      * @return list of all Interests.
      */
@@ -15,6 +15,8 @@ public interface InterestService {
 
     /**
      * deletes an Interest with given id.
+     *
+     * @param id of the Interest to delete
      */
     void deleteById(Long id);
 

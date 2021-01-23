@@ -164,7 +164,7 @@ public class EventEndpointTest implements TestData {
         String body = objectMapper.writeValueAsString(eventMapper.eventToEventInquiryDto(event));
 
         MvcResult mvcResult = this.mockMvc.perform(post(EVENTS_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES))
             .contentType(MediaType.APPLICATION_JSON)
             .content(body))
             .andDo(print())
@@ -200,7 +200,6 @@ public class EventEndpointTest implements TestData {
             () -> {
                 //Reads the errors from the body
                 String content = response.getContentAsString();
-                content = content.substring(content.indexOf('[') + 1, content.indexOf(']'));
                 String[] errors = content.split(",");
                 assertEquals(8, errors.length);
             }
@@ -276,7 +275,7 @@ public class EventEndpointTest implements TestData {
         assertEquals(taskRepository.count(), 1);
 
         MvcResult mvcResult = this.mockMvc.perform(delete(EVENTS_BASE_URI + "/" + id)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES))
             .contentType(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andReturn();
@@ -284,9 +283,9 @@ public class EventEndpointTest implements TestData {
 
         //checks if the event and all the related data has been deleted
         assertEquals(HttpStatus.OK.value(), response.getStatus());
-        assertEquals(eventRepository.count(), 0);
-        assertEquals(addressRepository.count(), 0);
-        assertEquals(taskRepository.count(), 0);
+        assertEquals(0, eventRepository.count());
+        assertEquals(0, addressRepository.count());
+        assertEquals(0, taskRepository.count());
     }
 
     @Test
