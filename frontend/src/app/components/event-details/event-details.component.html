@@ -71,7 +71,8 @@
           </table>
         </div>
         <div class="col-md-4 justify-content-end text-md-center">
-          <img *ngIf="hasPicture" class="rounded-circle" src="{{picture}}" width="100em" height="100em">
+          <img *ngIf="hasPicture && eventDetails.employer.companyName !== 'Privatperson'" class="" src="{{picture}}" width="200em">
+          <img *ngIf="hasPicture && eventDetails.employer.companyName === 'Privatperson'" class="rounded-circle" src="{{picture}}" width="200em">
           <svg *ngIf="!hasPicture" width="6em" height="6em" viewBox="0 0 16 16" style="color: #465c69;"
                class="bi bi-person-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
             <path
