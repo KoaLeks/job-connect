@@ -3,6 +3,14 @@ import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
 import {EmployeeService} from '../../services/employee.service';
 import {SimpleEmployee} from '../../dtos/simple-employee';
+import {InterestArea} from '../../dtos/interestArea';
+import {InterestService} from '../../services/interest.service';
+import {InterestAreaService} from '../../services/interestArea.service';
+import {FormBuilder} from '@angular/forms';
+import { IDropdownSettings } from 'ng-multiselect-dropdown';
+import {EventService} from '../../services/event.service';
+import {DetailedEvent} from '../../dtos/detailed-event';
+import {FilterEmployees} from '../../dtos/filter-employees';
 
 @Component({
   selector: 'app-employee-overview',
@@ -13,18 +21,83 @@ export class EmployeeOverviewComponent implements OnInit {
   employees: SimpleEmployee[] = [];
   error: boolean = false;
   errorMessage: string = '';
+  employeeFilterForm;
+  employeeSmartFilterForm;
 
   // Pagination
   page = 1;
   pageSize = 10;
   collectionSize;
   pageEmployees: SimpleEmployee[];
+  interestAreas: InterestArea[];
+  smartFilter: boolean;
+  myEvents: DetailedEvent[];
 
-  constructor(private authService: AuthService, public router: Router, private employeeService: EmployeeService) {
+  selectedItems = [];
+  dropdownSettingsInterests: IDropdownSettings;
+  dropdownSettingsEvents: IDropdownSettings;
+
+  constructor(private authService: AuthService, public router: Router,
+              private employeeService: EmployeeService,
+              private interestAreaService: InterestAreaService,
+              private formBuilder: FormBuilder,
+              private eventService: EventService) {
+    this.employeeFilterForm = this.formBuilder.group(
+      {
+        interests: '',
+        date: '',
+        time: ''
+      }
+    );
+
+    this.employeeSmartFilterForm = this.formBuilder.group(
+      {
+        events: ''
+      }
+    );
   }
 
   ngOnInit(): void {
+    this.smartFilter = false;
     this.loadEmployees();
+    this.loadInterestAreas();
+    this.loadMyEvents();
+
+    this.dropdownSettingsInterests = {
+      singleSelection: false,
+      idField: 'id',
+      textField: 'description',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      itemsShowLimit: 4,
+      allowSearchFilter: true
+    };
+
+    this.dropdownSettingsEvents = {
+      singleSelection: false,
+      idField: 'id',
+      textField: 'title',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      itemsShowLimit: 3,
+      allowSearchFilter: true
+    };
+  }
+
+  private loadMyEvents() {
+    this.eventService.getEventsOfTokenSub().subscribe(
+      (events: DetailedEvent[]) => {
+        this.myEvents = events;
+      }
+    );
+  }
+
+  private loadInterestAreas() {
+    this.interestAreaService.getInterestAreas().subscribe(
+      (interests: InterestArea[]) => {
+        this.interestAreas = interests;
+      }
+    );
   }
 
   private loadEmployees() {
@@ -64,5 +137,26 @@ export class EmployeeOverviewComponent implements OnInit {
       }
     }
     return Array.from(interestAreasDist);
+  }
+
+  private filterEmployees(filterEmployees: FilterEmployees) {
+    this.employeeService.filterEmployees(filterEmployees).subscribe(
+      (employees: SimpleEmployee[]) => {
+        console.log(employees);
+        this.employees = employees;
+        this.refreshEmployees();
+      }
+    );
+  }
+
+  changeFilterMode() {
+    if (this.myEvents === null || this.myEvents === undefined){
+      this.eventService.getEventsOfTokenSub().subscribe(
+        (events: DetailedEvent[]) => {
+          this.myEvents = events;
+        }
+      );
+    }
+    this.smartFilter = !this.smartFilter;
   }
 }

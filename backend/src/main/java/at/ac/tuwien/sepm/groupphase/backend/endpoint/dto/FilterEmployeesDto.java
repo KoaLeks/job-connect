@@ -1,10 +1,14 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDateTime;
 import java.util.Set;
 
 public class FilterEmployeesDto {
     private Set<Long> interestAreas;
+
+    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm")
     private Set<LocalDateTime> startTimes;
 
     public Set<Long> getInterestAreas() {

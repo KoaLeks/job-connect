@@ -27,9 +27,9 @@ export class ErrorInterceptor implements HttpInterceptor {
           }
         },
       (error) => {
-          console.log(error);
+          console.log(error.error);
           if (error.error === 'Bad credentials') { return throwError(error.message); }
-          if (error.error.contains('Diese Bewerbung wurde leider bereits')) { return; }
+          //if (error.error.contains('Diese Bewerbung wurde leider bereits')) { return; }
         this.alertService.error(error.error, {autoClose: false, keepAfterRouteChanges: true});
         return throwError(error.message);
         }

@@ -32,6 +32,7 @@ import { EmployerDetailsComponent } from './components/employer-details/employer
 import { EventAppliedComponent } from './components/event-applied/event-applied.component';
 import { ExpiredEventsComponent } from './components/expired-events/expired-events.component';
 import { PastAppliedEventsComponent } from './components/past-applied-events/past-applied-events.component';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 @NgModule({
   declarations: [
@@ -61,13 +62,14 @@ import { PastAppliedEventsComponent } from './components/past-applied-events/pas
     PastAppliedEventsComponent,
   ],
   imports: [
+    NgMultiSelectDropDownModule.forRoot(),
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
     NgbModule,
     FormsModule,
-    AlertModule
+    AlertModule,
   ],
   providers:
     [httpInterceptorProviders, UpdateHeaderService],
