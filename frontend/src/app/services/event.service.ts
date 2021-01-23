@@ -5,6 +5,7 @@ import {Globals} from '../global/globals';
 import {Event} from '../dtos/event';
 import {DetailedEvent} from '../dtos/detailed-event';
 import {SearchEvent} from '../dtos/search-event';
+import {EventOverview} from '../dtos/event-overview';
 
 @Injectable({
   providedIn: 'root'
@@ -37,16 +38,16 @@ export class EventService {
   /**
    * Gets all events from the backend
    */
-  getEvents(): Observable<DetailedEvent[]> {
+  getEvents(): Observable<EventOverview[]> {
     console.log('Get all events');
-    return this.httpClient.get<DetailedEvent[]>(this.eventBaseUri);
+    return this.httpClient.get<EventOverview[]>(this.eventBaseUri);
   }
 
   /**
    * searches events by given criteria
    * @param event search criterias for events
    */
-  searchEvent(event: SearchEvent): Observable<DetailedEvent[]> {
+  searchEvent(event: SearchEvent): Observable<EventOverview[]> {
     console.log('Search events for: ' + JSON.stringify(event));
     const params = new HttpParams()
       .set('title', event.title)
@@ -58,7 +59,7 @@ export class EventService {
       .set('state', event.state)
       .set('onlyAvailableTasks', String(event.onlyAvailableTasks))
       .set('userId', event.userId === false ? String(0) : String(event.userId));
-    return this.httpClient.get<DetailedEvent[]>(this.eventBaseUri, {params});
+    return this.httpClient.get<EventOverview[]>(this.eventBaseUri, {params});
   }
 
   /**

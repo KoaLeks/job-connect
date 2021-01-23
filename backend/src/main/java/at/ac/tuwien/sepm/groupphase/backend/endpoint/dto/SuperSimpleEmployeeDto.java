@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 public class SuperSimpleEmployeeDto {
+
     private Long id;
     private SuperSimpleProfileDto superSimpleProfileDto;
     private Set<InterestDto> interestDtos;

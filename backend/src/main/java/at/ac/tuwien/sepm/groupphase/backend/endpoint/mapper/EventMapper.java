@@ -19,6 +19,9 @@ public interface EventMapper {
     @IterableMapping(qualifiedByName = "detailedEvent")
     List<DetailedEventDto> eventsToDetailedEventDtos(List<Event> events);
 
+    @IterableMapping(qualifiedByName = "eventOverview")
+    List<EventOverviewDto> eventsToEventOverviewDtos(List<Event> events);
+
     @Mapping(source = "employer.id", target = "employer")
     Event eventInquiryDtoToEvent(EventInquiryDto eventInquiryDto);
 
@@ -29,6 +32,9 @@ public interface EventMapper {
 
     @Named("detailedEvent")
     DetailedEventDto eventToDetailedEventDto(Event event);
+
+    @Named("eventOverview")
+    EventOverviewDto eventToEventOverviewDto(Event event);
 
     @Mapping(source = "employee_tasks.employee", target = "employee")
     @Mapping(source = "employee_tasks.task.id", target = "taskId")

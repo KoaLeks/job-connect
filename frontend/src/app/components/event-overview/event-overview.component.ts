@@ -11,6 +11,8 @@ import {EmployerService} from '../../services/employer.service';
 import {SimpleEmployer} from '../../dtos/simple-employer';
 import {EmployeeService} from '../../services/employee.service';
 import {EditEmployee} from '../../dtos/edit-employee';
+import {SuperSimpleEmployer} from '../../dtos/super-simple-employer';
+import {EventOverview} from '../../dtos/event-overview';
 
 @Component({
   selector: 'app-event-overview',
@@ -18,11 +20,11 @@ import {EditEmployee} from '../../dtos/edit-employee';
   styleUrls: ['./event-overview.component.scss']
 })
 export class EventOverviewComponent implements OnInit {
-  events: DetailedEvent[] = [];
+  events: EventOverview[] = [];
   eventSearchForm;
 
   interestAreas: InterestArea[];
-  employers: SimpleEmployer[];
+  employers: SuperSimpleEmployer[];
 
   states: string[] = ['Burgenland', 'Kärnten', 'Niederösterreich', 'Oberösterreich', 'Salzburg', 'Steiermark', 'Tirol', 'Vorarlberg',
                       'Wien'];
@@ -33,7 +35,7 @@ export class EventOverviewComponent implements OnInit {
   loggedInEmployee: boolean;
   loggedInEmployer: boolean;
   notLoggedIn: boolean;
-  employerEvents: DetailedEvent[] = [];
+  employerEvents: EventOverview[] = [];
   uniqueDateArray: string[] = [];
   uniqueDateArrayEmployer: string[] = [];
 
@@ -70,10 +72,10 @@ export class EventOverviewComponent implements OnInit {
   }
   private loadResources() {
     this.eventService.getEvents().subscribe(
-      (events: DetailedEvent[]) => {
+      (events: EventOverview[]) => {
         this.events = events;
         for (const event of events) {
-          if (this.loggedInEmployer && this.authService.getTokenIdentifier() === event.employer.simpleProfileDto.email
+          if (this.loggedInEmployer && this.authService.getTokenIdentifier() === event.employer.superSimpleProfileDto.email
             && this.checkDateInFuture(event.end)) {
             this.employerEvents.push(event);
           }
@@ -92,7 +94,7 @@ export class EventOverviewComponent implements OnInit {
       }
     );
     this.employerService.getEmployers().subscribe(
-      (employers: SimpleEmployer[]) => {
+      (employers: SuperSimpleEmployer[]) => {
         this.employers = employers;
       }, error => {
         this.defaultServiceErrorHandling(error);
@@ -105,13 +107,13 @@ export class EventOverviewComponent implements OnInit {
         (profile: EditEmployee) => {
           event.userId = profile.profileDto.id;
           this.eventService.searchEvent(event).subscribe(
-            (events: DetailedEvent[]) => {
+            (events: EventOverview[]) => {
               this.events = events;
               this.sortEventsByDate();
               this.search = true;
               this.employerEvents = [];
               for (const e of this.events) {
-                if (this.loggedInEmployer && this.authService.getTokenIdentifier() === e.employer.simpleProfileDto.email
+                if (this.loggedInEmployer && this.authService.getTokenIdentifier() === e.employer.superSimpleProfileDto.email
                   && this.checkDateInFuture(e.end)) {
                   this.employerEvents.push(e);
                 }
@@ -128,13 +130,13 @@ export class EventOverviewComponent implements OnInit {
       );
     } else {
       this.eventService.searchEvent(event).subscribe(
-        (events: DetailedEvent[]) => {
+        (events: EventOverview[]) => {
           this.events = events;
           this.sortEventsByDate();
           this.search = true;
           this.employerEvents = [];
           for (const e of this.events) {
-            if (this.loggedInEmployer && this.authService.getTokenIdentifier() === e.employer.simpleProfileDto.email
+            if (this.loggedInEmployer && this.authService.getTokenIdentifier() === e.employer.superSimpleProfileDto.email
               && this.checkDateInFuture(e.end)) {
               this.employerEvents.push(e);
             }

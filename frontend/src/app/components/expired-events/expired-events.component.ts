@@ -3,6 +3,8 @@ import {DetailedEvent} from '../../dtos/detailed-event';
 import {AuthService} from '../../services/auth.service';
 import {EventService} from '../../services/event.service';
 import {Task} from '../../dtos/task';
+import {Event} from '../../dtos/event';
+import {EventOverview} from '../../dtos/event-overview';
 
 @Component({
   selector: 'app-expired-events',
@@ -13,7 +15,7 @@ export class ExpiredEventsComponent implements OnInit {
   error: boolean = false;
   errorMessage: string = '';
   loggedInEmployer: boolean;
-  employerEvents: DetailedEvent[] = [];
+  employerEvents: EventOverview[] = [];
   uniqueDateArrayEmployer: string[] = [];
 
   constructor(public authService: AuthService, private eventService: EventService) {
@@ -28,9 +30,9 @@ export class ExpiredEventsComponent implements OnInit {
 
   private loadEvents() {
     this.eventService.getEvents().subscribe(
-      (events: DetailedEvent[]) => {
+      (events: EventOverview[]) => {
         for (const event of events) {
-          if (this.loggedInEmployer && this.authService.getTokenIdentifier() === event.employer.simpleProfileDto.email
+          if (this.loggedInEmployer && this.authService.getTokenIdentifier() === event.employer.superSimpleProfileDto.email
             && !this.checkDateInFuture(event.end)) {
             this.employerEvents.push(event);
           }

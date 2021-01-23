@@ -140,9 +140,9 @@ public class ProfileEndpoint {
     @GetMapping(value = "/employers")
     @ApiOperation(value = "Get list of all employers", authorizations = {@Authorization(value = "apiKey")})
     @CrossOrigin(origins = "http://localhost:4200")
-    public List<SimpleEmployerDto> getAllEmployers() {
+    public List<SuperSimpleEmployerDto> getAllEmployers() {
         LOGGER.info("GET api/v1/profiles/employers");
-        return this.employerMapper.employersToSimpleEmployerDtos(employerService.findAll());
+        return this.employerMapper.employersToSuperSimpleEmployerDtos(employerService.findAll());
     }
 
     @PutMapping(value = "/updatePassword")

@@ -1,10 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedEventDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EmployerDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventInquiryDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.ProfileDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SearchEventDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.*;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Employer;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
@@ -72,9 +68,9 @@ public class EventEndpoint {
     @CrossOrigin(origins = "http://localhost:4200")
     @Transactional
     @ResponseBody
-    public List<DetailedEventDto> search(SearchEventDto searchEventDto) {
+    public List<EventOverviewDto> search(SearchEventDto searchEventDto) {
         LOGGER.info("GET /api/v1/events");
-        return eventMapper.eventsToDetailedEventDtos(eventService.findAll(searchEventDto));
+        return eventMapper.eventsToEventOverviewDtos(eventService.findAll(searchEventDto));
     }
 
     @DeleteMapping(value = "/{id}")

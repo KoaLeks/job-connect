@@ -95,4 +95,27 @@ public class EmployerMapper {
         }
         return simpleEmployerList;
     }
+
+    public List<SuperSimpleEmployerDto> employersToSuperSimpleEmployerDtos(List<Employer> employers){
+        List<SuperSimpleEmployerDto> simpleEmployerList = new ArrayList<>();
+        for (Employer employer:
+            employers) {
+            simpleEmployerList.add(employerToSuperSimpleEmployerDto(employer));
+        }
+        return simpleEmployerList;
+    }
+
+    public SuperSimpleEmployerDto employerToSuperSimpleEmployerDto(Employer employer) {
+        if (employer != null) {
+            var empDto_builder = SuperSimpleEmployerDto.SuperSimpleEmployerDtoBuilder.aSuperSimpleEmployerDto();
+            SuperSimpleProfileDto profile = profileMapper.profileToSuperSimpleProfileDto(employer.getProfile());
+            empDto_builder
+                .withSuperSimpleProfileDto(profile)
+                .withCompanyName(employer.getCompanyName())
+                .withCompanyDescription(employer.getDescription());
+            return empDto_builder.build();
+        } else {
+            return null;
+        }
+    }
 }

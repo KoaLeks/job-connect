@@ -13,8 +13,6 @@ public class SimpleEmployeeDto {
     private Gender gender;
     private LocalDateTime birthDate;
 
-
-
     public Long getId() {
         return id;
     }
