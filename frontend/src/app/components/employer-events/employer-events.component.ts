@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {Task} from '../../dtos/task';
-import {DetailedEvent} from '../../dtos/detailed-event';
 import {EventService} from '../../services/event.service';
 import {ActivatedRoute} from '@angular/router';
 import {EmployerService} from '../../services/employer.service';
 import {SimpleEmployer} from '../../dtos/simple-employer';
+import {EventOverview} from '../../dtos/event-overview';
 
 @Component({
   selector: 'app-employer-events',
@@ -13,7 +13,7 @@ import {SimpleEmployer} from '../../dtos/simple-employer';
 })
 export class EmployerEventsComponent implements OnInit {
   uniqueDateArray: string[] = [];
-  events: DetailedEvent[] = [];
+  events: EventOverview[] = [];
   employerId; // is a String
   employer: SimpleEmployer;
 
@@ -27,9 +27,9 @@ export class EmployerEventsComponent implements OnInit {
         this.employer = employer;
       });
     this.eventService.getEvents().subscribe(
-      (events: DetailedEvent[]) => {
+      (events: EventOverview[]) => {
         for (const e of events) {
-          if ((e.employer.simpleProfileDto.id).toString() === this.employerId) {
+          if ((e.employer.superSimpleProfileDto.id).toString() === this.employerId) {
             this.events.push(e);
           }
         }

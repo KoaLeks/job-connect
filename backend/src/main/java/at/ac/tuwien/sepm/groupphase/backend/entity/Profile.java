@@ -191,7 +191,7 @@ public class Profile {
             return this;
         }
 
-        public ProfileBuilder isPicture(Byte[] picture) {
+        public ProfileBuilder withPicture(Byte[] picture) {
             this.picture = picture;
             return this;
         }

@@ -39,10 +39,9 @@
                 *ngIf="loggedInEmployee || notLoggedIn">
           <option value="" class="select-option-none">ArbeitgeberIn auswählen</option>
           <option *ngFor="let employer of employers"
-                  [ngValue]="employer.simpleProfileDto.id">
+                  [ngValue]="employer.superSimpleProfileDto.id">
             <ng-container *ngIf="employer.companyName != 'Privatperson'">{{employer.companyName}}</ng-container>
-            <ng-container
-              *ngIf="employer.companyName == 'Privatperson'">{{employer.simpleProfileDto.firstName}} {{employer.simpleProfileDto.lastName}}</ng-container>
+            <ng-container *ngIf="employer.companyName == 'Privatperson'">{{employer.superSimpleProfileDto.firstName}} {{employer.superSimpleProfileDto.lastName}}</ng-container>
           </option>
         </select>
         <select class="form-control" id="exampleFormControlSelect3" formControlName="employerId"
@@ -128,7 +127,7 @@
         <ng-container *ngFor="let event of pageEvents">
           <ng-container *ngIf="event.start.split('T')[0] === date">
             <div class="list-group mt-3" [routerLink]="['/events', event.id, 'details']"
-                 *ngIf="authService.getTokenIdentifier() === event.employer.simpleProfileDto.email">
+                 *ngIf="authService.getTokenIdentifier() === event.employer.superSimpleProfileDto.email">
               <a class="list-group-item list-group-item-action flex-column align-items-start event-item">
                 <div class="d-flex w-100 justify-content-between">
                   <h4 class="mb-1">
@@ -324,7 +323,7 @@
         <hr>
         <ng-container *ngFor="let event of pageEvents">
           <ng-container *ngIf="event.start.split('T')[0] === date
-              && authService.getTokenIdentifier() === event.employer.simpleProfileDto.email">
+              && authService.getTokenIdentifier() === event.employer.superSimpleProfileDto.email">
             <div class="list-group mt-3" [routerLink]="['/events', event.id, 'details']">
               <a class="list-group-item list-group-item-action flex-column align-items-start event-item">
                 <div class="d-flex w-100 justify-content-between">

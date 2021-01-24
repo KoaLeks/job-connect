@@ -6,6 +6,7 @@ import {ApplicationStatus} from '../../dtos/application-status';
 import {AuthService} from '../../services/auth.service';
 import {NotificationService} from '../../services/notification.service';
 import {NavigationEnd, Router} from '@angular/router';
+import {AlertService} from '../../alert';
 
 @Component({
   selector: 'app-application-list',
@@ -22,14 +23,14 @@ export class ApplicationListComponent implements OnInit {
   hasApplicationsFav: boolean;
 
   constructor(private authService: AuthService, private applicationService: ApplicationService,
-              private notificationService: NotificationService, public router: Router) {
+              private notificationService: NotificationService, public router: Router, public alertService: AlertService) {
   }
 
   ngOnInit(): void {
     this.applicationService.getApplicationsForEvent(this.eventId).subscribe(
       (applications) => {
         // this.applications = applications;
-        console.log(applications);
+        // console.log(applications);
 
         for (let i = 0; i < applications.length; i++) {
           if (applications[i].favorite === true) {
@@ -55,25 +56,33 @@ export class ApplicationListComponent implements OnInit {
     return this.tasks.find(task => task.id === id).description;
   }
 
-  reloadComponent() {
+  reload() {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.router.onSameUrlNavigation = 'reload';
     this.router.navigate(['events', this.eventId, 'details']);
+    this.alertService.success('Erfolgreich', {autoClose: true}) ;
+  }
+
+  async delay() {
+    await new Promise(resolve => setTimeout(() => resolve(), 50)).then(() =>
+      this.reload());
   }
 
   accept(notification: SimpleNotification) {
     const acceptApplication = new ApplicationStatus(notification.taskId, notification.sender.id, notification.id, true);
-    this.applicationService.changeApplicationStatus(acceptApplication).subscribe();
-    this.removeNotification(notification.id);
-    this.reloadComponent();
+    this.applicationService.changeApplicationStatus(acceptApplication).subscribe(
+      () => {
+        this.removeNotification(notification.id);
+        this.delay();
+      }
+    );
   }
 
   decline(notification: SimpleNotification) {
-    console.log(JSON.stringify(notification));
     const declineApplication = new ApplicationStatus(notification.taskId, notification.sender.id, notification.id, false);
     this.applicationService.changeApplicationStatus(declineApplication).subscribe();
     this.removeNotification(notification.id);
-    this.reloadComponent();
+    this.delay();
   }
 
   deleteNotification(id: number) {

@@ -1,9 +1,9 @@
+import {SimpleEmployer} from './simple-employer';
 import {Address} from './address';
 import {Task} from './task';
-import {Employer} from './employer';
 import {SuperSimpleEmployer} from './super-simple-employer';
 
-export class Event {
+export class EventOverview {
   constructor(
     public id: number,
     public start: string,
@@ -12,6 +12,7 @@ export class Event {
     public description: string,
     public employer: SuperSimpleEmployer,
     public address: Address,
-    public tasks: Task[]) {
-  }
+    public tasks: Task[],
+    public sortHelper: number
+  ) {}
 }

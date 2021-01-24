@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Employee;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Employee_Tasks;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Task;
 import at.ac.tuwien.sepm.groupphase.backend.exception.AlreadyHandledException;
+import at.ac.tuwien.sepm.groupphase.backend.exception.NoAvailableSpacesException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.Employee_TasksRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.TaskRepository;
@@ -35,9 +36,12 @@ public class Employee_TasksServiceImpl implements Employee_TasksService {
         Employee_Tasks employee_tasks = new Employee_Tasks();
         employee_tasks.setEmployee(employee);
         employee_tasks.setTask(task);
-        if(employee_tasksRepository.findFirstByEmployeeAndTask(employee, task) == null){
+        if (task.getEmployeeCount() == employee_tasksRepository.findAllByTask_IdAndAcceptedIsTrue(task.getId()).size()) {
+            throw new NoAvailableSpacesException(String.format("Für die Aufgabe \"%s\" sind keine freien Plätze mehr verfügbar.", task.getDescription()));
+        }
+        if (employee_tasksRepository.findFirstByEmployeeAndTask(employee, task) == null) {
             return employee_tasksRepository.save(employee_tasks).getId();
-        }else{
+        } else {
             throw new AlreadyHandledException(String.format("Sie haben sich bereits für die Aufgabe \"%s\" beworben", task.getDescription()));
         }
     }

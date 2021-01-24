@@ -4,6 +4,7 @@ import {Globals} from '../global/globals';
 import {EditEmployer} from '../dtos/edit-employer';
 import {Observable} from 'rxjs';
 import {SimpleEmployer} from '../dtos/simple-employer';
+import {SuperSimpleEmployer} from '../dtos/super-simple-employer';
 
 @Injectable({
   providedIn: 'root'
@@ -35,9 +36,9 @@ export class EmployerService {
   /**
    * Get all employers from backend
    */
-  getEmployers(): Observable<SimpleEmployer[]> {
+  getEmployers(): Observable<SuperSimpleEmployer[]> {
     console.log('Get all employers');
-    return this.httpClient.get<SimpleEmployer[]>(this.employerBaseUri + 's');
+    return this.httpClient.get<SuperSimpleEmployer[]>(this.employerBaseUri + 's');
   }
 
   /**

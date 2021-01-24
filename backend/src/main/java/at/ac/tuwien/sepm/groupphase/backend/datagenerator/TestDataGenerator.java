@@ -1,8 +1,16 @@
 package at.ac.tuwien.sepm.groupphase.backend.datagenerator;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
+import at.ac.tuwien.sepm.groupphase.backend.exception.AlreadyHandledException;
+import at.ac.tuwien.sepm.groupphase.backend.exception.NoAvailableSpacesException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.*;
+import at.ac.tuwien.sepm.groupphase.backend.service.EmployeeService;
+import at.ac.tuwien.sepm.groupphase.backend.service.Employee_TasksService;
 import at.ac.tuwien.sepm.groupphase.backend.util.Gender;
+import at.ac.tuwien.sepm.groupphase.backend.util.NotificationType;
+import com.github.javafaker.Faker;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
@@ -10,10 +18,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.lang.invoke.MethodHandles;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.ZoneId;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Profile("generateData")
 @Component
@@ -66,7 +81,7 @@ public class TestDataGenerator {
 
     String[] names = {
         "Lucy Bauer",
-        "Lukas Müller",
+        "Lukas Mueller",
         "Ella Schwartz",
         "Konstantin Hofer",
         "Amy Gruber",
@@ -97,96 +112,31 @@ public class TestDataGenerator {
         "Felix Maier"
     };
 
+    String[] studium = {
+        "Architektur",
+        "Wirtschaftinformatik",
+        "Medien Informatik und Visual Computing",
+        "Software Engineering",
+        "Embedded Systems",
+        "Elektrotechnik und Informationstechnik",
+        "Umweltingenieurwesen",
+        "Maschinenbau",
+        "Technische Chemie",
+        "Technische Mathematik",
+        "Zahnmedizin",
+        "Medizinische Informatik",
+        "Agrarwissenschaften",
+        "Biotechnologie",
+        "Landschaftsplanung und Landschaftsarchitektur",
+        "Finanzwirtschaft und Rechnungswesen",
+        "Business and Economics",
+        "Marketing",
+        "Bildtechnik und Kamera"
+    };
+
     // Employer
-    private static final String TEST_EMPLOYER_FIRST_NAME = "FIRST NAME";
-    private static final String TEST_EMPLOYER_LAST_NAME = "LAST NAME";
-    private static final String TEST_PUBLIC_INFO = "PUBLIC INFO";
     private static final String TEST_PASSWORD = "123456789";
-    private static final LocalDateTime TEST_BIRTHDATE
-        = LocalDateTime.of(2000, 1, 1, 0, 0, 0, 0);
-
-    // Event
-    private static final String TEST_EVENT_TITLE1 = "Weihnachtsfeier";
-    private static final String TEST_EVENT_TITLE2 = "Putzhilfe";
-    private static final String TEST_EVENT_TITLE3 = "BabysitterIn gesucht für 3 jähriges Mädchen";
-    private static final String TEST_EVENT_TITLE4 = "Computerunterricht";
-    private static final String TEST_EVENT_DESCRIPTION1 = "Unsere Firma plant für den 24.12 Nachmittag eine kleine Feier und wir benötigen KellnerInnen und eine(n) DJ.";
-    private static final String TEST_EVENT_DESCRIPTION2 = "Reinigungsarbeit für das gesamte Haus (Küche, Wohnzimmer, Badezimmer, Schlafzimmer), zirka 60m²";
-    private static final String TEST_EVENT_DESCRIPTION3 = "Sind auf der Suche nach einem netten Menschen der gerne und gut mit unserer Kleinen umgehen und aufpassen kann!";
-    private static final String TEST_EVENT_DESCRIPTION4 = "Unsere Oma hat einen neuen Laptop bekommen und braucht dringend Einstiegshilfe!";
-
-    private static final LocalDateTime TEST_EVENT_START1
-        = LocalDateTime.of(2020, 12, 24, 12, 0, 0, 0);
-    private static final LocalDateTime TEST_EVENT_END1
-        = LocalDateTime.of(2020, 12, 24, 18, 0, 0, 0);
-
-    private static final LocalDateTime TEST_EVENT_START2
-        = LocalDateTime.of(2020, 12, 20, 13, 0, 0, 0);
-    private static final LocalDateTime TEST_EVENT_END2
-        = LocalDateTime.of(2020, 12, 20, 18, 0, 0, 0);
-
-    private static final LocalDateTime TEST_EVENT_START3
-        = LocalDateTime.of(2020, 12, 25, 8, 0, 0, 0);
-    private static final LocalDateTime TEST_EVENT_END3
-        = LocalDateTime.of(2021, 1, 25, 20, 0, 0, 0);
-
-    private static final LocalDateTime TEST_EVENT_START4
-        = LocalDateTime.of(2021, 3, 13, 7, 15, 0, 0);
-    private static final LocalDateTime TEST_EVENT_END4
-        = LocalDateTime.of(2021, 3, 13, 16, 15, 0, 0);
-
-    // Addresses
-    private static final Address TEST_ADDRESS1 = Address.AddressBuilder.aAddress()
-        .withAddressLine("Mariahilfer Straße 5")
-        .withCity("Wien")
-        .withState("Wien")
-        .withZip(1070)
-        .build();
-    private static final Address TEST_ADDRESS2 = Address.AddressBuilder.aAddress()
-        .withAddressLine("Morzingasse 22")
-        .withCity("Mariazell")
-        .withState("Steiermark")
-        .withZip(8100)
-        .build();
-    private static final Address TEST_ADDRESS3 = Address.AddressBuilder.aAddress()
-        .withAddressLine("Kapfweg 12")
-        .withCity("Feldkirch")
-        .withState("Vorarlberg")
-        .withZip(6800)
-        .build();
-    private static final Address TEST_ADDRESS4 = Address.AddressBuilder.aAddress()
-        .withAddressLine("Heimstraße 4")
-        .withCity("Villach")
-        .withState("Kärnten")
-        .withZip(9500)
-        .build();
-
-    // Tasks
-    private static final Task TEST_TASK1 = Task.TaskBuilder.aTask()
-        .withDescription("KellnerIn für Getränke und Snacks servieren, Tische abräumen und sauber machen.")
-        .withEmployeeCount(3)
-        .withPaymentHourly(9.0)
-        .build();
-    private static final Task TEST_TASK1_1 = Task.TaskBuilder.aTask()
-        .withDescription("jemand mit DJ Erfahrung der für gute Stimmung sorgen kann")
-        .withEmployeeCount(1)
-        .withPaymentHourly(10.0)
-        .build();
-    private static final Task TEST_TASK2 = Task.TaskBuilder.aTask()
-        .withDescription("Putzhilfe")
-        .withEmployeeCount(1)
-        .withPaymentHourly(10.0)
-        .build();
-    private static final Task TEST_TASK3 = Task.TaskBuilder.aTask()
-        .withDescription("BabysitteIn")
-        .withEmployeeCount(1)
-        .withPaymentHourly(8.0)
-        .build();
-    private static final Task TEST_TASK4 = Task.TaskBuilder.aTask()
-        .withDescription("jemand der sich gut mit Computern und IT auskennt und älteren Damen diesen Bereich gut erklären und beibringen kann")
-        .withEmployeeCount(1)
-        .withPaymentHourly(16.0)
-        .build();
+    private static final int NUMBER_OF_PRIVATE_EMPLOYERS = 20;
 
     private final EmployeeRepository employeeRepository;
     private final EmployerRepository employerRepository;
@@ -198,13 +148,18 @@ public class TestDataGenerator {
     private final InterestAreaRepository interestAreaRepository;
     private final InterestRepository interestRepository;
     private final TimeRepository timeRepository;
+    private final Employee_TasksService employee_tasksService;
+    private final NotificationRepository notificationRepository;
+    private final EmployeeService employeeService;
 
 
     public TestDataGenerator(EmployeeRepository employeeRepository, EmployerRepository employerRepository,
                              ProfileRepository profileRepository, PasswordEncoder passwordEncoder,
                              EventRepository eventRepository, AddressRepository addressRepository,
                              TaskRepository taskRepository, InterestAreaRepository interestAreaRepository,
-                             InterestRepository interestRepository, TimeRepository timeRepository) {
+                             InterestRepository interestRepository, TimeRepository timeRepository,
+                             Employee_TasksService employee_tasksService, NotificationRepository notificationRepository,
+                             EmployeeService employeeService) {
         this.employeeRepository = employeeRepository;
         this.employerRepository = employerRepository;
         this.profileRepository = profileRepository;
@@ -215,6 +170,9 @@ public class TestDataGenerator {
         this.passwordEncoder = passwordEncoder;
         this.interestRepository = interestRepository;
         this.timeRepository = timeRepository;
+        this.employee_tasksService = employee_tasksService;
+        this.notificationRepository = notificationRepository;
+        this.employeeService = employeeService;
     }
 
     public void generateEmployers() {
@@ -222,24 +180,77 @@ public class TestDataGenerator {
             LOGGER.debug("employers already generated");
         } else {
             LOGGER.debug("generating {} employer entries", companyNames.length);
-            for (String name : companyNames) {
+            Random random = new Random();
+            int count = 0;
+            Byte[] picture;
+            for (String companyName : companyNames) {
+                String name = names[random.nextInt(names.length - 1)];
+                try {
+                    File pic = new File("src/main/resources/employerPictures/company/" + count + ".png");
+                    picture = ArrayUtils.toObject(Files.readAllBytes(pic.toPath()));
+                } catch (IOException e) {
+                    picture = null;
+                }
                 at.ac.tuwien.sepm.groupphase.backend.entity.Profile employerProfile =
                     at.ac.tuwien.sepm.groupphase.backend.entity.Profile.ProfileBuilder.aProfile()
-                        .withEmail("test@" + name.replace(" ", "").toLowerCase() + ".at")
-                        .withForename(TEST_EMPLOYER_FIRST_NAME)
-                        .withName(TEST_EMPLOYER_LAST_NAME)
+                        .withEmail("test@" + companyName.replace(" ", "").toLowerCase() + ".at")
+                        .withForename(name.split(" ")[0])
+                        .withName(name.split(" ")[1])
                         .withPassword(passwordEncoder.encode(TEST_PASSWORD))
-                        .withPublicInfo(TEST_PUBLIC_INFO)
+                        .withPublicInfo("Ich, " + name + ", bin der Gruender und Geschaeftsleiter von " + companyName + " falls Sie Fragen zu unseren Unternehmen oder zu einzelnen Veranstaltungen haben, koennen Sie mich gerne kontaktieren.")
+                        .withPicture(picture)
                         .isEmployer(true)
                         .build();
 
                 Employer employer = Employer.EmployerBuilder.aEmployer()
-                    .withCompanyName(name)
-                    .withDescription("generated employer")
+                    .withCompanyName(companyName)
+                    .withDescription(
+                        random.nextBoolean() ?
+                            "Wir sind " + companyName + ", welches " + (1950 + random.nextInt(70)) + " von " + name + " gegründet wurde. " +
+                                (random.nextBoolean() ?
+                                    "Das Ziel von " + companyName + " hat sich seit der Gründung nicht verändert, wir versorgen unsere Kunden mit den besten Produkten zu einem fairen Preis."
+                                :
+                                   companyName + " setzt die neusten state of the art Technologien direkt bei Ihnen zu Hause ein, um alle möglichen Probleme zu loesen.")
+                            :
+                            companyName + " ist ein neues Startup, welches sich aus " + (5 + random.nextInt(10)) + " engagierte MitarbeiterInnen zusammensetzt. " +
+                                (random.nextBoolean() ?
+                                    "Unser Ziel ist es all ihre Bedürfnisse zu erfuellen."
+                                :
+                                    "Als neues Startup versuchen wir ständig neue innovative Ideen an den Markt und direkt zu Ihnen zu bringen.")
+                    )
                     .withProfile(employerProfile)
                     .build();
                 LOGGER.debug("saving employer {}", employer);
                 Long id = profileRepository.save(employerProfile).getId();
+                employer.setId(id);
+                employerRepository.save(employer);
+                count++;
+            }
+            for (int i = 0; i < NUMBER_OF_PRIVATE_EMPLOYERS; i++) {
+                String name = names[i];
+                try {
+                    File pic = new File("src/main/resources/employerPictures/private/" + i + ".jpg");
+                    picture = ArrayUtils.toObject(Files.readAllBytes(pic.toPath()));
+                } catch (IOException e) {
+                    picture = null;
+                }
+                at.ac.tuwien.sepm.groupphase.backend.entity.Profile privateEmployer =
+                    at.ac.tuwien.sepm.groupphase.backend.entity.Profile.ProfileBuilder.aProfile()
+                        .withEmail("test@" + name.replace(" ", "").toLowerCase() + ".at")
+                        .withForename(name.split(" ")[0])
+                        .withName(name.split(" ")[1])
+                        .withPassword(passwordEncoder.encode(TEST_PASSWORD))
+                        .withPublicInfo("Hallo, ich bin " + name + ", falls Ihr irgendwelche Fragen zu euren Aufgaben habt, koennt Ihr mich einfach per E-Mail kontaktieren.")
+                        .withPicture(picture)
+                        .isEmployer(true)
+                        .build();
+
+                Employer employer = Employer.EmployerBuilder.aEmployer()
+                    .withCompanyName("Privatperson")
+                    .withProfile(privateEmployer)
+                    .build();
+                LOGGER.debug("saving employer {}", employer);
+                Long id = profileRepository.save(privateEmployer).getId();
                 employer.setId(id);
                 employerRepository.save(employer);
             }
@@ -252,22 +263,40 @@ public class TestDataGenerator {
         } else {
             LOGGER.debug("generating {} employee entries", names.length);
             int count = 0;
+            Byte[] picture;
+            Faker faker = new Faker(new Locale("de-AT"));
             for (String name : names) {
+                String publicInfo = "Hallo mein Name ist " + name + " und ich studiere zurzeit \""
+                    + studium[faker.random().nextInt(studium.length - 1)] + "\" an der Universitaet \""
+                    + faker.university().name() + "\" und plane meine " +
+                    (faker.random().nextBoolean() ? "Masterarbeit" : "Bachelorarbeit") +
+                    (faker.random().nextBoolean() ?
+                        " in den naechsten " + (faker.random().nextInt(3) + 2) + " Jahren abzuschließen."
+                    :
+                        " dieses Jahr noch zu schreiben.");
+
+                try {
+                    File pic = new File("src/main/resources/employeePictures/" + count + ".jpg");
+                    picture = ArrayUtils.toObject(Files.readAllBytes(pic.toPath()));
+                } catch (IOException e) {
+                    picture = null;
+                }
                 at.ac.tuwien.sepm.groupphase.backend.entity.Profile employeeProfile =
                     at.ac.tuwien.sepm.groupphase.backend.entity.Profile.ProfileBuilder.aProfile()
                         .withEmail(name.replace(" ", ".").toLowerCase() + "@jobconnect.test")
                         .withForename(name.split(" ")[0])
                         .withName(name.split(" ")[1])
                         .withPassword(passwordEncoder.encode(TEST_PASSWORD))
-                        .withPublicInfo(TEST_PUBLIC_INFO)
+                        .withPublicInfo(publicInfo)
+                        .withPicture(picture)
                         .isEmployer(false)
                         .build();
-
                 Employee employee = Employee.EmployeeBuilder.aEmployee()
                     .withGender(count % 2 == 0 ? Gender.FEMALE : Gender.MALE)
-                    .withBirthDate(TEST_BIRTHDATE)
+                    .withBirthDate(convertToLocalDateTime(faker.date().birthday(18, 35)))
                     .withProfile(employeeProfile)
                     .build();
+
                 LOGGER.debug("saving employee {}", employee);
                 Long id = profileRepository.save(employeeProfile).getId();
                 employee.setId(id);
@@ -281,108 +310,23 @@ public class TestDataGenerator {
         if (interestAreaRepository.findAll().size() > 0) {
             LOGGER.debug("interestAreas already generated");
         } else {
-            LOGGER.debug("generating {} interestAreas entries", 16);
-            InterestArea interestArea1 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("Service")
-                .withDescription("Promo (z.B. Flyer verteilen)")
-                .build();
-            InterestArea interestArea1_1 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("Service")
-                .withDescription("Verkaufshilfe")
-                .build();
-            InterestArea interestArea1_2 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("Service")
-                .withDescription("Messebetreuung")
-                .build();
-            InterestArea interestArea1_3 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("Service")
-                .withDescription("KellnerIn")
-                .build();
-            InterestArea interestArea2 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("Haushalt")
-                .withDescription("Babysitter")
-                .build();
-            InterestArea interestArea2_1 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("Haushalt")
-                .withDescription("Tiersitter")
-                .build();
-            InterestArea interestArea2_2 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("IT")
-                .withDescription("Computerhilfe")
-                .build();
-            InterestArea interestArea2_3 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("Haushalt")
-                .withDescription("Gartenhilfe")
-                .build();
-            InterestArea interestArea2_4 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("Haushalt")
-                .withDescription("Putzhilfe")
-                .build();
-            InterestArea interestArea3 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("Handwerk")
-                .withDescription("Umzugshelfer (vor allem schwere Lasten tragen)")
-                .build();
-            InterestArea interestArea3_1 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("Handwerk")
-                .withDescription("Autofahrer")
-                .build();
-            InterestArea interestArea3_2 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("Handwerk")
-                .withDescription("Aufbauhilfe (z.B. Bühnen)")
-                .build();
-            InterestArea interestArea3_3 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("Handwerk")
-                .withDescription("Aufbauhilfe (z.B. Möbel)")
-                .build();
-            InterestArea interestArea4 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("Musik")
-                .withDescription("DJ")
-                .build();
-            InterestArea interestArea4_1 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("IT")
-                .withDescription("Backend Dev")
-                .build();
-            InterestArea interestArea4_2 = InterestArea.InterestAreaBuilder.aInterest()
-                .withArea("IT")
-                .withDescription("Frontend Dev")
-                .build();
-
-            LOGGER.debug("saving interestArea {}", interestArea1);
-            interestAreaRepository.save(interestArea1);
-            LOGGER.debug("saving interestArea {}", interestArea1_1);
-            interestAreaRepository.save(interestArea1_1);
-            LOGGER.debug("saving interestArea {}", interestArea1_2);
-            interestAreaRepository.save(interestArea1_2);
-            LOGGER.debug("saving interestArea {}", interestArea1_3);
-            interestAreaRepository.save(interestArea1_3);
-
-            LOGGER.debug("saving interestArea {}", interestArea2);
-            interestAreaRepository.save(interestArea2);
-            LOGGER.debug("saving interestArea {}", interestArea2_1);
-            interestAreaRepository.save(interestArea2_1);
-            LOGGER.debug("saving interestArea {}", interestArea2_2);
-            interestAreaRepository.save(interestArea2_2);
-            LOGGER.debug("saving interestArea {}", interestArea2_3);
-            interestAreaRepository.save(interestArea2_3);
-            LOGGER.debug("saving interestArea {}", interestArea2_4);
-            interestAreaRepository.save(interestArea2_4);
-
-            LOGGER.debug("saving interestArea {}", interestArea3);
-            interestAreaRepository.save(interestArea3);
-            LOGGER.debug("saving interestArea {}", interestArea3_1);
-            interestAreaRepository.save(interestArea3_1);
-            LOGGER.debug("saving interestArea {}", interestArea3_2);
-            interestAreaRepository.save(interestArea3_2);
-            LOGGER.debug("saving interestArea {}", interestArea3_3);
-            interestAreaRepository.save(interestArea3_3);
-
-            LOGGER.debug("saving interestArea {}", interestArea4);
-            interestAreaRepository.save(interestArea4);
-            LOGGER.debug("saving interestArea {}", interestArea4_1);
-            interestAreaRepository.save(interestArea4_1);
-            LOGGER.debug("saving interestArea {}", interestArea4_2);
-            interestAreaRepository.save(interestArea4_2);
-
+            LOGGER.debug("generating interestAreas entries");
+            List<InterestArea> areas = new LinkedList<>();
+            try {
+                RandomAccessFile areasFile = new RandomAccessFile("src/main/resources/interestAreas.txt", "r");
+                String line;
+                while ((line = areasFile.readLine()) != null) {
+                    line = new String(line.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                    String[] split = line.split(";");
+                    areas.add(InterestArea.InterestAreaBuilder.aInterest()
+                        .withArea(split[1])
+                        .withDescription(split[2])
+                        .build());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            interestAreaRepository.saveAll(areas);
         }
     }
 
@@ -391,187 +335,308 @@ public class TestDataGenerator {
             LOGGER.debug("interests already generated");
         } else {
             LOGGER.debug("generating {} interests entries", 5);
+            Random random = new Random();
+            for (Employee employee : employeeRepository.findAll()) {
+                try {
+                    RandomAccessFile randomAccessFile = new RandomAccessFile("src/main/resources/interests.txt", "r");
+                    int length = (int) randomAccessFile.length();
+                    for (int i = random.nextInt(3) + 1; i > 0; i--) {
+                        int pos = random.nextInt(length);
+                        randomAccessFile.seek(pos);
+                        randomAccessFile.readLine();
+                        String randomLine = randomAccessFile.readLine();
+                        if (randomLine == null) {
+                            i--;
+                            continue;
+                        }
+                        String line = new String(randomLine.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                        String[] parts = line.split(";");
+                        Interest interest = Interest.InterestBuilder.aInterest()
+                            .withName(parts[1])
+                            .withDescription(parts.length > 2 ? parts[2].replace("\"", "") : "TODO: add description to interests.txt")
+                            .withInterestArea(parts[3].equals("null") ? null : interestAreaRepository.getOne(Long.valueOf(parts[3])))
+                            .withEmployee(employee)
+                            .build();
 
-            for (Employee employee :
-                employeeRepository.findAll()) {
-
-                Interest interest1 = Interest.InterestBuilder.aInterest()
-                    .withName("IT")
-                    .withDescription("ich programmiere gerne")
-                    .withInterestArea(interestAreaRepository.getOne(15L))
-                    .withEmployee(employee)
-                    .build();
-                Interest interest2 = Interest.InterestBuilder.aInterest()
-                    .withName("Babysitter")
-                    .withDescription("passe gerne auf kleine Kinder und Babys auf")
-                    .withInterestArea(interestAreaRepository.getOne(5L))
-                    .withEmployee(employee)
-                    .build();
-                Interest interest3 = Interest.InterestBuilder.aInterest()
-                    .withName("spazieren gehen")
-                    .withDescription("in meiner Freizeit verbringe ich gerne Zeit im Freien")
-                    .withInterestArea(interestAreaRepository.getOne(6L))
-                    .withEmployee(employee)
-                    .build();
-                Interest interest4 = Interest.InterestBuilder.aInterest()
-                    .withName("Musik produzieren")
-                    .withDescription("ab und zu versuche ich mich als Hobby-DJ")
-                    .withInterestArea(interestAreaRepository.getOne(14L))
-                    .withEmployee(employee)
-                    .build();
-                Interest interest5 = Interest.InterestBuilder.aInterest()
-                    .withName("Bücher lesen")
-                    .withDescription("ich lese gerne")
-                    .withInterestArea(null)
-                    .withEmployee(employee)
-                    .build();
-
-                LOGGER.debug("saving interest {}", interest1);
-                interestRepository.save(interest1);
-                LOGGER.debug("saving interest {}", interest2);
-                interestRepository.save(interest2);
-                LOGGER.debug("saving interest {}", interest3);
-                interestRepository.save(interest3);
-                LOGGER.debug("saving interest {}", interest4);
-                interestRepository.save(interest4);
-                LOGGER.debug("saving interest {}", interest5);
-                interestRepository.save(interest5);
+                        LOGGER.debug("saving interest {}", interest);
+                        interestRepository.save(interest);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-
         }
     }
 
-    private void generateTimes() {
+    private void generateTimes(Float ratio) {
         if (timeRepository.findAll().size() > 0) {
             LOGGER.debug("times already generated");
         } else {
-            LOGGER.debug("generating {} time entries", 3);
-
-            for (Employee employee :
-                employeeRepository.findAll()) {
-
-                Time time1 = Time.TimeBuilder.aTime()
-                    .withStart(LocalDateTime.of(2020, 12, 28, 12, 0, 0, 0))
-                    .withEnd(LocalDateTime.of(2020, 12, 28, 18, 0, 0, 0))
-                    .withFinalEndDate(LocalDateTime.of(2020, 12, 28, 18, 0, 0, 0))
-                    .withVisible(true)
-                    .withRef_Id(-1L)
-                    .withEmployee(employee)
-                    .build();
-
-                Time time2 = Time.TimeBuilder.aTime()
-                    .withStart(LocalDateTime.of(2021, 1, 7, 17, 0, 0, 0))
-                    .withEnd(LocalDateTime.of(2021, 1, 7, 23, 0, 0, 0))
-                    .withFinalEndDate(LocalDateTime.of(2021, 1, 7, 23, 0, 0, 0))
-                    .withVisible(true)
-                    .withRef_Id(-1L)
-                    .withEmployee(employee)
-                    .build();
-
-                LOGGER.debug("saving time {}", time1);
-                timeRepository.save(time1);
-                LOGGER.debug("saving time {}", time2);
-                timeRepository.save(time2);
+            LOGGER.debug("randomly generating time entries for random employees");
+            Faker faker = new Faker();
+            Random random = new Random();
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(2021, Calendar.FEBRUARY, 28);
+            for (Employee employee : employeeRepository.findAll()) {
+                if (random.nextDouble() <= ratio) {
+                    for (int i = 0; i < random.nextInt(5) + 1; i++) {
+                        Date start = DateUtils.round(faker.date().between(new Date(System.currentTimeMillis()), calendar.getTime()), Calendar.HOUR);
+                        Date end = DateUtils.round(DateUtils.addHours(faker.date().future(random.nextInt(12) + 1, TimeUnit.HOURS, start), 1), Calendar.HOUR);
+                        // one semester 30% chance
+                        if (random.nextDouble() <= 0.3) {
+                            Date finalEnd = DateUtils.addWeeks(end, 17);
+                            Time time1 = Time.TimeBuilder.aTime()
+                                .withStart(convertToLocalDateTime(start))
+                                .withEnd(convertToLocalDateTime(end))
+                                .withFinalEndDate(convertToLocalDateTime(finalEnd))
+                                .withVisible(true)
+                                .withRef_Id(-1L)
+                                .withEmployee(employee)
+                                .build();
+                            timeRepository.save(time1);
+                            for (int j = 0; j < 18; j++) {
+                                Time time = Time.TimeBuilder.aTime()
+                                    .withStart(convertToLocalDateTime(DateUtils.addDays(start, j * 7)))
+                                    .withEnd(convertToLocalDateTime(DateUtils.addDays(end, j * 7)))
+                                    .withFinalEndDate(convertToLocalDateTime(DateUtils.addDays(end, j * 7)))
+                                    .withVisible(false)
+                                    .withRef_Id(-1L)
+                                    .withEmployee(employee)
+                                    .build();
+                                LOGGER.debug("saving time (one semester) {}, for employee {}", time, employee);
+                                timeRepository.save(time);
+                            }
+                            // one day 70% chance
+                        } else {
+                            Time time = Time.TimeBuilder.aTime()
+                                .withStart(convertToLocalDateTime(start))
+                                .withEnd(convertToLocalDateTime(end))
+                                .withFinalEndDate(convertToLocalDateTime(end))
+                                .withVisible(true)
+                                .withRef_Id(-1L)
+                                .withEmployee(employee)
+                                .build();
+                            LOGGER.debug("saving time {}, for employee {}", time, employee);
+                            timeRepository.save(time);
+                        }
+                    }
+                }
             }
         }
     }
 
     @PostConstruct
     public void generateEvents() {
+
         generateEmployers();
         generateEmployees();
         generateInterestAreas();
         generateInterests();
-        generateTimes();
-        if (eventRepository.findAll().size() > 0) {
-            LOGGER.debug("events already generated");
-        } else {
+        generateTimes(0.75f);
 
-            TEST_TASK1.setInterestArea(interestAreaRepository.getOne(4L));
-            TEST_TASK1_1.setInterestArea(interestAreaRepository.getOne(14L));
+        Faker faker = new Faker(new Locale("de-AT"));
+        Random random = new Random();
+        try {
+            RandomAccessFile eventFile = new RandomAccessFile("src/main/resources/events.txt", "r");
+            String line;
+            while ((line = eventFile.readLine()) != null) {
+                line = new String(line.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                Calendar earliestStartDateForEvents = Calendar.getInstance();
+                earliestStartDateForEvents.set(2021, Calendar.JANUARY, 1);
+                Calendar latestStartDateForEvents = Calendar.getInstance();
+                latestStartDateForEvents.set(2021, Calendar.APRIL, 30);
+                Date start = roundTimeToQuarter(faker.date().between(earliestStartDateForEvents.getTime(), latestStartDateForEvents.getTime()));
+                Date end = roundTimeToQuarter(faker.date().future(4, TimeUnit.DAYS, start));
 
-            TEST_TASK2.setInterestArea(interestAreaRepository.getOne(9L));
+                Address address = Address.AddressBuilder.aAddress()
+                    .withAddressLine(faker.address().streetAddress())
+                    .withCity(faker.address().city())
+                    .withState(faker.address().state())
+                    .withZip(Integer.parseInt(faker.address().zipCode()))
+                    .build();
 
-            TEST_TASK3.setInterestArea(interestAreaRepository.getOne(5L));
+                //Set<Task> tasks = generateRandomTasks(3);
 
-            TEST_TASK4.setInterestArea(interestAreaRepository.getOne(7L));
+                //get list of task ids
+                String[] taskIdStrings = line.split(";")[2].split(",");
+                List<Integer> taskIds = new LinkedList<>();
+                for (String s : taskIdStrings) {
+                    taskIds.add(Integer.valueOf(s));
+                }
+                Set<Task> tasks = generateTasksByIds(taskIds);
 
-
-            Set<Task> tasks1 = new HashSet<>();
-            tasks1.add(TEST_TASK1);
-            tasks1.add(TEST_TASK1_1);
-
-            Set<Task> tasks2 = new HashSet<>();
-            tasks2.add(TEST_TASK2);
-
-            Set<Task> tasks3 = new HashSet<>();
-            tasks3.add(TEST_TASK3);
-
-            Set<Task> tasks4 = new HashSet<>();
-            tasks4.add(TEST_TASK4);
-
-            Event event1 = Event.EventBuilder.aEvent()
-                .withTitle(TEST_EVENT_TITLE1)
-                .withDescription(TEST_EVENT_DESCRIPTION1)
-                .withStart(TEST_EVENT_START1)
-                .withEnd(TEST_EVENT_END1)
-                .withAddress(addressRepository.save(TEST_ADDRESS1))
-                .withTask(tasks1)
-                .withEmployer(employerRepository.findByProfile_Email("test@freedommap.at"))
-                .build();
-            Event event2 = Event.EventBuilder.aEvent()
-                .withTitle(TEST_EVENT_TITLE2)
-                .withDescription(TEST_EVENT_DESCRIPTION2)
-                .withStart(TEST_EVENT_START2)
-                .withEnd(TEST_EVENT_END2)
-                .withAddress(addressRepository.save(TEST_ADDRESS2))
-                .withTask(tasks2)
-                .withEmployer(employerRepository.findByProfile_Email("test@galaxyman.at"))
-                .build();
-            Event event3 = Event.EventBuilder.aEvent()
-                .withTitle(TEST_EVENT_TITLE3)
-                .withDescription(TEST_EVENT_DESCRIPTION3)
-                .withStart(TEST_EVENT_START3)
-                .withEnd(TEST_EVENT_END3)
-                .withAddress(addressRepository.save(TEST_ADDRESS3))
-                .withTask(tasks3)
-                .withEmployer(employerRepository.findByProfile_Email("test@futureplan.at"))
-                .build();
-            Event event4 = Event.EventBuilder.aEvent()
-                .withTitle(TEST_EVENT_TITLE4)
-                .withDescription(TEST_EVENT_DESCRIPTION4)
-                .withStart(TEST_EVENT_START4)
-                .withEnd(TEST_EVENT_END4)
-                .withAddress(addressRepository.save(TEST_ADDRESS4))
-                .withTask(tasks4)
-                .withEmployer(employerRepository.findByProfile_Email("test@maxaprofit.at"))
-                .build();
-
-            TEST_TASK1.setEvent(event1);
-            TEST_TASK1_1.setEvent(event1);
-            TEST_TASK2.setEvent(event2);
-            TEST_TASK3.setEvent(event3);
-            TEST_TASK4.setEvent(event4);
-
-            LOGGER.debug("saving event {}", event1);
-            eventRepository.save(event1);
-            LOGGER.debug("saving event {}", event2);
-            eventRepository.save(event2);
-            LOGGER.debug("saving event {}", event3);
-            eventRepository.save(event3);
-            LOGGER.debug("saving event {}", event4);
-            eventRepository.save(event4);
-
-            LOGGER.debug("saving task {}", TEST_TASK1);
-            taskRepository.save(TEST_TASK1);
-            LOGGER.debug("saving task {}", TEST_TASK1_1);
-            taskRepository.save(TEST_TASK1_1);
-            LOGGER.debug("saving task {}", TEST_TASK2);
-            taskRepository.save(TEST_TASK2);
-            LOGGER.debug("saving task {}", TEST_TASK3);
-            taskRepository.save(TEST_TASK3);
-            LOGGER.debug("saving task {}", TEST_TASK4);
-            taskRepository.save(TEST_TASK4);
+                Event event = Event.EventBuilder.aEvent()
+                    .withTitle(line.split(";")[1])
+                    .withDescription(line.split(";")[3])
+                    .withStart(convertToLocalDateTime(start))
+                    .withEnd(convertToLocalDateTime(end))
+                    .withAddress(addressRepository.save(address))
+                    .withTask(tasks)
+                    .withEmployer(line.split(";")[4].equalsIgnoreCase("firma") ? employerRepository.findByProfile_Id(random.nextInt(companyNames.length) + 1L) : employerRepository.findByProfile_Id(random.nextInt(NUMBER_OF_PRIVATE_EMPLOYERS) + companyNames.length + 1L))
+                    .build();
+                Event savedEvent = eventRepository.save(event);
+                for (Task task : tasks) {
+                    task.setEvent(savedEvent);
+                    taskRepository.save(task);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        generateApplications(300, 0.5f);
+    }
+
+    public Date roundTimeToQuarter(Date dateToRound) {
+        Calendar round = Calendar.getInstance();
+        round.setTime(dateToRound);
+        int unrounded = round.get(Calendar.MINUTE);
+        int mod = unrounded % 15;
+        round.add(Calendar.MINUTE, mod < 8 ? -mod : (15 - mod));
+        return round.getTime();
+    }
+
+    public LocalDateTime convertToLocalDateTime(Date dateToConvert) {
+        return Instant.ofEpochMilli(dateToConvert.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
+    }
+
+    public void updateApplications(Event event, Employee_Tasks employee_tasks, Employer employer, Long applicationId) {
+        Notification notification = new Notification();
+        notification.setEvent(event);
+        notification.setRecipient(employee_tasks.getEmployee().getProfile());
+        notification.setSender(employer.getProfile());
+        notification.setTask(employee_tasks.getTask());
+        notification.setSeen(false);
+        if (employee_tasks.getAccepted()) {
+            notification.setMessage(String.format("Deine Bewerbung für das Event \"%s\" wurde akzeptiert", event.getTitle()));
+            notification.setType(NotificationType.EVENT_ACCEPTED.name());
+            employeeService.deleteTime(employee_tasks.getEmployee().getId(), employee_tasks.getTask().getId());
+        } else {
+            notification.setMessage(String.format("Deine Bewerbung für das Event \"%s\" wurde abgelehnt", event.getTitle()));
+            notification.setType(NotificationType.EVENT_DECLINED.name());
+        }
+        employee_tasksService.updateStatus(employee_tasks);
+        notificationRepository.deleteById(applicationId);
+        notificationRepository.save(notification);
+    }
+
+    public void generateApplications(int count, float ratio) {
+        Random random = new Random();
+        List<Task> tasks = taskRepository.findAll();
+        for (int i = 0; i < count; i++) {
+            Optional<Employee> employee = employeeRepository.findById(companyNames.length + NUMBER_OF_PRIVATE_EMPLOYERS + 1L + random.nextInt(30));
+            Employee randomEmployee = employee.orElse(null);
+            if (randomEmployee == null) {
+                continue;
+            }
+            Task randomTask = tasks.get(random.nextInt(tasks.size() - 1));
+            Event event = eventRepository.findFirstByTasks(randomTask);
+            Employer employer = employerRepository.findFirstByEvents(event);
+            String message = "Sehr geehrte Damen und Herren,\r\n" +
+                "hiermit bewerbe ich mich für die Stelle \"" + randomTask.getDescription() + "\" für das Event " + event.getTitle() + "\r\n" +
+                "Mit freundlichen Grüßen\r\n" +
+                randomEmployee.getProfile().getFirstName() + " " + randomEmployee.getProfile().getLastName();
+
+            Notification existingApplication = notificationRepository.findFirstByEvent_IdAndSender_Id(event.getId(), randomEmployee.getId());
+            if (!(existingApplication == null || existingApplication.getType().equalsIgnoreCase(NotificationType.NOTIFICATION.name()))) {
+                i--;
+                continue;
+            }
+            try {
+                employee_tasksService.applyForTask(randomEmployee, randomTask);
+            } catch (AlreadyHandledException e) {
+                i--;
+                continue;
+            } catch (NoAvailableSpacesException e) {
+                continue;
+            }
+
+            Notification application = new Notification();
+            application.setEvent(event);
+            application.setMessage(message);
+            application.setRecipient(employer.getProfile());
+            application.setSender(randomEmployee.getProfile());
+            application.setSeen(false);
+            application.setTask(randomTask);
+            application.setType(NotificationType.APPLICATION.name());
+
+            Notification notification = new Notification();
+            notification.setEvent(event);
+            notification.setMessage("Es gibt eine neue Bewerbung für das Event: " + event.getTitle());
+            notification.setRecipient(employer.getProfile());
+            notification.setSender(null);
+            notification.setSeen(false);
+            notification.setTask(randomTask);
+            notification.setType(NotificationType.NOTIFICATION.name());
+
+            Long applicationId = notificationRepository.save(application).getId();
+            notificationRepository.save(notification);
+            if (random.nextDouble() <= ratio) {
+                Employee_Tasks employee_tasks = new Employee_Tasks();
+                employee_tasks.setAccepted(random.nextBoolean());
+                employee_tasks.setEmployee(randomEmployee);
+                employee_tasks.setTask(randomTask);
+                updateApplications(event, employee_tasks, employer, applicationId);
+            }
+        }
+    }
+
+    public Set<Task> generateRandomTasks(int maxTasks) {
+        Set<Task> tasks = new HashSet<>();
+        List<InterestArea> areas = interestAreaRepository.findAll();
+        Random random = new Random();
+        try {
+            RandomAccessFile randomAccessFile = new RandomAccessFile("src/main/resources/tasks.txt", "r");
+            int length = (int) randomAccessFile.length();
+            for (int i = random.nextInt(maxTasks) + 1; i > 0; i--) {
+                int pos = random.nextInt(length);
+                randomAccessFile.seek(pos);
+                String randomLine = randomAccessFile.readLine();
+                if (randomLine == null) {
+                    i--;
+                    continue;
+                }
+                String line = new String(randomLine.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                Task task = new Task();
+                task.setDescription(line.substring(line.indexOf(";") + 1));
+                task.setEmployeeCount(1 + random.nextInt(9));
+                task.setPaymentHourly((double) (5 + random.nextInt(20)));
+                task.setInterestArea(areas.get(random.nextInt(areas.size() - 1)));
+                tasks.add(task);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return tasks;
+    }
+
+    public Set<Task> generateTasksByIds(List<Integer> ids) {
+        Set<Task> tasks = new HashSet<>();
+        Random random = new Random();
+        try {
+            RandomAccessFile randomAccessFile = new RandomAccessFile("src/main/resources/tasks.txt", "r");
+            List<String> taskStrings = new LinkedList<>();
+            String taskLine;
+            while ((taskLine = randomAccessFile.readLine()) != null) {
+                taskLine = new String(taskLine.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                taskStrings.add(taskLine);
+            }
+
+            for (Integer id : ids) {
+                String line = taskStrings.get(id - 1);
+                if (line == null) continue;
+                Task task = new Task();
+                task.setDescription(line.split(";")[1]);
+                task.setEmployeeCount(1 + random.nextInt(4));
+                task.setPaymentHourly((double) (5 + random.nextInt(20)));
+                if (line.split(";").length > 2) {
+                    Optional<InterestArea> area = interestAreaRepository.findById(Long.parseLong(line.split(";")[2]));
+                    area.ifPresent(task::setInterestArea);
+                }
+                tasks.add(task);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return tasks;
     }
 }
