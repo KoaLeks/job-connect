@@ -27,7 +27,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -105,6 +107,18 @@ public class ProfileEndpointTest implements TestData {
         .withBirthDate(EMPLOYEE_BIRTH_DATE)
         .build();
 
+    Employee employee2 = Employee.EmployeeBuilder.aEmployee()
+        .withProfile(Profile.ProfileBuilder.aProfile()
+            .isEmployer(false)
+            .withEmail(EMPLOYEE_EMAIL_2)
+            .withName(EMPLOYEE_LAST_NAME)
+            .withForename(EMPLOYEE_FIRST_NAME)
+            .withPassword(EMPLOYEE_PASSWORD)
+            .build())
+        .withGender(EMPLOYEE_GENDER)
+        .withBirthDate(EMPLOYEE_BIRTH_DATE)
+        .build();
+
     private final Employee editEmployee = Employee.EmployeeBuilder.aEmployee()
         .withProfile(Profile.ProfileBuilder.aProfile()
             .isEmployer(false)
@@ -121,6 +135,18 @@ public class ProfileEndpointTest implements TestData {
         .withProfile(Profile.ProfileBuilder.aProfile()
             .isEmployer(true)
             .withEmail(EMPLOYER_EMAIL)
+            .withName(EMPLOYER_LAST_NAME)
+            .withForename(EMPLOYER_FIRST_NAME)
+            .withPassword(EMPLOYER_PASSWORD)
+            .build())
+        .withCompanyName(EMPLOYER_COMPANY_NAME)
+        .withDescription(EMPLOYER_COMPANY_DESCRIPTION)
+        .build();
+
+    private final Employer employer2 = Employer.EmployerBuilder.aEmployer()
+        .withProfile(Profile.ProfileBuilder.aProfile()
+            .isEmployer(true)
+            .withEmail(EMPLOYER_EMAIL_2)
             .withName(EMPLOYER_LAST_NAME)
             .withForename(EMPLOYER_FIRST_NAME)
             .withPassword(EMPLOYER_PASSWORD)
@@ -376,10 +402,27 @@ public class ProfileEndpointTest implements TestData {
     }
 
     @Test
-    public void getEmployeeWithNonExistingEmailShouldReturnNotFound() throws Exception {
-        MvcResult mvcResult = this.mockMvc.perform(get(GET_EMPLOYEE_BASE_URI + EMPLOYEE_EMAIL)
+    public void getEmployeeWithExistingEmailShouldReturnOK() throws Exception{
+        employeeRepository.save(employee);
+
+        MvcResult mvcResult = this.mockMvc.perform(get(GET_EMPLOYEE_BASE_URI)
             .accept(MediaType.APPLICATION_JSON)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, ADMIN_ROLES)))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        EmployeeDto employee = objectMapper.readValue(response.getContentAsString(),EmployeeDto.class);
+
+        assertEquals(employee.getProfileDto().getEmail(), EMPLOYEE_EMAIL);
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+    }
+
+    @Test
+    public void getEmployeeWithNonExistingEmailShouldReturnNotFound() throws Exception {
+        MvcResult mvcResult = this.mockMvc.perform(get(GET_EMPLOYEE_BASE_URI)
+            .accept(MediaType.APPLICATION_JSON)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES)))
             .andDo(print())
             .andReturn();
 
@@ -388,15 +431,126 @@ public class ProfileEndpointTest implements TestData {
     }
 
     @Test
-    public void getEmployerWithNonExistingEmailShouldReturnNotFound() throws Exception {
-        MvcResult mvcResult = this.mockMvc.perform(get(GET_EMPLOYER_BASE_URI + EMPLOYER_EMAIL)
+    public void getEmployerWithExistingEmailShouldReturnOK() throws Exception{
+        employerRepository.save(employer);
+
+        MvcResult mvcResult = this.mockMvc.perform(get(GET_EMPLOYER_BASE_URI)
             .accept(MediaType.APPLICATION_JSON)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES)))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        EmployerDto employer = objectMapper.readValue(response.getContentAsString(),EmployerDto.class);
+
+        assertEquals(employer.getProfileDto().getEmail(), EMPLOYER_EMAIL);
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+    }
+
+    @Test
+    public void getEmployerWithNonExistingEmailShouldReturnNotFound() throws Exception {
+        MvcResult mvcResult = this.mockMvc.perform(get(GET_EMPLOYER_BASE_URI)
+            .accept(MediaType.APPLICATION_JSON)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES)))
             .andDo(print())
             .andReturn();
 
         MockHttpServletResponse response = mvcResult.getResponse();
         assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
+    }
+
+    @Test
+    public void getEmployeeWithExistingIdShouldReturnOK() throws Exception {
+        Long id = employeeRepository.save(employee).getId();
+
+        MvcResult mvcResult = this.mockMvc.perform(get(GET_EMPLOYEE_BASE_URI + "/" + id + "/details")
+            .accept(MediaType.APPLICATION_JSON)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, ADMIN_ROLES)))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        SimpleEmployeeDto employee = objectMapper.readValue(response.getContentAsString(),SimpleEmployeeDto.class);
+
+        assertEquals(employee.getSimpleProfileDto().getEmail(), EMPLOYEE_EMAIL);
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+    }
+
+    @Test
+    public void getEmployeeWithNonExistingIdShouldReturnNotFound() throws Exception {
+        MvcResult mvcResult = this.mockMvc.perform(get(GET_EMPLOYEE_BASE_URI + "/" + EMPLOYEE_ID)
+            .accept(MediaType.APPLICATION_JSON)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, ADMIN_ROLES)))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
+    }
+
+    @Test
+    public void getEmployerWithExistingIdShouldReturnOK() throws Exception {
+        Long id = employerRepository.save(employer).getId();
+
+        MvcResult mvcResult = this.mockMvc.perform(get(GET_EMPLOYER_BASE_URI + "/" + id + "/details")
+            .accept(MediaType.APPLICATION_JSON)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES)))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        SimpleEmployerDto employer = objectMapper.readValue(response.getContentAsString(),SimpleEmployerDto.class);
+
+        assertEquals(employer.getSimpleProfileDto().getEmail(), EMPLOYER_EMAIL);
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+    }
+
+    @Test
+    public void getEmployerWithNonExistingIdShouldReturnNotFound() throws Exception {
+        MvcResult mvcResult = this.mockMvc.perform(get(GET_EMPLOYER_BASE_URI + "/" + EMPLOYER_ID)
+            .accept(MediaType.APPLICATION_JSON)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES)))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
+    }
+
+    @Test
+    public void getAllEmployersShouldReturnList() throws Exception {
+        employerRepository.save(employer);
+        employerRepository.save(employer2);
+
+        MvcResult mvcResult = this.mockMvc.perform(get(GET_ALL_EMPLOYERS_BASE_URI)
+            .accept(MediaType.APPLICATION_JSON)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, ADMIN_ROLES)))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        SimpleEmployerDto[] simpleEmployerDtos = objectMapper.readValue(response.getContentAsString(),SimpleEmployerDto[].class);
+
+        assertEquals(simpleEmployerDtos.length, 2);
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+    }
+
+    @Test
+    public void getAllEmployeesShouldReturnList() throws Exception {
+        employeeRepository.save(employee);
+        employeeRepository.save(employee2);
+
+        MvcResult mvcResult = this.mockMvc.perform(get(GET_ALL_EMPLOYEES_BASE_URI)
+            .accept(MediaType.APPLICATION_JSON)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES)))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        SimpleEmployeeDto[] simpleEmployeeDtos = objectMapper.readValue(response.getContentAsString(),SimpleEmployeeDto[].class);
+
+        assertEquals(simpleEmployeeDtos.length, 2);
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
     }
 
     @Test

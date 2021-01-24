@@ -87,4 +87,27 @@ public class EmployeeMapper {
 
         return list;
     }
+
+    public List<SuperSimpleEmployeeDto> employeesToSuperSimpleEmployeeDtos(List<Employee> employees) {
+        if (employees == null) {
+            return null;
+        }
+
+        List<SuperSimpleEmployeeDto> list = new ArrayList<>(employees.size());
+        for (Employee employee : employees) {
+            list.add(employeeToSuperSimpleEmployeeDto(employee));
+        }
+
+        return list;
+    }
+
+    public SuperSimpleEmployeeDto employeeToSuperSimpleEmployeeDto(Employee employee){
+        var empDto_builder = SuperSimpleEmployeeDto.SuperSimpleEmployeeDtoBuilder.aSuperSimpleEmployeeDto();
+        empDto_builder.withId(employee.getId());
+        empDto_builder.withSuperSimpleProfileDto(profileMapper.profileToSuperSimpleProfileDto(employee.getProfile()));
+        empDto_builder.withInterestDtos(interestMapper.interestSetToInterestDtoSet(employee.getInterests()));
+        empDto_builder.withBirthDate(employee.getBirthDate());
+        empDto_builder.withGender(employee.getGender());
+        return empDto_builder.build();
+    }
 }

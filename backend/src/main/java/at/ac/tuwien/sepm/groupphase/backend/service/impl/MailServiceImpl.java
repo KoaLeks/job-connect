@@ -101,4 +101,25 @@ public class MailServiceImpl implements MailService {
             mimeMessageHelper.setText(contactMessage.getMessage());
         });
     }
+
+    @Override
+    public void sendJobTerminationMail(Task task) {
+        Employer employer = task.getEvent().getEmployer();
+        mailSender.send(mimeMessage -> {
+            MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            message.setFrom("from@mail.com");
+            message.setTo(employer.getProfile().getEmail());
+            message.setSubject("Kündigung eines Arbeitnehmers!");
+            message.setText("<center>" +
+                    "<div style='font-family:'Century Gothic', 'sans-serif'>" +
+                    "  <h1 style='color:#FFA545'>Hi, " + (employer.getCompanyName().equals("Privatperson") ? employer.getProfile().getFirstName() : employer.getCompanyName()) + "</h1><br>" +
+                    "  <p style='font-size: medium'> Wir müssen dir leider mitteilen, dass ein/e Arbeitnehmer/in den Task <b>"
+                    + task.getDescription() + "</b> beim Event <b>" + task.getEvent().getTitle() +
+                    "</b> gekündigt hat und die Stelle nun wieder offen ist. Du kannst dir gern aus unserer Liste von " +
+                    "ArbeitnehmerInnen passende KandidatInnen raussuchen und kontaktieren unter: " +
+                    "<a href='http://localhost:4200/employee-overview'>http://localhost:4200/employee-overview</a>" +
+                    "<br></p></center></div>"
+                , true);
+        });
+    }
 }

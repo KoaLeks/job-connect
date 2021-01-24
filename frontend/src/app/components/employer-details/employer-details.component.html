@@ -40,8 +40,7 @@
   <div class="row" *ngIf="!(employer.companyName === 'Privatperson')">
     <div class="col-lg-6 col-sm-6" style="border-right: 2px solid #ccc">
       <div class="container mb-2">
-        <img *ngIf="hasPicture" id="img" src="{{picture}}" alt="profile_picture"
-             class="image">
+        <img *ngIf="hasPicture" id="img" src="{{picture}}" alt="profile_picture">
         <img *ngIf="!hasPicture" id="img_default" src="assets/user_default.svg" alt="default_profile_picture">
       </div>
       <div class="companyName name text-center">

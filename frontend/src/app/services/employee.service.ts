@@ -8,6 +8,7 @@ import {DetailedEvent} from '../dtos/detailed-event';
 import {FilterEmployees} from '../dtos/filter-employees';
 import {FilterEmployeesSmart} from '../dtos/filter-employees-smart';
 import {filter} from 'rxjs/operators';
+import {SuperSimpleEmployee} from '../dtos/SuperSimpleEmployee';
 
 @Injectable({
   providedIn: 'root'
@@ -49,9 +50,9 @@ export class EmployeeService {
   /**
    * Get all employees from the backend
    */
-  findAll(): Observable<SimpleEmployee[]> {
+  findAll(): Observable<SuperSimpleEmployee[]> {
     console.log('Get all employees');
-    return this.httpClient.get<SimpleEmployee[]>(this.employeeBaseUri + 's');
+    return this.httpClient.get<SuperSimpleEmployee[]>(this.employeeBaseUri + 's');
   }
 
   /**
@@ -65,7 +66,7 @@ export class EmployeeService {
   /**
    * Filter Employees
    */
-  filterEmployees(filterEmployees: FilterEmployees): Observable<SimpleEmployee[]> {
+  filterEmployees(filterEmployees: FilterEmployees): Observable<SuperSimpleEmployee[]> {
     console.log('Filter employee');
     let interestAreas = '';
     filterEmployees.interests.forEach(x => interestAreas += x.id + ',');
@@ -74,15 +75,15 @@ export class EmployeeService {
     if (filterEmployees.interests.length !== 0) { params = params.set('interestAreas', interestAreas); }
     if (filterEmployees.time !== '' && filterEmployees.date !== '') {
       params = params.set('startTimes', filterEmployees.date + 'T' + filterEmployees.time); }
-    return this.httpClient.get<SimpleEmployee[]>(this.employeeBaseUri + '/filter', {params});
+    return this.httpClient.get<SuperSimpleEmployee[]>(this.employeeBaseUri + '/filter', {params});
   }
 
-  filterEmployeesSmart(filterEmployees: FilterEmployeesSmart): Observable<SimpleEmployee[]> {
+  filterEmployeesSmart(filterEmployees: FilterEmployeesSmart): Observable<SuperSimpleEmployee[]> {
     console.log('Filter employees via Events');
     let events = '';
     filterEmployees.events.forEach(x => events += x.id + ',');
     events = events.substring(0, (events.length - 1));
     const params = new HttpParams().set('eventIds', events);
-    return this.httpClient.get<SimpleEmployee[]>(this.employeeBaseUri + '/filter/smart', {params});
+    return this.httpClient.get<SuperSimpleEmployee[]>(this.employeeBaseUri + '/filter/smart', {params});
   }
 }

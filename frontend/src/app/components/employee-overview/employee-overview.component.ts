@@ -3,6 +3,7 @@ import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
 import {EmployeeService} from '../../services/employee.service';
 import {SimpleEmployee} from '../../dtos/simple-employee';
+import {SuperSimpleEmployee} from '../../dtos/SuperSimpleEmployee';
 import {InterestArea} from '../../dtos/interestArea';
 import {InterestService} from '../../services/interest.service';
 import {InterestAreaService} from '../../services/interestArea.service';
@@ -21,7 +22,7 @@ import {FilterEmployeesSmart} from '../../dtos/filter-employees-smart';
   styleUrls: ['./employee-overview.component.scss']
 })
 export class EmployeeOverviewComponent implements OnInit {
-  employees: SimpleEmployee[] = [];
+  employees: SuperSimpleEmployee[] = [];
   error: boolean = false;
   errorMessage: string = '';
   employeeFilterForm: FormGroup;
@@ -31,8 +32,8 @@ export class EmployeeOverviewComponent implements OnInit {
   page = 1;
   pageSize = 10;
   collectionSize;
-  pageEmployees: SimpleEmployee[];
   interestAreas: InterestArea[];
+  pageEmployees: SuperSimpleEmployee[];
   smartFilter: boolean;
   myEvents: DetailedEvent[];
 
@@ -107,7 +108,7 @@ export class EmployeeOverviewComponent implements OnInit {
 
   private loadEmployees() {
     this.employeeService.findAll().subscribe(
-      (employees: SimpleEmployee[]) => {
+      (employees: SuperSimpleEmployee[]) => {
         this.employees = employees;
         this.collectionSize = this.employees.length;
         this.refreshEmployees();
@@ -132,7 +133,7 @@ export class EmployeeOverviewComponent implements OnInit {
     }
   }
 
-  public getInterestAreas(employee: SimpleEmployee): String[] {
+  public getInterestAreas(employee: SuperSimpleEmployee): String[] {
     const interestAreasDist: Set<String> = new Set<String>();
     if (employee.interestDtos !== null) {
       for (let i = 0; i < employee.interestDtos.length; i++) {
@@ -146,7 +147,7 @@ export class EmployeeOverviewComponent implements OnInit {
 
   filterEmployees(filterEmployees: FilterEmployees) {
     this.employeeService.filterEmployees(filterEmployees).subscribe(
-      (employees: SimpleEmployee[]) => {
+      (employees: SuperSimpleEmployee[]) => {
         this.employees = employees;
         this.refreshEmployees();
       }
@@ -179,7 +180,7 @@ export class EmployeeOverviewComponent implements OnInit {
 
   filterEmployeesSmart(filterEmployeesSmart: FilterEmployeesSmart) {
     this.employeeService.filterEmployeesSmart(filterEmployeesSmart).subscribe(
-      (employees: SimpleEmployee[]) => {
+      (employees: SuperSimpleEmployee[]) => {
         this.employees = employees;
         this.refreshEmployees();
       }

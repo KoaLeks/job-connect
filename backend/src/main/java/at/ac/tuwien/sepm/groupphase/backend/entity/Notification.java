@@ -140,5 +140,81 @@ public class Notification {
             '}';
     }
 
+    public static final class NotificationBuilder {
+        private Long id;
+        private String message;
+        private String type;
+        private boolean seen;
+        private Event event;
+        private Profile recipient;
+        private Profile sender;
+        private Task task;
+        private Boolean favorite = false;
 
+        private NotificationBuilder() {
+        }
+
+        public static NotificationBuilder aNotification() {
+            return new NotificationBuilder();
+        }
+
+        public NotificationBuilder withId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public NotificationBuilder withMessage(String message) {
+            this.message = message;
+            return this;
+        }
+
+        public NotificationBuilder withType(String type) {
+            this.type = type;
+            return this;
+        }
+
+        public NotificationBuilder withSeen(boolean seen) {
+            this.seen = seen;
+            return this;
+        }
+
+        public NotificationBuilder withEvent(Event event) {
+            this.event = event;
+            return this;
+        }
+
+        public NotificationBuilder withRecipient(Profile recipient) {
+            this.recipient = recipient;
+            return this;
+        }
+
+        public NotificationBuilder withSender(Profile sender) {
+            this.sender = sender;
+            return this;
+        }
+
+        public NotificationBuilder withTask(Task task) {
+            this.task = task;
+            return this;
+        }
+
+        public NotificationBuilder withFavorite(Boolean favorite) {
+            this.favorite = favorite;
+            return this;
+        }
+
+        public Notification build() {
+            Notification notification = new Notification();
+            notification.setId(id);
+            notification.setMessage(message);
+            notification.setType(type);
+            notification.setSeen(seen);
+            notification.setEvent(event);
+            notification.setRecipient(recipient);
+            notification.setSender(sender);
+            notification.setTask(task);
+            notification.setFavorite(favorite);
+            return notification;
+        }
+    }
 }

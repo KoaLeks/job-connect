@@ -22,6 +22,7 @@ public interface TestData {
     String EMPLOYEE_LAST_NAME = "Mustermann";
     String EMPLOYEE_FIRST_NAME = "Max";
     String EMPLOYEE_EMAIL = "Max.Mustermann@muster.com";
+    String EMPLOYEE_EMAIL_2 = "erika.musterfrau@muster.com";
     String EMPLOYEE_PASSWORD = "password1234";
     String EMPLOYEE_PUBLIC_INFO = "This is the public information of Max Mustermann";
     Gender EMPLOYEE_GENDER = Gender.MALE;
@@ -35,6 +36,7 @@ public interface TestData {
     String EMPLOYER_LAST_NAME = "Musterfrau";
     String EMPLOYER_FIRST_NAME = "Erika";
     String EMPLOYER_EMAIL = "Erika.Musterfrau@muster.com";
+    String EMPLOYER_EMAIL_2 = "max.mustermann@muster.com";
     String EMPLOYER_PASSWORD = "password1234";
     String EMPLOYER_PUBLIC_INFO = "This is the public information of Erika Musterfrau";
     String EMPLOYER_COMPANY_NAME = "Muster Corp.";
@@ -86,8 +88,10 @@ public interface TestData {
     Set<Task> TASKS_EVENT = null;
     String REGISTER_EMPLOYEE_BASE_URI = BASE_URI + "/profiles/employee";
     String REGISTER_EMPLOYER_BASE_URI = BASE_URI + "/profiles/employer";
-    String GET_EMPLOYEE_BASE_URI = BASE_URI + "/profiles/employee/";
-    String GET_EMPLOYER_BASE_URI = BASE_URI + "/profiles/employer/";
+    String GET_EMPLOYEE_BASE_URI = BASE_URI + "/profiles/employee";
+    String GET_ALL_EMPLOYEES_BASE_URI = BASE_URI + "/profiles/employees";
+    String GET_EMPLOYER_BASE_URI = BASE_URI + "/profiles/employer";
+    String GET_ALL_EMPLOYERS_BASE_URI = BASE_URI + "/profiles/employers";
     String EDIT_EMPLOYEE_BASE_URI = BASE_URI + "/profiles/employee";
     String EDIT_EMPLOYER_BASE_URI = BASE_URI + "/profiles/employer";
     String GET_INTERESTS_BASE_URI = BASE_URI + "/interests";

@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Set;
+
 import java.time.LocalDateTime;
 
 @Repository
@@ -30,6 +32,8 @@ public interface Employee_TasksRepository extends JpaRepository<Employee_Tasks, 
      *         with the given employee profile id to the task with the given task id
      */
     Employee_Tasks findFirstByEmployee_Profile_IdAndTask_Id(Long employee, Long task);
+
+    Set<Employee_Tasks> findAllByTask_IdAndAcceptedIsTrue(Long task);
 
     /**
      * Count how many accepted tasks a certain employee has after a point in time
