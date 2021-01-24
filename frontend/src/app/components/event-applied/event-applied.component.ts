@@ -47,7 +47,7 @@ export class EventAppliedComponent implements OnInit {
   private getTask(tasks: Task[]) {
     for (const task of tasks) {
       for (const emp of task.employees) {
-        if (emp.employee.simpleProfileDto.email === this.authService.getEmail()) {
+        if (emp.employee.superSimpleProfileDto.email === this.authService.getEmail()) {
           return task;
         }
       }

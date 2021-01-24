@@ -213,10 +213,10 @@ public class ProfileEndpoint {
     @CrossOrigin(origins = "http://localhost:4200")
     @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
     @ResponseStatus(HttpStatus.OK)
-    public List<SimpleEmployeeDto> filterEmployeesSmart(FilterEmployeesSmartDto employeesDto) {
+    public List<SuperSimpleEmployeeDto> filterEmployeesSmart(FilterEmployeesSmartDto employeesDto) {
         LOGGER.info("GET api/v1/profiles/filterEmployees/smart");
         List<Employee> employees = this.employeeService.findEmployeeByInterestAreasAndStartTimesSmart(employeesDto.getEventIds());
-        return this.employeeMapper.employeesToSimpleEmployeeDtos(employees);
+        return this.employeeMapper.employeesToSuperSimpleEmployeeDtos(employees);
     }
 
     @GetMapping(value = "employee/filter")
@@ -224,11 +224,11 @@ public class ProfileEndpoint {
     @CrossOrigin(origins = "http://localhost:4200")
     @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
     @ResponseStatus(HttpStatus.OK)
-    public List<SimpleEmployeeDto> filterEmployees(FilterEmployeesDto employeesDto) {
+    public List<SuperSimpleEmployeeDto> filterEmployees(FilterEmployeesDto employeesDto) {
         LOGGER.info("GET api/v1/profiles/employee/filter");
         if(employeesDto.getStartTimes() == null ) employeesDto.setStartTimes(new HashSet<>());
         if(employeesDto.getInterestAreas() == null ) employeesDto.setInterestAreas(new HashSet<>());
         List<Employee> employees = this.employeeService.findEmployeeByInterestAreasAndStartTimes(employeesDto.getInterestAreas(), employeesDto.getStartTimes());
-        return this.employeeMapper.employeesToSimpleEmployeeDtos(employees);
+        return this.employeeMapper.employeesToSuperSimpleEmployeeDtos(employees);
     }
 }

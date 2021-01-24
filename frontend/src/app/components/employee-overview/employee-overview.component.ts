@@ -147,7 +147,7 @@ export class EmployeeOverviewComponent implements OnInit {
 
   filterEmployees(filterEmployees: FilterEmployees) {
     this.employeeService.filterEmployees(filterEmployees).subscribe(
-      (employees: SimpleEmployee[]) => {
+      (employees: SuperSimpleEmployee[]) => {
         this.employees = employees;
         this.refreshEmployees();
       }
@@ -180,7 +180,7 @@ export class EmployeeOverviewComponent implements OnInit {
 
   filterEmployeesSmart(filterEmployeesSmart: FilterEmployeesSmart) {
     this.employeeService.filterEmployeesSmart(filterEmployeesSmart).subscribe(
-      (employees: SimpleEmployee[]) => {
+      (employees: SuperSimpleEmployee[]) => {
         this.employees = employees;
         this.refreshEmployees();
       }
