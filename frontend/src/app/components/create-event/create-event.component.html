@@ -147,7 +147,7 @@
                 &#10060;
               </div>
             </button>
-            Aufgabe: {{task.description}} Bezahlung: {{task.paymentHourly}}€/h Benötigte
+            Aufgabe: {{task.description}} Bezahlung: {{task.paymentHourly}} €/Std Benötigte
             MitarbeiterInnen: {{task.employeeCount}}
           </div>
         </ng-container>
@@ -157,7 +157,7 @@
       <div class="form-group form-check form">
         <button type="button" style="float: right" class="btn btn-primary"
                 [disabled]="!eventCreationForm.valid || !addressCreationForm.valid ||
-                 this.tasks.length == 0" data-toggle="modal" data-target="#ConfirmCreation" (click)="calculatePrice()">Erstellen
+                 this.tasks.length == 0" data-toggle="modal" data-target="#ConfirmCreation" (click)="calculateEventPrice()">Erstellen
         </button>
       </div>
       <div class="modal fade" id="ConfirmCreation" tabindex="-1" role="dialog" aria-labelledby="deleteEventLabel"
@@ -165,21 +165,26 @@
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="deleteEvent">Event erstellen</h5>
+              <h5 class="modal-title" id="deleteEvent">Eventerstellung bestätigen</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
-              Dieses Event kann später <span style="color:red;">nicht</span> mehr bearbeitet werden.
+              <b>Dieses Event kann später <span style="color:red;">nicht</span> mehr bearbeitet werden.</b>
               <br>
               <br>
-              Für dieses Event wird die Pauschale wie folgt berechnet:
+              Für dieses Event werden die Kosten wie folgt berechnet:
+              <br>
+              <br>
+              Vermittlungspauschale: <b>{{eventPrice}}€</b> pro erfolgreich vermitteltem Arbeitnehmer, bis zu <b>{{finalEventPrice}}€</b>
+              <br>
+              <br>
               <ul>
-                <li>Vermittlungspauschale: 10€</li>
-                <li>Pro ArbeitnehmerIn: 5€</li>
-                <li><b>Gesamt: 10€ bis {{employeePrice}}€</b></li>
+                <li *ngFor="let task of tasks">Entlohnung für "{{task.description}}": <b>{{task.paymentHourly}} €/Std.</b></li>
               </ul>
+              <br>
+              Diese Vermittlungspauschale wird nach Ablauf Ihres Events in Rechnung gestellt, die ArbeitnehmerInnen sind von Ihnen direkt zu entlohnen.
               <br>
               <br>
               <b>Sind Sie sicher, dass Sie dieses Event erstellen möchten?</b>

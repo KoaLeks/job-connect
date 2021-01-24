@@ -25,7 +25,8 @@ export class CreateEventComponent implements OnInit {
   taskCreationForm;
   tasks: Task[] = [];
   interestAreas: InterestArea[];
-  employeePrice: number = 0;
+  eventPrice: number = 0;
+  finalEventPrice: number = 0;
 
   constructor(public authService: AuthService, private formBuilder: FormBuilder, private addressService: AddressService,
               private eventService: EventService, private taskService: TaskService,
@@ -109,12 +110,24 @@ export class CreateEventComponent implements OnInit {
     }
   }
 
-  calculatePrice() {
+  calculateEventPrice() {
+    const duration = new Date(this.eventCreationForm.value.end).valueOf() - new Date(this.eventCreationForm.value.start).valueOf();
+    console.log('duration ' + duration);
+    const diffHours = duration / (60 * 60 * 1000);
+    console.log('diffHours ' + diffHours);
+    if (diffHours < 4) {
+      this.eventPrice = 10;
+    } else if (diffHours <= 8) {
+      this.eventPrice = 14;
+    } else {
+      this.eventPrice = 19;
+    }
     let countEmployees = 0;
     for (const task of this.tasks) {
       countEmployees += task.employeeCount;
+
     }
-    this.employeePrice = (countEmployees * 5 ) + 10; // employee count * 5 euros + 10 euro pauschale
+    this.finalEventPrice = this.eventPrice * countEmployees;
   }
 
 }
