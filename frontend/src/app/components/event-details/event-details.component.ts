@@ -173,13 +173,21 @@ export class EventDetailsComponent implements OnInit {
                 this.applicationService.deleteApplication(application.id).subscribe(
                   () => {
                     this.alertService.success('Bewerbung erfolgreich gelöscht', {autoClose: true});
-                    this.router.navigate(['events']);
+                    this.router.navigate(['applied-events']);
                   }
                 );
               }
             }
       }
     );
+  }
+
+  deleteJob(id: number) {
+    this.applicationService.deleteJob(id).subscribe(
+      () => {
+        this.alertService.success('Stelle erfolgreich gekündigt', {autoClose: true});
+        this.router.navigate(['applied-events']);
+      });
   }
 
   getStatus(tasks: Task[]) {
@@ -190,6 +198,39 @@ export class EventDetailsComponent implements OnInit {
         }
       }
     }
+  }
+
+  getTaskId(tasks: Task[]) {
+    for (const task of tasks) {
+      for (const emp of task.employees) {
+        if (emp.employee.simpleProfileDto.email === this.authService.getEmail()) {
+          return task.id;
+        }
+      }
+    }
+  }
+
+  checkForThreeDaysBeforeStart(date) {
+    const currDate = new Date();
+    currDate.setDate(currDate.getDate() + 3);
+    return new Date(date) <= currDate;
+  }
+
+  maximumDate(date) {
+    const newDate = new Date(date);
+    newDate.setDate(newDate.getDate() - 3);
+    return newDate;
+  }
+
+  getTaskDescription(tasks: Task[]) {
+    for (const task of tasks) {
+      for (const emp of task.employees) {
+        if (emp.employee.simpleProfileDto.email === this.authService.getEmail()) {
+          return task.description;
+        }
+      }
+    }
+    return null;
   }
 
 }
