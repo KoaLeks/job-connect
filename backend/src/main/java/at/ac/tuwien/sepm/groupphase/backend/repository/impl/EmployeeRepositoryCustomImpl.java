@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -52,6 +53,7 @@ public class EmployeeRepositoryCustomImpl implements EmployeeRepositoryCustom {
         query.distinct(true);
 
         var res = em.createQuery(query).getResultList();
+        res.sort(Comparator.comparing(e -> e.getProfile().getFirstName()));
 
         return res;
     }

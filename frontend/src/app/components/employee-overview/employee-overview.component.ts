@@ -6,11 +6,14 @@ import {SimpleEmployee} from '../../dtos/simple-employee';
 import {InterestArea} from '../../dtos/interestArea';
 import {InterestService} from '../../services/interest.service';
 import {InterestAreaService} from '../../services/interestArea.service';
-import {FormBuilder} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import {EventService} from '../../services/event.service';
 import {DetailedEvent} from '../../dtos/detailed-event';
 import {FilterEmployees} from '../../dtos/filter-employees';
+import {DatePipe} from '@angular/common';
+import {FilterEmployeesSmart} from '../../dtos/filter-employees-smart';
+
 
 @Component({
   selector: 'app-employee-overview',
@@ -21,7 +24,7 @@ export class EmployeeOverviewComponent implements OnInit {
   employees: SimpleEmployee[] = [];
   error: boolean = false;
   errorMessage: string = '';
-  employeeFilterForm;
+  employeeFilterForm: FormGroup;
   employeeSmartFilterForm;
 
   // Pagination
@@ -34,6 +37,7 @@ export class EmployeeOverviewComponent implements OnInit {
   myEvents: DetailedEvent[];
 
   selectedItems = [];
+  selectedItemsSmart = [];
   dropdownSettingsInterests: IDropdownSettings;
   dropdownSettingsEvents: IDropdownSettings;
 
@@ -41,11 +45,12 @@ export class EmployeeOverviewComponent implements OnInit {
               private employeeService: EmployeeService,
               private interestAreaService: InterestAreaService,
               private formBuilder: FormBuilder,
-              private eventService: EventService) {
+              private eventService: EventService,
+              public datePipe: DatePipe) {
     this.employeeFilterForm = this.formBuilder.group(
       {
         interests: '',
-        date: '',
+        date: ['', Validators.required],
         time: ''
       }
     );
@@ -69,7 +74,7 @@ export class EmployeeOverviewComponent implements OnInit {
       textField: 'description',
       selectAllText: 'Select All',
       unSelectAllText: 'UnSelect All',
-      itemsShowLimit: 4,
+      itemsShowLimit: 2,
       allowSearchFilter: true
     };
 
@@ -79,7 +84,7 @@ export class EmployeeOverviewComponent implements OnInit {
       textField: 'title',
       selectAllText: 'Select All',
       unSelectAllText: 'UnSelect All',
-      itemsShowLimit: 3,
+      itemsShowLimit: 2,
       allowSearchFilter: true
     };
   }
@@ -139,18 +144,18 @@ export class EmployeeOverviewComponent implements OnInit {
     return Array.from(interestAreasDist);
   }
 
-  private filterEmployees(filterEmployees: FilterEmployees) {
+  filterEmployees(filterEmployees: FilterEmployees) {
     this.employeeService.filterEmployees(filterEmployees).subscribe(
       (employees: SimpleEmployee[]) => {
-        console.log(employees);
         this.employees = employees;
         this.refreshEmployees();
       }
     );
+
   }
 
   changeFilterMode() {
-    if (this.myEvents === null || this.myEvents === undefined){
+    if (this.myEvents === null || this.myEvents === undefined) {
       this.eventService.getEventsOfTokenSub().subscribe(
         (events: DetailedEvent[]) => {
           this.myEvents = events;
@@ -158,5 +163,26 @@ export class EmployeeOverviewComponent implements OnInit {
       );
     }
     this.smartFilter = !this.smartFilter;
+  }
+
+  setTime() {
+    if (this.employeeFilterForm.value.time === '') {
+      this.employeeFilterForm.value.time = '12:00';
+    }
+  }
+
+  setDate() {
+    if (this.employeeFilterForm.value.date === '') {
+      this.employeeFilterForm.value.date = this.datePipe.transform(Date.now(), 'yyyy-MM-dd');
+    }
+  }
+
+  filterEmployeesSmart(filterEmployeesSmart: FilterEmployeesSmart) {
+    this.employeeService.filterEmployeesSmart(filterEmployeesSmart).subscribe(
+      (employees: SimpleEmployee[]) => {
+        this.employees = employees;
+        this.refreshEmployees();
+      }
+    );
   }
 }

@@ -89,6 +89,9 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     List<Event> searchEventsBySearchEventDto(String title, Long employerId, String start, String end,
                                              Long interestAreaId, Long payment, String state);
 
+    @Query(value = "SELECT * FROM event e " +
+        "WHERE e.employer_profile_id = ?1 " +
+        "AND e.start > CURRENT_TIMESTAMP()", nativeQuery = true)
     List<Event> findALlByEmployerId(Long employerId);
 
 }
