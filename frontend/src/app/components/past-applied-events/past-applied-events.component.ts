@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {DetailedEvent} from '../../dtos/detailed-event';
 import {AuthService} from '../../services/auth.service';
 import {ApplicationService} from '../../services/application.service';
@@ -13,7 +13,7 @@ export class PastAppliedEventsComponent implements OnInit {
   events: DetailedEvent[] = [];
   error: boolean = false;
   errorMessage: string = '';
-  pastAppliedEvents: number;
+  pastAppliedEvents: DetailedEvent[] = [];
 
   constructor(public authService: AuthService, private applicationService: ApplicationService) {
   }
@@ -64,15 +64,16 @@ export class PastAppliedEventsComponent implements OnInit {
     this.applicationService.getAppliedEvents().subscribe(
       (events: DetailedEvent[]) => {
         this.events = events;
+        for (const event of events) {
+          if (!this.checkDateInFuture(event.start)) {
+            this.pastAppliedEvents.push(event);
+          }
+        }
       }
     );
   }
 
   checkDateInFuture(date) {
     return new Date(date) >= new Date();
-  }
-
-  countPastAppliedEvents() {
-    this.pastAppliedEvents++;
   }
 }

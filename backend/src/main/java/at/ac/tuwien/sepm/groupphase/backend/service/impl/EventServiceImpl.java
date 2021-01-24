@@ -58,7 +58,7 @@ public class EventServiceImpl implements EventService {
             Set<Task> tasks = event.getTasks();
             for (Task task : tasks) {
                 task.setEvent(savedEvent);
-                if(task.getInterestArea().getId() == null) {
+                if(task.getInterestArea() != null && task.getInterestArea().getId() == null) {
                     task.setInterestArea(null);
                 }
                 taskRepository.save(task);

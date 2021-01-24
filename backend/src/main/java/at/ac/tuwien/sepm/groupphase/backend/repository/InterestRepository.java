@@ -9,7 +9,18 @@ import java.util.Set;
 @Repository
 public interface InterestRepository extends JpaRepository<Interest, Long> {
 
+    /**
+     * Finds all the interests of the employee with the given id
+     *
+     * @param id of the employee
+     * @return Set of interests of the employee with the given id
+     */
     Set<Interest> findByEmployee_Id(Long id);
 
+    /**
+     * Deletes all the interests of the employee with the given profile email
+     *
+     * @param email of the employee profile
+     */
     void deleteInterestsByEmployee_Profile_Email(String email);
 }

@@ -38,10 +38,17 @@ public interface ProfileService extends UserDetailsService {
      */
     Profile findOneById(Long id);
 
+    /**
+     * Creates a profile and returns its id
+     *
+     * @param profile to create
+     * @return the id of the created profile
+     */
     Long createProfile(Profile profile);
 
     /**
      * Check if email password combination is correct. Used to update a users password.
+     *
      * @param email of the profile
      * @param password of the profile
      * @return true if the password is correct, false otherwise
@@ -50,6 +57,7 @@ public interface ProfileService extends UserDetailsService {
 
     /**
      * Update the profile details
+     *
      * @param profileToEdit values to update
      * @return the ID of the updated user profile
      */

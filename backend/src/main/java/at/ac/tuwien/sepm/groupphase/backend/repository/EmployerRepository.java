@@ -17,7 +17,18 @@ public interface EmployerRepository extends JpaRepository<Employer, Long> {
      */
     Employer findByProfile_Email(String email);
 
+    /**
+     * Find the employer/creator of the given event
+     *
+     * @param event to look for
+     * @return the employer of the given event
+     */
     Employer findFirstByEvents(Event event);
 
+    /**
+     * Delete the employer with the given profile email
+     *
+     * @param email of the employer profile to delete
+     */
     void deleteByProfile_Email(String email);
 }

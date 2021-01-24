@@ -3,12 +3,13 @@
     <div class="card-header">
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col-md-9 h1" >
+          <div class="col-md-9 h1">
             {{eventDetails.title}}
             <i style="color: red" *ngIf="!checkDateInFuture(eventDetails.end)">
               <small>(bereits vorbei)</small>
             </i>
-            <i style="color:green;" *ngIf="!checkDateInFuture(eventDetails.start) && checkDateInFuture(eventDetails.end)">
+            <i style="color:green;"
+               *ngIf="!checkDateInFuture(eventDetails.start) && checkDateInFuture(eventDetails.end)">
               <small>(läuft gerade)</small>
             </i>
           </div>
@@ -60,7 +61,8 @@
                   <ng-container *ngFor="let acceptedEmployee of task.employees">
                     <a *ngIf="acceptedEmployee.accepted"
                        [routerLink]="['/employee', acceptedEmployee.employee.simpleProfileDto.id, 'details']">
-                      {{acceptedEmployee.employee.simpleProfileDto.firstName}} {{acceptedEmployee.employee.simpleProfileDto.lastName}}</a>
+                      {{acceptedEmployee.employee.simpleProfileDto.firstName}} {{acceptedEmployee.employee.simpleProfileDto.lastName}}
+                      <br></a>
                   </ng-container>
                 </td>
 
@@ -117,8 +119,16 @@
     </div>
     <div class="card-footer text-muted">
       <button type="button" class="btn btn-primary" data-toggle="modal" (click)="createApplication()"
-              data-target="#Apply-Task" [disabled]="!loggedInEmployee || applied">
+              *ngIf="loggedInEmployee && !applied" data-target="#Apply-Task">
         Bewirb dich jetzt!
+      </button>
+      <button [disabled]="loggedInEmployer" type="button" class="btn btn-primary" data-toggle="modal" (click)="createApplication()"
+              *ngIf="!authService.isLoggedIn() || loggedInEmployer" data-target="#Apply-Task-Alert">
+        Bewirb dich jetzt!
+      </button>
+      <button type="button" class="btn btn-primary" data-toggle="modal" (click)="createApplication()"
+              *ngIf="applied" disabled>
+        Du hast dich schon beworben
       </button>
       <button type="button" style="float: right" *ngIf="this.authService.getToken() !== '' && eventDetails != undefined && authService.getUserRole() === 'EMPLOYER' &&
          authService.getTokenIdentifier() === eventDetails.employer.simpleProfileDto.email && checkDateInFuture(eventDetails.end) && !checkDateIn24h(eventDetails.start)"
@@ -136,6 +146,12 @@
               class="btn btn-outline-danger" data-toggle="modal" data-target="#Delete-Event" disabled
               title="Event ist schon vorbei!">
         Event absagen!
+      </button>
+      <button type=button class="btn btn-outline-info" style="float: right"
+              *ngIf="this.authService.getToken() !== '' && getStatus(eventDetails.tasks) === null && loggedInEmployee
+               && checkDateInFuture(eventDetails.start)"
+              (click)="deleteApplication(eventDetails.id)">
+        Bewerbung zurückziehen
       </button>
     </div>
   </div>
@@ -187,7 +203,7 @@
       <form [formGroup]="applyTaskForm" (ngSubmit)="apply(applyTaskForm.value)">
         <div class="form-group"
              *ngIf="this.eventDetails !== undefined && this.eventDetails.tasks !== undefined && this.eventDetails.tasks.length !== 0">
-          <label for="inputTask">Für welche Stelle möchtest du dich bewerben</label>
+          <label for="inputTask">Für welche Stelle möchtest du dich bewerben?</label>
           <select class="form-control" id="inputTask" formControlName="inputTask"
                   (change)='createApplication()'>
             <option [value]=null>kein Stelle ausgewählt</option>
@@ -208,7 +224,7 @@
         </div>
         <!-- TASK FORM -->
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Schließen</button>
           <button type="submit" class="btn btn-primary" data-toggle="modal"
                   data-target="#Apply-Task" [disabled]="!applyTaskForm.valid">Senden
           </button>
@@ -219,9 +235,32 @@
 </div>
 
 <!-- Application list -->
-<ng-container *ngIf="eventDetails != undefined">
+<ng-container *ngIf="eventDetails != undefined && checkDateInFuture(eventDetails.end)">
   <!-- added this, because it was throwing "TypeError: cannot read property 'employer' of undefined -->
   <app-application-list *ngIf="this.authService.getToken() !== '' && authService.getUserRole() === 'EMPLOYER' &&
   authService.getTokenIdentifier() === eventDetails.employer.simpleProfileDto.email"
                         [eventId]="id" [tasks]="eventDetails.tasks"></app-application-list>
 </ng-container>
+
+<!-- Modal for Alert 'Create Account Before Applying'-->
+<div class="modal fade" id="Apply-Task-Alert" tabindex="-1" role="dialog" aria-labelledby="applyTaskAlertLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="appleTaskAlert">Achtung, Sie sind nicht eingeloggt.</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Bitte loggen Sie sich ein, um sich bei einem Event bewerben zu können!<br><br>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">Verstanden</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

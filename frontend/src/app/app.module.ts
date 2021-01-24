@@ -34,6 +34,7 @@ import { ExpiredEventsComponent } from './components/expired-events/expired-even
 import { PastAppliedEventsComponent } from './components/past-applied-events/past-applied-events.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { DatePipe } from '@angular/common'
+import { EmployerEventsComponent } from './components/employer-events/employer-events.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { DatePipe } from '@angular/common'
     EventAppliedComponent,
     ExpiredEventsComponent,
     PastAppliedEventsComponent,
+    EmployerEventsComponent,
   ],
   imports: [
     NgMultiSelectDropDownModule.forRoot(),

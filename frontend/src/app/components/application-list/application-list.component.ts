@@ -5,7 +5,7 @@ import {Task} from '../../dtos/task';
 import {ApplicationStatus} from '../../dtos/application-status';
 import {AuthService} from '../../services/auth.service';
 import {NotificationService} from '../../services/notification.service';
-import {Router} from '@angular/router';
+import {NavigationEnd, Router} from '@angular/router';
 
 @Component({
   selector: 'app-application-list',
@@ -56,9 +56,9 @@ export class ApplicationListComponent implements OnInit {
   }
 
   reloadComponent() {
-    this.router.navigateByUrl('', { skipLocationChange: true }).then(() => {
-      this.router.navigate(['events', this.eventId, 'details']);
-    });
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    this.router.onSameUrlNavigation = 'reload';
+    this.router.navigate(['events', this.eventId, 'details']);
   }
 
   accept(notification: SimpleNotification) {
@@ -73,6 +73,7 @@ export class ApplicationListComponent implements OnInit {
     const declineApplication = new ApplicationStatus(notification.taskId, notification.sender.id, notification.id, false);
     this.applicationService.changeApplicationStatus(declineApplication).subscribe();
     this.removeNotification(notification.id);
+    this.reloadComponent();
   }
 
   deleteNotification(id: number) {

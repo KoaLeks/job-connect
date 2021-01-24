@@ -1,8 +1,9 @@
 <div class="eventoverviewcontainer">
   <ng-container *ngIf="!(events.length === 0)">
     <ng-container *ngFor="let event of events">
-      <div class="list-group mt-3" [routerLink]="['/events', event.id, 'details']" *ngIf="checkDateInFuture(event.start)">
-        <a class="list-group-item list-group-item-action flex-column align-items-start event-item">
+      <div class="list-group mt-3" *ngIf="checkDateInFuture(event.start)">
+        <a class="list-group-item list-group-item-action flex-column align-items-start event-item"
+           [routerLink]="['/events', event.id, 'details']">
           <div class="d-flex w-100 justify-content-between">
             <h4 class="mb-1">
               {{event.title}}
@@ -69,10 +70,14 @@
             </small>
           </p>
         </a>
+        <button type=button class="btn btn-outline-info btn-sm ml-auto" *ngIf="getStatus(event.tasks) === null"
+                (click)="deleteApplication(event.id)">
+          Bewerbung zurückziehen
+        </button>
       </div>
     </ng-container>
   </ng-container>
-  <ng-container *ngIf="events.length === 0">
+  <ng-container *ngIf="futureEvents.length === 0">
     <div class="text-black-50 text-center mt-2">
       Keine Bewerbungen vorhanden
       <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-emoji-frown" fill="currentColor"
