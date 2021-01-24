@@ -74,16 +74,13 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
 
     /**
-     * Finds events that start between available times of given user
-     *
-     * @param userId Id of user to match times with
-     * @return list of events in which user has time
+     * Finds events that start between available times of given user and has similar interest areas as user
+     * @param userId Id of user to match times and interests with
+     * @return list of events in which user has time and interest
      */
-    @Query(value =
-        "SELECT e.id,e.description, e.end, e.start, e.title, e.address_id, e.employer_profile_id FROM event e, " +
-            "time t, interest interest, interest_area intArea, task task where t.employee_profile_id=?1 and (FORMATDATETIME(e.start, 'yyyy-MM-dd') between t.start and t.end) " +
-            "and interest.employee_profile_id=?1 and task.interest_area_Id=intArea.id and intArea.id=interest.interest_area_id",
-        nativeQuery = true)
+    @Query("select event from Event event inner join Time time on time.employee.id=?1 inner join Interest interest on " +
+        "interest.employee.id=?1 inner join InterestArea intArea on intArea.id=interest.interestArea.id inner join Task task " +
+        "on task.interestArea.id=intArea.id where time.start < event.start and event.start < time.end")
     List<Event> findEventsByUsersTime(Long userId);
 
     /**
