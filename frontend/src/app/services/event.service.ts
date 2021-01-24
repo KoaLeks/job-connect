@@ -42,6 +42,11 @@ export class EventService {
     return this.httpClient.get<DetailedEvent[]>(this.eventBaseUri);
   }
 
+  getEventsOfTokenSub(): Observable<DetailedEvent[]> {
+    console.log('Get all Events of Token sub');
+    return this.httpClient.get<DetailedEvent[]>(this.eventBaseUri + '/my');
+  }
+
   /**
    * searches events by given criteria
    * @param event search criterias for events

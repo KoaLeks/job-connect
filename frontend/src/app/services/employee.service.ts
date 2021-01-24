@@ -1,9 +1,13 @@
 import {Injectable} from '@angular/core';
 import {Globals} from '../global/globals';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {EditEmployee} from '../dtos/edit-employee';
 import {Observable} from 'rxjs';
 import {SimpleEmployee} from '../dtos/simple-employee';
+import {DetailedEvent} from '../dtos/detailed-event';
+import {FilterEmployees} from '../dtos/filter-employees';
+import {FilterEmployeesSmart} from '../dtos/filter-employees-smart';
+import {filter} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -56,5 +60,29 @@ export class EmployeeService {
   deleteEmployee() {
     console.log('Delete profile');
     return this.httpClient.delete(this.employeeBaseUri);
+  }
+
+  /**
+   * Filter Employees
+   */
+  filterEmployees(filterEmployees: FilterEmployees): Observable<SimpleEmployee[]> {
+    console.log('Filter employee');
+    let interestAreas = '';
+    filterEmployees.interests.forEach(x => interestAreas += x.id + ',');
+    interestAreas = interestAreas.substring(0, (interestAreas.length - 1));
+    let params = new HttpParams();
+    if (filterEmployees.interests.length !== 0) { params = params.set('interestAreas', interestAreas); }
+    if (filterEmployees.time !== '' && filterEmployees.date !== '') {
+      params = params.set('startTimes', filterEmployees.date + 'T' + filterEmployees.time); }
+    return this.httpClient.get<SimpleEmployee[]>(this.employeeBaseUri + '/filter', {params});
+  }
+
+  filterEmployeesSmart(filterEmployees: FilterEmployeesSmart): Observable<SimpleEmployee[]> {
+    console.log('Filter employees via Events');
+    let events = '';
+    filterEmployees.events.forEach(x => events += x.id + ',');
+    events = events.substring(0, (events.length - 1));
+    const params = new HttpParams().set('eventIds', events);
+    return this.httpClient.get<SimpleEmployee[]>(this.employeeBaseUri + '/filter/smart', {params});
   }
 }

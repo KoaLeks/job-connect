@@ -19,3 +19,33 @@ table td {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.search-button {
+  background-color: white;
+  color: #FFA545;
+  border-color: #FFA545;
+  font-weight: bold;
+}
+.search-button:hover{
+  background-color: #FFA545;
+  color: white;
+}
+
+.smart-button {
+  background-color: white;
+  color: #339FFF;
+  border-color: #339FFF;
+  font-weight: bold;
+}
+.smart-button:hover{
+  background-color: #339FFF;
+  color: white;
+}
+
+.event-search-form {
+  font-family: 'Century Gothic', sans-serif;
+}
+
+.smart-filter{
+  padding-top: 37.5px;
+}
