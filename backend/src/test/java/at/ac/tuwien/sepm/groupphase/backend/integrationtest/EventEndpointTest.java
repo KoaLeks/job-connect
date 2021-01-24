@@ -163,8 +163,10 @@ public class EventEndpointTest implements TestData {
 
         String body = objectMapper.writeValueAsString(eventMapper.eventToEventInquiryDto(event));
 
+        var res = jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES);
+
         MvcResult mvcResult = this.mockMvc.perform(post(EVENTS_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
             .contentType(MediaType.APPLICATION_JSON)
             .content(body))
             .andDo(print())
