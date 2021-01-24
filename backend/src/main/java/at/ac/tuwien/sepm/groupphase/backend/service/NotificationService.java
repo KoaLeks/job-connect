@@ -70,4 +70,12 @@ public interface NotificationService {
      * @param authorization used for authorizing who can delete the notification
      */
     void deleteApplication(Long id, String authorization);
+
+    /**
+     * Delete an employee from assigned task
+     *
+     * @param taskId task that employee quit
+     * @param authorization token to identify logged in user (employee)
+     */
+    void deleteEmployeeFromTask(Long taskId, String authorization);
 }

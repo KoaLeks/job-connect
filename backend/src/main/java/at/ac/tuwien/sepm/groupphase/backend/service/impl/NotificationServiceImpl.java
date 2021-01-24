@@ -2,12 +2,10 @@ package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
+import at.ac.tuwien.sepm.groupphase.backend.exception.ValidationException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.Employee_TasksRepository;
-import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.NotificationRepository;
-import at.ac.tuwien.sepm.groupphase.backend.service.NotificationService;
-import at.ac.tuwien.sepm.groupphase.backend.service.ProfileService;
-import at.ac.tuwien.sepm.groupphase.backend.service.TokenService;
+import at.ac.tuwien.sepm.groupphase.backend.service.*;
 import at.ac.tuwien.sepm.groupphase.backend.util.NotificationType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +15,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.lang.invoke.MethodHandles;
-import java.util.HashSet;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 
@@ -30,14 +29,19 @@ public class NotificationServiceImpl implements NotificationService {
     private final Employee_TasksRepository employee_tasksRepository;
     private final TokenService tokenService;
     private final ProfileService profileService;
+    private final MailService mailService;
+    private final TaskService taskService;
 
     @Autowired
     public NotificationServiceImpl(NotificationRepository notificationRepository, TokenService tokenService,
-                                   ProfileService profileService, Employee_TasksRepository employee_tasksRepository) {
+                                   ProfileService profileService, MailService mailService, TaskService taskService,
+                                   Employee_TasksRepository employee_tasksRepository) {
         this.notificationRepository = notificationRepository;
         this.tokenService = tokenService;
         this.profileService = profileService;
         this.employee_tasksRepository = employee_tasksRepository;
+        this.mailService = mailService;
+        this.taskService = taskService;
     }
 
     @Override
@@ -126,4 +130,25 @@ public class NotificationServiceImpl implements NotificationService {
             employee_tasksRepository.deleteEmployee_TaskByEmployee_Profile_Email_AndTask_Id(mail, taskId);
         }
     }
+    @Override
+    @Transactional
+    public void deleteEmployeeFromTask(Long taskId, String authorization) {
+        LOGGER.debug("Delete employee_task entry with task id{}", taskId);
+        Task task = this.taskService.findOneById(taskId);
+        Event event = task.getEvent();
+        LocalDateTime latestDateTime = event.getStart().minus(Duration.ofDays(3));
+        LocalDateTime currDate = LocalDateTime.now();
+        if (currDate.isAfter(latestDateTime)) {
+            throw new ValidationException("Kündigung ist nur bis zu drei Tage vor Eventbeginn möglich.");
+        }
+        else {
+            String mail = tokenService.getEmailFromHeader(authorization);
+            employee_tasksRepository.deleteEmployee_TaskByEmployee_Profile_Email_AndTask_Id(mail, taskId);
+            notificationRepository.deleteNotificationByTask_IdAndTypeAndRecipient_Email(taskId, NotificationType.EVENT_ACCEPTED.name(), mail);
+
+            this.mailService.sendJobTerminationMail(task);
+        }
+
+    }
 }
+

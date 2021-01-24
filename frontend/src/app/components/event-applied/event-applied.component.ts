@@ -44,6 +44,17 @@ export class EventAppliedComponent implements OnInit {
     return null;
   }
 
+  private getTask(tasks: Task[]) {
+    for (const task of tasks) {
+      for (const emp of task.employees) {
+        if (emp.employee.simpleProfileDto.email === this.authService.getEmail()) {
+          return task;
+        }
+      }
+    }
+    return null;
+  }
+
   private getAmountOfFreeJobs(tasks: Task[]) {
     let sum = 0;
     for (const task of tasks) {
@@ -80,7 +91,16 @@ export class EventAppliedComponent implements OnInit {
   checkDateInFuture(date) {
     return new Date(date) >= new Date();
   }
-
+  checkForThreeDaysBeforeStart(date) {
+    const currDate = new Date();
+    currDate.setDate(currDate.getDate() + 3);
+    return new Date(date) <= currDate;
+  }
+  maximumDate(date) {
+    const newDate = new Date(date);
+    newDate.setDate(newDate.getDate() - 3);
+    return newDate;
+  }
   deleteApplication(id: number) {
     this.applicationService.getApplicationsForEvent(id).subscribe(
       (applications) => {
@@ -88,8 +108,13 @@ export class EventAppliedComponent implements OnInit {
           if (application.sender.email === this.authService.getEmail()) {
             this.applicationService.deleteApplication(application.id).subscribe(
               () => {
-                this.alertService.success('Bewerbung erfolgreich gelöscht', {autoClose: true});
-                this.router.navigate(['events']);
+                this.alertService.success('Bewerbung erfolgreich zurückgezogen', {autoClose: true});
+                // this.router.navigate(['events']);
+                this.applicationService.getAppliedEvents().subscribe(
+                  (events: DetailedEvent[]) => {
+                    this.events = events;
+                  }
+                );
               }
             );
           }
@@ -97,5 +122,16 @@ export class EventAppliedComponent implements OnInit {
       }
     );
   }
-
+  deleteJob(id: number) {
+    this.applicationService.deleteJob(id).subscribe(
+      () => {
+        this.alertService.success('Stelle erfolgreich gekündigt', {autoClose: true});
+        this.applicationService.getAppliedEvents().subscribe(
+          (events: DetailedEvent[]) => {
+            this.events = events;
+          }
+        );
+      }
+    );
+  }
 }

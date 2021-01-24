@@ -28,15 +28,19 @@
 }
 
 .declined{
-  color: white;
-  background-color: lightcoral;
+  color: black;
+  background-color: #e84855;
 }
 
 .pending{
-  background-color: lightgrey;
+  background-color: #CFD8D7;
 }
 
 .accepted{
-  color: white;
-  background-color: green;
+  color: black;
+  background-color: #cdeac0;
+}
+.quittext {
+  font-size: smaller;
+  margin: 0.5em;
 }

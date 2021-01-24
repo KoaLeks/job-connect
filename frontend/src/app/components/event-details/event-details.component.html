@@ -148,14 +148,77 @@
               title="Event ist schon vorbei!">
         Event absagen!
       </button>
-      <button type=button class="btn btn-outline-info" style="float: right"
+      <button type=button class="btn btn-outline-danger" style="float: right" data-toggle="modal"
+              [attr.data-target]="'#revokeModal' + eventDetails.id"
               *ngIf="this.authService.getToken() !== '' && getStatus(eventDetails.tasks) === null && loggedInEmployee
-               && checkDateInFuture(eventDetails.start)"
-              (click)="deleteApplication(eventDetails.id)">
+               && checkDateInFuture(eventDetails.start)">
         Bewerbung zurückziehen
       </button>
+
+      <button type=button class="btn btn-outline-danger" style="float: right" data-toggle="modal"
+              [attr.data-target]="'#quitModal' + eventDetails.id"
+              *ngIf="this.authService.getToken() !== '' && getStatus(eventDetails.tasks) === true && loggedInEmployee"
+              [disabled]="checkForThreeDaysBeforeStart(eventDetails.start)">
+        Stelle kündigen
+      </button>
+      <span class="float-right quittext mt-3 mr-3" *ngIf="getStatus(eventDetails.tasks) === true">Kündigung möglich
+        bis: {{maximumDate(eventDetails.start) | date:'dd.MM.yyyy HH:mm'}}</span>
     </div>
   </div>
+
+  <div class="modal fade" [id]="'quitModal'+ eventDetails.id" tabindex="-1" role="dialog"
+       aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content text-center">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel"><b>Stelle kündigen</b></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h5>Bist du sicher, dass du die folgende Stelle kündigen willst?</h5> <br>
+          <b> Stelle: </b> {{getTaskDescription(eventDetails.tasks)}} <br>
+          <b>Event:</b> {{eventDetails.title}}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
+          <button type="button" class="btn btn-danger" (click)="deleteJob(getTaskId(eventDetails.tasks))"
+                  data-dismiss="modal">Stelle kündigen
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade" [id]="'revokeModal'+ eventDetails.id" tabindex="-1" role="dialog"
+       aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content text-center">
+        <div class="modal-header">
+          <h5 class="modal-title" id="revokeModalLabel"><b>Bewerbung zurückziehen</b></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h5>Bist du sicher, dass du die folgende Bewerbung zurückziehen willst?</h5> <br>
+          <b> Stelle: </b> {{getTaskDescription(eventDetails.tasks)}} <br>
+          <b>Event:</b> {{eventDetails.title}}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
+          <button type="button" class="btn btn-danger" (click)="deleteApplication(eventDetails.id)"
+                  data-dismiss="modal">
+            Bewerbung zurückziehen
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 </ng-container>
 
 <!-- Modal Delete Event-->
