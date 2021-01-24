@@ -18,6 +18,12 @@ public interface EmployerRepository extends JpaRepository<Employer, Long> {
     Employer findByProfile_Email(String email);
 
     /**
+     * Find the employer/creator of the given event
+     *
+     * @param event to look for
+     * @return the employer of the given event
+     */
+    /**
      * Find an employer with a certain id
      *
      * @param id to look for
@@ -26,12 +32,17 @@ public interface EmployerRepository extends JpaRepository<Employer, Long> {
     Employer findByProfile_Id(Long id);
 
     /**
-     * Find an employer with a certain event
+     * Find the employer/creator of the given event
      *
      * @param event to look for
-     * @return the employer
+     * @return the employer of the given event
      */
     Employer findFirstByEvents(Event event);
 
+    /**
+     * Delete the employer with the given profile email
+     *
+     * @param email of the employer profile to delete
+     */
     void deleteByProfile_Email(String email);
 }

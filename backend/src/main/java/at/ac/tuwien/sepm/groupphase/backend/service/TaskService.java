@@ -7,6 +7,7 @@ public interface TaskService {
 
     /**
      * Find a task by id
+     *
      * @param id to look for
      * @return the task
      */
@@ -14,6 +15,7 @@ public interface TaskService {
 
     /**
      * Update a task
+     *
      * @param task to update
      * @return the task id
      */
