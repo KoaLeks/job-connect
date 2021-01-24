@@ -3,10 +3,7 @@ package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SearchEventDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
-import at.ac.tuwien.sepm.groupphase.backend.repository.AddressRepository;
-import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
-import at.ac.tuwien.sepm.groupphase.backend.repository.NotificationRepository;
-import at.ac.tuwien.sepm.groupphase.backend.repository.TaskRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.*;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.service.TaskService;
 import at.ac.tuwien.sepm.groupphase.backend.service.MailService;
@@ -30,6 +27,8 @@ public class EventServiceImpl implements EventService {
     private final TaskRepository taskRepository;
     private final MailService mailService;
     private final NotificationRepository notificationRepository;
+    private final TimeRepository timeRepository;
+    private final InterestRepository interestRepository;
 
     @Autowired
     private EntityManagerFactory emf;
@@ -38,13 +37,15 @@ public class EventServiceImpl implements EventService {
     public EventServiceImpl(TaskService taskService, EventRepository eventRepository,
                             AddressRepository addressRepository,
                             TaskRepository taskRepository,
-                            MailService mailService, NotificationRepository notificationRepository) {
+                            MailService mailService, NotificationRepository notificationRepository, TimeRepository timeRepository, InterestRepository interestRepository) {
         this.taskService = taskService;
         this.eventRepository = eventRepository;
         this.addressRepository = addressRepository;
         this.taskRepository = taskRepository;
         this.mailService = mailService;
         this.notificationRepository = notificationRepository;
+        this.timeRepository = timeRepository;
+        this.interestRepository = interestRepository;
     }
 
     @Override
@@ -89,7 +90,9 @@ public class EventServiceImpl implements EventService {
             eventListAvailableTasks = eventRepository.findEventsWithFreeAvailableSlots();
         }
         if(searchEventDto.getUserId() != null) {
-            eventsAtUserTime = eventRepository.findEventsByUsersTime(searchEventDto.getUserId());
+            var times = timeRepository.findAllByEmployeeId(searchEventDto.getUserId());
+            var interests = interestRepository.findAllByEmployeeId(searchEventDto.getUserId());
+            eventsAtUserTime = eventRepository.getAllEventsByMatchingTimesAndInterests(times, interests);
         }
 
         if(searchEventDto.getTitle() != null && searchEventDto.getTitle().isBlank()){
