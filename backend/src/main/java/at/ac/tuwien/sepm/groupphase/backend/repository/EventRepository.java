@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.repository;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Task;
+import org.hibernate.WrongClassException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -111,5 +112,10 @@ public interface EventRepository extends JpaRepository<Event, Long> {
         nativeQuery = true)
     List<Event> searchEventsBySearchEventDto(String title, Long employerId, String start, String end,
                                              Long interestAreaId, Long payment, String state);
+
+    @Query(value = "SELECT * FROM event e " +
+        "WHERE e.employer_profile_id = ?1 " +
+        "AND e.start > CURRENT_TIMESTAMP()", nativeQuery = true)
+    List<Event> findALlByEmployerId(Long employerId);
 
 }

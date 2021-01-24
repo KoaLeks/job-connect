@@ -54,4 +54,40 @@ public class ContactMessage {
             ", message='" + message + '\'' +
             '}';
     }
+
+    public static final class ContactMessageBuilder {
+        private Long to;
+        private String subject;
+        private String message;
+
+        private ContactMessageBuilder() {
+        }
+
+        public static ContactMessageBuilder aContactMessage() {
+            return new ContactMessageBuilder();
+        }
+
+        public ContactMessageBuilder withTo(Long to) {
+            this.to = to;
+            return this;
+        }
+
+        public ContactMessageBuilder withSubject(String subject) {
+            this.subject = subject;
+            return this;
+        }
+
+        public ContactMessageBuilder withMessage(String message) {
+            this.message = message;
+            return this;
+        }
+
+        public ContactMessage build() {
+            ContactMessage contactMessage = new ContactMessage();
+            contactMessage.setTo(to);
+            contactMessage.setSubject(subject);
+            contactMessage.setMessage(message);
+            return contactMessage;
+        }
+    }
 }

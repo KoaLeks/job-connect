@@ -80,5 +80,47 @@ public class Employee_Tasks {
             '}';
     }
 
+    public static final class Employee_TasksBuilder {
+        private Long id;
+        private Employee employee;
+        private Task task;
+        //This value initially has to be null
+        private Boolean accepted;
 
+        private Employee_TasksBuilder() {
+        }
+
+        public static Employee_TasksBuilder anEmployee_Tasks() {
+            return new Employee_TasksBuilder();
+        }
+
+        public Employee_TasksBuilder withId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Employee_TasksBuilder withEmployee(Employee employee) {
+            this.employee = employee;
+            return this;
+        }
+
+        public Employee_TasksBuilder withTask(Task task) {
+            this.task = task;
+            return this;
+        }
+
+        public Employee_TasksBuilder withAccepted(Boolean accepted) {
+            this.accepted = accepted;
+            return this;
+        }
+
+        public Employee_Tasks build() {
+            Employee_Tasks employee_Tasks = new Employee_Tasks();
+            employee_Tasks.setId(id);
+            employee_Tasks.setEmployee(employee);
+            employee_Tasks.setTask(task);
+            employee_Tasks.setAccepted(accepted);
+            return employee_Tasks;
+        }
+    }
 }

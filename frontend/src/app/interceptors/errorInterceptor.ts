@@ -27,10 +27,15 @@ export class ErrorInterceptor implements HttpInterceptor {
           }
         },
       (error) => {
-          console.log(error);
+          console.log(error.error);
+          if (error.status === 404) {
+            this.alertService.error(error.error, {autoClose: false, keepAfterRouteChanges: true});
+            return;
+          }
           if (error.error === 'Bad credentials') { return throwError(error.message); }
-        this.alertService.error(error.error, {autoClose: false, keepAfterRouteChanges: true});
-        return throwError(error.message);
+          if (error.error.contains('Diese Bewerbung wurde leider bereits')) { return; }
+          this.alertService.error(error.error, {autoClose: false, keepAfterRouteChanges: true});
+          return throwError(error.message);
         }
       )
     );

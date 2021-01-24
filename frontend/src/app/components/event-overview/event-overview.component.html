@@ -16,8 +16,10 @@
     <div class="form-group mb-0 col-md-1">
       <button class="btn setting-button w-100 dropdown-toggle" type="button" data-toggle="collapse"
               data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16">
-          <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2h-11z"/>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-funnel"
+             viewBox="0 0 16 16">
+          <path
+            d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2h-11z"/>
         </svg>
       </button>
     </div>
@@ -33,15 +35,18 @@
       </div>
       <div class="col">
         <label></label>
-        <select class="form-control" id="exampleFormControlSelect2" formControlName="employerId" *ngIf="loggedInEmployee || notLoggedIn">
+        <select class="form-control" id="exampleFormControlSelect2" formControlName="employerId"
+                *ngIf="loggedInEmployee || notLoggedIn">
           <option value="" class="select-option-none">ArbeitgeberIn auswählen</option>
           <option *ngFor="let employer of employers"
                   [ngValue]="employer.simpleProfileDto.id">
             <ng-container *ngIf="employer.companyName != 'Privatperson'">{{employer.companyName}}</ng-container>
-            <ng-container *ngIf="employer.companyName == 'Privatperson'">{{employer.simpleProfileDto.firstName}} {{employer.simpleProfileDto.lastName}}</ng-container>
+            <ng-container
+              *ngIf="employer.companyName == 'Privatperson'">{{employer.simpleProfileDto.firstName}} {{employer.simpleProfileDto.lastName}}</ng-container>
           </option>
         </select>
-        <select class="form-control" id="exampleFormControlSelect3" formControlName="employerId" *ngIf="loggedInEmployer" disabled>
+        <select class="form-control" id="exampleFormControlSelect3" formControlName="employerId"
+                *ngIf="loggedInEmployer" disabled>
           <option value="" class="select-option-none">ArbeitgeberIn auswählen</option>
         </select>
       </div>
@@ -73,20 +78,24 @@
     <div class="form-row mt-4 align-items-center">
       <div class="col">
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" formControlName="onlyAvailableTasks">
+          <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1"
+                 formControlName="onlyAvailableTasks">
           <label class="form-check-label" for="inlineCheckbox1">Nur Events mit freien Stellen anzeigen</label>
         </div>
       </div>
       <div class="col">
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" id="inlineCheckbox2" formControlName="userId" [attr.disabled]="authService.isLoggedIn() && authService.getUserRole() === 'EMPLOYEE' ? null : true">
+          <input class="form-check-input" type="checkbox" id="inlineCheckbox2" formControlName="userId"
+                 [attr.disabled]="authService.isLoggedIn() && authService.getUserRole() === 'EMPLOYEE' ? null : true">
           <label class="form-check-label" for="inlineCheckbox2">Smart Filter
             <button type="button" class="btn btn-sm mr-2 pb-2 info-button" placement="right" ngbTooltip="
             Wenn du als ArbeitnehmerIn eingeloggt bist und in deinem Profil Zeiten und Interessen angegeben hast, kannst du diese Option verwenden, um Events zu finden, die genau zu dir passen!">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#33658a" class="bi bi-info-circle" viewBox="0 0 16 16">
-              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-              <path d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-            </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#33658a" class="bi bi-info-circle"
+                   viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path
+                  d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+              </svg>
             </button>
           </label>
         </div>
@@ -108,270 +117,272 @@
 
 <div class="eventoverviewcontainer">
 
-  <!-- Employer Events -->
-  <ng-container *ngIf="!search && employerEvents.length !== 0 && loggedInEmployer !== undefined && loggedInEmployer">
-    <ng-container *ngFor="let date of uniqueDateArrayEmployer">
-      <br>
-      <br>
-      <h5><b>{{date | date: 'dd.MM.yyyy'}}</b></h5>
-      <hr>
-      <ng-container *ngFor="let event of events">
-        <ng-container *ngIf="event.start.split('T')[0] === date">
-          <div class="list-group mt-3" [routerLink]="['/events', event.id, 'details']"
-               *ngIf="authService.getTokenIdentifier() === event.employer.simpleProfileDto.email">
-            <a class="list-group-item list-group-item-action flex-column align-items-start event-item">
-              <div class="d-flex w-100 justify-content-between">
-                <h4 class="mb-1">
-                  {{event.title}}
-                  <i style="color:green;" *ngIf="!checkDateInFuture(event.start) && checkDateInFuture(event.end)">
-                    <small>(läuft gerade)</small></i>
-                </h4>
-                <small class="text-muted">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
-                       class="bi bi-geo-alt"
-                       viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                          d="M12.166 8.94C12.696 7.867 13 6.862 13 6A5 5 0 0 0 3 6c0 .862.305 1.867.834 2.94.524 1.062 1.234 2.12 1.96 3.07A31.481 31.481 0 0 0 8 14.58l.208-.22a31.493 31.493 0 0 0 1.998-2.35c.726-.95 1.436-2.008 1.96-3.07zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
-                    <path fill-rule="evenodd" d="M8 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                  </svg>
-                  {{event.address.zip}} {{event.address.city}}</small>
-              </div>
-              <p class="mb-1">
-                <small class="text-muted">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
-                       class="bi bi-calendar"
-                       viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                          d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
-                  </svg>
-                  {{event.start.split("T")[0] | date: 'dd.MM.yyyy'}}
-                  bis {{event.end.split("T")[0] | date: 'dd.MM.yyyy'}}
-                </small>
-                <small class="text-muted ml-5">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
-                       class="bi bi-clipboard"
-                       viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                          d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
-                    <path fill-rule="evenodd"
-                          d="M9.5 1h-3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
-                  </svg>
-                  {{event.tasks.length}}
-                </small>
-                <small class="text-muted ml-5">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
-                       class="bi bi-person-check" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                          d="M8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6 5c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10zm4.854-7.85a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
-                  </svg>
-                  {{getAmountOfTakenJobs(event.tasks)}}/{{getAmountOfFreeJobs(event.tasks)}}
-                </small>
-              </p>
-            </a>
-          </div>
+  <div class="mb-4">
+    <!-- Employer Events -->
+    <ng-container *ngIf="!search && employerEvents.length !== 0 && loggedInEmployer !== undefined && loggedInEmployer">
+      <ng-container *ngFor="let date of uniqueDateSetPage">
+        <br>
+        <br>
+        <h5><b>{{date | date: 'dd.MM.yyyy'}}</b></h5>
+        <hr>
+        <ng-container *ngFor="let event of pageEvents">
+          <ng-container *ngIf="event.start.split('T')[0] === date">
+            <div class="list-group mt-3" [routerLink]="['/events', event.id, 'details']"
+                 *ngIf="authService.getTokenIdentifier() === event.employer.simpleProfileDto.email">
+              <a class="list-group-item list-group-item-action flex-column align-items-start event-item">
+                <div class="d-flex w-100 justify-content-between">
+                  <h4 class="mb-1">
+                    {{event.title}}
+                    <i style="color:green;" *ngIf="!checkDateInFuture(event.start) && checkDateInFuture(event.end)">
+                      <small>(läuft gerade)</small></i>
+                  </h4>
+                  <small class="text-muted">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
+                         class="bi bi-geo-alt"
+                         viewBox="0 0 16 16">
+                      <path fill-rule="evenodd"
+                            d="M12.166 8.94C12.696 7.867 13 6.862 13 6A5 5 0 0 0 3 6c0 .862.305 1.867.834 2.94.524 1.062 1.234 2.12 1.96 3.07A31.481 31.481 0 0 0 8 14.58l.208-.22a31.493 31.493 0 0 0 1.998-2.35c.726-.95 1.436-2.008 1.96-3.07zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
+                      <path fill-rule="evenodd" d="M8 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                    </svg>
+                    {{event.address.zip}} {{event.address.city}}</small>
+                </div>
+                <p class="mb-1">
+                  <small class="text-muted">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
+                         class="bi bi-calendar"
+                         viewBox="0 0 16 16">
+                      <path fill-rule="evenodd"
+                            d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+                    </svg>
+                    {{event.start.split("T")[0] | date: 'dd.MM.yyyy'}}
+                    bis {{event.end.split("T")[0] | date: 'dd.MM.yyyy'}}
+                  </small>
+                  <small class="text-muted ml-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
+                         class="bi bi-clipboard"
+                         viewBox="0 0 16 16">
+                      <path fill-rule="evenodd"
+                            d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                      <path fill-rule="evenodd"
+                            d="M9.5 1h-3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                    </svg>
+                    {{event.tasks.length}}
+                  </small>
+                  <small class="text-muted ml-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
+                         class="bi bi-person-check" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd"
+                            d="M8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6 5c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10zm4.854-7.85a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                    </svg>
+                    {{getAmountOfTakenJobs(event.tasks)}}/{{getAmountOfFreeJobs(event.tasks)}}
+                  </small>
+                </p>
+              </a>
+            </div>
+          </ng-container>
         </ng-container>
       </ng-container>
     </ng-container>
-  </ng-container>
-  <!-- Employer Events -->
+    <!-- Employer Events -->
 
-  <!-- All Events -->
-  <ng-container *ngIf="!search && !(events.length === 0) && (loggedInEmployee || notLoggedIn)">
-    <ng-container *ngFor="let date of uniqueDateArray">
-      <br>
-      <br>
-      <h5><b>{{date | date: 'dd.MM.yyyy'}}</b></h5>
-      <hr>
-      <ng-container *ngFor="let event of events">
-        <ng-container *ngIf="event.start.split('T')[0] === date && checkDateInFuture(event.start)">
-          <div class="list-group mt-3" [routerLink]="['/events', event.id, 'details']">
-            <a class="list-group-item list-group-item-action flex-column align-items-start event-item">
-              <div class="d-flex w-100 justify-content-between">
-                <h4 class="mb-1">
-                  {{event.title}}
-                </h4>
-                <small class="text-muted">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
-                       class="bi bi-geo-alt"
-                       viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                          d="M12.166 8.94C12.696 7.867 13 6.862 13 6A5 5 0 0 0 3 6c0 .862.305 1.867.834 2.94.524 1.062 1.234 2.12 1.96 3.07A31.481 31.481 0 0 0 8 14.58l.208-.22a31.493 31.493 0 0 0 1.998-2.35c.726-.95 1.436-2.008 1.96-3.07zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
-                    <path fill-rule="evenodd"
-                          d="M8 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                  </svg>
-                  {{event.address.zip}} {{event.address.city}}</small>
-              </div>
-              <p class="mb-1">
-                <small class="text-muted">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
-                       class="bi bi-calendar"
-                       viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                          d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
-                  </svg>
-                  {{event.start.split("T")[0] | date: 'dd.MM.yyyy'}}
-                  bis {{event.end.split("T")[0] | date: 'dd.MM.yyyy'}}
-                </small>
-                <small class="text-muted ml-5">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
-                       class="bi bi-clipboard"
-                       viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                          d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
-                    <path fill-rule="evenodd"
-                          d="M9.5 1h-3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
-                  </svg>
-                  {{event.tasks.length}}
-                </small>
-                <small class="text-muted ml-5">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
-                       class="bi bi-person-check" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                          d="M8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6 5c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10zm4.854-7.85a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
-                  </svg>
-                  {{getAmountOfTakenJobs(event.tasks)}}/{{getAmountOfFreeJobs(event.tasks)}}
-                </small>
-              </p>
-            </a>
-          </div>
+    <!-- All Events -->
+    <ng-container *ngIf="!search && !(events.length === 0) && (loggedInEmployee || notLoggedIn)">
+      <ng-container *ngFor="let date of uniqueDateSetPage">
+        <br>
+        <br>
+        <h5><b>{{date | date: 'dd.MM.yyyy'}}</b></h5>
+        <hr>
+        <ng-container *ngFor="let event of pageEvents">
+          <ng-container *ngIf="event.start.split('T')[0] === date && checkDateInFuture(event.start)">
+            <div class="list-group mt-3" [routerLink]="['/events', event.id, 'details']">
+              <a class="list-group-item list-group-item-action flex-column align-items-start event-item">
+                <div class="d-flex w-100 justify-content-between">
+                  <h4 class="mb-1">
+                    {{event.title}}
+                  </h4>
+                  <small class="text-muted">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
+                         class="bi bi-geo-alt"
+                         viewBox="0 0 16 16">
+                      <path fill-rule="evenodd"
+                            d="M12.166 8.94C12.696 7.867 13 6.862 13 6A5 5 0 0 0 3 6c0 .862.305 1.867.834 2.94.524 1.062 1.234 2.12 1.96 3.07A31.481 31.481 0 0 0 8 14.58l.208-.22a31.493 31.493 0 0 0 1.998-2.35c.726-.95 1.436-2.008 1.96-3.07zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
+                      <path fill-rule="evenodd"
+                            d="M8 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                    </svg>
+                    {{event.address.zip}} {{event.address.city}}</small>
+                </div>
+                <p class="mb-1">
+                  <small class="text-muted">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
+                         class="bi bi-calendar"
+                         viewBox="0 0 16 16">
+                      <path fill-rule="evenodd"
+                            d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+                    </svg>
+                    {{event.start.split("T")[0] | date: 'dd.MM.yyyy'}}
+                    bis {{event.end.split("T")[0] | date: 'dd.MM.yyyy'}}
+                  </small>
+                  <small class="text-muted ml-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
+                         class="bi bi-clipboard"
+                         viewBox="0 0 16 16">
+                      <path fill-rule="evenodd"
+                            d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                      <path fill-rule="evenodd"
+                            d="M9.5 1h-3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                    </svg>
+                    {{event.tasks.length}}
+                  </small>
+                  <small class="text-muted ml-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
+                         class="bi bi-person-check" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd"
+                            d="M8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6 5c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10zm4.854-7.85a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                    </svg>
+                    {{getAmountOfTakenJobs(event.tasks)}}/{{getAmountOfFreeJobs(event.tasks)}}
+                  </small>
+                </p>
+              </a>
+            </div>
+          </ng-container>
         </ng-container>
       </ng-container>
     </ng-container>
-  </ng-container>
-  <!-- All Events -->
+    <!-- All Events -->
 
-  <!-- Found Events -->
-  <ng-container *ngIf="search && events.length !== 0 && (notLoggedIn || loggedInEmployee)">
-    <ng-container *ngFor="let date of uniqueDateArray">
-      <br>
-      <br>
-      <h5><b>{{date | date: 'dd.MM.yyyy'}}</b></h5>
-      <hr>
-      <ng-container *ngFor="let event of events">
-        <ng-container *ngIf="event.start.split('T')[0] === date && checkDateInFuture(event.start)">
-          <div class="list-group mt-3" [routerLink]="['/events', event.id, 'details']">
-            <a class="list-group-item list-group-item-action flex-column align-items-start event-item">
-              <div class="d-flex w-100 justify-content-between">
-                <h4 class="mb-1">
-                  {{event.title}}
-                </h4>
-                <small class="text-muted">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
-                       class="bi bi-geo-alt"
-                       viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                          d="M12.166 8.94C12.696 7.867 13 6.862 13 6A5 5 0 0 0 3 6c0 .862.305 1.867.834 2.94.524 1.062 1.234 2.12 1.96 3.07A31.481 31.481 0 0 0 8 14.58l.208-.22a31.493 31.493 0 0 0 1.998-2.35c.726-.95 1.436-2.008 1.96-3.07zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
-                    <path fill-rule="evenodd"
-                          d="M8 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                  </svg>
-                  {{event.address.zip}} {{event.address.city}}</small>
-              </div>
-              <p class="mb-1">
-                <small class="text-muted">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
-                       class="bi bi-calendar"
-                       viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                          d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
-                  </svg>
-                  {{event.start.split("T")[0] | date: 'dd.MM.yyyy'}}
-                  bis {{event.end.split("T")[0] | date: 'dd.MM.yyyy'}}
-                </small>
-                <small class="text-muted ml-5">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
-                       class="bi bi-clipboard"
-                       viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                          d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
-                    <path fill-rule="evenodd"
-                          d="M9.5 1h-3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
-                  </svg>
-                  {{event.tasks.length}}
-                </small>
-                <small class="text-muted ml-5">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
-                       class="bi bi-person-check" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                          d="M8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6 5c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10zm4.854-7.85a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
-                  </svg>
-                  {{getAmountOfTakenJobs(event.tasks)}}/{{getAmountOfFreeJobs(event.tasks)}}
-                </small>
-              </p>
-            </a>
-          </div>
+    <!-- Found Events -->
+    <ng-container *ngIf="search && events.length !== 0 && (notLoggedIn || loggedInEmployee)">
+      <ng-container *ngFor="let date of uniqueDateSetPage">
+        <br>
+        <br>
+        <h5><b>{{date | date: 'dd.MM.yyyy'}}</b></h5>
+        <hr>
+        <ng-container *ngFor="let event of pageEvents">
+          <ng-container *ngIf="event.start.split('T')[0] === date && checkDateInFuture(event.start)">
+            <div class="list-group mt-3" [routerLink]="['/events', event.id, 'details']">
+              <a class="list-group-item list-group-item-action flex-column align-items-start event-item">
+                <div class="d-flex w-100 justify-content-between">
+                  <h4 class="mb-1">
+                    {{event.title}}
+                  </h4>
+                  <small class="text-muted">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
+                         class="bi bi-geo-alt"
+                         viewBox="0 0 16 16">
+                      <path fill-rule="evenodd"
+                            d="M12.166 8.94C12.696 7.867 13 6.862 13 6A5 5 0 0 0 3 6c0 .862.305 1.867.834 2.94.524 1.062 1.234 2.12 1.96 3.07A31.481 31.481 0 0 0 8 14.58l.208-.22a31.493 31.493 0 0 0 1.998-2.35c.726-.95 1.436-2.008 1.96-3.07zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
+                      <path fill-rule="evenodd"
+                            d="M8 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                    </svg>
+                    {{event.address.zip}} {{event.address.city}}</small>
+                </div>
+                <p class="mb-1">
+                  <small class="text-muted">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
+                         class="bi bi-calendar"
+                         viewBox="0 0 16 16">
+                      <path fill-rule="evenodd"
+                            d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+                    </svg>
+                    {{event.start.split("T")[0] | date: 'dd.MM.yyyy'}}
+                    bis {{event.end.split("T")[0] | date: 'dd.MM.yyyy'}}
+                  </small>
+                  <small class="text-muted ml-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
+                         class="bi bi-clipboard"
+                         viewBox="0 0 16 16">
+                      <path fill-rule="evenodd"
+                            d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                      <path fill-rule="evenodd"
+                            d="M9.5 1h-3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                    </svg>
+                    {{event.tasks.length}}
+                  </small>
+                  <small class="text-muted ml-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
+                         class="bi bi-person-check" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd"
+                            d="M8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6 5c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10zm4.854-7.85a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                    </svg>
+                    {{getAmountOfTakenJobs(event.tasks)}}/{{getAmountOfFreeJobs(event.tasks)}}
+                  </small>
+                </p>
+              </a>
+            </div>
+          </ng-container>
         </ng-container>
       </ng-container>
     </ng-container>
-  </ng-container>
-  <!-- Found Events -->
+    <!-- Found Events -->
 
-  <!-- Found Events Employer -->
-  <ng-container *ngIf="search && events.length !== 0 && loggedInEmployer">
-    <ng-container *ngFor="let date of uniqueDateArrayEmployer">
-      <br>
-      <br>
-      <h5><b>{{date | date: 'dd.MM.yyyy'}}</b></h5>
-      <hr>
-      <ng-container *ngFor="let event of events">
-        <ng-container *ngIf="event.start.split('T')[0] === date
+    <!-- Found Events Employer -->
+    <ng-container *ngIf="search && events.length !== 0 && loggedInEmployer">
+      <ng-container *ngFor="let date of uniqueDateSetPage">
+        <br>
+        <br>
+        <h5><b>{{date | date: 'dd.MM.yyyy'}}</b></h5>
+        <hr>
+        <ng-container *ngFor="let event of pageEvents">
+          <ng-container *ngIf="event.start.split('T')[0] === date
               && authService.getTokenIdentifier() === event.employer.simpleProfileDto.email">
-          <div class="list-group mt-3" [routerLink]="['/events', event.id, 'details']">
-            <a class="list-group-item list-group-item-action flex-column align-items-start event-item">
-              <div class="d-flex w-100 justify-content-between">
-                <h4 class="mb-1">
-                  {{event.title}} <i style="color:green;" *ngIf="!checkDateInFuture(event.start) && checkDateInFuture(event.end)">
-                  <small>(läuft gerade)</small></i>
-                </h4>
-                <small class="text-muted">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
-                       class="bi bi-geo-alt"
-                       viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                          d="M12.166 8.94C12.696 7.867 13 6.862 13 6A5 5 0 0 0 3 6c0 .862.305 1.867.834 2.94.524 1.062 1.234 2.12 1.96 3.07A31.481 31.481 0 0 0 8 14.58l.208-.22a31.493 31.493 0 0 0 1.998-2.35c.726-.95 1.436-2.008 1.96-3.07zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
-                    <path fill-rule="evenodd"
-                          d="M8 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                  </svg>
-                  {{event.address.zip}} {{event.address.city}}</small>
-              </div>
-              <p class="mb-1">
-                <small class="text-muted">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
-                       class="bi bi-calendar"
-                       viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                          d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
-                  </svg>
-                  {{event.start.split("T")[0] | date: 'dd.MM.yyyy'}}
-                  bis {{event.end.split("T")[0] | date: 'dd.MM.yyyy'}}
-                </small>
-                <small class="text-muted ml-5">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
-                       class="bi bi-clipboard"
-                       viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                          d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
-                    <path fill-rule="evenodd"
-                          d="M9.5 1h-3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
-                  </svg>
-                  {{event.tasks.length}}
-                </small>
-                <small class="text-muted ml-5">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
-                       class="bi bi-person-check" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                          d="M8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6 5c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10zm4.854-7.85a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
-                  </svg>
-                  {{getAmountOfTakenJobs(event.tasks)}}/{{getAmountOfFreeJobs(event.tasks)}}
-                </small>
-              </p>
-            </a>
-          </div>
+            <div class="list-group mt-3" [routerLink]="['/events', event.id, 'details']">
+              <a class="list-group-item list-group-item-action flex-column align-items-start event-item">
+                <div class="d-flex w-100 justify-content-between">
+                  <h4 class="mb-1">
+                    {{event.title}} <i style="color:green;"
+                                       *ngIf="!checkDateInFuture(event.start) && checkDateInFuture(event.end)">
+                    <small>(läuft gerade)</small></i>
+                  </h4>
+                  <small class="text-muted">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
+                         class="bi bi-geo-alt"
+                         viewBox="0 0 16 16">
+                      <path fill-rule="evenodd"
+                            d="M12.166 8.94C12.696 7.867 13 6.862 13 6A5 5 0 0 0 3 6c0 .862.305 1.867.834 2.94.524 1.062 1.234 2.12 1.96 3.07A31.481 31.481 0 0 0 8 14.58l.208-.22a31.493 31.493 0 0 0 1.998-2.35c.726-.95 1.436-2.008 1.96-3.07zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
+                      <path fill-rule="evenodd"
+                            d="M8 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                    </svg>
+                    {{event.address.zip}} {{event.address.city}}</small>
+                </div>
+                <p class="mb-1">
+                  <small class="text-muted">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
+                         class="bi bi-calendar"
+                         viewBox="0 0 16 16">
+                      <path fill-rule="evenodd"
+                            d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+                    </svg>
+                    {{event.start.split("T")[0] | date: 'dd.MM.yyyy'}}
+                    bis {{event.end.split("T")[0] | date: 'dd.MM.yyyy'}}
+                  </small>
+                  <small class="text-muted ml-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
+                         class="bi bi-clipboard"
+                         viewBox="0 0 16 16">
+                      <path fill-rule="evenodd"
+                            d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                      <path fill-rule="evenodd"
+                            d="M9.5 1h-3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                    </svg>
+                    {{event.tasks.length}}
+                  </small>
+                  <small class="text-muted ml-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
+                         class="bi bi-person-check" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd"
+                            d="M8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6 5c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10zm4.854-7.85a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                    </svg>
+                    {{getAmountOfTakenJobs(event.tasks)}}/{{getAmountOfFreeJobs(event.tasks)}}
+                  </small>
+                </p>
+              </a>
+            </div>
+          </ng-container>
         </ng-container>
       </ng-container>
     </ng-container>
-  </ng-container>
-  <!-- Found Events Employer -->
-
+    <!-- Found Events Employer -->
+  </div>
   <!-- No Events -->
   <ng-container *ngIf="events.length === 0 || (loggedInEmployer && employerEvents.length === 0)">
     <div class="text-black-50 text-center mt-2">
@@ -389,6 +400,20 @@
     </div>
   </ng-container>
   <!-- No Events -->
+
+  <!-- Pagination -->
+  <div class="d-flex justify-content-between mb-5">
+    <ngb-pagination [collectionSize]="collectionSize" [(page)]="currentPage" [pageSize]="pageSize"
+                    (pageChange)="refreshEvents()">
+    </ngb-pagination>
+
+    <select class="custom-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="refreshEvents()">
+      <option [ngValue]="5">5 pro Seite</option>
+      <option [ngValue]="10">10 pro Seite</option>
+      <option [ngValue]="20">20 pro Seite</option>
+    </select>
+  </div>
+  <!-- Pagination -->
 
   <router-outlet></router-outlet>
 </div>
