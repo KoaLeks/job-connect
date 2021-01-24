@@ -16,7 +16,7 @@ export class ApplicationService {
 
   applyTask(application: Application) {
     console.log('PUT application for Task ' + JSON.stringify(application));
-    return this.httpClient.put<Application>(this.applicationBaseUri + '/apply', application);;
+    return this.httpClient.put<Application>(this.applicationBaseUri + '/apply', application);
   }
 
   changeApplicationStatus(applicationStatus: ApplicationStatus) {
