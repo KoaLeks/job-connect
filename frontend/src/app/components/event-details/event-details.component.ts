@@ -76,7 +76,7 @@ export class EventDetailsComponent implements OnInit {
     if (this.loggedInEmployee) {
       for (const task of this.eventDetails.tasks) {
         for (const emp of task.employees) {
-          if (emp.employee.superSimpleProfileDto.email === this.authService.getEmail()) {
+          if (emp.employee.superSimpleProfileDto.email === this.authService.getTokenIdentifier()) {
             this.applied = true;
             this.appliedStatus = emp.accepted;
             this.appliedTask = task.description;
@@ -177,7 +177,7 @@ export class EventDetailsComponent implements OnInit {
     this.applicationService.getApplicationsForEvent(id).subscribe(
       (applications) => {
             for (const application of applications) {
-              if (application.sender.email === this.authService.getEmail()) {
+              if (application.sender.email === this.authService.getTokenIdentifier()) {
                 this.applicationService.deleteApplication(application.id).subscribe(
                   () => {
                     this.alertService.success('Bewerbung erfolgreich gelöscht', {autoClose: true});
@@ -201,7 +201,7 @@ export class EventDetailsComponent implements OnInit {
   getStatus(tasks: Task[]) {
     for (const task of tasks) {
       for (const emp of task.employees) {
-        if (emp.employee.superSimpleProfileDto.email === this.authService.getEmail()) {
+        if (emp.employee.superSimpleProfileDto.email === this.authService.getTokenIdentifier()) {
           return emp.accepted;
         }
       }
@@ -211,7 +211,7 @@ export class EventDetailsComponent implements OnInit {
   getTaskId(tasks: Task[]) {
     for (const task of tasks) {
       for (const emp of task.employees) {
-        if (emp.employee.superSimpleProfileDto.email === this.authService.getEmail()) {
+        if (emp.employee.superSimpleProfileDto.email === this.authService.getTokenIdentifier()) {
           return task.id;
         }
       }
@@ -233,7 +233,7 @@ export class EventDetailsComponent implements OnInit {
   getTaskDescription(tasks: Task[]) {
     for (const task of tasks) {
       for (const emp of task.employees) {
-        if (emp.employee.superSimpleProfileDto.email === this.authService.getEmail()) {
+        if (emp.employee.superSimpleProfileDto.email === this.authService.getTokenIdentifier()) {
           return task.description;
         }
       }

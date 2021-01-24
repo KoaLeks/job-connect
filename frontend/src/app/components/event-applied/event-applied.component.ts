@@ -25,7 +25,7 @@ export class EventAppliedComponent implements OnInit {
   private getStatus(tasks: Task[]) {
     for (const task of tasks) {
       for (const emp of task.employees) {
-        if (emp.employee.superSimpleProfileDto.email === this.authService.getEmail()) {
+        if (emp.employee.superSimpleProfileDto.email === this.authService.getTokenIdentifier()) {
           return emp.accepted;
         }
       }
@@ -36,7 +36,7 @@ export class EventAppliedComponent implements OnInit {
   private getTaskDescription(tasks: Task[]) {
     for (const task of tasks) {
       for (const emp of task.employees) {
-        if (emp.employee.superSimpleProfileDto.email === this.authService.getEmail()) {
+        if (emp.employee.superSimpleProfileDto.email === this.authService.getTokenIdentifier()) {
           return task.description;
         }
       }
@@ -47,7 +47,7 @@ export class EventAppliedComponent implements OnInit {
   private getTask(tasks: Task[]) {
     for (const task of tasks) {
       for (const emp of task.employees) {
-        if (emp.employee.superSimpleProfileDto.email === this.authService.getEmail()) {
+        if (emp.employee.superSimpleProfileDto.email === this.authService.getTokenIdentifier()) {
           return task;
         }
       }
@@ -105,7 +105,7 @@ export class EventAppliedComponent implements OnInit {
     this.applicationService.getApplicationsForEvent(id).subscribe(
       (applications) => {
         for (const application of applications) {
-          if (application.sender.email === this.authService.getEmail()) {
+          if (application.sender.email === this.authService.getTokenIdentifier()) {
             this.applicationService.deleteApplication(application.id).subscribe(
               () => {
                 this.alertService.success('Bewerbung erfolgreich zurückgezogen', {autoClose: true});
