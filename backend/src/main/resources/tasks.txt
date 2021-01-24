@@ -107,6 +107,6 @@
 107;VerkäuferIn;2;
 108;MechanikerIn;11;
 109;Studentische Aushilfskraft (m/w/d);
-110;Logistische Fachkraft (m/w/d);
+110;Logistische Fachkraft (m/w/d);11;
 111;Berater im EDV Bereich;
 112;PromoterIn für Umwelt-, Tier- und Klimaschutz (m/w/d);1;

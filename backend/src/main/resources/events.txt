@@ -29,4 +29,7 @@
 29;Promo für Hilfsorganisation;74,79;Für die nächste Zeit suchen wir nach Interessierten, welche etwas für den guten Zweck machen wollen und dabei noch etwas verdienen können.;firma;
 30;Promotion für den Umweltschutz;112;Umweltschutz ist dir wichtig? Uns auch! Wir suchen ab sofort Promo MitarbeiterInnen für unsere anstehende Kampagne. Für mehr Informationen kontaktiere uns gerne.;firma;
 31;WebentwicklerIn gesucht (m/w/d);6,7;Für unser Startup suchen wir noch junge, motivierte Frontend Entwickler. Studierende mit technischem Hintergrund werden bevorzugt.;firma;
-32;Pflegeassistentin;39,76;Suche BetreürIn für meine Tante(79, im Rollstuhl) und eventuell zeitweise jemanden zum Katzensitten;privat;
+32;Pflegeassistentin;39,76;Suche BetreurIn für meine Tante(79, im Rollstuhl) und eventuell zeitweise jemanden zum Katzensitten;privat;
+33;Temporärer Gartenarbeiter (m/w/d);53;Suche temporären Hilfsarbeiter der mir beim Aufräumen meines Gartens hiflt;privat;
+34;Mitarbeiter wegen Büroerweiterung gesucht;22,24;Unser Büro wird erweitert und sind zurzeit in der Übergangsphase. Bis die Bauarbeiten abgeschlossen sind benötigen wir temporäre Mitarbeiter;firma;
+35;Mitarbeiter zentrale Transportlogistik (m/w);110;Organisatorisches und administratives Abwickeln von Projektaufgaben. Enges Zusammenarbeiten mit internen und externen Logistikpartnerinnen und Logistikpartner sowie Unterstützen bei Akquise und Ausschreibung von Transportunternehmen.;firma;
