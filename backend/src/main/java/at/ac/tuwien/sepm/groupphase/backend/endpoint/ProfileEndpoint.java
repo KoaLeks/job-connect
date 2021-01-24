@@ -70,6 +70,7 @@ public class ProfileEndpoint {
     @GetMapping(value = "/employee")
     @ApiOperation(value = "Get an employees profile details", authorizations = {@Authorization(value = "apiKey")})
     @CrossOrigin(origins = "http://localhost:4200")
+    @ResponseStatus(HttpStatus.OK)
     public EmployeeDto getEmployee(@RequestHeader String authorization) {
         String email = tokenService.getEmailFromHeader(authorization);
         LOGGER.info("GET /api/v1/profiles/employee/{}", email);
@@ -80,6 +81,7 @@ public class ProfileEndpoint {
     @ApiOperation(value = "Get an employees profile details by id", authorizations = {@Authorization(value = "apiKey")})
     @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
     @CrossOrigin(origins = "http://localhost:4200")
+    @ResponseStatus(HttpStatus.OK)
     public SimpleEmployeeDto getEmployeeById(@PathVariable @NotNull Long id) {
         LOGGER.info("GET /api/v1/profiles/employee/{}", id);
         return employeeMapper.employeeToSimpleEmployeeDto(employeeService.findOneById(id));
