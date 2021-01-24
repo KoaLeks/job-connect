@@ -106,10 +106,10 @@
           </div>
         </div>
       </div>
-      <div class="row justify-content-center mt-3" style="border-top: 1px solid #ccc">
-        <ng-container *ngFor="let task of eventDetails.tasks">
-          <h5> <span class="badge badge-pill badge-info mt-3 ml-1 mr-1" style="border-radius: 30px"
-                     *ngIf="task.interestArea !== null">{{task.interestArea.area}}</span></h5>
+      <div class="row justify-content-center mt-3" style="border-top: 1px solid #ccc" *ngIf="interestAreasDist">
+        <ng-container *ngFor="let area of interestAreasDist">
+          <h5><span class="badge badge-pill badge-info mt-3 ml-1 mr-1"
+                    style="border-radius: 30px">{{area}}</span></h5>
         </ng-container>
       </div>
       <div *ngIf="applied">
@@ -123,7 +123,8 @@
               *ngIf="loggedInEmployee && !applied" data-target="#Apply-Task">
         Bewirb dich jetzt!
       </button>
-      <button [disabled]="loggedInEmployer" type="button" class="btn btn-primary" data-toggle="modal" (click)="createApplication()"
+      <button [disabled]="loggedInEmployer" type="button" class="btn btn-primary" data-toggle="modal"
+              (click)="createApplication()"
               *ngIf="!authService.isLoggedIn() || loggedInEmployer" data-target="#Apply-Task-Alert">
         Bewirb dich jetzt!
       </button>
@@ -148,14 +149,77 @@
               title="Event ist schon vorbei!">
         Event absagen!
       </button>
-      <button type=button class="btn btn-outline-info" style="float: right"
+      <button type=button class="btn btn-outline-danger" style="float: right" data-toggle="modal"
+              [attr.data-target]="'#revokeModal' + eventDetails.id"
               *ngIf="this.authService.getToken() !== '' && getStatus(eventDetails.tasks) === null && loggedInEmployee
-               && checkDateInFuture(eventDetails.start)"
-              (click)="deleteApplication(eventDetails.id)">
+               && checkDateInFuture(eventDetails.start)">
         Bewerbung zurückziehen
       </button>
+
+      <button type=button class="btn btn-outline-danger" style="float: right" data-toggle="modal"
+              [attr.data-target]="'#quitModal' + eventDetails.id"
+              *ngIf="this.authService.getToken() !== '' && getStatus(eventDetails.tasks) === true && loggedInEmployee"
+              [disabled]="checkForThreeDaysBeforeStart(eventDetails.start)">
+        Stelle kündigen
+      </button>
+      <span class="float-right quittext mt-3 mr-3" *ngIf="getStatus(eventDetails.tasks) === true">Kündigung möglich
+        bis: {{maximumDate(eventDetails.start) | date:'dd.MM.yyyy HH:mm'}}</span>
     </div>
   </div>
+
+  <div class="modal fade" [id]="'quitModal'+ eventDetails.id" tabindex="-1" role="dialog"
+       aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content text-center">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel"><b>Stelle kündigen</b></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h5>Bist du sicher, dass du die folgende Stelle kündigen willst?</h5> <br>
+          <b> Stelle: </b> {{getTaskDescription(eventDetails.tasks)}} <br>
+          <b>Event:</b> {{eventDetails.title}}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
+          <button type="button" class="btn btn-danger" (click)="deleteJob(getTaskId(eventDetails.tasks))"
+                  data-dismiss="modal">Stelle kündigen
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade" [id]="'revokeModal'+ eventDetails.id" tabindex="-1" role="dialog"
+       aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content text-center">
+        <div class="modal-header">
+          <h5 class="modal-title" id="revokeModalLabel"><b>Bewerbung zurückziehen</b></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h5>Bist du sicher, dass du die folgende Bewerbung zurückziehen willst?</h5> <br>
+          <b> Stelle: </b> {{getTaskDescription(eventDetails.tasks)}} <br>
+          <b>Event:</b> {{eventDetails.title}}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
+          <button type="button" class="btn btn-danger" (click)="deleteApplication(eventDetails.id)"
+                  data-dismiss="modal">
+            Bewerbung zurückziehen
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 </ng-container>
 
 <!-- Modal Delete Event-->
@@ -204,7 +268,7 @@
       <form [formGroup]="applyTaskForm" (ngSubmit)="apply(applyTaskForm.value)">
         <div class="form-group"
              *ngIf="this.eventDetails !== undefined && this.eventDetails.tasks !== undefined && this.eventDetails.tasks.length !== 0">
-          <label for="inputTask">Für welche Stelle möchtest du dich bewerben</label>
+          <label for="inputTask">Für welche Stelle möchtest du dich bewerben?</label>
           <select class="form-control" id="inputTask" formControlName="inputTask"
                   (change)='createApplication()'>
             <option [value]=null>kein Stelle ausgewählt</option>

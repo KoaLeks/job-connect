@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.lang.invoke.MethodHandles;
 import java.util.HashSet;
 import java.util.Optional;
@@ -265,5 +266,27 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<Employee> getAvailableEmployeesByEvent(Long eventId) {
         LOGGER.info("Find all available employees for event {}", eventId);
         return employeeRepository.getAvailableEmployeesByEvent(eventId);
+    }
+
+    @Override
+    public List<Employee> findEmployeeByInterestAreasAndStartTimesSmart(Set<Long> eventIds) {
+        Set<Long> interestAreas = new HashSet<>();
+        Set<LocalDateTime> startTimes = new HashSet<>();
+        for(Long id : eventIds){
+            Event event = eventRepository.getOne(id);
+            event.getTasks().forEach(x -> interestAreas.add(x.getInterestArea().getId()) );
+            startTimes.add(event.getStart());
+        }
+
+        List<Employee> employees = employeeRepository.findEmployeesByInterestAreasAndStartTimes(interestAreas, startTimes);
+        if(employees.size() == 0) throw new NotFoundException("Es konnten keine passenden ArbeitnehmerInnen gefunden werden");
+        return employeeRepository.findEmployeesByInterestAreasAndStartTimes(interestAreas, startTimes);
+    }
+
+    @Override
+    public List<Employee> findEmployeeByInterestAreasAndStartTimes(Set<Long> interestAreas, Set<LocalDateTime> startTimes) {
+        List<Employee> employees = employeeRepository.findEmployeesByInterestAreasAndStartTimes(interestAreas, startTimes);
+        if(employees.size() == 0) throw new NotFoundException("Es konnten keine passenden ArbeitnehmerInnen gefunden werden");
+        return employeeRepository.findEmployeesByInterestAreasAndStartTimes(interestAreas, startTimes);
     }
 }

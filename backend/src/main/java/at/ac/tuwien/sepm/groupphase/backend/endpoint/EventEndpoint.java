@@ -73,6 +73,17 @@ public class EventEndpoint {
         return eventMapper.eventsToEventOverviewDtos(eventService.findAll(searchEventDto));
     }
 
+    @GetMapping(value = "/my")
+    @ApiOperation(value = "Get list of events from Token sub ", authorizations = {@Authorization(value = "apiKey")})
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
+    @Transactional
+    public List<DetailedEventDto> getEventsOfTokenSub(@RequestHeader String authorization) {
+        LOGGER.info("GET /api/v1/events/my");
+        Profile p = tokenService.getProfileFromHeader(authorization);
+        return eventMapper.eventsToDetailedEventDtos(eventService.findByEmployerId(p.getId()));
+    }
+
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Delete event and related data")

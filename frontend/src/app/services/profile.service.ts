@@ -38,7 +38,6 @@ export class ProfileService {
    */
   updatePassword(passwords: EditPassword): Observable<Number> {
     console.log('Update user password');
-    console.log(passwords);
     return this.httpClient.put<Number>(this.profileBaseUri + '/updatePassword', passwords);
   }
 

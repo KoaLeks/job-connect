@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {EventService} from '../../services/event.service';
 import {AuthService} from '../../services/auth.service';
 import {DetailedEvent} from '../../dtos/detailed-event';
@@ -21,13 +21,21 @@ import {EventOverview} from '../../dtos/event-overview';
 })
 export class EventOverviewComponent implements OnInit {
   events: EventOverview[] = [];
+
+  // pagination
+  currentPage = 1;
+  pageSize = 5;
+  uniqueDateSetPage: Set<String>;
+  collectionSize;
+  pageEvents: EventOverview[];
   eventSearchForm;
+  countEvents: EventOverview[] = [];
 
   interestAreas: InterestArea[];
   employers: SuperSimpleEmployer[];
 
   states: string[] = ['Burgenland', 'Kärnten', 'Niederösterreich', 'Oberösterreich', 'Salzburg', 'Steiermark', 'Tirol', 'Vorarlberg',
-                      'Wien'];
+    'Wien'];
   paymentValue: number = 0;
   search: boolean = false;
   error: boolean = false;
@@ -36,8 +44,6 @@ export class EventOverviewComponent implements OnInit {
   loggedInEmployer: boolean;
   notLoggedIn: boolean;
   employerEvents: EventOverview[] = [];
-  uniqueDateArray: string[] = [];
-  uniqueDateArrayEmployer: string[] = [];
 
   currProfile: EditEmployee;
 
@@ -60,16 +66,17 @@ export class EventOverviewComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadResources();
-    if (this.authService.isLoggedIn() && this.authService.getUserRole() === 'EMPLOYEE') {
+    if (this.authService.isLoggedIn() && this.authService.userIsEmployee()) {
       this.loggedInEmployee = true;
     }
-    if (this.authService.isLoggedIn() && this.authService.getUserRole() === 'EMPLOYER') {
+    if (this.authService.isLoggedIn() && this.authService.userIsEmployer()) {
       this.loggedInEmployer = true;
     }
     if (!this.authService.isLoggedIn()) {
       this.notLoggedIn = true;
     }
   }
+
   private loadResources() {
     this.eventService.getEvents().subscribe(
       (events: EventOverview[]) => {
@@ -101,7 +108,9 @@ export class EventOverviewComponent implements OnInit {
       }
     );
   }
+
   searchEvent(event: SearchEvent) {
+    this.currentPage = 1;
     if (event.userId) {
       this.employeeService.getEmployeeByEmail().subscribe(
         (profile: EditEmployee) => {
@@ -109,6 +118,12 @@ export class EventOverviewComponent implements OnInit {
           this.eventService.searchEvent(event).subscribe(
             (events: EventOverview[]) => {
               this.events = events;
+              this.countEvents = [];
+              for (const e of events) {
+                if (this.checkDateInFuture(e.start)) {
+                  this.countEvents.push(e);
+                }
+              }
               this.sortEventsByDate();
               this.search = true;
               this.employerEvents = [];
@@ -132,6 +147,12 @@ export class EventOverviewComponent implements OnInit {
       this.eventService.searchEvent(event).subscribe(
         (events: EventOverview[]) => {
           this.events = events;
+          this.countEvents = [];
+          for (const e of events) {
+            if (this.checkDateInFuture(e.start)) {
+              this.countEvents.push(e);
+            }
+          }
           this.sortEventsByDate();
           this.search = true;
           this.employerEvents = [];
@@ -178,49 +199,32 @@ export class EventOverviewComponent implements OnInit {
       this.errorMessage = error.error;
     }
   }
+
   getSliderValue(event) {
     this.paymentValue = event.target.value;
   }
 
   // sorts Events by Date by calculating the number of milliseconds between January 1, 1970 and 'event.start'
   private sortEventsByDate() {
-    this.uniqueDateArray = [];
-    this.uniqueDateArrayEmployer = [];
-    const dateArray: string[] = [];
-    const dateArrayEmployer: string[] = [];
-
-    for (const event of this.events) {
-      event.sortHelper = Date.parse(event.start); // returns the number of milliseconds between January 1, 1970 and 'event.start'
-      dateArray.push(event.start);
-    }
-
-    for (const event of this.employerEvents) {
-      dateArrayEmployer.push(event.start.split('T')[0]);
-    }
-
-    for (const date of dateArray) {
-      if (this.uniqueDateArray.indexOf(date.split('T')[0]) === -1) {
-        if (new Date() <= new Date(date)) { // only show future events
-          this.uniqueDateArray.push(date.split('T')[0]);
-        }
+    if (this.loggedInEmployer) {
+      for (const event of this.employerEvents) {
+        event.sortHelper = Date.parse(event.start);
       }
-    }
-
-    for (const date of dateArrayEmployer) {
-      if (this.uniqueDateArrayEmployer.indexOf(date) === -1) {
-          this.uniqueDateArrayEmployer.push(date);
+      this.employerEvents.sort((a, b) => (a.sortHelper > b.sortHelper ? 1 : -1));
+    } else {
+      for (const event of this.events) {
+        event.sortHelper = Date.parse(event.start); // returns the number of milliseconds between January 1, 1970 and 'event.start'
       }
+      this.events.sort((a, b) => (a.sortHelper > b.sortHelper ? 1 : -1));
     }
 
-    this.events.sort((a, b) => (a.sortHelper > b.sortHelper ? 1 : -1));
-    this.employerEvents.sort((a, b) => (a.sortHelper > b.sortHelper ? 1 : -1));
-    this.uniqueDateArray.sort((a, b) => (a > b ? 1 : -1));
-    this.uniqueDateArrayEmployer.sort((a, b) => (a > b ? 1 : -1));
+    this.refreshEvents();
   }
 
   checkDateInFuture(date) {
     return new Date(date) >= new Date();
   }
+
   resetForm() {
     this.eventSearchForm = this.formBuilder.group(
       {
@@ -236,5 +240,48 @@ export class EventOverviewComponent implements OnInit {
       }
     );
     this.paymentValue = 0;
+  }
+
+  /**
+   * Changes the currently shown events and dates (pagination).
+   *
+   * Note:
+   *  - If the user is an employer they only see their own upcoming and running events.
+   *  - Else the user sees all events which haven't started yet.
+   */
+  refreshEvents() {
+    this.uniqueDateSetPage = new Set<String>();
+
+    if (this.loggedInEmployer) {
+      this.collectionSize = this.employerEvents.length;
+      this.pageEvents = this.employerEvents
+        .map((event, i) => ({id: i + 1, ...event}))
+        .slice((this.currentPage - 1) * this.pageSize, (this.currentPage - 1) * this.pageSize + this.pageSize);
+
+      for (const event of this.pageEvents) {
+        if (new Date(event.end) > new Date()) {
+          this.uniqueDateSetPage.add(event.start.split('T')[0]);
+        }
+      }
+    } else {
+      // get all events which have not started yet
+      const upcomingEvents = [];
+      for (const event of this.events) {
+        if (new Date(event.start) > new Date()) {
+          upcomingEvents.push(event);
+        }
+      }
+
+      this.collectionSize = upcomingEvents.length;
+      this.pageEvents = upcomingEvents
+        .map((event, i) => ({id: i + 1, ...event}))
+        .slice((this.currentPage - 1) * this.pageSize, (this.currentPage - 1) * this.pageSize + this.pageSize);
+
+      for (const event of this.pageEvents) {
+        if (new Date(event.start) > new Date()) {
+          this.uniqueDateSetPage.add(event.start.split('T')[0]);
+        }
+      }
+    }
   }
 }

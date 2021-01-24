@@ -58,7 +58,7 @@ public class EventServiceImpl implements EventService {
             Set<Task> tasks = event.getTasks();
             for (Task task : tasks) {
                 task.setEvent(savedEvent);
-                if(task.getInterestArea().getId() == null) {
+                if(task.getInterestArea() != null && task.getInterestArea().getId() == null) {
                     task.setInterestArea(null);
                 }
                 taskRepository.save(task);
@@ -162,8 +162,15 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional
     public List<Event> findAllAppliedEvents(Long id) {
-        LOGGER.debug("Find all events where Employee with id %s applied" + id);
+        LOGGER.debug(String.format("Find all events where Employee with id %s applied", id));
         return eventRepository.findAllAppliedEvents(id);
+    }
+
+    @Override
+    @Transactional
+    public List<Event> findByEmployerId(Long employerId) {
+        LOGGER.debug(String.format("Find all events from Employer %s", employerId));
+        return eventRepository.findALlByEmployerId(employerId);
     }
 
 }

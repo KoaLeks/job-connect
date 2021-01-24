@@ -35,10 +35,11 @@ export class EditPasswordComponent implements OnInit {
       console.log(editPassword);
       this.profileService.updatePassword(editPassword).subscribe(
         (id: Number) => {
-          console.log('password updated successfully for ' + id);
+          console.log('password updated successfully');
           this.alertService.clear();
           // close the modal
           this.close.nativeElement.click();
+          this.alertService.success('Passwort erfolgreich geändert.', {autoClose: true});
         }
       );
     }
