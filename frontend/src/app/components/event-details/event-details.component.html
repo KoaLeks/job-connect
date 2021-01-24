@@ -20,7 +20,7 @@
         </div>
         <div class="row justify-content-between">
           <div class="col-md-9 h3">
-            {{eventDetails.address.addressLine}}, {{eventDetails.address.zip}} {{eventDetails.address.city}}
+            {{eventDetails.address.addressLine}}, {{eventDetails.address.zip}} {{eventDetails.address.city}} <br> {{eventDetails.address.state}}
           </div>
           <div class="col-md-3 text-right h5">
             Ende: {{eventDetails.end.slice(0, 10) |  date:'dd.MM.yyyy'}}<br>{{eventDetails.end.slice(11, 16)}} Uhr

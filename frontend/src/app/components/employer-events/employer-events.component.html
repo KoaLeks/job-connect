@@ -26,7 +26,7 @@
                 <h4 class="mb-1">
                   {{event.title}}
                 </h4>
-                <small class="text-muted">
+                <small class="text-muted address">
                   <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor"
                        class="bi bi-geo-alt"
                        viewBox="0 0 16 16">
@@ -35,7 +35,7 @@
                     <path fill-rule="evenodd"
                           d="M8 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
                   </svg>
-                  {{event.address.zip}} {{event.address.city}}</small>
+                  {{event.address.zip}} {{event.address.city}} <br> {{event.address.state}}</small>
               </div>
               <p class="mb-1">
                 <small class="text-muted">
