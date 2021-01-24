@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.groupphase.backend.repository.impl;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepositoryCustom;
 import at.ac.tuwien.sepm.groupphase.backend.repository.InterestRepository;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -10,6 +11,7 @@ import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class EventRepositoryCustomImpl implements EventRepositoryCustom {
     @PersistenceContext
     private EntityManager em;
