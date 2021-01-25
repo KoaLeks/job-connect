@@ -51,7 +51,7 @@ export class EmployeeOverviewComponent implements OnInit {
     this.employeeFilterForm = this.formBuilder.group(
       {
         interests: '',
-        date: ['', Validators.required],
+        date: '',
         time: ''
       }
     );
@@ -73,8 +73,8 @@ export class EmployeeOverviewComponent implements OnInit {
       singleSelection: false,
       idField: 'id',
       textField: 'description',
-      selectAllText: 'Select All',
-      unSelectAllText: 'UnSelect All',
+      selectAllText: 'Alle auswählen',
+      unSelectAllText: 'Keine auswählen',
       itemsShowLimit: 2,
       allowSearchFilter: true
     };
@@ -83,8 +83,8 @@ export class EmployeeOverviewComponent implements OnInit {
       singleSelection: false,
       idField: 'id',
       textField: 'title',
-      selectAllText: 'Select All',
-      unSelectAllText: 'UnSelect All',
+      selectAllText: 'Alle auswählen',
+      unSelectAllText: 'Keine auswählen',
       itemsShowLimit: 2,
       allowSearchFilter: true
     };
@@ -167,15 +167,17 @@ export class EmployeeOverviewComponent implements OnInit {
   }
 
   setTime() {
-    if (this.employeeFilterForm.value.time === '') {
+    if (this.employeeFilterForm.value.time === null || this.employeeFilterForm.value.time === '') {
       this.employeeFilterForm.value.time = '12:00';
     }
+    if (this.employeeFilterForm.value.date === '') { this.employeeFilterForm.value.time = ''; }
   }
 
   setDate() {
-    if (this.employeeFilterForm.value.date === '') {
+    if (this.employeeFilterForm.value.date === null || this.employeeFilterForm.value.date === '') {
       this.employeeFilterForm.value.date = this.datePipe.transform(Date.now(), 'yyyy-MM-dd');
     }
+    if (this.employeeFilterForm.value.time === '') { this.employeeFilterForm.value.date = ''; }
   }
 
   filterEmployeesSmart(filterEmployeesSmart: FilterEmployeesSmart) {
@@ -185,5 +187,11 @@ export class EmployeeOverviewComponent implements OnInit {
         this.refreshEmployees();
       }
     );
+  }
+
+  resetForm() {
+    this.employeeFilterForm.reset();
+    this.employeeSmartFilterForm.reset();
+    this.smartFilter = false;
   }
 }
