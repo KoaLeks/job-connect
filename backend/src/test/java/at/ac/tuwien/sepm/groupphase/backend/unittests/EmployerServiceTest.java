@@ -6,6 +6,10 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Profile;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.PasswordsNotMatchingException;
+import at.ac.tuwien.sepm.groupphase.backend.repository.EmployeeRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.EmployerRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.ProfileRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.EmployerService;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.service.ProfileService;
@@ -32,7 +36,6 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 @ActiveProfiles("test")
 public class EmployerServiceTest {
 
-
     @Autowired
     PlatformTransactionManager txm;
 
@@ -44,9 +47,18 @@ public class EmployerServiceTest {
     EmployerService employerService;
     @Autowired
     EventService eventService;
+    @Autowired
+    ProfileRepository profileRepository;
+    @Autowired
+    private EmployerRepository employerRepository;
+    @Autowired
+    private EventRepository eventRepository;
 
     @BeforeEach
     public void setupDBTransaction() {
+        eventRepository.deleteAll();
+        employerRepository.deleteAll();
+        profileRepository.deleteAll();
         DefaultTransactionDefinition def = new DefaultTransactionDefinition();
         def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
         txstatus = txm.getTransaction(def);

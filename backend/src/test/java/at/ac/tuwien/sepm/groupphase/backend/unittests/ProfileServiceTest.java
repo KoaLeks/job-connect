@@ -9,6 +9,7 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Profile;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.PasswordsNotMatchingException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.UniqueConstraintException;
+import at.ac.tuwien.sepm.groupphase.backend.repository.ProfileRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.ProfileService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,8 +38,12 @@ public class ProfileServiceTest {
     @Autowired
     ProfileService profileService;
 
+    @Autowired
+    ProfileRepository profileRepository;
+
     @BeforeEach
     public void setupDBTransaction() {
+        profileRepository.deleteAll();
         DefaultTransactionDefinition def = new DefaultTransactionDefinition();
         def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
         txstatus = txm.getTransaction(def);

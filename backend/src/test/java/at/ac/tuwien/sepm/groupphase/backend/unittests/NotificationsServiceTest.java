@@ -2,7 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.unittests;
 
 import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
-import at.ac.tuwien.sepm.groupphase.backend.repository.Employee_TasksRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.*;
 import at.ac.tuwien.sepm.groupphase.backend.security.JwtTokenizer;
 import at.ac.tuwien.sepm.groupphase.backend.service.*;
 import at.ac.tuwien.sepm.groupphase.backend.util.NotificationType;
@@ -50,22 +50,48 @@ public class NotificationsServiceTest {
     NotificationService notificationsService;
 
     @Autowired
+    NotificationRepository notificationRepository;
+
+    @Autowired
     EmployerService employerService;
 
     @Autowired
     EmployeeService employeeService;
 
     @Autowired
+    EmployeeRepository employeeRepository;
+
+    @Autowired
     TaskService taskService;
 
     @Autowired
+    TaskRepository taskRepository;
+
+    @Autowired
     Employee_TasksRepository employee_tasksRepository;
+
+    @Autowired
+    ProfileRepository profileRepository;
+
+    @Autowired
+     EmployerRepository employerRepository;
+
+    @Autowired
+    EventRepository eventRepository;
 
     @Autowired
     private JwtTokenizer jwtTokenizer;
 
     @BeforeEach
     public void setupDBTransaction() {
+        eventRepository.deleteAll();
+        notificationRepository.deleteAll();
+        employerRepository.deleteAll();
+        employeeRepository.deleteAll();
+        profileRepository.deleteAll();
+        employee_tasksRepository.deleteAll();
+
+        taskRepository.deleteAll();
         DefaultTransactionDefinition def = new DefaultTransactionDefinition();
         def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
         txstatus = txm.getTransaction(def);
