@@ -23,7 +23,7 @@ public class EventRepositoryTest implements TestData {
     private EventRepository eventRepository;
 
     @Test
-    public void givenNothing_whenSaveMessage_thenFindListWithOneElementAndFindMessageById() {
+    public void whenSaveEvent_thenFindListWithOneElementAndFindEventById() {
         Event event = Event.EventBuilder.aEvent()
             .withStart(START)
             .withEnd(END)

@@ -79,7 +79,7 @@ public class ApplicationEndpoint {
 
         Notification existingApplication = notificationService.findFirstByEvent_IdAndSender_Id(event.getId(), employee.getId());
         if(!(existingApplication == null || existingApplication.getType().equalsIgnoreCase(NotificationType.NOTIFICATION.name()))){
-            throw new AlreadyHandledException(String.format("Sie haben sich bereits für den Task \"%s\" für dieses Event beworben.", existingApplication.getTask().getDescription()));
+            throw new AlreadyHandledException("Sie haben sich bereits für dieses Event beworben.");
         }
 
         employee_tasksService.applyForTask(employee, task);
