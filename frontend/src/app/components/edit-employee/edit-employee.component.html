@@ -191,6 +191,10 @@
               <ng-container *ngFor="let interest of employeeInterests">
                 <li>
                   {{interest.name}}: {{interest.description}}
+                  <small
+                    *ngIf="interest.simpleInterestAreaDto && interest.simpleInterestAreaDto.description && interest.simpleInterestAreaDto.area">
+                    ({{interest.simpleInterestAreaDto.area}} - {{interest.simpleInterestAreaDto.description}})
+                  </small>
                   <button type="button" class="btn btn-xs btn-danger delete-interest-button btn-xs text-center"
                           (click)="deleteInterest(interest)">
                     <a class="deletebutton">
