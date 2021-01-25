@@ -86,8 +86,8 @@ public interface TestData {
     Employer EMPLOYER = null;
     Address ADDRESS = null;
     Set<Task> TASKS_EVENT = null;
-    String REGISTER_EMPLOYEE_BASE_URI = BASE_URI + "/profiles/employee";
-    String REGISTER_EMPLOYER_BASE_URI = BASE_URI + "/profiles/employer";
+    String REGISTER_EMPLOYEE_BASE_URI = BASE_URI + "/profiles/employee/register";
+    String REGISTER_EMPLOYER_BASE_URI = BASE_URI + "/profiles/employer/register";
     String GET_EMPLOYEE_BASE_URI = BASE_URI + "/profiles/employee";
     String GET_ALL_EMPLOYEES_BASE_URI = BASE_URI + "/profiles/employees";
     String GET_EMPLOYER_BASE_URI = BASE_URI + "/profiles/employer";

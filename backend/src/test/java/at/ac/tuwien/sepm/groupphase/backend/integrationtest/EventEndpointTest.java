@@ -163,10 +163,8 @@ public class EventEndpointTest implements TestData {
 
         String body = objectMapper.writeValueAsString(eventMapper.eventToEventInquiryDto(event));
 
-        var res = jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES);
-
-        MvcResult mvcResult = this.mockMvc.perform(post(EVENTS_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+        MvcResult mvcResult = this.mockMvc.perform(post(EVENTS_BASE_URI + "/create")
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(employer1.getProfile().getEmail(), ADMIN_ROLES))
             .contentType(MediaType.APPLICATION_JSON)
             .content(body))
             .andDo(print())
@@ -189,7 +187,7 @@ public class EventEndpointTest implements TestData {
 
         String body = objectMapper.writeValueAsString(eventMapper.eventToEventInquiryDto(event));
 
-        MvcResult mvcResult = this.mockMvc.perform(post(EVENTS_BASE_URI)
+        MvcResult mvcResult = this.mockMvc.perform(post(EVENTS_BASE_URI + "/create")
             .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
             .contentType(MediaType.APPLICATION_JSON)
             .content(body))
