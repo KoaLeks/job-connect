@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Repository
@@ -37,5 +38,7 @@ public interface TimeRepository extends JpaRepository<Time, Long> {
     @Modifying
     @Transactional
     void deleteByFinalEndDateBefore(LocalDateTime expiryDate);
+
+    List<Time> findAllByEmployeeId(Long id);
 
 }

@@ -12,10 +12,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AuthorizationServiceException;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -59,7 +62,7 @@ public class ProfileEndpoint {
         this.tokenService = tokenService;
     }
 
-    @PostMapping(value = "/employee")
+    @PostMapping(value = "/employee/register")
     @ApiOperation(value = "Register a new employee", authorizations = {@Authorization(value = "apiKey")})
     @ResponseStatus(HttpStatus.CREATED)
     @CrossOrigin(origins = "http://localhost:4200")
@@ -101,7 +104,7 @@ public class ProfileEndpoint {
         employeeService.updateEmployee(employeeMapper.editEmployeeDtoToEmployee(editEmployeeDto));
     }
 
-    @PostMapping(value = "/employer")
+    @PostMapping(value = "/employer/register")
     @ApiOperation(value = "Register a new employer", authorizations = {@Authorization(value = "apiKey")})
     @ResponseStatus(HttpStatus.CREATED)
     @CrossOrigin(origins = "http://localhost:4200")

@@ -64,7 +64,7 @@ public class EmployerServiceImpl implements EmployerService {
         LOGGER.info("Find employer with email {}", email);
         Employer employer = employerRepository.findByProfile_Email(email);
         if (employer != null) return employer;
-        else throw new NotFoundException(String.format("Could not find employer with email %s", email));
+        else throw new NotFoundException(String.format("ArbeitgeberIn mit der Email %s konnte nicht gefunden werden", email));
     }
 
     @Override

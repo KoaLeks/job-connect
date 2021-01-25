@@ -91,7 +91,6 @@ export class AuthService {
   }
 
   private getTokenExpirationDate(token: string): Date {
-
     const decoded: any = jwt_decode(token);
     if (decoded.exp === undefined) {
       return null;
