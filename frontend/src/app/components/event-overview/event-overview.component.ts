@@ -258,6 +258,7 @@ export class EventOverviewComponent implements OnInit {
         .map((event, i) => ({id: i + 1, ...event}))
         .slice((this.currentPage - 1) * this.pageSize, (this.currentPage - 1) * this.pageSize + this.pageSize);
 
+
       for (const event of this.pageEvents) {
         if (new Date(event.end) > new Date()) {
           this.uniqueDateSetPage.add(event.start.split('T')[0]);

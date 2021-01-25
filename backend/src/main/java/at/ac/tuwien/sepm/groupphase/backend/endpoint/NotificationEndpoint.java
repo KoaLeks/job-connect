@@ -53,7 +53,7 @@ public class NotificationEndpoint {
 
     @DeleteMapping(value = "/{id}")
     @ApiOperation(value = "Get all Notifications of jwt sub Profile", authorizations = {@Authorization(value = "apiKey")})
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     @CrossOrigin(origins = "http://localhost:4200")
     public void deleteNotification(@PathVariable Long id, @RequestHeader String authorization){
         LOGGER.info("Delete /api/v1/notifications/{}", id);

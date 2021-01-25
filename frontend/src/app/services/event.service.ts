@@ -23,7 +23,7 @@ export class EventService {
    */
   createEvent(event: Event): Observable<Event> {
     console.log('Create event: ' + JSON.stringify(event));
-    return this.httpClient.post<Event>(this.eventBaseUri + 'create', event);
+    return this.httpClient.post<Event>(this.eventBaseUri + '/create', event);
   }
 
   /**
