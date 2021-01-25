@@ -146,9 +146,10 @@ public class NotificationServiceImpl implements NotificationService {
             employee_tasksRepository.deleteEmployee_TaskByEmployee_Profile_Email_AndTask_Id(mail, taskId);
             notificationRepository.deleteNotificationByTask_IdAndTypeAndRecipient_Email(taskId, NotificationType.EVENT_ACCEPTED.name(), mail);
 
-            this.mailService.sendJobTerminationMail(task);
+            new Thread(() -> {
+                this.mailService.sendJobTerminationMail(task);
+            }).start();
         }
-
     }
 }
 
