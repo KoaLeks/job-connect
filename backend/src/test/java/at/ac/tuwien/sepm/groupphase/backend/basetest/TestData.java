@@ -88,8 +88,8 @@ public interface TestData {
     Employer EMPLOYER = null;
     Address ADDRESS = null;
     Set<Task> TASKS_EVENT = null;
-    String REGISTER_EMPLOYEE_BASE_URI = BASE_URI + "/profiles/employee";
-    String REGISTER_EMPLOYER_BASE_URI = BASE_URI + "/profiles/employer";
+    String REGISTER_EMPLOYEE_BASE_URI = BASE_URI + "/profiles/employee/register";
+    String REGISTER_EMPLOYER_BASE_URI = BASE_URI + "/profiles/employer/register";
     String GET_EMPLOYEE_BASE_URI = BASE_URI + "/profiles/employee";
     String GET_ALL_EMPLOYEES_BASE_URI = BASE_URI + "/profiles/employees";
     String GET_EMPLOYER_BASE_URI = BASE_URI + "/profiles/employer";
@@ -101,6 +101,8 @@ public interface TestData {
     String CONTACT_BASE_URI = BASE_URI + "/profiles/contact";
     String DELETE_EMPLOYER_BASE_URI = BASE_URI + "/profiles/employer";
     String DELETE_EMPLOYEE_BASE_URI = BASE_URI + "/profiles/employee";
+    String NOTIFICATION_BASE_URI = BASE_URI + "/notifications";
+    String CHANGE_FAVORITE_NOTIFICATION_BASE_URI = BASE_URI + "/notifications/changeFavorite";
 
     Long TIME_ID = 1L;
     LocalDateTime START_TIME = LocalDateTime.of(2022, 11, 13, 12, 0, 0, 0);
@@ -222,12 +224,15 @@ public interface TestData {
         {
             add("ROLE_ADMIN");
             add("ROLE_USER");
+            add("ROLE_EMPLOYER");
+            add("ROLE_EMPLOYEE");
         }
     };
     String DEFAULT_USER = "admin@email.com";
     List<String> USER_ROLES = new ArrayList<>() {
         {
             add("ROLE_USER");
+            add("ROLE_EMPLOYEE");
         }
     };
 

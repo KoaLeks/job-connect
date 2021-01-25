@@ -58,7 +58,7 @@ public class ProfileDetailsService implements ProfileService {
         LOGGER.debug("Find profile by email");
         Profile profile = profileRepository.findProfileByEmail(email);
         if (profile != null) return profile;
-        throw new NotFoundException(String.format("Could not find the user with the email address %s", email));
+        throw new NotFoundException(String.format("Benutzer mit Email %s konnte nicht gefunden werden", email));
     }
 
     @Override

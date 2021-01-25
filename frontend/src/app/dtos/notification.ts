@@ -1,5 +1,3 @@
-import {ProfileDto} from './profile-dto';
-
 export class Notification {
   constructor(
     public message: string,

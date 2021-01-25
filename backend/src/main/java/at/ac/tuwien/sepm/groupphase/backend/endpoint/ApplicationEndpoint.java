@@ -146,7 +146,6 @@ public class ApplicationEndpoint {
 
     @GetMapping(value = "/events/{id}")
     @ApiOperation(value = "Get all applications for an Event", authorizations = {@Authorization(value = "apiKey")})
-    @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
     @ResponseStatus(HttpStatus.OK)
     @CrossOrigin(origins = "http://localhost:4200")
     public Set<SimpleNotificationDto> getAllApplicationsForEvent(@PathVariable Long id) {

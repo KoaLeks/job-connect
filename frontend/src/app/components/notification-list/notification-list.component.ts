@@ -1,7 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {SimpleNotification} from '../../dtos/simple-notification';
 import {AuthService} from '../../services/auth.service';
-import {ApplicationStatus} from '../../dtos/application-status';
 import {ApplicationService} from '../../services/application.service';
 import {NotificationService} from '../../services/notification.service';
 import {UpdateHeaderService} from '../../services/update-header.service';

@@ -274,10 +274,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         Set<LocalDateTime> startTimes = new HashSet<>();
         for(Long id : eventIds){
             Event event = eventRepository.getOne(id);
-            event.getTasks().forEach(x -> interestAreas.add(x.getInterestArea().getId()) );
+            event.getTasks().forEach(x -> {
+                if(x.getInterestArea() != null){
+                    interestAreas.add(x.getInterestArea().getId());
+                }
+            });
             startTimes.add(event.getStart());
         }
-
         List<Employee> employees = employeeRepository.findEmployeesByInterestAreasAndStartTimes(interestAreas, startTimes);
         if(employees.size() == 0) throw new NotFoundException("Es konnten keine passenden ArbeitnehmerInnen gefunden werden");
         return employeeRepository.findEmployeesByInterestAreasAndStartTimes(interestAreas, startTimes);

@@ -384,13 +384,14 @@ public class TestDataGenerator {
                         Date end = DateUtils.round(DateUtils.addHours(faker.date().future(random.nextInt(12) + 1, TimeUnit.HOURS, start), 1), Calendar.HOUR);
                         // one semester 30% chance
                         if (random.nextDouble() <= 0.3) {
+                            Long refId = random.nextLong();
                             Date finalEnd = DateUtils.addWeeks(end, 17);
                             Time time1 = Time.TimeBuilder.aTime()
                                 .withStart(convertToLocalDateTime(start))
                                 .withEnd(convertToLocalDateTime(end))
                                 .withFinalEndDate(convertToLocalDateTime(finalEnd))
                                 .withVisible(true)
-                                .withRef_Id(-1L)
+                                .withRef_Id(refId)
                                 .withEmployee(employee)
                                 .build();
                             timeRepository.save(time1);
@@ -400,7 +401,7 @@ public class TestDataGenerator {
                                     .withEnd(convertToLocalDateTime(DateUtils.addDays(end, j * 7)))
                                     .withFinalEndDate(convertToLocalDateTime(DateUtils.addDays(end, j * 7)))
                                     .withVisible(false)
-                                    .withRef_Id(-1L)
+                                    .withRef_Id(refId)
                                     .withEmployee(employee)
                                     .build();
                                 LOGGER.debug("saving time (one semester) {}, for employee {}", time, employee);

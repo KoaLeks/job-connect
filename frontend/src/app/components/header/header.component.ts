@@ -39,6 +39,10 @@ export class HeaderComponent implements OnInit {
         this.loadNotifications();
       }
     });
+    this.updateHeaderService.removeEventNotifications.subscribe(() => {
+      this.loadNotifications();
+    });
+
   }
 
   ngOnInit() {
@@ -117,10 +121,6 @@ export class HeaderComponent implements OnInit {
       binary += String.fromCharCode(bytes[i]);
     }
     this.picture = window.btoa(binary);
-  }
-
-  private getNotifications() {
-
   }
 
 }

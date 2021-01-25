@@ -6,6 +6,7 @@ import {ApplicationService} from '../../services/application.service';
 import {Router} from '@angular/router';
 import {AlertService} from '../../alert';
 import {EmployeeService} from '../../services/employee.service';
+import {UpdateHeaderService} from '../../services/update-header.service';
 
 @Component({
   selector: 'app-event-applied',
@@ -19,7 +20,8 @@ export class EventAppliedComponent implements OnInit {
   errorMessage: string = '';
 
   constructor(public authService: AuthService, private applicationService: ApplicationService,
-              private router: Router, private alertService: AlertService, private employeeService: EmployeeService) {
+              private router: Router, private alertService: AlertService, private employeeService: EmployeeService,
+              private updateHeaderService: UpdateHeaderService) {
   }
 
   private getStatus(tasks: Task[]) {
@@ -109,6 +111,7 @@ export class EventAppliedComponent implements OnInit {
             this.applicationService.deleteApplication(application.id).subscribe(
               () => {
                 this.alertService.success('Bewerbung erfolgreich zurückgezogen', {autoClose: true});
+                this.updateHeaderService.emitDeletedEvent(-1);
                 // this.router.navigate(['events']);
                 this.applicationService.getAppliedEvents().subscribe(
                   (events: DetailedEvent[]) => {
@@ -129,6 +132,7 @@ export class EventAppliedComponent implements OnInit {
         this.applicationService.getAppliedEvents().subscribe(
           (events: DetailedEvent[]) => {
             this.events = events;
+            this.updateHeaderService.emitDeletedEvent(-1);
           }
         );
       }

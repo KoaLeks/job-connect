@@ -29,7 +29,7 @@
 
 .declined{
   color: white;
-  background-color: lightcoral;
+  background-color: #e84855;
 }
 
 .pending{
@@ -39,4 +39,8 @@
 .accepted{
   color: white;
   background-color: green;
+}
+
+.address{
+  text-align: right;
 }

@@ -40,11 +40,11 @@ public class EventEndpoint {
         this.tokenService = tokenService;
     }
 
-    @PostMapping
+    @PostMapping(value="/create")
     @ApiOperation(value = "Publish a new event", authorizations = {@Authorization(value = "apiKey")})
+    @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
     @ResponseStatus(HttpStatus.CREATED)
     @CrossOrigin(origins = "http://localhost:4200")
-    @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
     public EventInquiryDto create(@Valid @RequestBody EventInquiryDto eventInquiryDto, @RequestHeader String authorization) {
         LOGGER.info("POST /api/v1/events/{}", eventInquiryDto);
         Profile profile = tokenService.getProfileFromHeader(authorization);
