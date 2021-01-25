@@ -21,7 +21,7 @@ export class PastAppliedEventsComponent implements OnInit {
   private getStatus(tasks: Task[]) {
     for (const task of tasks) {
       for (const emp of task.employees) {
-        if (emp.employee.superSimpleProfileDto.email === this.authService.getEmail()) {
+        if (emp.employee.superSimpleProfileDto.email === this.authService.getTokenIdentifier()) {
           return emp.accepted;
         }
       }
@@ -32,7 +32,7 @@ export class PastAppliedEventsComponent implements OnInit {
   private getTaskDescription(tasks: Task[]) {
     for (const task of tasks) {
       for (const emp of task.employees) {
-        if (emp.employee.superSimpleProfileDto.email === this.authService.getEmail()) {
+        if (emp.employee.superSimpleProfileDto.email === this.authService.getTokenIdentifier()) {
           return task.description;
         }
       }

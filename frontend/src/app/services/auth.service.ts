@@ -36,15 +36,6 @@ export class AuthService {
     return !!this.getToken() && (this.getTokenExpirationDate(this.getToken()).valueOf() > new Date().valueOf());
   }
 
-  getEmail() {
-    if (this.getToken() === '' ) { return null; }
-    if (this.getToken() !== null ) {
-      const dec = jwt_decode(this.getToken());
-      return dec.sub;
-    }
-    return null;
-  }
-
   logoutUser() {
     console.log('Logout');
     localStorage.removeItem('authToken');
