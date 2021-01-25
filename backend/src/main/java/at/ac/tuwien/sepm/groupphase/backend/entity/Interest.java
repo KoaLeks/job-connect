@@ -78,7 +78,7 @@ public class Interest {
             "id=" + id +
             ", name='" + name + '\'' +
             ", description='" + description + '\'' +
-            ", interestArea=" + interestArea.getId() +
+            ", interestArea=" + (interestArea == null ? "null" : interestArea.getId()) +
             ", employee=" + employee +
             '}';
     }

@@ -147,8 +147,10 @@ public class EventServiceImpl implements EventService {
         Set<Task> tasks = event.getTasks();
         for (Task t : tasks) {
             Set<Employee_Tasks> employee_tasks = t.getEmployees();
-            for (Employee_Tasks e : employee_tasks) {
-                employeeSet.add(e.getEmployee());
+            if(employee_tasks != null) {
+                for (Employee_Tasks e : employee_tasks) {
+                    employeeSet.add(e.getEmployee());
+                }
             }
         }
         Set<Notification> notifications = notificationRepository.findAllByEvent_Id(id);

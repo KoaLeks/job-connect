@@ -181,8 +181,8 @@ public interface TestData {
 
     static Event getNewEvent() {
         return Event.EventBuilder.aEvent()
-            .withStart(START_OVER)
-            .withEnd(END_OVER)
+            .withStart(START_TIME)
+            .withEnd(END_TIME)
             .withTitle(TITLE_EVENT)
             .withDescription(DESCRIPTION_EVENT)
             .withEmployer(getNewEmployer())
