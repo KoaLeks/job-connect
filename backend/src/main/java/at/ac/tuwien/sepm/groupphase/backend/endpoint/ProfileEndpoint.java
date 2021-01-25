@@ -18,6 +18,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -61,7 +62,7 @@ public class ProfileEndpoint {
         this.tokenService = tokenService;
     }
 
-    @PostMapping(value = "/employee")
+    @PostMapping(value = "/employee/register")
     @ApiOperation(value = "Register a new employee", authorizations = {@Authorization(value = "apiKey")})
     @ResponseStatus(HttpStatus.CREATED)
     @CrossOrigin(origins = "http://localhost:4200")
@@ -103,7 +104,7 @@ public class ProfileEndpoint {
         employeeService.updateEmployee(employeeMapper.editEmployeeDtoToEmployee(editEmployeeDto));
     }
 
-    @PostMapping(value = "/employer")
+    @PostMapping(value = "/employer/register")
     @ApiOperation(value = "Register a new employer", authorizations = {@Authorization(value = "apiKey")})
     @ResponseStatus(HttpStatus.CREATED)
     @CrossOrigin(origins = "http://localhost:4200")
@@ -122,8 +123,8 @@ public class ProfileEndpoint {
 
     @GetMapping(value = "/employer")
     @ApiOperation(value = "Get an employers profile details", authorizations = {@Authorization(value = "apiKey")})
+    @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
     @CrossOrigin(origins = "http://localhost:4200")
-    @PreAuthorize(("hasAuthority('ROLE_EMPLOYER')"))
     public EmployerDto getEmployer(@RequestHeader String authorization) {
         Employer employer = tokenService.getEmployerFromHeader(authorization);
         LOGGER.info("GET /api/v1/profiles/employer/{}", employer.getProfile().getEmail());
