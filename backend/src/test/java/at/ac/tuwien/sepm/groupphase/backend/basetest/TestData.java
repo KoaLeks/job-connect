@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.TimeDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.repository.Employee_TasksRepository;
 import at.ac.tuwien.sepm.groupphase.backend.util.Gender;
+import at.ac.tuwien.sepm.groupphase.backend.util.NotificationType;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -199,6 +200,20 @@ public interface TestData {
             .withEmployee(EMPLOYEE_TIME)
             .withVisible(VISIBLE)
             .withRef_Id(REF_ID)
+            .build();
+    }
+
+    static Notification getNewNotification() {
+        return Notification.NotificationBuilder.aNotification()
+            .withId(null)
+            .withMessage("Notification message")
+            .withType(NotificationType.APPLICATION.name())
+            .withSeen(false)
+            .withEvent(null)
+            .withRecipient(null)
+            .withSender(null)
+            .withTask(null)
+            .withFavorite(false)
             .build();
     }
 
