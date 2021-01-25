@@ -9,6 +9,7 @@ import at.ac.tuwien.sepm.groupphase.backend.repository.*;
 import at.ac.tuwien.sepm.groupphase.backend.security.JwtTokenizer;
 import at.ac.tuwien.sepm.groupphase.backend.util.NotificationType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.aspectj.weaver.ast.Not;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -44,6 +46,9 @@ public class NotificationEndpointTest implements TestData {
 
     @Autowired
     private EmployerRepository employerRepository;
+
+    @Autowired
+    private ProfileRepository profileRepository;
 
     @Autowired
     private TaskRepository taskRepository;
@@ -132,6 +137,7 @@ public class NotificationEndpointTest implements TestData {
         employerRepository.deleteAll();
         notificationRepository.deleteAll();
         taskRepository.deleteAll();
+        profileRepository.deleteAll();
 
         employee = Employee.EmployeeBuilder.aEmployee()
             .withProfile(Profile.ProfileBuilder.aProfile()
@@ -225,14 +231,14 @@ public class NotificationEndpointTest implements TestData {
     }
 
     @Test
-    public void deleteNonExistingNotificationsShouldReturnNoContent() throws Exception {
+    public void deleteNonExistingNotificationsShouldReturnNotFound() throws Exception {
         MvcResult mvcResult = this.mockMvc.perform(delete(NOTIFICATION_BASE_URI + "/" + 999)
             .accept(MediaType.APPLICATION_JSON)
             .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES)))
             .andDo(print())
             .andReturn();
         MockHttpServletResponse response = mvcResult.getResponse();
-        assertEquals(HttpStatus.NO_CONTENT.value(), response.getStatus());
+        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
     }
 
     @Test
@@ -271,7 +277,43 @@ public class NotificationEndpointTest implements TestData {
             () -> assertNotEquals(favoriteStatusBeforeChange, notificationRepository.findById(id).get().getFavorite()),
             () -> assertEquals(HttpStatus.OK.value(), response.getStatus())
         );
+    }
 
+    @Test
+    public void updatingNotificationShouldReturnDifferentNotificationAndOK() throws Exception {
+        employee.setId(null);
+        employee.getProfile().setId(null);
+        employee.getProfile().setId(employeeRepository.save(employee).getId());
+        task.setId(taskRepository.save(task).getId());
+        notification2.setTask(task);
+        notification2.setRecipient(employee.getProfile());
+        notification2.setId(notificationRepository.save(notification2).getId());
+        Notification beforeUpdate = Notification.NotificationBuilder.aNotification()
+            .withEvent(notification2.getEvent())
+            .withFavorite(notification2.getFavorite())
+            .withMessage(notification2.getMessage())
+            .withRecipient(notification2.getRecipient())
+            .withSeen(notification2.isSeen())
+            .withSender(notification2.getSender())
+            .withTask(notification2.getTask())
+            .withType(notification2.getType())
+            .withId(notification2.getId())
+            .build();
+        notification2.setSeen(true);
+        String body = objectMapper.writeValueAsString(notificationMapper.notificationToSimpleNotificationDto(notification2));
+        MvcResult mvcResult = this.mockMvc.perform(put(NOTIFICATION_BASE_URI + "/" + beforeUpdate.getId())
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(body))
+            .andDo(print())
+            .andReturn();
+        MockHttpServletResponse response = mvcResult.getResponse();
+
+        assertAll(
+            () -> assertNotEquals(beforeUpdate, notificationRepository.findById(beforeUpdate.getId()).get()),
+//            () -> assertNotEquals(beforeUpdate, notificationMapper.simpleNotificationDtoToNotification(afterUpdate)),
+            () -> assertEquals(HttpStatus.OK.value(), response.getStatus())
+        );
     }
 
 }
