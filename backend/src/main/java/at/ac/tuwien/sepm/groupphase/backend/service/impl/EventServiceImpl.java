@@ -93,6 +93,9 @@ public class EventServiceImpl implements EventService {
             var times = timeRepository.findAllByEmployeeId(searchEventDto.getUserId());
             var interests = interestRepository.findAllByEmployeeId(searchEventDto.getUserId());
             eventsAtUserTime = eventRepository.getAllEventsByMatchingTimesAndInterests(times, interests);
+            if(eventsAtUserTime.isEmpty()){
+                return eventsAtUserTime;
+            }
         }
 
         if(searchEventDto.getTitle() != null && searchEventDto.getTitle().isBlank()){

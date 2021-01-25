@@ -40,7 +40,7 @@ public class EventRepositoryCustomImpl implements EventRepositoryCustom {
         if(interests.size() != 0){
             finalPred.add(cb.or(predicatesInterests.toArray(new Predicate[0])));
         }
-        query.where(finalPred.toArray(new Predicate[0]));
+        query.where(cb.and(finalPred.toArray(new Predicate[0])));
         query.select(events);
         query.distinct(true);
 
