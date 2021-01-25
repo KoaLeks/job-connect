@@ -99,6 +99,8 @@ public interface TestData {
     String CONTACT_BASE_URI = BASE_URI + "/profiles/contact";
     String DELETE_EMPLOYER_BASE_URI = BASE_URI + "/profiles/employer";
     String DELETE_EMPLOYEE_BASE_URI = BASE_URI + "/profiles/employee";
+    String FILTER_EMPLOYEES_SMART_BASE_URI = BASE_URI + "/profiles/employee/filter/smart";
+    String FILTER_EMPLOYEES_BASE_URI = BASE_URI +  "/profiles/employee/filter";
 
     Long TIME_ID = 1L;
     LocalDateTime START_TIME = LocalDateTime.of(2022, 11, 13, 12, 0, 0, 0);
