@@ -184,6 +184,7 @@ export class EventDetailsComponent implements OnInit {
                   () => {
                     this.alertService.success('Bewerbung erfolgreich gelöscht', {autoClose: true});
                     this.router.navigate(['applied-events']);
+                    this.updateHeaderService.emitDeletedEvent(this.id);
                   }
                 );
               }
@@ -197,6 +198,7 @@ export class EventDetailsComponent implements OnInit {
       () => {
         this.alertService.success('Stelle erfolgreich gekündigt', {autoClose: true});
         this.router.navigate(['applied-events']);
+        this.updateHeaderService.emitDeletedEvent(this.id);
       });
   }
 
