@@ -2,7 +2,9 @@ package at.ac.tuwien.sepm.groupphase.backend.basetest;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.TimeDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
+import at.ac.tuwien.sepm.groupphase.backend.repository.Employee_TasksRepository;
 import at.ac.tuwien.sepm.groupphase.backend.util.Gender;
+import at.ac.tuwien.sepm.groupphase.backend.util.NotificationType;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -109,6 +111,113 @@ public interface TestData {
     Employee EMPLOYEE_TIME = null;
     Boolean VISIBLE = false;
     Long REF_ID = 1L;
+
+    static Employee getNewEmployee() {
+        return Employee.EmployeeBuilder.aEmployee()
+            .withProfile(Profile.ProfileBuilder.aProfile()
+                .isEmployer(false)
+                .withEmail(EMPLOYEE_EMAIL)
+                .withName(EMPLOYEE_LAST_NAME)
+                .withForename(EMPLOYEE_FIRST_NAME)
+                .withPassword(EMPLOYEE_PASSWORD)
+                .build())
+            .withGender(EMPLOYEE_GENDER)
+            .withBirthDate(EMPLOYEE_BIRTH_DATE)
+            .build();
+    }
+
+    static Employer getNewEmployer() {
+        return Employer.EmployerBuilder.aEmployer()
+            .withProfile(Profile.ProfileBuilder.aProfile()
+                .isEmployer(true)
+                .withEmail(EMPLOYER_EMAIL)
+                .withName(EMPLOYER_LAST_NAME)
+                .withForename(EMPLOYER_FIRST_NAME)
+                .withPassword(EMPLOYER_PASSWORD)
+                .build())
+            .withCompanyName(EMPLOYER_COMPANY_NAME)
+            .withDescription(EMPLOYER_COMPANY_DESCRIPTION)
+            .build();
+    }
+
+    static Address getNewAddress() {
+        return Address.AddressBuilder.aAddress()
+            .withCity(CITY)
+            .withState(STATE)
+            .withZip(ZIP)
+            .withAddressLine(ADDRESS_LINE)
+            .withAdditional(ADDITIONAL)
+            .build();
+    }
+
+
+    static InterestArea getNewInterestArea() {
+        return InterestArea.InterestAreaBuilder.aInterest()
+            .withArea(AREA)
+            .withDescription(DESCRIPTION)
+            .withInterests(INTERESTS)
+            .withTasks(TASKS)
+            .build();
+    }
+
+    static Interest getNewInterest() {
+        return Interest.InterestBuilder.aInterest()
+            .withId(INTEREST_ID)
+            .withName(INTEREST_NAME)
+            .withDescription(INTEREST_DESCRIPTION)
+            .withInterestArea(getNewInterestArea())
+            .withEmployee(INTEREST_EMPLOYEE)
+            .build();
+    }
+
+    static Task getNewTask() {
+        return Task.TaskBuilder.aTask()
+            .withDescription(DESCRIPTION_TASK)
+            .withEmployeeCount(EMPLOYEE_COUNT)
+            .withPaymentHourly(PAYMENT_HOURLY)
+            .withEvent(EVENT)
+            .withEmployees(EMPLOYEES)
+            .withInterestArea(INTEREST_AREA)
+            .build();
+    }
+
+    static Event getNewEvent() {
+        return Event.EventBuilder.aEvent()
+            .withStart(START_OVER)
+            .withEnd(END_OVER)
+            .withTitle(TITLE_EVENT)
+            .withDescription(DESCRIPTION_EVENT)
+            .withEmployer(getNewEmployer())
+            .withAddress(getNewAddress())
+            .withTask(TASKS_EVENT)
+            .build();
+    }
+
+    static Time getNewTime() {
+        return Time.TimeBuilder.aTime()
+            .withId(TIME_ID)
+            .withStart(START_TIME)
+            .withEnd(END_TIME)
+            .withFinalEndDate(FINAL_END_TIME)
+            .withEmployee(EMPLOYEE_TIME)
+            .withVisible(VISIBLE)
+            .withRef_Id(REF_ID)
+            .build();
+    }
+
+    static Notification getNewNotification() {
+        return Notification.NotificationBuilder.aNotification()
+            .withId(null)
+            .withMessage("Notification message")
+            .withType(NotificationType.APPLICATION.name())
+            .withSeen(false)
+            .withEvent(null)
+            .withRecipient(null)
+            .withSender(null)
+            .withTask(null)
+            .withFavorite(false)
+            .build();
+    }
 
     String ADMIN_USER = "admin@email.com";
     List<String> ADMIN_ROLES = new ArrayList<>() {

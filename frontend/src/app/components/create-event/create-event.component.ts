@@ -12,6 +12,7 @@ import {InterestAreaService} from '../../services/interestArea.service';
 import {EmployerService} from '../../services/employer.service';
 import {Router} from '@angular/router';
 import {AlertService} from '../../alert';
+import {consolidateMessages} from '@angular/localize/src/tools/src/extract/translation_files/utils';
 
 @Component({
   selector: 'app-create-event',
@@ -67,20 +68,22 @@ export class CreateEventComponent implements OnInit {
    * Saves new Event
    */
   createEvent(event: Event, address: Address, tasks: Task[]) {
-    this.alertService.clear();
-    event.address = address;
-    event.tasks = tasks;
-    this.eventService.createEvent(event).subscribe(
-      createdEvent => {
-        this.event = createdEvent;
-        this.eventCreationForm.reset();
-        this.addressCreationForm.reset();
-        this.taskCreationForm.reset();
-        this.tasks = [];
-        this.router.navigate(['events/' + this.event.id + '/details']);
-        this.alertService.success('Event erfolgreich erstellt', {autoClose: true});
-      }
-    );
+    if (this.eventCreationForm.valid) {
+      this.alertService.clear();
+      event.address = address;
+      event.tasks = tasks;
+      this.eventService.createEvent(event).subscribe(
+        createdEvent => {
+          this.event = createdEvent;
+          this.eventCreationForm.reset();
+          this.addressCreationForm.reset();
+          this.taskCreationForm.reset();
+          this.tasks = [];
+          this.router.navigate(['events/' + this.event.id + '/details']);
+          this.alertService.success('Event erfolgreich erstellt', {autoClose: true});
+        }
+      );
+    }
   }
 
   getInterestAreas() {
