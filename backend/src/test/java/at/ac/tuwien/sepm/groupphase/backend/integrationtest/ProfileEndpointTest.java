@@ -241,9 +241,9 @@ public class ProfileEndpointTest implements TestData {
     public void beforeEach() {
         timeRepository.deleteAll();
         interestRepository.deleteAll();
-        interestAreaRepository.deleteAll();
         employee_tasksRepository.deleteAll();
         taskRepository.deleteAll();
+        interestAreaRepository.deleteAll();
         eventRepository.deleteAll();
         employeeRepository.deleteAll();
         employerRepository.deleteAll();
@@ -1090,8 +1090,8 @@ public class ProfileEndpointTest implements TestData {
 
         MockHttpServletResponse response = mvcResult.getResponse();
         assertEquals(HttpStatus.OK.value(), response.getStatus());
-        assertTrue(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":1"));
-        assertFalse(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":2"));
+        assertTrue(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":" + empe1.getId()));
+        assertFalse(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":2" + empe2.getId()));
     }
 
     @Test
@@ -1213,8 +1213,8 @@ public class ProfileEndpointTest implements TestData {
 
         MockHttpServletResponse response = mvcResult.getResponse();
         assertEquals(HttpStatus.OK.value(), response.getStatus());
-        assertTrue(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":1"));
-        assertFalse(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":2"));
+        assertTrue(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":" + empe1.getId()));
+        assertFalse(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":2" + empe2.getId()));
     }
 
     @Test
@@ -1271,8 +1271,8 @@ public class ProfileEndpointTest implements TestData {
 
         MockHttpServletResponse response = mvcResult.getResponse();
         assertEquals(HttpStatus.OK.value(), response.getStatus());
-        assertTrue(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":1"));
-        assertFalse(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":2"));
+        assertTrue(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":" + empe1.getId()));
+        assertFalse(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":" + empe2.getId()));
     }
 
     @Test
@@ -1329,8 +1329,8 @@ public class ProfileEndpointTest implements TestData {
 
         MockHttpServletResponse response = mvcResult.getResponse();
         assertEquals(HttpStatus.OK.value(), response.getStatus());
-        assertTrue(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":1"));
-        assertFalse(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":2"));
+        assertTrue(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":" + empe1.getId()));
+        assertFalse(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":" + empe2.getId()));
     }
 
     @Test
@@ -1353,8 +1353,8 @@ public class ProfileEndpointTest implements TestData {
 
         MockHttpServletResponse response = mvcResult.getResponse();
         assertEquals(HttpStatus.OK.value(), response.getStatus());
-        assertTrue(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":1"));
-        assertTrue(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":2"));
+        assertTrue(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":" + empe1.getId()));
+        assertTrue(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":" + empe2.getId()));
     }
 
     //endregion
