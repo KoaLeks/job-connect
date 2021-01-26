@@ -6,11 +6,11 @@ import java.util.Objects;
 
 public class UserLoginDto {
 
-    @NotNull(message = "E-Mail darf nicht NULL sein")
-    @Email
+    @NotNull(message = "E-Mail muss angegeben sein")
+    @Email(message = "E-Mail muss gültig sein")
     private String email;
 
-    @NotNull(message = "Passwort darf nicht NULL sein")
+    @NotNull(message = "Passwort muss angegeben sein")
     private String password;
 
     public String getEmail() {

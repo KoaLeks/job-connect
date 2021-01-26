@@ -11,10 +11,10 @@ import java.util.Set;
 
 public class RegisterEmployeeDto extends ProfileDto{
 
-    @NotNull(message = "Geschlecht darf nicht NULL sein")
+    @NotNull(message = "Geschlecht muss angegeben sein")
     private Gender gender;
 
-    @NotNull(message = "Geburtstag darf nicht NULL sein")
+    @NotNull(message = "Geburtstag muss angegeben sein")
     @IsAdult(message = "Benutzer muss volljährig sein")
     private LocalDateTime birthDate;
 

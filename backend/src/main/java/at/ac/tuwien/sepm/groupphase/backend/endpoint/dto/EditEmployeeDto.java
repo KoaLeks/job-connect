@@ -16,7 +16,7 @@ public class EditEmployeeDto {
     private Long id;
 
     @Valid
-    @NotNull(message = "Profil details dürfen nicht NULL sein")
+    @NotNull(message = "Profildetails müssen angegeben sein")
     private EditProfileDto editProfileDto;
 
     private Set<Task> tasks;
@@ -24,10 +24,10 @@ public class EditEmployeeDto {
     @Valid
     private Set<InterestDto> interestDtos;
 
-    @NotNull(message = "Geschlecht darf nicht NULL sein")
+    @NotNull(message = "Geschlecht muss angegeben sein")
     private Gender gender;
 
-    @NotNull(message = "Geburtstag darf nicht NULL sein")
+    @NotNull(message = "Geburtstag muss angegeben sein")
     @IsAdult(message = "Benutzer müssen volljährig sein")
     private LocalDateTime birthDate;
 

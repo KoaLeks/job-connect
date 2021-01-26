@@ -8,19 +8,19 @@ public class EditProfileDto {
 
     private Long id;
 
-    @NotNull(message = "Nachname darf nicht NULL sein")
+    @NotNull(message = "Nachname muss angegeben sein")
     @NotBlank(message = "Nachname darf nicht leer sein")
     @Size(max = 100)
     @Pattern(regexp = "[a-zA-ZÖöÜüÄä]+([ ]|[a-zA-ZÖöÜüÄä])*", message = "Nachname muss mit einem Buchstaben beginnen und darf keine Sonderzeichen enthalten")
     private String lastName;
 
-    @NotNull(message = "Vorname darf nicht NULL sein")
+    @NotNull(message = "Vorname muss angegeben sein")
     @NotBlank(message = "Vorname darf nicht leer sein")
     @Size(max = 100)
     @Pattern(regexp = "[a-zA-ZÖöÜüÄä]+([ ]|[a-zA-ZÖöÜüÄä])*", message = "Vorname muss mit einem Buchstaben beginnen und darf keine Sonderzeichen enthalten")
     private String firstName;
 
-    @NotNull(message = "E-Mail darf nicht NULL sein")
+    @NotNull(message = "E-Mail muss angegeben sein")
     @Size(max = 100)
     @Email(message = "E-Mail muss gültig sein")
     private String email;

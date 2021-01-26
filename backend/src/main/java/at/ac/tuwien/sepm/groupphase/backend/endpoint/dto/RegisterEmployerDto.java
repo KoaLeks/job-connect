@@ -6,7 +6,7 @@ import javax.validation.constraints.Size;
 
 public class RegisterEmployerDto extends ProfileDto{
 
-    @NotNull(message = "Firmenname darf nicht NULL sein")
+    @NotNull(message = "Firmenname muss angegeben sein")
     @NotBlank(message = "Firmenname darf nicht leer sein")
     @Size(max = 255)
     private String companyName;

@@ -7,12 +7,12 @@ import javax.validation.constraints.Size;
 
 public class EditPasswordDto {
 
-    @NotNull(message = "Passwort darf nicht NULL sein")
+    @NotNull(message = "Passwort muss angegeben sein")
     @NotBlank(message = "Passwort darf nicht leer sein")
     @Size(max = 255)
     private String currentPassword;
 
-    @NotNull(message = "Neues Passwort darf nicht NULL sein")
+    @NotNull(message = "Neues Passwort muss angegeben sein")
     @NotBlank(message = "Neues Passwort darf nicht leer sein")
     @Size(max = 255)
     private String newPassword;

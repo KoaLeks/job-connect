@@ -14,10 +14,10 @@ public class EditEmployerDto {
     private Long id;
 
     @Valid
-    @NotNull(message = "Profil details dürfen nicht NULL sein")
+    @NotNull(message = "Profildetails müssen angegeben sein")
     private EditProfileDto editProfileDto;
 
-    @NotNull(message = "Firmenname darf nicht NULL sein")
+    @NotNull(message = "Firmenname muss angegeben sein")
     @NotBlank(message = "Firmenname darf nicht leer sein")
     @Size(max = 255)
     private String companyName;

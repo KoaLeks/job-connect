@@ -5,6 +5,7 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Employer;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Task;
 import org.springframework.security.core.parameters.P;
 
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -14,20 +15,20 @@ public class EventInquiryDto {
 
     private Long id;
 
-    @NotNull(message = "Veranstaltungsbeginn darf nicht NULL sein")
+    @NotNull(message = "Veranstaltungsbeginn muss angegeben sein")
     @Future(message = "Veranstaltungsbeginn muss in der Zukunft liegen")
     private LocalDateTime start;
 
-    @NotNull(message = "Veranstaltungsende darf nicht NULL sein")
+    @NotNull(message = "Veranstaltungsende muss angegeben sein")
     @Future(message = "Veranstaltungsende muss in der Zukunft liegen")
     private LocalDateTime end;
 
-    @NotNull(message = "Titel darf nicht NULL sein")
+    @NotNull(message = "Titel muss angegeben sein")
     @NotBlank(message = "Titel darf nicht leer sein")
     @Size(max = 255)
     private String title;
 
-    @NotNull(message = "Beschreibung darf nicht NULL sein")
+    @NotNull(message = "Beschreibung muss angegeben sein")
     @NotBlank(message = "Beschreibung darf nicht leer sein")
     @Size(max = 1000)
     @Pattern(regexp = "[a-zA-ZÖöÜüÄä]+([ ]|[a-zA-ZÖöÜüÄä]|[0-9]|[.]|[,]|[(]|[)]|[-]|[/]|[^'\\u0027])*", message = "Pattern muss eingehalten werden")
@@ -36,8 +37,10 @@ public class EventInquiryDto {
     private EmployerDto employer;
 
     @NotNull(message = "must not be null")
+    @Valid
     private AddressInquiryDto address;
 
+    @Valid
     private Set<TaskInquiryDto> tasks;
 
     public String getTitle() {

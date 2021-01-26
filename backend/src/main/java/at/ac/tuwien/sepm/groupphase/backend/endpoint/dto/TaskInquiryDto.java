@@ -10,16 +10,16 @@ public class TaskInquiryDto {
 
     private Long id;
 
-    @NotNull(message = "Beschreibung darf nicht NULL sein")
+    @NotNull(message = "Beschreibung muss angegeben sein")
     @NotBlank(message = "Beschreibung darf nicht leer sein")
     @Size(max = 1000)
     private String description;
 
-    @NotNull(message = "Arbeitnehmeranzahl darf nicht NULL sein")
+    @NotNull(message = "Arbeitnehmeranzahl muss angegeben sein")
     private Integer employeeCount;
 
-    @NotNull(message = "Stundenlohn darf nicht NULL sein")
-    @PositiveOrZero
+    @NotNull(message = "Stundenlohn muss angegeben sein")
+    @PositiveOrZero(message = "Stundenlohn muss positiv sein")
     private Double paymentHourly;
 
     private Long eventId;

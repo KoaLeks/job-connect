@@ -10,22 +10,22 @@ public class ProfileDto {
 
     private Long id;
 
-    @NotNull(message = "Nachname darf nicht NULL sein")
+    @NotNull(message = "Nachname muss angegeben sein")
     @NotBlank(message = "Nachname darf nicht leer sein")
     @Size(max = 100)
     private String lastName;
 
-    @NotNull(message = "Vorname darf nicht NULL sein")
+    @NotNull(message = "Vorname muss angegeben sein")
     @NotBlank(message = "Vorname darf nicht leer sein")
     @Size(max = 100)
     private String firstName;
 
-    @NotNull(message = "E-Mail darf nicht NULL sein")
+    @NotNull(message = "E-Mail dmuss angegeben sein")
     @Email(message = "E-Mail muss gültig sein")
     @Size(max = 100)
     private String email;
 
-    @NotNull(message = "Passwort darf nicht NULL sein")
+    @NotNull(message = "Passwort muss angegeben sein")
     @NotBlank(message = "Passwort darf nicht leer sein")
     @Size(max = 255)
     private String password;

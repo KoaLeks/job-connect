@@ -9,21 +9,21 @@ public class AddressInquiryDto {
 
     private Long id;
 
-    @NotNull(message = "Darf nicht NULL sein")
-    @NotBlank(message = "Darf nicht leer sein")
+    @NotNull(message = "Stadt muss angegeben sein")
+    @NotBlank(message = "Stadt darf nicht leer sein")
     private String city;
 
-    @NotNull(message = "Darf nicht NULL sein")
-    @NotBlank(message = "Darf nicht leer sein")
+    @NotNull(message = "Bundesland muss angegeben sein")
+    @NotBlank(message = "Bundesland darf nicht leer sein")
     private String state;
 
-    @NotNull(message = "Darf nicht NULL sein")
-    @Min(value = 1000, message = "Postleitzahl musst zwischen 1000 und 9999 liegen")
-    @Max(value = 9999, message = "Postleitzahl musst zwischen 1000 und 9999 liegen")
+    @NotNull(message = "PLZ muss angegeben sein")
+    @Min(value = 1000, message = "PLZ muss zwischen 1000 und 9999 liegen")
+    @Max(value = 9999, message = "PLZ muss zwischen 1000 und 9999 liegen")
     private Integer zip;
 
-    @NotNull(message = "Darf nicht NULL sein")
-    @NotBlank(message = "Darf nicht leer sein")
+    @NotNull(message = "Addresse muss angegeben sein")
+    @NotBlank(message = "Addresse darf nicht leer sein")
     private String addressLine;
 
     @Nullable
