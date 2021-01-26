@@ -23,6 +23,7 @@ export class EditEmployerComponent implements OnInit {
   @ViewChild('pictureUpload') // needed for resetting fileUpload button
   inputImage: ElementRef; // needed for resetting fileUpload button
   pattern = '[a-zA-ZÖöÜüÄä]+([ ]|[a-zA-ZÖöÜüÄä])*';
+  changedToPrivate = false;
 
   constructor(public authService: AuthService, private router: Router, private formBuilder: FormBuilder,
               private employerService: EmployerService, private updateHeaderService: UpdateHeaderService,
@@ -71,7 +72,8 @@ export class EditEmployerComponent implements OnInit {
   update() {
     this.alertService.clear();
     this.submitted = true;
-    if (this.editForm.valid) {
+    this.changedToPrivate = this.editForm.controls.companyName.value === 'Privatperson' && this.employer.companyName !== 'Privatperson';
+    if (this.editForm.valid && !this.changedToPrivate) {
       const employer = this.createEmployer();
       if (this.selectedPicture != null && typeof this.selectedPicture !== 'object') {
         // image has valid format (png or jpg)

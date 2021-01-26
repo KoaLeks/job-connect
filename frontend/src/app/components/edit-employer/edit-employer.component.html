@@ -9,9 +9,11 @@
         <div class="mb-2">
           <button class="btn btn-link float-right" (click)=deletePicture()>Bild entfernen</button>
           <div class="container" (click)="file.click()">
-            <img *ngIf="hasPicture && employer.companyName !== 'Privatperson'" id="imgCompany" src="{{picture}}" alt="profile_picture">
-            <img *ngIf="hasPicture && employer.companyName === 'Privatperson'" id="imgPrivate" src="{{picture}}" alt="profile_picture"
-                 class="image">
+            <img *ngIf="hasPicture && employer.companyName !== 'Privatperson'" id="imgCompany" src="{{picture}}"
+                 alt="profile_picture">
+            <img *ngIf="hasPicture && employer.companyName === 'Privatperson'" id="imgPrivate" src="{{picture}}"
+                 alt="profile_picture"
+                 class="custom-image">
             <img *ngIf="!hasPicture" id="img_default" src="assets/user_default.svg" alt="default_profile_picture">
             <div class="centered">Profilbild ändern</div>
           </div>
@@ -25,7 +27,7 @@
         <label for="companyName_edit_employer">Name des Unternehmens*</label>
         <input class="form-control" type="text" name="companyName" formControlName="companyName"
                id="companyName_edit_employer"
-               placeholder="Name">
+               placeholder="Name" [readOnly]="employer && employer.companyName === 'Privatperson'">
 
         <div *ngIf="submitted && editForm.controls.companyName.errors"
              class="error">
@@ -33,6 +35,9 @@
             eingegeben werden
           </small>
         </div>
+        <small class="form-text text-info" *ngIf="changedToPrivate">
+          Unternehmen darf nicht Privatperson heißen
+        </small>
       </div>
 
       <!-- company description -->

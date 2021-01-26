@@ -12,13 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AuthorizationServiceException;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.RolesAllowed;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -94,6 +91,7 @@ public class ProfileEndpoint {
     @PutMapping(value = "/employee")
     @ApiOperation(value = "Update employee details", authorizations = {@Authorization(value = "apiKey")})
     @CrossOrigin(origins = "http://localhost:4200")
+    @PreAuthorize("hasAuthority('ROLE_EMPLOYEE')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateEmployee(@Valid @RequestBody EditEmployeeDto editEmployeeDto, @RequestHeader String authorization) {
         LOGGER.info("PUT /api/v1/profiles/employee body: {}", editEmployeeDto);
@@ -134,6 +132,7 @@ public class ProfileEndpoint {
     @PutMapping(value = "/employer")
     @ApiOperation(value = "Update employer details", authorizations = {@Authorization(value = "apiKey")})
     @CrossOrigin(origins = "http://localhost:4200")
+    @PreAuthorize("hasAuthority('ROLE_EMPLOYER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateEmployer(@Valid @RequestBody EditEmployerDto editEmployerDto, @RequestHeader String authorization) {
         LOGGER.info("PUT /api/v1/profiles/employer body: {}", editEmployerDto);

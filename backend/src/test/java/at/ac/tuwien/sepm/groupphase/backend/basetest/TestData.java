@@ -238,5 +238,14 @@ public interface TestData {
             add("ROLE_EMPLOYEE");
         }
     };
-
+    List<String> EMPLOYER_ROLES = new ArrayList<>() {
+        {
+            add("ROLE_EMPLOYER");
+        }
+    };
+    List<String> EMPLOYEE_ROLES = new ArrayList<>() {
+        {
+            add("ROLE_EMPLOYEE");
+        }
+    };
 }

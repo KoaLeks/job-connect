@@ -418,7 +418,7 @@ public class ProfileEndpointTest implements TestData {
 
         MvcResult mvcResult = this.mockMvc.perform(get(GET_EMPLOYEE_BASE_URI)
             .accept(MediaType.APPLICATION_JSON)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, ADMIN_ROLES)))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, EMPLOYEE_ROLES)))
             .andDo(print())
             .andReturn();
 
@@ -433,7 +433,7 @@ public class ProfileEndpointTest implements TestData {
     public void getEmployeeWithNonExistingEmailShouldReturnNotFound() throws Exception {
         MvcResult mvcResult = this.mockMvc.perform(get(GET_EMPLOYEE_BASE_URI)
             .accept(MediaType.APPLICATION_JSON)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES)))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, EMPLOYEE_ROLES)))
             .andDo(print())
             .andReturn();
 
@@ -447,7 +447,7 @@ public class ProfileEndpointTest implements TestData {
 
         MvcResult mvcResult = this.mockMvc.perform(get(GET_EMPLOYER_BASE_URI)
             .accept(MediaType.APPLICATION_JSON)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES)))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, EMPLOYER_ROLES)))
             .andDo(print())
             .andReturn();
 
@@ -462,7 +462,7 @@ public class ProfileEndpointTest implements TestData {
     public void getEmployerWithNonExistingEmailShouldReturnNotFound() throws Exception {
         MvcResult mvcResult = this.mockMvc.perform(get(GET_EMPLOYER_BASE_URI)
             .accept(MediaType.APPLICATION_JSON)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES)))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, EMPLOYER_ROLES)))
             .andDo(print())
             .andReturn();
 
@@ -476,7 +476,7 @@ public class ProfileEndpointTest implements TestData {
 
         MvcResult mvcResult = this.mockMvc.perform(get(GET_EMPLOYEE_BASE_URI + "/" + id + "/details")
             .accept(MediaType.APPLICATION_JSON)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, ADMIN_ROLES)))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, EMPLOYER_ROLES)))
             .andDo(print())
             .andReturn();
 
@@ -488,10 +488,25 @@ public class ProfileEndpointTest implements TestData {
     }
 
     @Test
+    public void getEmployeeByIdWithWrongRoleShouldReturnForbidden() throws Exception {
+        Long id = employeeRepository.save(employee).getId();
+
+        MvcResult mvcResult = this.mockMvc.perform(get(GET_EMPLOYEE_BASE_URI + "/" + id + "/details")
+            .accept(MediaType.APPLICATION_JSON)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, EMPLOYEE_ROLES)))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+
+        assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatus());
+    }
+
+    @Test
     public void getEmployeeWithNonExistingIdShouldReturnNotFound() throws Exception {
         MvcResult mvcResult = this.mockMvc.perform(get(GET_EMPLOYEE_BASE_URI + "/" + EMPLOYEE_ID)
             .accept(MediaType.APPLICATION_JSON)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, ADMIN_ROLES)))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, EMPLOYER_ROLES)))
             .andDo(print())
             .andReturn();
 
@@ -505,7 +520,7 @@ public class ProfileEndpointTest implements TestData {
 
         MvcResult mvcResult = this.mockMvc.perform(get(GET_EMPLOYER_BASE_URI + "/" + id + "/details")
             .accept(MediaType.APPLICATION_JSON)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES)))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, EMPLOYER_ROLES)))
             .andDo(print())
             .andReturn();
 
@@ -520,7 +535,7 @@ public class ProfileEndpointTest implements TestData {
     public void getEmployerWithNonExistingIdShouldReturnNotFound() throws Exception {
         MvcResult mvcResult = this.mockMvc.perform(get(GET_EMPLOYER_BASE_URI + "/" + EMPLOYER_ID)
             .accept(MediaType.APPLICATION_JSON)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES)))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, EMPLOYER_ROLES)))
             .andDo(print())
             .andReturn();
 
@@ -535,7 +550,7 @@ public class ProfileEndpointTest implements TestData {
 
         MvcResult mvcResult = this.mockMvc.perform(get(GET_ALL_EMPLOYERS_BASE_URI)
             .accept(MediaType.APPLICATION_JSON)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, ADMIN_ROLES)))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, EMPLOYEE_ROLES)))
             .andDo(print())
             .andReturn();
 
@@ -553,7 +568,7 @@ public class ProfileEndpointTest implements TestData {
 
         MvcResult mvcResult = this.mockMvc.perform(get(GET_ALL_EMPLOYEES_BASE_URI)
             .accept(MediaType.APPLICATION_JSON)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES)))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, EMPLOYER_ROLES)))
             .andDo(print())
             .andReturn();
 
@@ -585,7 +600,7 @@ public class ProfileEndpointTest implements TestData {
         String editBody = objectMapper.writeValueAsString(editEmployeeDto);
 
         MvcResult mvcResult = this.mockMvc.perform(put(EDIT_EMPLOYEE_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, EMPLOYEE_ROLES))
             .contentType(MediaType.APPLICATION_JSON)
             .content(editBody))
             .andDo(print())
@@ -613,7 +628,7 @@ public class ProfileEndpointTest implements TestData {
         String editBody = objectMapper.writeValueAsString(editEmployerDto);
 
         MvcResult mvcResult = this.mockMvc.perform(put(EDIT_EMPLOYER_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, EMPLOYER_ROLES))
             .contentType(MediaType.APPLICATION_JSON)
             .content(editBody))
             .andDo(print())
@@ -633,7 +648,7 @@ public class ProfileEndpointTest implements TestData {
         String body = objectMapper.writeValueAsString(employeeMapper.employeeToEmployeeDto(employee));
 
         MvcResult mvcResult = this.mockMvc.perform(put(EDIT_EMPLOYEE_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, EMPLOYEE_ROLES))
             .contentType(MediaType.APPLICATION_JSON)
             .content(body))
             .andDo(print())
@@ -654,7 +669,7 @@ public class ProfileEndpointTest implements TestData {
         String body = objectMapper.writeValueAsString(employerMapper.employerToEmployerDto(employer));
 
         MvcResult mvcResult = this.mockMvc.perform(put(EDIT_EMPLOYER_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, EMPLOYER_ROLES))
             .contentType(MediaType.APPLICATION_JSON)
             .content(body))
             .andDo(print())
@@ -662,6 +677,34 @@ public class ProfileEndpointTest implements TestData {
 
         MockHttpServletResponse response = mvcResult.getResponse();
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+    }
+
+    @Test
+    public void updateEmployerWithWrongRoleShouldReturnForbidden() throws Exception {
+        Long id = employerRepository.save(employer).getId();
+
+        EditEmployerDto editEmployerDto = EditEmployerDto.EditEmployerDtoBuilder.aEmployerDto()
+            .withProfileDto(EditProfileDto.EditProfileDtoBuilder.aEditProfileDto()
+                .withId(id)
+                .withEmail(EMPLOYER_EMAIL)
+                .withLastName(EMPLOYER_LAST_NAME)
+                .withFirstName(EMPLOYER_FIRST_NAME)
+                .build())
+            .withCompanyName(EDIT_EMPLOYER_COMPANY_NAME)
+            .withDescription(EDIT_EMPLOYER_COMPANY_DESCRIPTION)
+            .build();
+
+        String body = objectMapper.writeValueAsString(editEmployerDto);
+
+        MvcResult mvcResult = this.mockMvc.perform(put(EDIT_EMPLOYER_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, EMPLOYEE_ROLES))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(body))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatus());
     }
 
     @Test
@@ -713,7 +756,7 @@ public class ProfileEndpointTest implements TestData {
         String editBody = objectMapper.writeValueAsString(editEmployeeDto);
 
         MvcResult mvcResult = this.mockMvc.perform(put(EDIT_EMPLOYEE_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, EMPLOYEE_ROLES))
             .contentType(MediaType.APPLICATION_JSON)
             .content(editBody))
             .andDo(print())
@@ -749,7 +792,7 @@ public class ProfileEndpointTest implements TestData {
         String editBody = objectMapper.writeValueAsString(editEmployeeDto);
 
         MvcResult mvcResult = this.mockMvc.perform(put(EDIT_EMPLOYEE_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, EMPLOYEE_ROLES))
             .contentType(MediaType.APPLICATION_JSON)
             .content(editBody))
             .andDo(print())
@@ -813,7 +856,7 @@ public class ProfileEndpointTest implements TestData {
         String editBody = objectMapper.writeValueAsString(editEmployeeDto);
 
         MvcResult mvcResult = this.mockMvc.perform(put(EDIT_EMPLOYEE_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, EMPLOYEE_ROLES))
             .contentType(MediaType.APPLICATION_JSON)
             .content(editBody))
             .andDo(print())
@@ -847,7 +890,7 @@ public class ProfileEndpointTest implements TestData {
         String editBody = objectMapper.writeValueAsString(editEmployeeDto);
 
         MvcResult mvcResult = this.mockMvc.perform(put(EDIT_EMPLOYEE_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, EMPLOYEE_ROLES))
             .contentType(MediaType.APPLICATION_JSON)
             .content(editBody))
             .andDo(print())
@@ -872,7 +915,7 @@ public class ProfileEndpointTest implements TestData {
         String newEditBody = objectMapper.writeValueAsString(newEditEmployeeDto);
 
         MvcResult newMvcResult = this.mockMvc.perform(put(EDIT_EMPLOYEE_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, EMPLOYEE_ROLES))
             .contentType(MediaType.APPLICATION_JSON)
             .content(newEditBody))
             .andDo(print())
@@ -931,7 +974,7 @@ public class ProfileEndpointTest implements TestData {
         eventRepository.save(event);
 
         MvcResult mvcResult = this.mockMvc.perform(delete(DELETE_EMPLOYER_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, EMPLOYER_ROLES))
             .contentType(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andReturn();
@@ -957,7 +1000,7 @@ public class ProfileEndpointTest implements TestData {
         eventRepository.save(event);
 
         MvcResult mvcResult = this.mockMvc.perform(delete(DELETE_EMPLOYER_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, EMPLOYER_ROLES))
             .contentType(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andReturn();
@@ -989,7 +1032,7 @@ public class ProfileEndpointTest implements TestData {
         employee_tasksRepository.save(employee_tasks);
 
         MvcResult mvcResult = this.mockMvc.perform(delete(DELETE_EMPLOYEE_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, EMPLOYEE_ROLES))
             .contentType(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andReturn();
@@ -1023,7 +1066,7 @@ public class ProfileEndpointTest implements TestData {
         employee_tasksRepository.save(employee_tasks);
 
         MvcResult mvcResult = this.mockMvc.perform(delete(DELETE_EMPLOYEE_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYEE_EMAIL, EMPLOYEE_ROLES))
             .contentType(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andReturn();
@@ -1083,7 +1126,7 @@ public class ProfileEndpointTest implements TestData {
         assertEquals(interestRepository.findAll().size(), 1);
 
         MvcResult mvcResult = this.mockMvc.perform(get(FILTER_EMPLOYEES_SMART_BASE_URI).param("eventIds", e.getId().toString())
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, EMPLOYER_ROLES))
             .contentType(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andReturn();
@@ -1137,7 +1180,7 @@ public class ProfileEndpointTest implements TestData {
         assertEquals(timeRepository.findAll().size(), 1);
 
         MvcResult mvcResult = this.mockMvc.perform(get(FILTER_EMPLOYEES_SMART_BASE_URI).param("eventIds", e.getId().toString())
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, EMPLOYER_ROLES))
             .contentType(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andReturn();
@@ -1150,7 +1193,7 @@ public class ProfileEndpointTest implements TestData {
     @Test
     public void testFilterEmployeesWithNonExistingEventShouldReturnBadRequest() throws Exception {
         MvcResult mvcResult = this.mockMvc.perform(get(FILTER_EMPLOYEES_SMART_BASE_URI).param("eventIds", "10")
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, EMPLOYER_ROLES))
             .contentType(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andReturn();
@@ -1206,7 +1249,7 @@ public class ProfileEndpointTest implements TestData {
         assertEquals(interestRepository.findAll().size(), 1);
 
         MvcResult mvcResult = this.mockMvc.perform(get(FILTER_EMPLOYEES_BASE_URI).param("interestAreas", i.getId().toString())
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, EMPLOYER_ROLES))
             .contentType(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andReturn();
@@ -1264,7 +1307,7 @@ public class ProfileEndpointTest implements TestData {
         assertEquals(interestRepository.findAll().size(), 1);
 
         MvcResult mvcResult = this.mockMvc.perform(get(FILTER_EMPLOYEES_BASE_URI).param("startTimes", e.getStart().toString())
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, EMPLOYER_ROLES))
             .contentType(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andReturn();
@@ -1322,7 +1365,7 @@ public class ProfileEndpointTest implements TestData {
         assertEquals(interestRepository.findAll().size(), 1);
 
         MvcResult mvcResult = this.mockMvc.perform(get(FILTER_EMPLOYEES_BASE_URI).param("startTimes", e.getStart().toString()).param("interestAreas", i.getId().toString())
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, EMPLOYER_ROLES))
             .contentType(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andReturn();
@@ -1346,7 +1389,7 @@ public class ProfileEndpointTest implements TestData {
         var empe2 = employeeRepository.save(employee2);
 
         MvcResult mvcResult = this.mockMvc.perform(get(FILTER_EMPLOYEES_BASE_URI)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES))
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, EMPLOYER_ROLES))
             .contentType(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andReturn();
