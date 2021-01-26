@@ -52,3 +52,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Resource image folders ###
+/src/main/resources/employeePictures/*
+/src/main/resources/employerPictures/*
