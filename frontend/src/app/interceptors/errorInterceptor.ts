@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {
   HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpEventType
 } from '@angular/common/http';
@@ -12,6 +12,7 @@ import {AlertService} from '../alert';
 export class ErrorInterceptor implements HttpInterceptor {
   constructor(protected alertService: AlertService) {
   }
+
   intercept(req: HttpRequest<any>, next: HttpHandler):
     Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
@@ -22,17 +23,24 @@ export class ErrorInterceptor implements HttpInterceptor {
               this.alertService.success('Erfolgreich erstellt', {autoClose: true, keepAfterRouteChanges: false});
             }
             if (sentEvent.status === 204) {
-              this.alertService.success('Erfolgreich', {autoClose: true, keepAfterRouteChanges: false}) ;
+              this.alertService.success('Erfolgreich', {autoClose: true, keepAfterRouteChanges: false});
             }
           }
         },
-      (error) => {
+        (error) => {
           console.log(error.error);
+          this.alertService.clear();
           if (error.status === 404) {
             this.alertService.error(error.error, {autoClose: false, keepAfterRouteChanges: true});
             return;
           }
-          if (error.error === 'Bad credentials') { return throwError(error.message); }
+          if (error.status === 409) {
+            this.alertService.warn(error.error, {autoClose: false});
+            return;
+          }
+          if (error.error === 'Bad credentials') {
+            return throwError(error.message);
+          }
 
           this.alertService.error(error.error, {autoClose: false, keepAfterRouteChanges: true});
           return throwError(error.message);

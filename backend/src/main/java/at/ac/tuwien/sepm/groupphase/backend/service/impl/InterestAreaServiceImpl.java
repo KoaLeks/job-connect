@@ -7,6 +7,7 @@ import at.ac.tuwien.sepm.groupphase.backend.service.InterestAreaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
@@ -33,7 +34,7 @@ public class InterestAreaServiceImpl implements InterestAreaService {
     @Override
     public List<InterestArea> findAll() {
         LOGGER.debug("Find all InterestAreas");
-        return interestAreaRepository.findAll();
+        return interestAreaRepository.findAll(Sort.by("area"));
     }
 
     @Override
