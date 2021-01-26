@@ -35,6 +35,7 @@ export class EventDetailsComponent implements OnInit {
   appliedStatus;
   applyTaskForm;
   interestAreasDist: Set<String> = new Set<String>();
+  freeJobs = false;
 
   constructor(public authService: AuthService, private route: ActivatedRoute, private employerService: EmployerService,
               private eventService: EventService, private formBuilder: FormBuilder, private applicationService: ApplicationService,
@@ -45,7 +46,7 @@ export class EventDetailsComponent implements OnInit {
     });
     this.applyTaskForm = this.formBuilder.group({
       applicationText: [null, Validators.required],
-      inputTask: [null]
+      inputTask: [null, Validators.required]
     });
   }
 
@@ -120,6 +121,7 @@ export class EventDetailsComponent implements OnInit {
           this.hasPicture = false;
         }
         this.setApplied();
+        this.setFreeJobs();
       },
       error => {
         this.error = true;
@@ -245,4 +247,11 @@ export class EventDetailsComponent implements OnInit {
     return null;
   }
 
+  private setFreeJobs() {
+    for (const task of this.eventDetails.tasks) {
+      if (this.getNumberOfParticipants(task) < task.employeeCount) {
+        this.freeJobs = true;
+      }
+    }
+  }
 }

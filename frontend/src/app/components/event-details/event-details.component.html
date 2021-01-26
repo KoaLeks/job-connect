@@ -120,6 +120,7 @@
     </div>
     <div class="card-footer text-muted">
       <button type="button" class="btn btn-primary" data-toggle="modal" (click)="createApplication()"
+              [disabled]="!freeJobs"
               *ngIf="loggedInEmployee && !applied" data-target="#Apply-Task">
         Bewirb dich jetzt!
       </button>
