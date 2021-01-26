@@ -102,6 +102,7 @@ public interface TestData {
     String DELETE_EMPLOYER_BASE_URI = BASE_URI + "/profiles/employer";
     String DELETE_EMPLOYEE_BASE_URI = BASE_URI + "/profiles/employee";
     String NOTIFICATION_BASE_URI = BASE_URI + "/notifications";
+    String APPLICATION_BASE_URI = BASE_URI + "/applications";
     String CHANGE_FAVORITE_NOTIFICATION_BASE_URI = BASE_URI + "/notifications/changeFavorite";
     String FILTER_EMPLOYEES_SMART_BASE_URI = BASE_URI + "/profiles/employee/filter/smart";
     String FILTER_EMPLOYEES_BASE_URI = BASE_URI +  "/profiles/employee/filter";

@@ -173,6 +173,7 @@ public class ApplicationEndpoint {
         LOGGER.info("DELETE /api/v1/applications/{}", id);
         notificationService.deleteApplication(id, authorization);
     }
+
     @DeleteMapping(value = "/task/{id}")
     @ApiOperation(value = "Delete job with task id", authorizations = {@Authorization(value = "apiKey")})
     @PreAuthorize("hasAuthority('ROLE_EMPLOYEE')")
