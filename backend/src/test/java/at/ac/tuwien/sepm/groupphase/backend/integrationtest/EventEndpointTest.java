@@ -86,7 +86,7 @@ public class EventEndpointTest implements TestData {
 
     private final Address address2 = Address.AddressBuilder.aAddress()
         .withCity(CITY)
-        .withState("Vienna")
+        .withState("Wien")
         .withZip(ZIP)
         .withAddressLine(ADDRESS_LINE)
         .withAdditional(ADDITIONAL)
@@ -318,6 +318,7 @@ public class EventEndpointTest implements TestData {
     @Test
     public void searchForEventWithValidState() throws Exception {
         addressRepository.save(address);
+        address2.setState("Oberösterreich");
         addressRepository.save(address2);
 
         eventRepository.save(event);
@@ -329,7 +330,7 @@ public class EventEndpointTest implements TestData {
         assertEquals(eventRepository.count(), 2);
 
         MvcResult mvcResult = this.mockMvc.perform(get(EVENTS_BASE_URI)
-            .queryParam("state", "Upper Austria"))
+            .queryParam("state", "Wien"))
             .andDo(print()).andReturn();
         MockHttpServletResponse response = mvcResult.getResponse();
 
@@ -359,7 +360,7 @@ public class EventEndpointTest implements TestData {
         assertEquals(eventRepository.count(), 2);
 
         MvcResult mvcResult = this.mockMvc.perform(get(EVENTS_BASE_URI)
-            .queryParam("state", "Upper Austria")
+            .queryParam("state", "Wien")
             .queryParam("title", "Flyer"))
             .andDo(print()).andReturn();
         MockHttpServletResponse response = mvcResult.getResponse();

@@ -54,7 +54,7 @@ public interface TestData {
 
     Long ADDRESS_ID = 1L;
     String CITY = "Linz";
-    String STATE = "Upper Austria";
+    String STATE = "Wien";
     Integer ZIP = 4020;
     String ADDRESS_LINE = "Baumstrasse 5";
     String ADDITIONAL = "Tuer 17";
