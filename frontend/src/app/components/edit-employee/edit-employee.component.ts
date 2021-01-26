@@ -274,91 +274,95 @@ export class EditEmployeeComponent implements OnInit {
   }
 
   addTime(time) {
-    // build Time with date, start, end
-    const date: string = time.date;
-    const start: string = time.timeStart;
-    const end: string = time.timeEnd;
-    let timeStartBuild: string;
-    let timeEndBuild: string;
-    let newEndDate;
-    if (this.nightShift) {
-      newEndDate = new Date(date);
-      newEndDate.setDate(newEndDate.getDate() + 1);
-      let newEndDateString: string;
-      newEndDateString = newEndDate.getFullYear() + '-' +
-        ('0' + (newEndDate.getMonth() + 1)).slice(-2) + '-'
-        + ('0' + newEndDate.getDate()).slice(-2);
-      timeEndBuild = newEndDateString + 'T' + end;
-    } else {
-      timeEndBuild = date + 'T' + end;
-    }
-    // format: 2021-09-10T00:00:00
-    timeStartBuild = date + 'T' + start;
-    if (time.booleanDate) {
-      // build a new timeEndBuild with plus 119 days
-      const newFinalEndDate = new Date(timeEndBuild);
-      // + 119 days calculates the final End Date for this weekly repeated time for one semester.
-      newFinalEndDate.setDate(newFinalEndDate.getDate() + 119);
-      const newFinalEndDateString = newFinalEndDate.getFullYear() + '-' +
-        ('0' + (newFinalEndDate.getMonth() + 1)).slice(-2) + '-'
-        + ('0' + newFinalEndDate.getDate()).slice(-2);
-      const finalTimeEndBuild = newFinalEndDateString + 'T' + end;
-      const timeDtoToSave: TimeDto =
-        new TimeDto(null, timeStartBuild, timeEndBuild, time.booleanDate, true, finalTimeEndBuild, this.ref_id);
-      this.newTimes.push(timeDtoToSave);
-      this.newTimes1.push(timeDtoToSave);
-    } else {
-      const timeDtoToSave: TimeDto = new TimeDto(null, timeStartBuild, timeEndBuild, time.booleanDate, true, timeEndBuild, -1);
-      this.newTimes.push(timeDtoToSave);
-      this.newTimes1.push(timeDtoToSave);
-    }
-    if (time.booleanDate) {
-      if (!this.nightShift) {
-        const newDate = new Date(date);
-        for (let i = 0; i < 17; i++) { // saves this day each week for one semester in database
-          newDate.setDate(newDate.getDate() + 7);
-          let newDateString: string;
-          newDateString = newDate.getFullYear() + '-' +
-            ('0' + (newDate.getMonth() + 1)).slice(-2) + '-'
-            + ('0' + newDate.getDate()).slice(-2);
-          const newTimeStartBuild: string = newDateString + 'T' + start;
-          const newTimeEndBuild: string = newDateString + 'T' + end;
-          const repeatedTimeDto: TimeDto =
-            new TimeDto(null, newTimeStartBuild, newTimeEndBuild, false, false, newTimeEndBuild, this.ref_id);
-          this.newTimes.push(repeatedTimeDto);
-          this.newTimes1.push(repeatedTimeDto);
-        }
+    if (time.date >= new Date().toISOString().split('T')[0]) { // check if chosen Date is today or in future
+      // build Time with date, start, end
+      const date: string = time.date;
+      const start: string = time.timeStart;
+      const end: string = time.timeEnd;
+      let timeStartBuild: string;
+      let timeEndBuild: string;
+      let newEndDate;
+      if (this.nightShift) {
+        newEndDate = new Date(date);
+        newEndDate.setDate(newEndDate.getDate() + 1);
+        let newEndDateString: string;
+        newEndDateString = newEndDate.getFullYear() + '-' +
+          ('0' + (newEndDate.getMonth() + 1)).slice(-2) + '-'
+          + ('0' + newEndDate.getDate()).slice(-2);
+        timeEndBuild = newEndDateString + 'T' + end;
       } else {
-        const newStartDate = new Date(date);
-        for (let i = 0; i < 17; i++) { // saves this day each week for one semester in database
-          newStartDate.setDate(newStartDate.getDate() + 7);
-          let newStartDateString: string;
-          newStartDateString = newStartDate.getFullYear() + '-' +
-            ('0' + (newStartDate.getMonth() + 1)).slice(-2) + '-'
-            + ('0' + newStartDate.getDate()).slice(-2);
-          newEndDate.setDate(newEndDate.getDate() + 7);
-          let newEndDateString: string;
-          newEndDateString = newEndDate.getFullYear() + '-' +
-            ('0' + (newEndDate.getMonth() + 1)).slice(-2) + '-'
-            + ('0' + newEndDate.getDate()).slice(-2);
-          const newTimeStartBuild: string = newStartDateString + 'T' + start;
-          const newTimeEndBuild: string = newEndDateString + 'T' + end;
-          const repeatedTimeDto: TimeDto =
-            new TimeDto(null, newTimeStartBuild, newTimeEndBuild, false, false, newTimeEndBuild, this.ref_id);
-          this.newTimes.push(repeatedTimeDto);
-          this.newTimes1.push(repeatedTimeDto);
-        }
+        timeEndBuild = date + 'T' + end;
       }
-      this.ref_id++;
+      // format: 2021-09-10T00:00:00
+      timeStartBuild = date + 'T' + start;
+      if (time.booleanDate) {
+        // build a new timeEndBuild with plus 119 days
+        const newFinalEndDate = new Date(timeEndBuild);
+        // + 119 days calculates the final End Date for this weekly repeated time for one semester.
+        newFinalEndDate.setDate(newFinalEndDate.getDate() + 119);
+        const newFinalEndDateString = newFinalEndDate.getFullYear() + '-' +
+          ('0' + (newFinalEndDate.getMonth() + 1)).slice(-2) + '-'
+          + ('0' + newFinalEndDate.getDate()).slice(-2);
+        const finalTimeEndBuild = newFinalEndDateString + 'T' + end;
+        const timeDtoToSave: TimeDto =
+          new TimeDto(null, timeStartBuild, timeEndBuild, time.booleanDate, true, finalTimeEndBuild, this.ref_id);
+        this.newTimes.push(timeDtoToSave);
+        this.newTimes1.push(timeDtoToSave);
+      } else {
+        const timeDtoToSave: TimeDto = new TimeDto(null, timeStartBuild, timeEndBuild, time.booleanDate, true, timeEndBuild, -1);
+        this.newTimes.push(timeDtoToSave);
+        this.newTimes1.push(timeDtoToSave);
+      }
+      if (time.booleanDate) {
+        if (!this.nightShift) {
+          const newDate = new Date(date);
+          for (let i = 0; i < 17; i++) { // saves this day each week for one semester in database
+            newDate.setDate(newDate.getDate() + 7);
+            let newDateString: string;
+            newDateString = newDate.getFullYear() + '-' +
+              ('0' + (newDate.getMonth() + 1)).slice(-2) + '-'
+              + ('0' + newDate.getDate()).slice(-2);
+            const newTimeStartBuild: string = newDateString + 'T' + start;
+            const newTimeEndBuild: string = newDateString + 'T' + end;
+            const repeatedTimeDto: TimeDto =
+              new TimeDto(null, newTimeStartBuild, newTimeEndBuild, false, false, newTimeEndBuild, this.ref_id);
+            this.newTimes.push(repeatedTimeDto);
+            this.newTimes1.push(repeatedTimeDto);
+          }
+        } else {
+          const newStartDate = new Date(date);
+          for (let i = 0; i < 17; i++) { // saves this day each week for one semester in database
+            newStartDate.setDate(newStartDate.getDate() + 7);
+            let newStartDateString: string;
+            newStartDateString = newStartDate.getFullYear() + '-' +
+              ('0' + (newStartDate.getMonth() + 1)).slice(-2) + '-'
+              + ('0' + newStartDate.getDate()).slice(-2);
+            newEndDate.setDate(newEndDate.getDate() + 7);
+            let newEndDateString: string;
+            newEndDateString = newEndDate.getFullYear() + '-' +
+              ('0' + (newEndDate.getMonth() + 1)).slice(-2) + '-'
+              + ('0' + newEndDate.getDate()).slice(-2);
+            const newTimeStartBuild: string = newStartDateString + 'T' + start;
+            const newTimeEndBuild: string = newEndDateString + 'T' + end;
+            const repeatedTimeDto: TimeDto =
+              new TimeDto(null, newTimeStartBuild, newTimeEndBuild, false, false, newTimeEndBuild, this.ref_id);
+            this.newTimes.push(repeatedTimeDto);
+            this.newTimes1.push(repeatedTimeDto);
+          }
+        }
+        this.ref_id++;
+      }
+      this.timeCreationForm.reset();
+      const checkbox = document.getElementById('fullDayCheck') as HTMLInputElement;
+      checkbox.checked = false;
+      const checkbox1 = document.getElementById('nightShift') as HTMLInputElement;
+      checkbox1.checked = false;
+      this.toggleStartEnd = false;
+      this.nightShift = false;
+      this.toggleStartEndNightShift = false;
+    } else {
+      this.alertService.warn('Die Zeit muss in der Zukunft liegen', {autoClose: true});
     }
-    this.timeCreationForm.reset();
-    const checkbox = document.getElementById('fullDayCheck') as HTMLInputElement;
-    checkbox.checked = false;
-    const checkbox1 = document.getElementById('nightShift') as HTMLInputElement;
-    checkbox1.checked = false;
-    this.toggleStartEnd = false;
-    this.nightShift = false;
-    this.toggleStartEndNightShift = false;
   }
 
   deleteTimeFromOverview(time, timeArray) {
