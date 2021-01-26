@@ -68,7 +68,7 @@ export class CreateEventComponent implements OnInit {
    * Saves new Event
    */
   createEvent(event: Event, address: Address, tasks: Task[]) {
-    if (this.eventCreationForm.valid) {
+    if (this.eventCreationForm.valid && this.addressCreationForm.valid) {
       this.alertService.clear();
       event.address = address;
       event.tasks = tasks;
