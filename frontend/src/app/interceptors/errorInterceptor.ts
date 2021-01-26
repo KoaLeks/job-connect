@@ -27,8 +27,7 @@ export class ErrorInterceptor implements HttpInterceptor {
             }
           }
         },
-        (error) => {
-          console.log(error.error);
+      (error) => {
           this.alertService.clear();
           if (error.status === 404) {
             this.alertService.error(error.error, {autoClose: false, keepAfterRouteChanges: true});
@@ -41,7 +40,10 @@ export class ErrorInterceptor implements HttpInterceptor {
           if (error.error === 'Bad credentials') {
             return throwError(error.message);
           }
-
+          if (error.status === 500 || error.status === 0 ) {
+            this.alertService.error('Interner Fehler: Bitte versuchen Sie es später erneut', {autoClose: false, keepAfterRouteChanges: true});
+            return ;
+          }
           this.alertService.error(error.error, {autoClose: false, keepAfterRouteChanges: true});
           return throwError(error.message);
         }
