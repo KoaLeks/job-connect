@@ -27,7 +27,7 @@
         <label for="companyName_edit_employer">Name des Unternehmens*</label>
         <input class="form-control" type="text" name="companyName" formControlName="companyName"
                id="companyName_edit_employer"
-               placeholder="Name" [readOnly]="employer.companyName === 'Privatperson'">
+               placeholder="Name" [readOnly]="employer && employer.companyName === 'Privatperson'">
 
         <div *ngIf="submitted && editForm.controls.companyName.errors"
              class="error">
@@ -35,9 +35,8 @@
             eingegeben werden
           </small>
         </div>
-        <small class="form-text text-info"
-               *ngIf="changedToPrivate">Unternehmen
-          darf nicht Privatperson heißen
+        <small class="form-text text-info" *ngIf="changedToPrivate">
+          Unternehmen darf nicht Privatperson heißen
         </small>
       </div>
 

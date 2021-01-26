@@ -110,7 +110,6 @@ export class EmployeeOverviewComponent implements OnInit {
     this.employeeService.findAll().subscribe(
       (employees: SuperSimpleEmployee[]) => {
         this.employees = employees;
-        this.collectionSize = this.employees.length;
         this.refreshEmployees();
       }, error => {
         this.defaultServiceErrorHandling(error);
@@ -118,6 +117,7 @@ export class EmployeeOverviewComponent implements OnInit {
   }
 
   public refreshEmployees() {
+    this.collectionSize = this.employees.length;
     this.pageEmployees = this.employees
       .map((employee, i) => ({id: i + 1, ...employee}))
       .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
