@@ -209,23 +209,25 @@ export class EditEmployeeComponent implements OnInit {
 
   onFileSelected(event) {
     console.log(event);
-    // checks if files size is smaller than 5MB
-    if (event.target.files[0].size <= 5242880) {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        this.selectedPicture = reader.result.toString();
-        if (this.selectedPicture.startsWith('data:image/png;base64') || this.selectedPicture.startsWith('data:image/jpeg;base64')) {
-          this.picture = this.selectedPicture;
-          this.hasPicture = true;
-        } else {
-          this.selectedPicture = null;
-          this.alertService.warn('Das Bild muss im JPEG oder PNG Format sein.', {autoClose: true});
-        }
-      };
-    } else {
-      this.alertService.warn('Das Bild darf maximal 5 MB groß sein.', {autoClose: true});
+    if (event.target.files[0] !== undefined) {
+      // checks if files size is smaller than 5MB
+      if (event.target.files[0].size <= 5242880) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          this.selectedPicture = reader.result.toString();
+          if (this.selectedPicture.startsWith('data:image/png;base64') || this.selectedPicture.startsWith('data:image/jpeg;base64')) {
+            this.picture = this.selectedPicture;
+            this.hasPicture = true;
+          } else {
+            this.selectedPicture = null;
+            this.alertService.warn('Das Bild muss im JPEG oder PNG Format sein.', {autoClose: true});
+          }
+        };
+      } else {
+        this.alertService.warn('Das Bild darf maximal 5 MB groß sein.', {autoClose: true});
+      }
     }
   }
 

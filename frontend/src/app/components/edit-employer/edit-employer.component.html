@@ -3,7 +3,7 @@
   <hr class="my-4">
 
   <div>
-    <form class="form" [formGroup]="editForm">
+    <form class="form" [formGroup]="editForm" (keydown.enter)="$event.preventDefault()">
       <!-- profile picture -->
       <div>
         <div class="mb-2">
