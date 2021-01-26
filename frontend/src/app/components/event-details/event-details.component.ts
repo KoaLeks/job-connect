@@ -131,6 +131,7 @@ export class EventDetailsComponent implements OnInit {
 
   createApplication() {
     if (this.applyTaskForm.value.inputTask === null || this.applyTaskForm.value.inputTask === 'null') {
+      this.applyTaskForm.controls['inputTask'].setValue(null);
       this.applyTaskForm.controls['applicationText'].setValue('');
     } else {
       const n: number = this.applyTaskForm.value.inputTask;
