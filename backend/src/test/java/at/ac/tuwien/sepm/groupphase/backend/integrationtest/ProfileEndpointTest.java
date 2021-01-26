@@ -11,7 +11,6 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.repository.*;
 import at.ac.tuwien.sepm.groupphase.backend.security.JwtTokenizer;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,9 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,6 +38,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 public class ProfileEndpointTest implements TestData {
+    //region autowireing
+
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -95,6 +95,8 @@ public class ProfileEndpointTest implements TestData {
     @Autowired
     private TaskRepository taskRepository;
 
+    //endregion
+    //region entities
     private Employee employee = Employee.EmployeeBuilder.aEmployee()
         .withProfile(Profile.ProfileBuilder.aProfile()
             .isEmployer(false)
@@ -231,14 +233,17 @@ public class ProfileEndpointTest implements TestData {
         .withEmployees(EMPLOYEES)
         .withInterestArea(INTEREST_AREA)
         .build();
+    //endregion
+
+    //region beforeeach
 
     @BeforeEach
     public void beforeEach() {
         timeRepository.deleteAll();
         interestRepository.deleteAll();
-        interestAreaRepository.deleteAll();
         employee_tasksRepository.deleteAll();
         taskRepository.deleteAll();
+        interestAreaRepository.deleteAll();
         eventRepository.deleteAll();
         employeeRepository.deleteAll();
         employerRepository.deleteAll();
@@ -278,6 +283,10 @@ public class ProfileEndpointTest implements TestData {
             .withTask(TASKS_EVENT)
             .build();
     }
+
+    //endregion
+
+    //region create Employee/Employer Tests
 
     @Test
     public void createValidEmployeeTest() throws Exception {
@@ -397,9 +406,11 @@ public class ProfileEndpointTest implements TestData {
                 assertEquals("E-Mail Adresse wird bereits verwendet", content);
             }
         );
-
-
     }
+
+    //endregion
+
+    //region getEmployees/Employers Tests
 
     @Test
     public void getEmployeeWithExistingEmailShouldReturnOK() throws Exception{
@@ -553,6 +564,9 @@ public class ProfileEndpointTest implements TestData {
         assertEquals(HttpStatus.OK.value(), response.getStatus());
     }
 
+    //endregion
+
+    //region update Employee/Employer Tests
     @Test
     public void updateValidEmployeeTest() throws Exception {
         Long id = employeeRepository.save(employee).getId();
@@ -670,6 +684,9 @@ public class ProfileEndpointTest implements TestData {
         MockHttpServletResponse response = mvcResult.getResponse();
         assertEquals(HttpStatus.UNAUTHORIZED.value(), response.getStatus());
     }
+    //endregion
+
+    //region Employee Interest Tests
 
     @Test
     public void updateInterestsOfValidEmployeeTest() throws Exception {
@@ -769,6 +786,10 @@ public class ProfileEndpointTest implements TestData {
         assertEquals(interestRepository.count(), 0);
     }
 
+    //endregion
+
+    //region Time of Employee Tests
+
     @Test
     public void updateTimeOfValidEmployeeTest() throws Exception {
         Long id = employeeRepository.save(employee).getId();
@@ -862,6 +883,10 @@ public class ProfileEndpointTest implements TestData {
         assertEquals(timeRepository.count(), 0);
     }
 
+    //endregion
+
+    //region contact Employee Tests
+
     @Test
     public void contactEmployeeWithValidEmail_ShouldReturnOK() throws Exception {
         Profile profile = this.employee.getProfile();
@@ -886,6 +911,10 @@ public class ProfileEndpointTest implements TestData {
         MockHttpServletResponse response = mvcResult.getResponse();
         assertEquals(HttpStatus.OK.value(), response.getStatus());
     }
+
+    //endregion
+
+    //region delete Employee with events Tests
 
     @Test
     public void deleteEmployerWithEndedEvent_ShouldReturnNoContent() throws Exception {
@@ -1002,4 +1031,332 @@ public class ProfileEndpointTest implements TestData {
         MockHttpServletResponse response = mvcResult.getResponse();
         assertEquals(HttpStatus.CONFLICT.value(), response.getStatus());
     }
+
+    //endregion
+
+    //region filter Employees Tests
+
+    @Test
+    public void testSmartFilterEmployeesShouldReturnOneEmployee() throws Exception{
+        var  profile1 = profileRepository.save(employee.getProfile());
+        employee.setProfile(profile1);
+        employee.setId(profile1.getId());
+        var empe1 = employeeRepository.save(employee);
+
+        var profile2 = profileRepository.save(employee2.getProfile());
+        employee2.setId(profile2.getId());
+        employee2.setProfile(profile2);
+        var empe2 = employeeRepository.save(employee2);
+
+        var profile3 = profileRepository.save(employer.getProfile());
+        employer.setId(profile3.getId());
+        employer.setProfile(profile3);
+        var empr1 = employerRepository.save(employer);
+
+        assertEquals(profileRepository.findAll().size(), 3);
+        assertEquals(employeeRepository.findAll().size(), 2);
+        assertEquals(employerRepository.findAll().size(), 1);
+
+        var i = interestAreaRepository.save(interestArea);
+        assertEquals(interestAreaRepository.findAll().size(), 1);
+
+        var a = addressRepository.save(address);
+        assertEquals(addressRepository.findAll().size(), 1);
+
+        event.setAddress(a);
+        event.setStart(time.getStart().plusHours(1));
+        event.setEnd(time.getEnd().minusHours(1));
+        var e = eventRepository.save(event);
+        assertEquals(eventRepository.findAll().size(), 1);
+
+        task.setInterestArea(i);
+        task.setEvent(e);
+        var t = taskRepository.save(task);
+        assertEquals(taskRepository.findAll().size(), 1);
+
+        time.setEmployee(empe1);
+        var ti = timeRepository.save(time);
+        assertEquals(timeRepository.findAll().size(), 1);
+
+        Interest interest = Interest.InterestBuilder.aInterest().withInterestArea(i).withEmployee(empe1).withName("Interest").withDescription("Desc").build();
+        interestRepository.save(interest);
+        assertEquals(interestRepository.findAll().size(), 1);
+
+        MvcResult mvcResult = this.mockMvc.perform(get(FILTER_EMPLOYEES_SMART_BASE_URI).param("eventIds", e.getId().toString())
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertTrue(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":" + empe1.getId()));
+        assertFalse(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":2" + empe2.getId()));
+    }
+
+    @Test
+    public void testSmartFilterEmployeesShouldReturnNothing() throws Exception{
+        var  profile1 = profileRepository.save(employee.getProfile());
+        employee.setProfile(profile1);
+        employee.setId(profile1.getId());
+        var empe1 = employeeRepository.save(employee);
+
+        var profile2 = profileRepository.save(employee2.getProfile());
+        employee2.setId(profile2.getId());
+        employee2.setProfile(profile2);
+        var empe2 = employeeRepository.save(employee2);
+
+        var profile3 = profileRepository.save(employer.getProfile());
+        employer.setId(profile3.getId());
+        employer.setProfile(profile3);
+        var empr1 = employerRepository.save(employer);
+
+        assertEquals(profileRepository.findAll().size(), 3);
+        assertEquals(employeeRepository.findAll().size(), 2);
+        assertEquals(employerRepository.findAll().size(), 1);
+
+        var i = interestAreaRepository.save(interestArea);
+        assertEquals(interestAreaRepository.findAll().size(), 1);
+
+        var a = addressRepository.save(address);
+        assertEquals(addressRepository.findAll().size(), 1);
+
+        event.setAddress(a);
+        event.setStart(time.getStart().plusHours(1));
+        event.setEnd(time.getEnd().minusHours(1));
+        var e = eventRepository.save(event);
+        assertEquals(eventRepository.findAll().size(), 1);
+
+        task.setInterestArea(i);
+        task.setEvent(e);
+        var t = taskRepository.save(task);
+        assertEquals(taskRepository.findAll().size(), 1);
+
+        time.setEmployee(empe1);
+        var ti = timeRepository.save(time);
+        assertEquals(timeRepository.findAll().size(), 1);
+
+        MvcResult mvcResult = this.mockMvc.perform(get(FILTER_EMPLOYEES_SMART_BASE_URI).param("eventIds", e.getId().toString())
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(response.getContentLength(), 0);
+    }
+
+    @Test
+    public void testFilterEmployeesWithNonExistingEventShouldReturnBadRequest() throws Exception {
+        MvcResult mvcResult = this.mockMvc.perform(get(FILTER_EMPLOYEES_SMART_BASE_URI).param("eventIds", "10")
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+    }
+
+    @Test
+    public void testFilterEmployeesWithInterestShouldReturnOneEmployee() throws Exception{
+        var  profile1 = profileRepository.save(employee.getProfile());
+        employee.setProfile(profile1);
+        employee.setId(profile1.getId());
+        var empe1 = employeeRepository.save(employee);
+
+        var profile2 = profileRepository.save(employee2.getProfile());
+        employee2.setId(profile2.getId());
+        employee2.setProfile(profile2);
+        var empe2 = employeeRepository.save(employee2);
+
+        var profile3 = profileRepository.save(employer.getProfile());
+        employer.setId(profile3.getId());
+        employer.setProfile(profile3);
+        var empr1 = employerRepository.save(employer);
+
+        assertEquals(profileRepository.findAll().size(), 3);
+        assertEquals(employeeRepository.findAll().size(), 2);
+        assertEquals(employerRepository.findAll().size(), 1);
+
+        var i = interestAreaRepository.save(interestArea);
+        assertEquals(interestAreaRepository.findAll().size(), 1);
+
+        var a = addressRepository.save(address);
+        assertEquals(addressRepository.findAll().size(), 1);
+
+        event.setAddress(a);
+        event.setStart(time.getStart().plusHours(1));
+        event.setEnd(time.getEnd().minusHours(1));
+        var e = eventRepository.save(event);
+        assertEquals(eventRepository.findAll().size(), 1);
+
+        task.setInterestArea(i);
+        task.setEvent(e);
+        var t = taskRepository.save(task);
+        assertEquals(taskRepository.findAll().size(), 1);
+
+        time.setEmployee(empe1);
+        var ti = timeRepository.save(time);
+        assertEquals(timeRepository.findAll().size(), 1);
+
+        Interest interest = Interest.InterestBuilder.aInterest().withInterestArea(i).withEmployee(empe1).withName("Interest").withDescription("Desc").build();
+        interestRepository.save(interest);
+        assertEquals(interestRepository.findAll().size(), 1);
+
+        MvcResult mvcResult = this.mockMvc.perform(get(FILTER_EMPLOYEES_BASE_URI).param("interestAreas", i.getId().toString())
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertTrue(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":" + empe1.getId()));
+        assertFalse(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":2" + empe2.getId()));
+    }
+
+    @Test
+    public void testFilterEmployeesWithTimeShouldReturnOneEmployee() throws Exception{
+        var  profile1 = profileRepository.save(employee.getProfile());
+        employee.setProfile(profile1);
+        employee.setId(profile1.getId());
+        var empe1 = employeeRepository.save(employee);
+
+        var profile2 = profileRepository.save(employee2.getProfile());
+        employee2.setId(profile2.getId());
+        employee2.setProfile(profile2);
+        var empe2 = employeeRepository.save(employee2);
+
+        var profile3 = profileRepository.save(employer.getProfile());
+        employer.setId(profile3.getId());
+        employer.setProfile(profile3);
+        var empr1 = employerRepository.save(employer);
+
+        assertEquals(profileRepository.findAll().size(), 3);
+        assertEquals(employeeRepository.findAll().size(), 2);
+        assertEquals(employerRepository.findAll().size(), 1);
+
+        var i = interestAreaRepository.save(interestArea);
+        assertEquals(interestAreaRepository.findAll().size(), 1);
+
+        var a = addressRepository.save(address);
+        assertEquals(addressRepository.findAll().size(), 1);
+
+        event.setAddress(a);
+        event.setStart(time.getStart().plusHours(1));
+        event.setEnd(time.getEnd().minusHours(1));
+        var e = eventRepository.save(event);
+        assertEquals(eventRepository.findAll().size(), 1);
+
+        task.setInterestArea(i);
+        task.setEvent(e);
+        var t = taskRepository.save(task);
+        assertEquals(taskRepository.findAll().size(), 1);
+
+        time.setEmployee(empe1);
+        var ti = timeRepository.save(time);
+        assertEquals(timeRepository.findAll().size(), 1);
+
+        Interest interest = Interest.InterestBuilder.aInterest().withInterestArea(i).withEmployee(empe1).withName("Interest").withDescription("Desc").build();
+        interestRepository.save(interest);
+        assertEquals(interestRepository.findAll().size(), 1);
+
+        MvcResult mvcResult = this.mockMvc.perform(get(FILTER_EMPLOYEES_BASE_URI).param("startTimes", e.getStart().toString())
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertTrue(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":" + empe1.getId()));
+        assertFalse(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":" + empe2.getId()));
+    }
+
+    @Test
+    public void testFilterEmployeesWithTimeAndInterestAreaShouldReturnOneEmployee() throws Exception{
+        var  profile1 = profileRepository.save(employee.getProfile());
+        employee.setProfile(profile1);
+        employee.setId(profile1.getId());
+        var empe1 = employeeRepository.save(employee);
+
+        var profile2 = profileRepository.save(employee2.getProfile());
+        employee2.setId(profile2.getId());
+        employee2.setProfile(profile2);
+        var empe2 = employeeRepository.save(employee2);
+
+        var profile3 = profileRepository.save(employer.getProfile());
+        employer.setId(profile3.getId());
+        employer.setProfile(profile3);
+        var empr1 = employerRepository.save(employer);
+
+        assertEquals(profileRepository.findAll().size(), 3);
+        assertEquals(employeeRepository.findAll().size(), 2);
+        assertEquals(employerRepository.findAll().size(), 1);
+
+        var i = interestAreaRepository.save(interestArea);
+        assertEquals(interestAreaRepository.findAll().size(), 1);
+
+        var a = addressRepository.save(address);
+        assertEquals(addressRepository.findAll().size(), 1);
+
+        event.setAddress(a);
+        event.setStart(time.getStart().plusHours(1));
+        event.setEnd(time.getEnd().minusHours(1));
+        var e = eventRepository.save(event);
+        assertEquals(eventRepository.findAll().size(), 1);
+
+        task.setInterestArea(i);
+        task.setEvent(e);
+        var t = taskRepository.save(task);
+        assertEquals(taskRepository.findAll().size(), 1);
+
+        time.setEmployee(empe1);
+        var ti = timeRepository.save(time);
+        assertEquals(timeRepository.findAll().size(), 1);
+
+        Interest interest = Interest.InterestBuilder.aInterest().withInterestArea(i).withEmployee(empe1).withName("Interest").withDescription("Desc").build();
+        interestRepository.save(interest);
+        assertEquals(interestRepository.findAll().size(), 1);
+
+        MvcResult mvcResult = this.mockMvc.perform(get(FILTER_EMPLOYEES_BASE_URI).param("startTimes", e.getStart().toString()).param("interestAreas", i.getId().toString())
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertTrue(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":" + empe1.getId()));
+        assertFalse(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":" + empe2.getId()));
+    }
+
+    @Test
+    public void filterEmployeesWithoutParamsShouldReturnAllEmployees() throws Exception{
+        var  profile1 = profileRepository.save(employee.getProfile());
+        employee.setProfile(profile1);
+        employee.setId(profile1.getId());
+        var empe1 = employeeRepository.save(employee);
+
+        var profile2 = profileRepository.save(employee2.getProfile());
+        employee2.setId(profile2.getId());
+        employee2.setProfile(profile2);
+        var empe2 = employeeRepository.save(employee2);
+
+        MvcResult mvcResult = this.mockMvc.perform(get(FILTER_EMPLOYEES_BASE_URI)
+            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(EMPLOYER_EMAIL, ADMIN_ROLES))
+            .contentType(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertTrue(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":" + empe1.getId()));
+        assertTrue(response.getContentAsString().contains("\"superSimpleProfileDto\":{\"id\":" + empe2.getId()));
+    }
+
+    //endregion
+
 }

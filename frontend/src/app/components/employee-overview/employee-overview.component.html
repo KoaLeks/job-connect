@@ -1,4 +1,4 @@
-<form *ngIf="!smartFilter" [formGroup]="employeeFilterForm"  class="event-search-form mb-5" (ngSubmit)="filterEmployees(employeeFilterForm.value)">
+<form *ngIf="!smartFilter" [formGroup]="employeeFilterForm"  class="event-search-form mb-2" (ngSubmit)="filterEmployees(employeeFilterForm.value)">
   <div class="form-row align-items-end">
     <div class="form-group mb-0 col-md-4">
       <ng-multiselect-dropdown formControlName="interests"
@@ -30,7 +30,7 @@
   </div>
 </form>
 
-<form *ngIf="smartFilter" [formGroup]="employeeSmartFilterForm"  class="event-search-form smart-filter mb-10" (ngSubmit)="filterEmployeesSmart(employeeSmartFilterForm.value)">
+<form *ngIf="smartFilter" [formGroup]="employeeSmartFilterForm"  class="event-search-form smart-filter mb-2" (ngSubmit)="filterEmployeesSmart(employeeSmartFilterForm.value)">
   <div class="form-row align-items-end">
     <div class="form-group mb-0 col-md-8">
       <ng-multiselect-dropdown formControlName="events"
@@ -53,6 +53,10 @@
     </div>
   </div>
 </form>
+<div class="float-right mb-3">
+  <button (click)="resetForm()" class="btn btn-sm reset-button"> Filter Zurücksetzen</button>
+</div>
+
 
 
 <ng-container *ngIf="employees.length !== 0">
@@ -91,7 +95,7 @@
 </ng-container>
 <ng-container *ngIf="employees.length === 0">
   <div class="text-black-50 text-center mt-2">
-    Keine ArbeitnehmerInnen vorhanden
+    Keine ArbeitnehmerInnen gefunden
     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-emoji-frown" fill="currentColor"
          xmlns="http://www.w3.org/2000/svg">
       <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>

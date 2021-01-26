@@ -68,18 +68,20 @@ export class EmployeeService {
    */
   filterEmployees(filterEmployees: FilterEmployees): Observable<SuperSimpleEmployee[]> {
     console.log('Filter employee');
+    if (filterEmployees.interests === null ) { filterEmployees.interests = []; }
     let interestAreas = '';
     filterEmployees.interests.forEach(x => interestAreas += x.id + ',');
     interestAreas = interestAreas.substring(0, (interestAreas.length - 1));
     let params = new HttpParams();
     if (filterEmployees.interests.length !== 0) { params = params.set('interestAreas', interestAreas); }
-    if (filterEmployees.time !== '' && filterEmployees.date !== '') {
+    if (filterEmployees.time !== null &&  filterEmployees.time !== '' && filterEmployees.date !== null && filterEmployees.date !== '') {
       params = params.set('startTimes', filterEmployees.date + 'T' + filterEmployees.time); }
     return this.httpClient.get<SuperSimpleEmployee[]>(this.employeeBaseUri + '/filter', {params});
   }
 
   filterEmployeesSmart(filterEmployees: FilterEmployeesSmart): Observable<SuperSimpleEmployee[]> {
     console.log('Filter employees via Events');
+    if (filterEmployees.events === null ) { filterEmployees.events = []; }
     let events = '';
     filterEmployees.events.forEach(x => events += x.id + ',');
     events = events.substring(0, (events.length - 1));

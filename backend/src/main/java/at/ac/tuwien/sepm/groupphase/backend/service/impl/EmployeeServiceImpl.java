@@ -270,6 +270,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<Employee> findEmployeeByInterestAreasAndStartTimesSmart(Set<Long> eventIds) {
+        LOGGER.info("Find all matching Employees for given events ");
         Set<Long> interestAreas = new HashSet<>();
         Set<LocalDateTime> startTimes = new HashSet<>();
         for(Long id : eventIds){
@@ -281,15 +282,12 @@ public class EmployeeServiceImpl implements EmployeeService {
             });
             startTimes.add(event.getStart());
         }
-        List<Employee> employees = employeeRepository.findEmployeesByInterestAreasAndStartTimes(interestAreas, startTimes);
-        if(employees.size() == 0) throw new NotFoundException("Es konnten keine passenden ArbeitnehmerInnen gefunden werden");
         return employeeRepository.findEmployeesByInterestAreasAndStartTimes(interestAreas, startTimes);
     }
 
     @Override
     public List<Employee> findEmployeeByInterestAreasAndStartTimes(Set<Long> interestAreas, Set<LocalDateTime> startTimes) {
-        List<Employee> employees = employeeRepository.findEmployeesByInterestAreasAndStartTimes(interestAreas, startTimes);
-        if(employees.size() == 0) throw new NotFoundException("Es konnten keine passenden ArbeitnehmerInnen gefunden werden");
+        LOGGER.info("Find all matching Employees for given interest areas and starting times");
         return employeeRepository.findEmployeesByInterestAreasAndStartTimes(interestAreas, startTimes);
     }
 }
