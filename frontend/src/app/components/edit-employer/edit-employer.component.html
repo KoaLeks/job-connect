@@ -11,7 +11,7 @@
           <div class="container" (click)="file.click()">
             <img *ngIf="hasPicture && employer.companyName !== 'Privatperson'" id="imgCompany" src="{{picture}}" alt="profile_picture">
             <img *ngIf="hasPicture && employer.companyName === 'Privatperson'" id="imgPrivate" src="{{picture}}" alt="profile_picture"
-                 class="image">
+                 class="custom-image">
             <img *ngIf="!hasPicture" id="img_default" src="assets/user_default.svg" alt="default_profile_picture">
             <div class="centered">Profilbild ändern</div>
           </div>
