@@ -33,3 +33,9 @@
 33;Temporärer Gartenarbeiter (m/w/d);53;Suche temporären Hilfsarbeiter der mir beim Aufräumen meines Gartens hiflt;privat;
 34;Mitarbeiter wegen Büroerweiterung gesucht;22,24;Unser Büro wird erweitert und sind zurzeit in der Übergangsphase. Bis die Bauarbeiten abgeschlossen sind benötigen wir temporäre Mitarbeiter;firma;
 35;Mitarbeiter zentrale Transportlogistik (m/w);110;Organisatorisches und administratives Abwickeln von Projektaufgaben. Enges Zusammenarbeiten mit internen und externen Logistikpartnerinnen und Logistikpartner sowie Unterstützen bei Akquise und Ausschreibung von Transportunternehmen.;firma;
+36;Putzfee gesucht für unsere WG;20;Wir sind eine WG bestehend aus drei Leuten und suchen für unseren Frühjahresputz eine tatkräftige Person für unsere zirka 80m² große Wohnung. Boden, Fenster, Ofen, Bad, WC.;privat;
+37;Promoter für meine neue App;102;Suche jemanden der mir online meine App promoten kann und auf diversen Plattformen Werbung schalten kann! Kosten für diese gehen natürlich auf mich.;privat;
+38;Spanischunterricht;73;Suche einen Spanischlehrer/eine Spanischlehrerin für mein A2 Niveau. Ich verbringe diesen Sommer in Madrid und benötigte bessere Spanischkenntnisse.;privat;
+39;Desktop PC Zusammenbau;111;Ich möchte mir einzelne Komponenten kaufen, scheitere aber an dem Wissen welche ich benötige und auch amZusammenbau! Suche jemanden der sich gut damit auskennt.;privat;
+40;Barkeeperaushilfe gesucht!;46;Brauche für meine kleine Bar eine Aushilfe, da ich eine größere Feier mit Freunden geplant habe.;privat;
+41;Babysitter für 1 Kind (4-5 Jahre) gesucht;35;Ich bin leider nicht zuhause und meine Großeltern haben auch keine Zeit auf die Kleine aufzupassen;privat;
