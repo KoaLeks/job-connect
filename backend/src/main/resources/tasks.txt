@@ -110,3 +110,10 @@
 110;Logistische Fachkraft (m/w/d);11;
 111;Berater im EDV Bereich;
 112;PromoterIn für Umwelt-, Tier- und Klimaschutz (m/w/d);1;
+113;Kisten einräumen;10;
+114;Großmöbeln aufbauen;13;
+115;Nachhilfe Informatik;7;
+116;Software Tester;15;
+117;DJ für Hochzeit;14;
+118;Nachhilfe Physik;20;
+119;Tierbetreuung Katzen;6;
