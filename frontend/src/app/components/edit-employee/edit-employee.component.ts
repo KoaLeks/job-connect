@@ -5,7 +5,6 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {EmployeeService} from '../../services/employee.service';
 import {EditEmployee} from '../../dtos/edit-employee';
 import {Gender} from '../../dtos/gender.enum';
-import {InterestService} from '../../services/interest.service';
 import {Interest} from '../../dtos/interest';
 import {ProfileDto} from '../../dtos/profile-dto';
 import {UpdateHeaderService} from '../../services/update-header.service';
@@ -51,9 +50,8 @@ export class EditEmployeeComponent implements OnInit {
   employeeInterests: Interest[] = [];
 
   constructor(public authService: AuthService, private router: Router, private formBuilder: FormBuilder,
-              private employeeService: EmployeeService, private interestService: InterestService,
-              private updateHeaderService: UpdateHeaderService, private interestAreaService: InterestAreaService,
-              private alertService: AlertService) {
+              private employeeService: EmployeeService, private updateHeaderService: UpdateHeaderService,
+              private interestAreaService: InterestAreaService, private alertService: AlertService) {
     this.editForm = this.formBuilder.group({
       email: ['', [Validators.required]],
       firstName: ['', [Validators.required, Validators.pattern(this.pattern)]],

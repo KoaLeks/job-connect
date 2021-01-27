@@ -3,7 +3,6 @@ import {AuthService} from '../../services/auth.service';
 import {FormBuilder, Validators} from '@angular/forms';
 import {AddressService} from '../../services/address.service';
 import {EventService} from '../../services/event.service';
-import {TaskService} from '../../services/task.service';
 import {Task} from '../../dtos/task';
 import {Event} from '../../dtos/event';
 import {Address} from '../../dtos/address';
@@ -30,8 +29,7 @@ export class CreateEventComponent implements OnInit {
   finalEventPrice: number = 0;
 
   constructor(public authService: AuthService, private formBuilder: FormBuilder, private addressService: AddressService,
-              private eventService: EventService, private taskService: TaskService,
-              private interestAreaService: InterestAreaService,
+              private eventService: EventService, private interestAreaService: InterestAreaService,
               private employerService: EmployerService, private router: Router, private alertService: AlertService) {
     this.addressCreationForm = this.formBuilder.group({
       city: [null, Validators.required],
