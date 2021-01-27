@@ -74,6 +74,7 @@ export class EmployeeOverviewComponent implements OnInit {
       textField: 'description',
       selectAllText: 'Alle auswählen',
       unSelectAllText: 'Keine auswählen',
+      searchPlaceholderText: 'Suche',
       itemsShowLimit: 2,
       allowSearchFilter: true
     };
@@ -84,6 +85,7 @@ export class EmployeeOverviewComponent implements OnInit {
       textField: 'title',
       selectAllText: 'Alle auswählen',
       unSelectAllText: 'Keine auswählen',
+      searchPlaceholderText: 'Suche',
       itemsShowLimit: 2,
       allowSearchFilter: true
     };
@@ -192,5 +194,6 @@ export class EmployeeOverviewComponent implements OnInit {
     this.employeeFilterForm.reset();
     this.employeeSmartFilterForm.reset();
     this.smartFilter = false;
+    this.loadEmployees();
   }
 }
