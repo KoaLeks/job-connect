@@ -67,5 +67,13 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
      * @param sameEmail email of the same user
      */
     void deleteNotificationsByRecipient_EmailEqualsOrSender_EmailEquals(String email, String sameEmail);
+
+    /**
+     * Deletes Notification of accepted application, after employee quit
+     *
+     * @param taskId taskId of notification
+     * @param notificationType type of notification (here: always Type ACCEPTED)
+     * @param recipientMail mail from employee
+     */
     void deleteNotificationByTask_IdAndTypeAndRecipient_Email(Long taskId, String notificationType, String recipientMail);
 }
