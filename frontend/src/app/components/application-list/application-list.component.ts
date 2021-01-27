@@ -60,6 +60,7 @@ export class ApplicationListComponent implements OnInit {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.router.onSameUrlNavigation = 'reload';
     this.router.navigate(['events', this.eventId, 'details']);
+    this.alertService.clear();
     this.alertService.success('Erfolgreich', {autoClose: true}) ;
   }
 
