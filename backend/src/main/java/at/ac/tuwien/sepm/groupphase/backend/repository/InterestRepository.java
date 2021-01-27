@@ -25,5 +25,10 @@ public interface InterestRepository extends JpaRepository<Interest, Long> {
      */
     void deleteInterestsByEmployee_Profile_Email(String email);
 
+    /**
+     * Finds all interests from given employee id
+     * @param id from the employee
+     * @return all interests from the Employee
+     */
     List<Interest> findAllByEmployeeId(Long id);
 }

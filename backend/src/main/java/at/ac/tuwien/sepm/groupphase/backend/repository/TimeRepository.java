@@ -39,6 +39,11 @@ public interface TimeRepository extends JpaRepository<Time, Long> {
     @Transactional
     void deleteByFinalEndDateBefore(LocalDateTime expiryDate);
 
+    /**
+     * Finds all available Times from a specific employee with id
+     * @param id id from the employee
+     * @return all times from the given employee
+     */
     List<Time> findAllByEmployeeId(Long id);
 
 }
