@@ -112,6 +112,29 @@ public class TestDataGenerator {
         "Felix Maier"
     };
 
+    String[] privateEmployer = {
+        "Chelsey Huber",
+        "Chelsie Schmitt",
+        "Chelsy Schmied",
+        "Cher Schmidt",
+        "Chere Hofer",
+        "Cherey Hofa",
+        "Cheri Bauer",
+        "Cherianne Otta",
+        "Cherice Maier",
+        "Cherida Mayr",
+        "Cherie Mayer",
+        "Eleanore Meier",
+        "Electra Hammer",
+        "Eleen Moser",
+        "Elena Muller",
+        "Elene Wieser",
+        "Eleni Lang",
+        "Elenore Schuster",
+        "Eleonora Winter",
+        "Eleonore Sommer"
+    };
+
     String[] studium = {
         "Architektur",
         "Wirtschaftinformatik",
@@ -136,7 +159,7 @@ public class TestDataGenerator {
 
     // Employer
     private static final String TEST_PASSWORD = "123456789";
-    private static final int NUMBER_OF_PRIVATE_EMPLOYERS = 20;
+    // private static final int NUMBER_OF_PRIVATE_EMPLOYERS = 20;
 
     private final EmployeeRepository employeeRepository;
     private final EmployerRepository employerRepository;
@@ -226,8 +249,8 @@ public class TestDataGenerator {
                 employerRepository.save(employer);
                 count++;
             }
-            for (int i = 0; i < NUMBER_OF_PRIVATE_EMPLOYERS; i++) {
-                String name = names[i];
+            for (int i = 0; i < privateEmployer.length; i++) {
+                String name = privateEmployer[i];
                 try {
                     File pic = new File("src/main/resources/employerPictures/private/" + i + ".jpg");
                     picture = ArrayUtils.toObject(Files.readAllBytes(pic.toPath()));
@@ -473,7 +496,7 @@ public class TestDataGenerator {
                     .withEnd(convertToLocalDateTime(end))
                     .withAddress(addressRepository.save(address))
                     .withTask(tasks)
-                    .withEmployer(line.split(";")[4].equalsIgnoreCase("firma") ? employerRepository.findByProfile_Id(random.nextInt(companyNames.length) + 1L) : employerRepository.findByProfile_Id(random.nextInt(NUMBER_OF_PRIVATE_EMPLOYERS) + companyNames.length + 1L))
+                    .withEmployer(line.split(";")[4].equalsIgnoreCase("firma") ? employerRepository.findByProfile_Id(random.nextInt(companyNames.length) + 1L) : employerRepository.findByProfile_Id(random.nextInt(privateEmployer.length) + companyNames.length + 1L))
                     .build();
                 Event savedEvent = eventRepository.save(event);
                 for (Task task : tasks) {
@@ -524,7 +547,7 @@ public class TestDataGenerator {
         Random random = new Random();
         List<Task> tasks = taskRepository.findAll();
         for (int i = 0; i < count; i++) {
-            Optional<Employee> employee = employeeRepository.findById(companyNames.length + NUMBER_OF_PRIVATE_EMPLOYERS + 1L + random.nextInt(30));
+            Optional<Employee> employee = employeeRepository.findById(companyNames.length + privateEmployer.length + 1L + random.nextInt(names.length));
             Employee randomEmployee = employee.orElse(null);
             if (randomEmployee == null) {
                 continue;

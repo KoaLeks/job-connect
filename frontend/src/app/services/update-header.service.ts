@@ -14,14 +14,26 @@ export class UpdateHeaderService {
 
   constructor() { }
 
+  /**
+   * Emit id of the deleted event
+   * @param eventId id of the deleted event
+   */
   emitDeletedEvent(eventId: number) {
     this.removeEventNotifications.emit(eventId);
   }
 
+  /**
+   * Emit updated notification
+   * @param notification of the task
+   */
   emitUpdatedNotification(notification: SimpleNotification) {
     this.updateSeenNotifications.emit(notification);
   }
 
+  /**
+   * Emit whether a new user is logged in
+   * @param bool: true if a new user is logged in
+   */
   emitNewLoggedInUser(bool: boolean) {
     this.newLoggedInUser.emit(bool);
   }
