@@ -4,10 +4,8 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {EditEmployee} from '../dtos/edit-employee';
 import {Observable} from 'rxjs';
 import {SimpleEmployee} from '../dtos/simple-employee';
-import {DetailedEvent} from '../dtos/detailed-event';
 import {FilterEmployees} from '../dtos/filter-employees';
 import {FilterEmployeesSmart} from '../dtos/filter-employees-smart';
-import {filter} from 'rxjs/operators';
 import {SuperSimpleEmployee} from '../dtos/SuperSimpleEmployee';
 
 @Injectable({
@@ -24,7 +22,7 @@ export class EmployeeService {
    * Loads an employee from the backend using the email
    */
   getEmployeeByEmail() {
-    // console.log('Get employee by email');
+    console.log('Get employee by email');
     return this.httpClient.get<EditEmployee>(this.employeeBaseUri);
   }
 
@@ -79,6 +77,10 @@ export class EmployeeService {
     return this.httpClient.get<SuperSimpleEmployee[]>(this.employeeBaseUri + '/filter', {params});
   }
 
+  /**
+   * Filter employees tailored to the employer events
+   * @param filterEmployees contains id and title of the employers events
+   */
   filterEmployeesSmart(filterEmployees: FilterEmployeesSmart): Observable<SuperSimpleEmployee[]> {
     console.log('Filter employees via Events');
     if (filterEmployees.events === null ) { filterEmployees.events = []; }

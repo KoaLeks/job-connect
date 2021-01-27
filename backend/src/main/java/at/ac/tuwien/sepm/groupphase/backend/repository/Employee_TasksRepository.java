@@ -33,6 +33,12 @@ public interface Employee_TasksRepository extends JpaRepository<Employee_Tasks, 
      */
     Employee_Tasks findFirstByEmployee_Profile_IdAndTask_Id(Long employee, Long task);
 
+    /**
+     * Find all accepted Employees(Employee_Tasks) for the given task
+     *
+     * @param task to find the accepted employees
+     * @return accepted employees for the task
+     */
     Set<Employee_Tasks> findAllByTask_IdAndAcceptedIsTrue(Long task);
 
     /**

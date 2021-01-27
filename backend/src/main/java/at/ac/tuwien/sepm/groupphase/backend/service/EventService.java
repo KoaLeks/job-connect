@@ -58,5 +58,11 @@ public interface EventService {
      */
     List<Event> findAllAppliedEvents(Long id);
 
+    /**
+     * Finds all events of the employer with his profile id
+     *
+     * @param employerId the profile id of the employer
+     * @return List of Events of the employer with the given id
+     */
     List<Event> findByEmployerId(Long employerId);
 }

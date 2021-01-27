@@ -5,7 +5,6 @@ import {EmployeeService} from '../../services/employee.service';
 import {SimpleEmployee} from '../../dtos/simple-employee';
 import {SuperSimpleEmployee} from '../../dtos/SuperSimpleEmployee';
 import {InterestArea} from '../../dtos/interestArea';
-import {InterestService} from '../../services/interest.service';
 import {InterestAreaService} from '../../services/interestArea.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';

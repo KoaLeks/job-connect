@@ -110,6 +110,12 @@ public interface EventRepository extends JpaRepository<Event, Long>, EventReposi
     List<Event> searchEventsBySearchEventDto(String title, Long employerId, String start, String end,
                                              Long interestAreaId, Long payment, String state);
 
+    /**
+     * Finds all events of the employer with his profile id
+     *
+     * @param employerId the profile id of the employer
+     * @return List of Events of the employer with the given id
+     */
     @Query(value = "SELECT * FROM event e " +
         "WHERE e.employer_profile_id = ?1 " +
         "AND e.start > CURRENT_TIMESTAMP()", nativeQuery = true)
